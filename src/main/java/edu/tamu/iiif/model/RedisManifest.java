@@ -18,6 +18,9 @@ public class RedisManifest {
     @Indexed
     private ManifestType type;
 
+    @Indexed
+    private RepositoryType repository;
+
     private String json;
 
     private Long creation;
@@ -26,10 +29,11 @@ public class RedisManifest {
         this.creation = new Date().getTime();
     }
 
-    public RedisManifest(String path, ManifestType type, String json) {
+    public RedisManifest(String path, ManifestType type, RepositoryType repository, String json) {
         this();
         this.path = path;
         this.type = type;
+        this.repository = repository;
         this.json = json;
     }
 
@@ -55,6 +59,14 @@ public class RedisManifest {
 
     public void setType(ManifestType type) {
         this.type = type;
+    }
+
+    public RepositoryType getRepository() {
+        return repository;
+    }
+
+    public void setRepository(RepositoryType repository) {
+        this.repository = repository;
     }
 
     public String getJson() {

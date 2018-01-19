@@ -6,9 +6,10 @@ import org.springframework.data.repository.CrudRepository;
 
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.RedisManifest;
+import edu.tamu.iiif.model.RepositoryType;
 
 public interface RedisManifestRepo extends CrudRepository<RedisManifest, String> {
 
-    Optional<RedisManifest> findByPathAndType(String path, ManifestType type);
+    Optional<RedisManifest> findByPathAndTypeAndRepository(String path, ManifestType type, RepositoryType repository);
 
 }

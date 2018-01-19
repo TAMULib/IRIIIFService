@@ -11,6 +11,7 @@ import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.EBUCORE_WIDTH_PREDI
 import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.FEDORA_FCR_METADATA;
 import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.IIIF_IMAGE_API_CONTEXT;
 import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.IIIF_IMAGE_API_LEVEL_ZERO_PROFILE;
+import static edu.tamu.iiif.model.RepositoryType.FEDORA;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
 import java.io.ByteArrayInputStream;
@@ -51,6 +52,7 @@ import de.digitalcollections.iiif.presentation.model.impl.jackson.v2.IiifPresent
 import de.digitalcollections.iiif.presentation.model.impl.v2.MetadataImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ServiceImpl;
+import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.rdf.fedora.FedoraRdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
 import edu.tamu.iiif.service.HttpService;
@@ -298,6 +300,11 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
 
     private String getFedoraPath(String url) {
         return url.substring(fedoraUrl.length() + 1);
+    }
+
+    @Override
+    protected RepositoryType getRepositoryType() {
+        return FEDORA;
     }
 
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.RedisManifest;
+import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
 import edu.tamu.iiif.utility.StringUtility;
 
@@ -41,7 +42,7 @@ public abstract class AbstractManifestService implements ManifestService {
         } else {
             LOG.info("Generating new manifest.");
             manifest = generateManifest(path);
-            redisManifestRepo.save(new RedisManifest(StringUtility.encode(path), getManifestType(), manifest));
+            redisManifestRepo.save(new RedisManifest(StringUtility.encode(path), getManifestType(), getRepositoryType(), manifest));
             update = false;
         }
 
@@ -62,8 +63,10 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected abstract ManifestType getManifestType();
 
+    protected abstract RepositoryType getRepositoryType();
+
     private Optional<RedisManifest> getRedisManifest(String path) {
-        return redisManifestRepo.findByPathAndType(StringUtility.encode(path), getManifestType());
+        return redisManifestRepo.findByPathAndTypeAndRepository(StringUtility.encode(path), getManifestType(), getRepositoryType());
     }
 
 }
