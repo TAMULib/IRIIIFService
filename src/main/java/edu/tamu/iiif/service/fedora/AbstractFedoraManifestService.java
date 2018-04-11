@@ -1,6 +1,7 @@
 package edu.tamu.iiif.service.fedora;
 
 import static edu.tamu.iiif.constants.rdf.Constants.COLLECECTION_IDENTIFIER;
+import static edu.tamu.iiif.constants.rdf.Constants.FEDORA_IDENTIFIER;
 import static edu.tamu.iiif.constants.rdf.Constants.IMAGE_IDENTIFIER;
 import static edu.tamu.iiif.constants.rdf.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.DUBLIN_CORE_PREFIX;
@@ -299,7 +300,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     }
 
     private String getFedoraPath(String url) {
-        return url.substring(fedoraUrl.length() + 1);
+        return FEDORA_IDENTIFIER + ":" + url.substring(fedoraUrl.length() + 1);
     }
 
     @Override
