@@ -296,11 +296,11 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     }
 
     private String pathIdentifier(String url) {
-        return StringUtility.encode(getFedoraPath(url));
+        return StringUtility.encode(FEDORA_IDENTIFIER + ":" + getFedoraPath(url));
     }
 
     private String getFedoraPath(String url) {
-        return FEDORA_IDENTIFIER + ":" + url.substring(fedoraUrl.length() + 1);
+        return url.substring(fedoraUrl.length() + 1);
     }
 
     @Override
