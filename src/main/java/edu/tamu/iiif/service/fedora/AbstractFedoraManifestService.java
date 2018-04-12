@@ -106,7 +106,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     }
 
     protected URI buildId(String path) throws URISyntaxException {
-        return new URI(iiifServiceUrl + "/" + getManifestType().getName() + "?path=" + path);
+        return new URI(getIiifServiceUrl() + "/" + getManifestType().getName() + "?path=" + path);
     }
 
     protected String getLogo(FedoraRdfResource fedoraRdfResource) {
@@ -208,7 +208,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     }
 
     private URI getFedoraIIIFUrl(String id, String type) throws URISyntaxException {
-        return new URI(id.replace(fedoraUrl + "/", iiifServiceUrl + "/" + type + "?path="));
+        return new URI(id.replace(fedoraUrl + "/", getIiifServiceUrl() + "/" + type + "?path="));
     }
 
     protected URI getImageUrl(String id) throws URISyntaxException {
@@ -296,11 +296,15 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     }
 
     private String pathIdentifier(String url) {
-        return StringUtility.encode(FEDORA_IDENTIFIER + ":" + getFedoraPath(url));
+        return StringUtility.encode(getFedoraPath(url));
     }
 
     private String getFedoraPath(String url) {
-        return url.substring(fedoraUrl.length() + 1);
+        return FEDORA_IDENTIFIER + ":" + url.substring(fedoraUrl.length() + 1);
+    }
+
+    private String getIiifServiceUrl() {
+        return iiifServiceUrl + "/" + FEDORA_IDENTIFIER;
     }
 
     @Override
