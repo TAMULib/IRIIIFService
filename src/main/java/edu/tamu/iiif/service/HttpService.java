@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -85,6 +86,14 @@ public class HttpService {
     private String get(String url, List<NameValuePair> parameters) throws IOException, URISyntaxException {
         CloseableHttpResponse response = httpClient.execute(craftRequest(url, parameters));
         try {
+            StatusLine sl = response.getStatusLine();
+            int sc = sl.getStatusCode();
+            switch (sc) {
+            case 200:
+                break;
+            default:
+                throw new IOException("Incorrect response status: " + sc);
+            }
             return EntityUtils.toString(response.getEntity());
         } finally {
             response.close();

@@ -1,12 +1,12 @@
 package edu.tamu.iiif.service.fedora;
 
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.FEDORA_HAS_PARENT_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.IANA_FIRST_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.IANA_LAST_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.IANA_NEXT_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.LDP_CONTAINS_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.ORE_PROXY_FOR_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.PCDM_HAS_FILE_PREDICATE;
+import static edu.tamu.iiif.constants.rdf.Constants.FEDORA_HAS_PARENT_PREDICATE;
+import static edu.tamu.iiif.constants.rdf.Constants.IANA_FIRST_PREDICATE;
+import static edu.tamu.iiif.constants.rdf.Constants.IANA_LAST_PREDICATE;
+import static edu.tamu.iiif.constants.rdf.Constants.IANA_NEXT_PREDICATE;
+import static edu.tamu.iiif.constants.rdf.Constants.LDP_CONTAINS_PREDICATE;
+import static edu.tamu.iiif.constants.rdf.Constants.ORE_PROXY_FOR_PREDICATE;
+import static edu.tamu.iiif.constants.rdf.Constants.PCDM_HAS_FILE_PREDICATE;
 import static edu.tamu.iiif.model.ManifestType.PRESENTATION;
 
 import java.io.IOException;

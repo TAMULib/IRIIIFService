@@ -1,17 +1,17 @@
 package edu.tamu.iiif.service.fedora;
 
 import static edu.tamu.iiif.constants.rdf.Constants.COLLECECTION_IDENTIFIER;
+import static edu.tamu.iiif.constants.rdf.Constants.DUBLIN_CORE_PREFIX;
+import static edu.tamu.iiif.constants.rdf.Constants.DUBLIN_CORE_TITLE_PREDICATE;
+import static edu.tamu.iiif.constants.rdf.Constants.EBUCORE_HAS_MIME_TYPE_PREDICATE;
+import static edu.tamu.iiif.constants.rdf.Constants.EBUCORE_HEIGHT_PREDICATE;
+import static edu.tamu.iiif.constants.rdf.Constants.EBUCORE_WIDTH_PREDICATE;
+import static edu.tamu.iiif.constants.rdf.Constants.FEDORA_FCR_METADATA;
 import static edu.tamu.iiif.constants.rdf.Constants.FEDORA_IDENTIFIER;
+import static edu.tamu.iiif.constants.rdf.Constants.IIIF_IMAGE_API_CONTEXT;
+import static edu.tamu.iiif.constants.rdf.Constants.IIIF_IMAGE_API_LEVEL_ZERO_PROFILE;
 import static edu.tamu.iiif.constants.rdf.Constants.IMAGE_IDENTIFIER;
 import static edu.tamu.iiif.constants.rdf.Constants.PRESENTATION_IDENTIFIER;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.DUBLIN_CORE_PREFIX;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.DUBLIN_CORE_TITLE_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.EBUCORE_HAS_MIME_TYPE_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.EBUCORE_HEIGHT_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.EBUCORE_WIDTH_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.FEDORA_FCR_METADATA;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.IIIF_IMAGE_API_CONTEXT;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.IIIF_IMAGE_API_LEVEL_ZERO_PROFILE;
 import static edu.tamu.iiif.model.RepositoryType.FEDORA;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
@@ -28,11 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
@@ -43,25 +40,19 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
 import de.digitalcollections.iiif.presentation.model.api.v2.Service;
-import de.digitalcollections.iiif.presentation.model.impl.jackson.v2.IiifPresentationApiObjectMapper;
 import de.digitalcollections.iiif.presentation.model.impl.v2.MetadataImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ServiceImpl;
 import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.rdf.fedora.FedoraRdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
-import edu.tamu.iiif.service.HttpService;
 import edu.tamu.iiif.utility.StringUtility;
 
 public abstract class AbstractFedoraManifestService extends AbstractManifestService {
-
-    protected final static ObjectMapper mapper = new IiifPresentationApiObjectMapper();
 
     @Value("${iiif.fedora.url}")
     protected String fedoraUrl;
@@ -70,47 +61,21 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     private String pcdmRdfExtUrl;
 
     @Autowired
-    private HttpService httpService;
-
-    @Autowired
     private ObjectMapper objectMapper;
 
-    @PostConstruct
-    private void init() {
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        mapper.enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
-    }
-
     protected FedoraRdfResource getFedoraRdfResource(String path) {
-        String fedoraPath = joinPath(fedoraUrl, path);
-        Model model = generateRdfModel(getRdf(fedoraPath));
-
+        String fedoraRdfUri = getId(path);
+        String rdf = getRdf(fedoraRdfUri);
+        System.out.println("\n" + rdf + "\n");
+        Model model = generateRdfModel(rdf);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");
-
-        return new FedoraRdfResource(model, model.getResource(fedoraPath));
+        return new FedoraRdfResource(model, model.getResource(fedoraRdfUri));
     }
 
     protected Model getRdfModel(String uri) {
         String resStr = httpService.get(uri + FEDORA_FCR_METADATA);
         return generateRdfModel(resStr);
-    }
-
-    protected Optional<String> getIdByPredicate(Model model, String predicate) {
-        Optional<String> id = Optional.empty();
-        NodeIterator firstNodeItr = model.listObjectsOfProperty(model.getProperty(predicate));
-        while (firstNodeItr.hasNext()) {
-            id = Optional.of(firstNodeItr.next().toString());
-        }
-        return id;
-    }
-
-    protected URI buildId(String path) throws URISyntaxException {
-        return new URI(getIiifServiceUrl() + "/" + getManifestType().getName() + "?path=" + path);
-    }
-
-    protected String getLogo(FedoraRdfResource fedoraRdfResource) {
-        return logoUrl;
     }
 
     protected Optional<String> getLicense(FedoraRdfResource fedoraRdfResource) {
@@ -182,17 +147,6 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
             }
         }
         return metadata;
-    }
-
-    private Metadata generateMetadatum(Statement statement) throws IOException {
-        Property predicate = statement.getPredicate();
-        RDFNode object = statement.getObject();
-        if (object instanceof Resource) {
-            throw new IOException("RDF statement object is a resource, not a literal value!");
-        }
-        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(formalize(predicate.getLocalName()));
-        PropertyValueSimpleImpl value = new PropertyValueSimpleImpl(object.toString());
-        return new MetadataImpl(label, value);
     }
 
     protected URI getFedoraIIIFCollectionUrl(String id) throws URISyntaxException {
@@ -284,6 +238,24 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         return service;
     }
 
+    protected String getLogo(FedoraRdfResource fedoraRdfResource) {
+        return logoUrl;
+    }
+
+    @Override
+    protected String getIiifServiceUrl() {
+        return iiifServiceUrl + "/" + FEDORA_IDENTIFIER;
+    }
+
+    @Override
+    protected RepositoryType getRepositoryType() {
+        return FEDORA;
+    }
+
+    private String getId(String path) {
+        return joinPath(fedoraUrl, path);
+    }
+
     private String getRdf(String fedoraPath) {
         return httpService.get(pcdmRdfExtUrl, fedoraPath);
     }
@@ -295,21 +267,23 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         return model;
     }
 
+    private Metadata generateMetadatum(Statement statement) throws IOException {
+        Property predicate = statement.getPredicate();
+        RDFNode object = statement.getObject();
+        if (object instanceof Resource) {
+            throw new IOException("RDF statement object is a resource, not a literal value!");
+        }
+        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(formalize(predicate.getLocalName()));
+        PropertyValueSimpleImpl value = new PropertyValueSimpleImpl(object.toString());
+        return new MetadataImpl(label, value);
+    }
+
     private String pathIdentifier(String url) {
         return StringUtility.encode(getFedoraPath(url));
     }
 
     private String getFedoraPath(String url) {
         return FEDORA_IDENTIFIER + ":" + url.substring(fedoraUrl.length() + 1);
-    }
-
-    private String getIiifServiceUrl() {
-        return iiifServiceUrl + "/" + FEDORA_IDENTIFIER;
-    }
-
-    @Override
-    protected RepositoryType getRepositoryType() {
-        return FEDORA;
     }
 
 }

@@ -1,10 +1,10 @@
 package edu.tamu.iiif.service.fedora;
 
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.IANA_FIRST_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.IANA_LAST_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.IANA_NEXT_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.ORE_PROXY_FOR_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.FedoraRdfConstants.PCDM_HAS_MEMBER_PREDICATE;
+import static edu.tamu.iiif.constants.rdf.Constants.IANA_FIRST_PREDICATE;
+import static edu.tamu.iiif.constants.rdf.Constants.IANA_LAST_PREDICATE;
+import static edu.tamu.iiif.constants.rdf.Constants.IANA_NEXT_PREDICATE;
+import static edu.tamu.iiif.constants.rdf.Constants.ORE_PROXY_FOR_PREDICATE;
+import static edu.tamu.iiif.constants.rdf.Constants.PCDM_HAS_MEMBER_PREDICATE;
 import static edu.tamu.iiif.model.ManifestType.COLLECTION;
 
 import java.io.IOException;
@@ -33,7 +33,12 @@ import edu.tamu.iiif.model.rdf.fedora.FedoraRdfResource;
 @Service
 public class FedoraCollectionManifestService extends AbstractFedoraManifestService {
 
-    public String generateManifest(String path) throws IOException, URISyntaxException {
+    @Override
+    protected String generateManifest(String handle) throws URISyntaxException, IOException {
+        return mapper.writeValueAsString(generateCollection(handle));
+    }
+
+    private Collection generateCollection(String path) throws URISyntaxException, IOException {
         FedoraRdfResource fedoraRdfResource = getFedoraRdfResource(path);
 
         URI id = buildId(path);
@@ -52,7 +57,7 @@ public class FedoraCollectionManifestService extends AbstractFedoraManifestServi
 
         collection.setViewingHint("multi-part");
 
-        return mapper.writeValueAsString(collection);
+        return collection;
     }
 
     private List<ManifestReference> getResourceManifests(FedoraRdfResource fedoraRdfResource) throws URISyntaxException {
