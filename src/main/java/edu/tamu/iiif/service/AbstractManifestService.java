@@ -1,6 +1,7 @@
 package edu.tamu.iiif.service;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
@@ -14,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -42,6 +45,9 @@ public abstract class AbstractManifestService implements ManifestService {
 
     @Autowired
     protected HttpService httpService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private RedisManifestRepo redisManifestRepo;
@@ -93,6 +99,18 @@ public abstract class AbstractManifestService implements ManifestService {
         return id;
     }
 
+    protected JsonNode getImageInfo(String url) throws JsonProcessingException, MalformedURLException, IOException, URISyntaxException {
+        return objectMapper.readTree(fetchImageInfo(url));
+    }
+
+    protected String fetchImageInfo(String url) {
+        return httpService.get(url);
+    }
+    
+    protected String pathIdentifier(String url) {
+        return StringUtility.encode(getRepositoryPath(url));
+    }
+
     protected abstract String generateManifest(String handle) throws URISyntaxException, IOException;
 
     protected abstract String getIiifServiceUrl();
@@ -100,6 +118,8 @@ public abstract class AbstractManifestService implements ManifestService {
     protected abstract RepositoryType getRepositoryType();
 
     protected abstract ManifestType getManifestType();
+    
+    protected abstract String getRepositoryPath(String url);
 
     private Optional<RedisManifest> getRedisManifest(String path) {
         return redisManifestRepo.findByPathAndTypeAndRepository(StringUtility.encode(path), getManifestType(), getRepositoryType());

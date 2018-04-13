@@ -18,7 +18,6 @@ import static edu.tamu.iiif.utility.StringUtility.joinPath;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -35,12 +34,7 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
 import de.digitalcollections.iiif.presentation.model.api.v2.Service;
@@ -50,7 +44,6 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.ServiceImpl;
 import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.rdf.fedora.FedoraRdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
-import edu.tamu.iiif.utility.StringUtility;
 
 public abstract class AbstractFedoraManifestService extends AbstractManifestService {
 
@@ -59,9 +52,6 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
 
     @Value("${iiif.pcdm.rdf.ext.url}")
     private String pcdmRdfExtUrl;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     protected FedoraRdfResource getFedoraRdfResource(String path) {
         String fedoraRdfUri = getId(path);
@@ -85,7 +75,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     protected PropertyValueSimpleImpl getTitle(FedoraRdfResource fedoraRdfResource) {
         Optional<String> title = getObject(fedoraRdfResource, DUBLIN_CORE_TITLE_PREDICATE);
         if (!title.isPresent()) {
-            title = Optional.of(formalize(getFedoraPath(fedoraRdfResource.getResource().getURI())));
+            title = Optional.of(formalize(getRepositoryPath(fedoraRdfResource.getResource().getURI())));
         }
         return new PropertyValueSimpleImpl(title.get());
     }
@@ -185,14 +175,6 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         return URI.create(joinPath(serviceUrl.toString(), "full/!200,200/0/default.jpg"));
     }
 
-    protected JsonNode getImageInfo(String url) throws JsonProcessingException, MalformedURLException, IOException, URISyntaxException {
-        return objectMapper.readTree(fetchImageInfo(url));
-    }
-
-    protected String fetchImageInfo(String url) {
-        return httpService.get(url);
-    }
-
     protected String extractLabel(String url) {
         return url.substring(url.lastIndexOf("/") + 1, url.length());
     }
@@ -248,6 +230,11 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     }
 
     @Override
+    protected String getRepositoryPath(String url) {
+        return FEDORA_IDENTIFIER + ":" + url.substring(fedoraUrl.length() + 1);
+    }
+
+    @Override
     protected RepositoryType getRepositoryType() {
         return FEDORA;
     }
@@ -276,14 +263,6 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(formalize(predicate.getLocalName()));
         PropertyValueSimpleImpl value = new PropertyValueSimpleImpl(object.toString());
         return new MetadataImpl(label, value);
-    }
-
-    private String pathIdentifier(String url) {
-        return StringUtility.encode(getFedoraPath(url));
-    }
-
-    private String getFedoraPath(String url) {
-        return FEDORA_IDENTIFIER + ":" + url.substring(fedoraUrl.length() + 1);
     }
 
 }

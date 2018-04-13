@@ -82,9 +82,18 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         return URI.create(getIiifServiceUrl() + "/" + PRESENTATION_IDENTIFIER + "?path=" + handle);
     }
 
+    protected URI getImageUri(String id) throws URISyntaxException {
+        return URI.create(joinPath(imageServerUrl, pathIdentifier(id)));
+    }
+
     @Override
     protected String getIiifServiceUrl() {
         return iiifServiceUrl + "/" + DSPACE_IDENTIFIER;
+    }
+
+    @Override
+    protected String getRepositoryPath(String url) {
+        return DSPACE_IDENTIFIER + ":" + url.substring(dspaceUrl.length() + 1);
     }
 
     @Override
