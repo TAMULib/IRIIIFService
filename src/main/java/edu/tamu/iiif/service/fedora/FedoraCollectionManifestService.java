@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Collection;
 import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
+import de.digitalcollections.iiif.presentation.model.api.v2.references.CollectionReference;
 import de.digitalcollections.iiif.presentation.model.api.v2.references.ManifestReference;
 import de.digitalcollections.iiif.presentation.model.impl.v2.CollectionImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
@@ -49,6 +50,8 @@ public class FedoraCollectionManifestService extends AbstractFedoraManifestServi
 
         Collection collection = new CollectionImpl(id, label, metadata);
 
+        collection.setSubCollections(getSubcollections(fedoraRdfResource));
+
         collection.setManifests(getResourceManifests(fedoraRdfResource));
 
         collection.setDescription(getDescription(fedoraRdfResource));
@@ -58,6 +61,11 @@ public class FedoraCollectionManifestService extends AbstractFedoraManifestServi
         collection.setViewingHint("multi-part");
 
         return collection;
+    }
+
+    private List<CollectionReference> getSubcollections(FedoraRdfResource fedoraRdfResource) throws URISyntaxException {
+        List<CollectionReference> subcollections = new ArrayList<CollectionReference>();
+        return subcollections;
     }
 
     private List<ManifestReference> getResourceManifests(FedoraRdfResource fedoraRdfResource) throws URISyntaxException {
