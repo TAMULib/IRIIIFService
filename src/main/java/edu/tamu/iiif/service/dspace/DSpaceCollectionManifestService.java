@@ -84,7 +84,7 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
         while (subcommunityIterator.hasNext()) {
             String uri = subcommunityIterator.next().toString();
             String handle = getHandle(uri);
-            subcommunities.add(new CollectionReferenceImpl(URI.create(getIiifServiceUrl() + "/collection?path=" + handle), new PropertyValueSimpleImpl(handle)));
+            subcommunities.add(new CollectionReferenceImpl(getDSpaceIIIFCollectionUri(handle), new PropertyValueSimpleImpl(handle)));
         }
         return subcommunities;
     }
@@ -95,7 +95,7 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
         while (collectionIterator.hasNext()) {
             String uri = collectionIterator.next().toString();
             String handle = getHandle(uri);
-            collections.add(new CollectionReferenceImpl(URI.create(getIiifServiceUrl() + "/collection?path=" + handle), new PropertyValueSimpleImpl(handle)));
+            collections.add(new CollectionReferenceImpl(getDSpaceIIIFCollectionUri(handle), new PropertyValueSimpleImpl(handle)));
         }
         return collections;
     }
@@ -116,7 +116,7 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
         while (collectionIterator.hasNext()) {
             String uri = collectionIterator.next().toString();
             String handle = getHandle(uri);
-            manifests.add(new ManifestReferenceImpl(URI.create(getIiifServiceUrl() + "/presentation?path=" + handle), new PropertyValueSimpleImpl(handle)));
+            manifests.add(new ManifestReferenceImpl(getDSpaceIIIFPresentationUri(handle), new PropertyValueSimpleImpl(handle)));
         }
         return manifests;
     }

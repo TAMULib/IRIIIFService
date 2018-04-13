@@ -149,40 +149,40 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         return metadata;
     }
 
-    protected URI getFedoraIIIFCollectionUrl(String id) throws URISyntaxException {
-        return getFedoraIIIFUrl(id, COLLECECTION_IDENTIFIER);
+    protected URI getFedoraIIIFCollectionUri(String id) throws URISyntaxException {
+        return getFedoraIIIFUri(id, COLLECECTION_IDENTIFIER);
     }
 
-    protected URI getFedoraIIIFPresentationUrl(String id) throws URISyntaxException {
-        return getFedoraIIIFUrl(id, PRESENTATION_IDENTIFIER);
+    protected URI getFedoraIIIFPresentationUri(String id) throws URISyntaxException {
+        return getFedoraIIIFUri(id, PRESENTATION_IDENTIFIER);
     }
 
-    protected URI getFedoraIIIFImageUrl(String id) throws URISyntaxException {
-        return getFedoraIIIFUrl(id, IMAGE_IDENTIFIER);
+    protected URI getFedoraIIIFImageUri(String id) throws URISyntaxException {
+        return getFedoraIIIFUri(id, IMAGE_IDENTIFIER);
     }
 
-    private URI getFedoraIIIFUrl(String id, String type) throws URISyntaxException {
-        return new URI(id.replace(fedoraUrl + "/", getIiifServiceUrl() + "/" + type + "?path="));
+    private URI getFedoraIIIFUri(String id, String type) throws URISyntaxException {
+        return URI.create(id.replace(fedoraUrl + "/", getIiifServiceUrl() + "/" + type + "?path="));
     }
 
-    protected URI getImageUrl(String id) throws URISyntaxException {
-        return new URI(joinPath(imageServerUrl, pathIdentifier(id)));
+    protected URI getImageUri(String id) throws URISyntaxException {
+        return URI.create(joinPath(imageServerUrl, pathIdentifier(id)));
     }
 
     protected URI getImageFullUrl(String id) throws URISyntaxException {
-        return new URI(joinPath(imageServerUrl, pathIdentifier(id), "full/full/0/default.jpg"));
+        return URI.create(joinPath(imageServerUrl, pathIdentifier(id), "full/full/0/default.jpg"));
     }
 
     protected URI getImageThumbnailUrl(String id) throws URISyntaxException {
-        return new URI(joinPath(imageServerUrl, pathIdentifier(id), "full/!200,200/0/default.jpg"));
+        return URI.create(joinPath(imageServerUrl, pathIdentifier(id), "full/!200,200/0/default.jpg"));
     }
 
-    protected URI getImageInfoUrl(String id) throws URISyntaxException {
-        return new URI(joinPath(imageServerUrl, pathIdentifier(id), "info.json"));
+    protected URI getImageInfoUri(String id) throws URISyntaxException {
+        return URI.create(joinPath(imageServerUrl, pathIdentifier(id), "info.json"));
     }
 
-    protected URI serviceUrlToThumbnailUrl(URI serviceUrl) throws URISyntaxException {
-        return new URI(joinPath(serviceUrl.toString(), "full/!200,200/0/default.jpg"));
+    protected URI serviceUrlToThumbnailUri(URI serviceUrl) throws URISyntaxException {
+        return URI.create(joinPath(serviceUrl.toString(), "full/!200,200/0/default.jpg"));
     }
 
     protected JsonNode getImageInfo(String url) throws JsonProcessingException, MalformedURLException, IOException, URISyntaxException {
@@ -231,7 +231,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     }
 
     protected Service getService(FedoraRdfResource fedoraRdfResource, String name) throws URISyntaxException {
-        Service service = new ServiceImpl(getImageUrl(fedoraRdfResource.getResource().getURI()));
+        Service service = new ServiceImpl(getImageUri(fedoraRdfResource.getResource().getURI()));
         service.setLabel(new PropertyValueSimpleImpl(name));
         service.setContext(IIIF_IMAGE_API_CONTEXT);
         service.setProfile(IIIF_IMAGE_API_LEVEL_ZERO_PROFILE);

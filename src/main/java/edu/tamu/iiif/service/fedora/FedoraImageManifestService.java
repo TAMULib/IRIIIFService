@@ -16,7 +16,7 @@ public class FedoraImageManifestService extends AbstractFedoraManifestService {
 
     public String generateManifest(String path) throws IOException, URISyntaxException {
         String fedoraPath = joinPath(fedoraUrl, path);
-        URI uri = getImageUrl(fedoraPath);
+        URI uri = getImageUri(fedoraPath);
         return fetchImageInfo(uri.toString());
     }
 

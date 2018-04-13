@@ -1,11 +1,15 @@
 package edu.tamu.iiif.service.dspace;
 
+import static edu.tamu.iiif.constants.rdf.Constants.COLLECECTION_IDENTIFIER;
 import static edu.tamu.iiif.constants.rdf.Constants.DSPACE_IDENTIFIER;
+import static edu.tamu.iiif.constants.rdf.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.model.RepositoryType.DSPACE;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.jena.rdf.model.Model;
@@ -68,6 +72,14 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
 
     protected String getLogo(Model model) {
         return logoUrl;
+    }
+
+    protected URI getDSpaceIIIFCollectionUri(String handle) throws URISyntaxException {
+        return URI.create(getIiifServiceUrl() + "/" + COLLECECTION_IDENTIFIER + "?path=" + handle);
+    }
+
+    protected URI getDSpaceIIIFPresentationUri(String handle) throws URISyntaxException {
+        return URI.create(getIiifServiceUrl() + "/" + PRESENTATION_IDENTIFIER + "?path=" + handle);
     }
 
     @Override

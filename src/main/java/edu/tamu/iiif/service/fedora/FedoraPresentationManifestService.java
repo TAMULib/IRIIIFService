@@ -90,7 +90,7 @@ public class FedoraPresentationManifestService extends AbstractFedoraManifestSer
     private Sequence generateSequence(FedoraRdfResource fedoraRdfResource) throws IOException, URISyntaxException {
         String id = fedoraRdfResource.getResource().getURI();
         PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(formalize(extractLabel(id)));
-        Sequence sequence = new SequenceImpl(getFedoraIIIFPresentationUrl(id), label);
+        Sequence sequence = new SequenceImpl(getFedoraIIIFPresentationUri(id), label);
         sequence.setCanvases(getCanvases(fedoraRdfResource));
         return sequence;
     }
@@ -101,7 +101,7 @@ public class FedoraPresentationManifestService extends AbstractFedoraManifestSer
                 for (Image image : canvas.getImages()) {
                     if (Optional.ofNullable(image.getResource()).isPresent()) {
                         URI serviceURI = image.getResource().getServices().get(0).getId();
-                        Thumbnail thubmnail = new ThumbnailImpl(serviceUrlToThumbnailUrl(serviceURI));
+                        Thumbnail thubmnail = new ThumbnailImpl(serviceUrlToThumbnailUri(serviceURI));
                         thubmnail.setServices(image.getResource().getServices());
                         return Optional.of(thubmnail);
                     }
@@ -175,7 +175,7 @@ public class FedoraPresentationManifestService extends AbstractFedoraManifestSer
 
         FedoraRdfCanvas fedoraRdfCanvas = getFedoraRdfCanvas(fedoraRdfResource);
 
-        Canvas canvas = new CanvasImpl(getFedoraIIIFPresentationUrl(id), label, fedoraRdfCanvas.getHeight(), fedoraRdfCanvas.getWidth());
+        Canvas canvas = new CanvasImpl(getFedoraIIIFPresentationUri(id), label, fedoraRdfCanvas.getHeight(), fedoraRdfCanvas.getWidth());
 
         canvas.setImages(fedoraRdfCanvas.getImages());
 
@@ -223,9 +223,9 @@ public class FedoraPresentationManifestService extends AbstractFedoraManifestSer
 
     private Image generateImage(FedoraRdfResource fedoraRdfResource, String canvasId) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
         String id = fedoraRdfResource.getResource().getURI();
-        Image image = new ImageImpl(getImageInfoUrl(id));
+        Image image = new ImageImpl(getImageInfoUri(id));
         image.setResource(generateImageResource(fedoraRdfResource));
-        image.setOn(getFedoraIIIFPresentationUrl(canvasId));
+        image.setOn(getFedoraIIIFPresentationUri(canvasId));
         return image;
     }
 
@@ -233,7 +233,7 @@ public class FedoraPresentationManifestService extends AbstractFedoraManifestSer
         String id = fedoraRdfResource.getResource().getURI();
         ImageResource imageResource = new ImageResourceImpl(getImageFullUrl(id));
 
-        URI infoUri = getImageInfoUrl(id);
+        URI infoUri = getImageInfoUri(id);
 
         JsonNode imageInfoNode = getImageInfo(infoUri.toString());
 
