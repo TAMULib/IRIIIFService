@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import edu.tamu.iiif.constants.rdf.Constants;
 import edu.tamu.iiif.model.RepositoryType;
+import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
 
 public abstract class AbstractDSpaceManifestService extends AbstractManifestService {
@@ -26,14 +27,14 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
     @Value("${iiif.dspace.url}")
     protected String dspaceUrl;
 
-    protected Model getDSpaceRdfModel(String handle) {
+    protected RdfResource getDSpaceRdfModel(String handle) {
         String dspaceRdfUri = getId(handle);
         String rdf = getRdf(dspaceRdfUri);
         System.out.println("\n" + rdf + "\n");
         Model model = generateRdfModel(rdf);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");
-        return model;
+        return new RdfResource(model, model.getResource(dspaceRdfUri));
     }
 
     protected boolean isTopLevelCommunity(Model model) {
@@ -56,7 +57,7 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         return isTopLevelCommunity(model) || isSubcommunity(model);
     }
 
-    protected PropertyValueSimpleImpl getDescription(Model model) {
+    protected PropertyValueSimpleImpl getDescription(RdfResource rdfResource) {
         return new PropertyValueSimpleImpl("");
     }
 
@@ -68,10 +69,6 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
             handle = uri.split("/resource/")[1];
         }
         return handle;
-    }
-
-    protected String getLogo(Model model) {
-        return logoUrl;
     }
 
     protected URI getDSpaceIIIFCollectionUri(String handle) throws URISyntaxException {

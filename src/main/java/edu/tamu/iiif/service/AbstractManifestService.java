@@ -1,9 +1,13 @@
 package edu.tamu.iiif.service;
 
+import static edu.tamu.iiif.utility.StringUtility.joinPath;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -25,6 +29,7 @@ import de.digitalcollections.iiif.presentation.model.impl.jackson.v2.IiifPresent
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.RepositoryType;
+import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
 import edu.tamu.iiif.utility.StringUtility;
 
@@ -98,17 +103,58 @@ public abstract class AbstractManifestService implements ManifestService {
         }
         return id;
     }
+    
+    protected Optional<String> getLicense(RdfResource rdfResource) {
+        return Optional.empty();
+    }
 
     protected JsonNode getImageInfo(String url) throws JsonProcessingException, MalformedURLException, IOException, URISyntaxException {
         return objectMapper.readTree(fetchImageInfo(url));
     }
 
+    protected URI serviceUrlToThumbnailUri(URI serviceUrl) throws URISyntaxException {
+        return URI.create(joinPath(serviceUrl.toString(), "full/!200,200/0/default.jpg"));
+    }
+
     protected String fetchImageInfo(String url) {
         return httpService.get(url);
     }
-    
+
     protected String pathIdentifier(String url) {
         return StringUtility.encode(getRepositoryPath(url));
+    }
+
+    protected String extractLabel(String url) {
+        return url.substring(url.lastIndexOf("/") + 1, url.length());
+    }
+
+    protected String formalize(String name) {
+        StringBuilder formalNameBuilder = new StringBuilder();
+        name = name.replace("/", "_").trim();
+        Iterator<String> parts = Arrays.asList(name.split("_")).iterator();
+        boolean formalizing = true;
+        while (formalizing) {
+            String part = parts.next();
+            if (!part.isEmpty()) {
+                if (part.length() == 1) {
+                    formalNameBuilder.append(part.toUpperCase());
+                } else {
+                    formalNameBuilder.append(part.substring(0, 1).toUpperCase());
+                    formalNameBuilder.append(part.substring(1, part.length()));
+                }
+            }
+
+            if (parts.hasNext()) {
+                formalNameBuilder.append(" ");
+            } else {
+                formalizing = false;
+            }
+        }
+        return formalNameBuilder.toString();
+    }
+    
+    protected String getLogo(RdfResource rdfResource) {
+        return logoUrl;
     }
 
     protected abstract String generateManifest(String handle) throws URISyntaxException, IOException;
@@ -118,7 +164,7 @@ public abstract class AbstractManifestService implements ManifestService {
     protected abstract RepositoryType getRepositoryType();
 
     protected abstract ManifestType getManifestType();
-    
+
     protected abstract String getRepositoryPath(String url);
 
     private Optional<RedisManifest> getRedisManifest(String path) {

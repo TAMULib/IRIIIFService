@@ -8,7 +8,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +21,7 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.references.Collecti
 import de.digitalcollections.iiif.presentation.model.impl.v2.references.ManifestReferenceImpl;
 import edu.tamu.iiif.constants.rdf.Constants;
 import edu.tamu.iiif.model.ManifestType;
+import edu.tamu.iiif.model.rdf.RdfResource;
 
 @Service
 public class DSpaceCollectionManifestService extends AbstractDSpaceManifestService {
@@ -32,7 +32,7 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
     }
 
     private Collection generateCollection(String handle) throws URISyntaxException {
-        Model model = getDSpaceRdfModel(handle);
+        RdfResource rdfResource = getDSpaceRdfModel(handle);
 
         URI id = buildId(handle);
 
@@ -42,25 +42,25 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
 
         Collection collection = new CollectionImpl(id, label, metadata);
 
-        collection.setSubCollections(getSubcollections(model));
+        collection.setSubCollections(getSubcollections(rdfResource));
 
-        collection.setManifests(getResourceManifests(model));
+        collection.setManifests(getResourceManifests(rdfResource));
 
-        collection.setDescription(getDescription(model));
+        collection.setDescription(getDescription(rdfResource));
 
-        collection.setLogo(getLogo(model));
+        collection.setLogo(getLogo(rdfResource));
 
         collection.setViewingHint("multi-part");
 
         return collection;
     }
 
-    private List<CollectionReference> getSubcollections(Model model) throws URISyntaxException {
-        List<CollectionReference> subcollections = getSubcommunities(model);
+    private List<CollectionReference> getSubcollections(RdfResource rdfResource) throws URISyntaxException {
+        List<CollectionReference> subcollections = getSubcommunities(rdfResource);
 
-        List<CollectionReference> collections = getCollections(model);
+        List<CollectionReference> collections = getCollections(rdfResource);
 
-        List<CollectionReference> collectionsToElide = getCollectionsToElide(model);
+        List<CollectionReference> collectionsToElide = getCollectionsToElide(rdfResource);
 
         collections.forEach(c -> {
             boolean include = true;
@@ -78,9 +78,9 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
         return subcollections;
     }
 
-    private List<CollectionReference> getSubcommunities(Model model) throws URISyntaxException {
+    private List<CollectionReference> getSubcommunities(RdfResource rdfResource) throws URISyntaxException {
         List<CollectionReference> subcommunities = new ArrayList<CollectionReference>();
-        NodeIterator subcommunityIterator = model.listObjectsOfProperty(model.getProperty(Constants.DSPACE_HAS_SUB_COMMUNITY_PREDICATE));
+        NodeIterator subcommunityIterator = rdfResource.getAllNodesOfPropertyWithId(Constants.DSPACE_HAS_SUB_COMMUNITY_PREDICATE);
         while (subcommunityIterator.hasNext()) {
             String uri = subcommunityIterator.next().toString();
             String handle = getHandle(uri);
@@ -89,9 +89,9 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
         return subcommunities;
     }
 
-    private List<CollectionReference> getCollections(Model model) throws URISyntaxException {
+    private List<CollectionReference> getCollections(RdfResource rdfResource) throws URISyntaxException {
         List<CollectionReference> collections = new ArrayList<CollectionReference>();
-        NodeIterator collectionIterator = model.listObjectsOfProperty(model.getProperty(Constants.DSPACE_HAS_COLLECTION_PREDICATE));
+        NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(Constants.DSPACE_HAS_COLLECTION_PREDICATE);
         while (collectionIterator.hasNext()) {
             String uri = collectionIterator.next().toString();
             String handle = getHandle(uri);
@@ -100,19 +100,19 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
         return collections;
     }
 
-    private List<CollectionReference> getCollectionsToElide(Model model) throws URISyntaxException {
+    private List<CollectionReference> getCollectionsToElide(RdfResource rdfResource) throws URISyntaxException {
         List<CollectionReference> collectionsToElide = new ArrayList<CollectionReference>();
-        for (CollectionReference subcommunity : getSubcommunities(model)) {
+        for (CollectionReference subcommunity : getSubcommunities(rdfResource)) {
             String handle = subcommunity.getLabel().getFirstValue();
-            Model subcommunityModel = getDSpaceRdfModel(handle);
-            collectionsToElide.addAll(getCollections(subcommunityModel));
+            RdfResource subcommunityRdfResource = getDSpaceRdfModel(handle);
+            collectionsToElide.addAll(getCollections(subcommunityRdfResource));
         }
         return collectionsToElide;
     }
 
-    private List<ManifestReference> getResourceManifests(Model model) throws URISyntaxException {
+    private List<ManifestReference> getResourceManifests(RdfResource rdfResource) throws URISyntaxException {
         List<ManifestReference> manifests = new ArrayList<ManifestReference>();
-        NodeIterator collectionIterator = model.listObjectsOfProperty(model.getProperty(Constants.DSPACE_HAS_ITEM_PREDICATE));
+        NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(Constants.DSPACE_HAS_ITEM_PREDICATE);
         while (collectionIterator.hasNext()) {
             String uri = collectionIterator.next().toString();
             String handle = getHandle(uri);

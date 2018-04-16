@@ -1,11 +1,11 @@
-package edu.tamu.iiif.model.rdf.fedora;
+package edu.tamu.iiif.model.rdf;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Image;
 
-public class FedoraRdfCanvas {
+public class RdfCanvas {
 
     private int height;
 
@@ -13,7 +13,7 @@ public class FedoraRdfCanvas {
 
     private final List<Image> images;
 
-    public FedoraRdfCanvas() {
+    public RdfCanvas() {
         this.height = 0;
         this.width = 0;
         this.images = new ArrayList<Image>();

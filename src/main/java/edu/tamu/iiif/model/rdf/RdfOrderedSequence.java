@@ -1,9 +1,9 @@
-package edu.tamu.iiif.model.rdf.fedora;
+package edu.tamu.iiif.model.rdf;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 
-public class FedoraRdfOrderedSequence extends FedoraRdfResource {
+public class RdfOrderedSequence extends RdfResource {
 
     private final String firstId;
 
@@ -11,7 +11,7 @@ public class FedoraRdfOrderedSequence extends FedoraRdfResource {
 
     private String currentId;
 
-    public FedoraRdfOrderedSequence(Model model, Resource resource, String firstId, String lastId) {
+    public RdfOrderedSequence(Model model, Resource resource, String firstId, String lastId) {
         super(model, resource);
         this.firstId = firstId;
         this.lastId = lastId;

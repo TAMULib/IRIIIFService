@@ -1,4 +1,4 @@
-package edu.tamu.iiif.model.rdf.fedora;
+package edu.tamu.iiif.model.rdf;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
@@ -8,25 +8,25 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 
-public class FedoraRdfResource extends FedoraRdfModel {
+public class RdfResource extends RdfModel {
 
     private Resource resource;
 
-    public FedoraRdfResource(Model model) {
+    public RdfResource(Model model) {
         super(model);
     }
 
-    public FedoraRdfResource(Model model, Resource resource) {
+    public RdfResource(Model model, Resource resource) {
         this(model);
         this.resource = resource;
     }
 
-    public FedoraRdfResource(FedoraRdfResource fedoraRdfResource, String id) {
+    public RdfResource(RdfResource fedoraRdfResource, String id) {
         this(fedoraRdfResource.getModel());
         this.resource = getModel().getResource(id);
     }
 
-    public FedoraRdfResource(FedoraRdfResource fedoraRdfResource, Resource resource) {
+    public RdfResource(RdfResource fedoraRdfResource, Resource resource) {
         this(fedoraRdfResource.getModel(), resource);
     }
 
@@ -60,6 +60,10 @@ public class FedoraRdfResource extends FedoraRdfModel {
 
     public StmtIterator listStatementsOfPropertyWithId(String id) {
         return resource.listProperties(getProperty(id));
+    }
+
+    public NodeIterator getAllNodesOfPropertyWithId(String id) {
+        return getModel().listObjectsOfProperty(getProperty(id));
     }
 
     public NodeIterator getNodesOfPropertyWithId(String id) {

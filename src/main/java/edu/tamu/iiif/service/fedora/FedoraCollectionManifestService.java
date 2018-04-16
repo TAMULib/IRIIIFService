@@ -28,8 +28,8 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.CollectionImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.references.ManifestReferenceImpl;
 import edu.tamu.iiif.model.ManifestType;
-import edu.tamu.iiif.model.rdf.fedora.FedoraRdfOrderedSequence;
-import edu.tamu.iiif.model.rdf.fedora.FedoraRdfResource;
+import edu.tamu.iiif.model.rdf.RdfOrderedSequence;
+import edu.tamu.iiif.model.rdf.RdfResource;
 
 @Service
 public class FedoraCollectionManifestService extends AbstractFedoraManifestService {
@@ -40,37 +40,37 @@ public class FedoraCollectionManifestService extends AbstractFedoraManifestServi
     }
 
     private Collection generateCollection(String path) throws URISyntaxException, IOException {
-        FedoraRdfResource fedoraRdfResource = getFedoraRdfResource(path);
+        RdfResource rdfResource = getRdfResource(path);
 
         URI id = buildId(path);
 
-        PropertyValueSimpleImpl label = getTitle(fedoraRdfResource);
+        PropertyValueSimpleImpl label = getTitle(rdfResource);
 
-        List<Metadata> metadata = getDublinCoreMetadata(fedoraRdfResource);
+        List<Metadata> metadata = getDublinCoreMetadata(rdfResource);
 
         Collection collection = new CollectionImpl(id, label, metadata);
 
-        collection.setSubCollections(getSubcollections(fedoraRdfResource));
+        collection.setSubCollections(getSubcollections(rdfResource));
 
-        collection.setManifests(getResourceManifests(fedoraRdfResource));
+        collection.setManifests(getResourceManifests(rdfResource));
 
-        collection.setDescription(getDescription(fedoraRdfResource));
+        collection.setDescription(getDescription(rdfResource));
 
-        collection.setLogo(getLogo(fedoraRdfResource));
+        collection.setLogo(getLogo(rdfResource));
 
         collection.setViewingHint("multi-part");
 
         return collection;
     }
 
-    private List<CollectionReference> getSubcollections(FedoraRdfResource fedoraRdfResource) throws URISyntaxException {
+    private List<CollectionReference> getSubcollections(RdfResource rdfResource) throws URISyntaxException {
         List<CollectionReference> subcollections = new ArrayList<CollectionReference>();
         return subcollections;
     }
 
-    private List<ManifestReference> getResourceManifests(FedoraRdfResource fedoraRdfResource) throws URISyntaxException {
+    private List<ManifestReference> getResourceManifests(RdfResource rdfResource) throws URISyntaxException {
         List<ManifestReference> manifests = new ArrayList<ManifestReference>();
-        List<String> members = getMembers(fedoraRdfResource);
+        List<String> members = getMembers(rdfResource);
         for (String id : members) {
             PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(formalize(extractLabel(id)));
             manifests.add(new ManifestReferenceImpl(getFedoraIIIFPresentationUri(id), label));
@@ -78,27 +78,27 @@ public class FedoraCollectionManifestService extends AbstractFedoraManifestServi
         return manifests;
     }
 
-    private List<String> getMembers(FedoraRdfResource fedoraRdfResource) {
+    private List<String> getMembers(RdfResource rdfResource) {
 
         List<String> members = new ArrayList<String>();
 
-        Optional<String> firstId = getIdByPredicate(fedoraRdfResource.getModel(), IANA_FIRST_PREDICATE);
+        Optional<String> firstId = getIdByPredicate(rdfResource.getModel(), IANA_FIRST_PREDICATE);
 
         if (firstId.isPresent()) {
-            Optional<String> lastId = getIdByPredicate(fedoraRdfResource.getModel(), IANA_LAST_PREDICATE);
+            Optional<String> lastId = getIdByPredicate(rdfResource.getModel(), IANA_LAST_PREDICATE);
 
             if (lastId.isPresent()) {
-                Resource firstResource = fedoraRdfResource.getModel().getResource(firstId.get());
-                getOrderedMembers(new FedoraRdfOrderedSequence(fedoraRdfResource.getModel(), firstResource, firstId.get(), lastId.get()), members);
+                Resource firstResource = rdfResource.getModel().getResource(firstId.get());
+                getOrderedMembers(new RdfOrderedSequence(rdfResource.getModel(), firstResource, firstId.get(), lastId.get()), members);
             }
         }
 
         if (members.isEmpty()) {
 
-            Resource resource = fedoraRdfResource.getResource();
-            Property property = fedoraRdfResource.getProperty(PCDM_HAS_MEMBER_PREDICATE);
+            Resource resource = rdfResource.getResource();
+            Property property = rdfResource.getProperty(PCDM_HAS_MEMBER_PREDICATE);
             if (resource != null && property != null) {
-                NodeIterator nodes = fedoraRdfResource.getModel().listObjectsOfProperty(resource, property);
+                NodeIterator nodes = rdfResource.getModel().listObjectsOfProperty(resource, property);
                 while (nodes.hasNext()) {
                     members.add(nodes.nextNode().toString());
                 }
@@ -107,7 +107,7 @@ public class FedoraCollectionManifestService extends AbstractFedoraManifestServi
         return members;
     }
 
-    private void getOrderedMembers(FedoraRdfOrderedSequence fedoraRdfOrderedSequence, List<String> members) {
+    private void getOrderedMembers(RdfOrderedSequence fedoraRdfOrderedSequence, List<String> members) {
 
         Model model = getRdfModel(fedoraRdfOrderedSequence.getResource().getURI());
 

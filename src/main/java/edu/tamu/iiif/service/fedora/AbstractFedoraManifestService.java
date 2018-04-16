@@ -22,8 +22,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +40,7 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.MetadataImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ServiceImpl;
 import edu.tamu.iiif.model.RepositoryType;
-import edu.tamu.iiif.model.rdf.fedora.FedoraRdfResource;
+import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
 
 public abstract class AbstractFedoraManifestService extends AbstractManifestService {
@@ -53,14 +51,14 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     @Value("${iiif.pcdm.rdf.ext.url}")
     private String pcdmRdfExtUrl;
 
-    protected FedoraRdfResource getFedoraRdfResource(String path) {
+    protected RdfResource getRdfResource(String path) {
         String fedoraRdfUri = getId(path);
         String rdf = getRdf(fedoraRdfUri);
         System.out.println("\n" + rdf + "\n");
         Model model = generateRdfModel(rdf);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");
-        return new FedoraRdfResource(model, model.getResource(fedoraRdfUri));
+        return new RdfResource(model, model.getResource(fedoraRdfUri));
     }
 
     protected Model getRdfModel(String uri) {
@@ -68,51 +66,47 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         return generateRdfModel(resStr);
     }
 
-    protected Optional<String> getLicense(FedoraRdfResource fedoraRdfResource) {
-        return Optional.empty();
-    }
-
-    protected PropertyValueSimpleImpl getTitle(FedoraRdfResource fedoraRdfResource) {
-        Optional<String> title = getObject(fedoraRdfResource, DUBLIN_CORE_TITLE_PREDICATE);
+    protected PropertyValueSimpleImpl getTitle(RdfResource rdfResource) {
+        Optional<String> title = getObject(rdfResource, DUBLIN_CORE_TITLE_PREDICATE);
         if (!title.isPresent()) {
-            title = Optional.of(formalize(getRepositoryPath(fedoraRdfResource.getResource().getURI())));
+            title = Optional.of(formalize(getRepositoryPath(rdfResource.getResource().getURI())));
         }
         return new PropertyValueSimpleImpl(title.get());
     }
 
-    protected PropertyValueSimpleImpl getDescription(FedoraRdfResource fedoraRdfResource) {
-        Optional<String> description = getObject(fedoraRdfResource, DUBLIN_CORE_TITLE_PREDICATE);
+    protected PropertyValueSimpleImpl getDescription(RdfResource rdfResource) {
+        Optional<String> description = getObject(rdfResource, DUBLIN_CORE_TITLE_PREDICATE);
         if (!description.isPresent()) {
             description = Optional.of("N/A");
         }
         return new PropertyValueSimpleImpl(description.get());
     }
 
-    protected Optional<String> getMimeType(FedoraRdfResource fedoraRdfResource) {
-        return getObject(fedoraRdfResource, EBUCORE_HAS_MIME_TYPE_PREDICATE);
+    protected Optional<String> getMimeType(RdfResource rdfResource) {
+        return getObject(rdfResource, EBUCORE_HAS_MIME_TYPE_PREDICATE);
     }
 
-    protected Optional<Integer> getHeight(FedoraRdfResource fedoraRdfResource) {
+    protected Optional<Integer> getHeight(RdfResource rdfResource) {
         Optional<Integer> height = Optional.empty();
-        Optional<String> heightAsString = getObject(fedoraRdfResource, EBUCORE_HEIGHT_PREDICATE);
+        Optional<String> heightAsString = getObject(rdfResource, EBUCORE_HEIGHT_PREDICATE);
         if (heightAsString.isPresent()) {
             height = Optional.of(Integer.parseInt(heightAsString.get()));
         }
         return height;
     }
 
-    protected Optional<Integer> getWidth(FedoraRdfResource fedoraRdfResource) {
+    protected Optional<Integer> getWidth(RdfResource rdfResource) {
         Optional<Integer> width = Optional.empty();
-        Optional<String> widthAsString = getObject(fedoraRdfResource, EBUCORE_WIDTH_PREDICATE);
+        Optional<String> widthAsString = getObject(rdfResource, EBUCORE_WIDTH_PREDICATE);
         if (widthAsString.isPresent()) {
             width = Optional.of(Integer.parseInt(widthAsString.get()));
         }
         return width;
     }
 
-    private Optional<String> getObject(FedoraRdfResource fedoraRdfResource, String uri) {
+    private Optional<String> getObject(RdfResource rdfResource, String uri) {
         Optional<String> metadatum = Optional.empty();
-        Statement statement = fedoraRdfResource.getStatementOfPropertyWithId(uri);
+        Statement statement = rdfResource.getStatementOfPropertyWithId(uri);
         if (statement != null) {
             RDFNode object = statement.getObject();
             if (!object.toString().isEmpty()) {
@@ -122,17 +116,17 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         return metadatum;
     }
 
-    protected List<Metadata> getDublinCoreMetadata(FedoraRdfResource fedoraRdfResource) throws IOException {
-        return getMetadata(fedoraRdfResource, DUBLIN_CORE_PREFIX);
+    protected List<Metadata> getDublinCoreMetadata(RdfResource rdfResource) throws IOException {
+        return getMetadata(rdfResource, DUBLIN_CORE_PREFIX);
     }
 
-    protected List<Metadata> getMetadata(FedoraRdfResource fedoraRdfResource, String prefix) throws IOException {
+    protected List<Metadata> getMetadata(RdfResource rdfResource, String prefix) throws IOException {
         List<Metadata> metadata = new ArrayList<Metadata>();
-        StmtIterator statements = fedoraRdfResource.getModel().listStatements();
+        StmtIterator statements = rdfResource.getModel().listStatements();
         while (statements.hasNext()) {
             Statement statement = statements.nextStatement();
             Property predicate = statement.getPredicate();
-            if (fedoraRdfResource.getResource().getURI().equals(statement.getSubject().getURI()) && predicate.getNameSpace().equals(prefix)) {
+            if (rdfResource.getResource().getURI().equals(statement.getSubject().getURI()) && predicate.getNameSpace().equals(prefix)) {
                 metadata.add(generateMetadatum(statement));
             }
         }
@@ -171,57 +165,20 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         return URI.create(joinPath(imageServerUrl, pathIdentifier(id), "info.json"));
     }
 
-    protected URI serviceUrlToThumbnailUri(URI serviceUrl) throws URISyntaxException {
-        return URI.create(joinPath(serviceUrl.toString(), "full/!200,200/0/default.jpg"));
-    }
-
-    protected String extractLabel(String url) {
-        return url.substring(url.lastIndexOf("/") + 1, url.length());
-    }
-
-    protected String formalize(String name) {
-        StringBuilder formalNameBuilder = new StringBuilder();
-        name = name.replace("/", "_").trim();
-        Iterator<String> parts = Arrays.asList(name.split("_")).iterator();
-        boolean formalizing = true;
-        while (formalizing) {
-            String part = parts.next();
-            if (!part.isEmpty()) {
-                if (part.length() == 1) {
-                    formalNameBuilder.append(part.toUpperCase());
-                } else {
-                    formalNameBuilder.append(part.substring(0, 1).toUpperCase());
-                    formalNameBuilder.append(part.substring(1, part.length()));
-                }
-            }
-
-            if (parts.hasNext()) {
-                formalNameBuilder.append(" ");
-            } else {
-                formalizing = false;
-            }
-        }
-        return formalNameBuilder.toString();
-    }
-
-    protected List<Service> getServices(FedoraRdfResource fedoraRdfResource, String... names) throws URISyntaxException {
+    protected List<Service> getServices(RdfResource rdfResource, String... names) throws URISyntaxException {
         List<Service> services = new ArrayList<Service>();
         for (String name : names) {
-            services.add(getService(fedoraRdfResource, name));
+            services.add(getService(rdfResource, name));
         }
         return services;
     }
 
-    protected Service getService(FedoraRdfResource fedoraRdfResource, String name) throws URISyntaxException {
-        Service service = new ServiceImpl(getImageUri(fedoraRdfResource.getResource().getURI()));
+    protected Service getService(RdfResource rdfResource, String name) throws URISyntaxException {
+        Service service = new ServiceImpl(getImageUri(rdfResource.getResource().getURI()));
         service.setLabel(new PropertyValueSimpleImpl(name));
         service.setContext(IIIF_IMAGE_API_CONTEXT);
         service.setProfile(IIIF_IMAGE_API_LEVEL_ZERO_PROFILE);
         return service;
-    }
-
-    protected String getLogo(FedoraRdfResource fedoraRdfResource) {
-        return logoUrl;
     }
 
     @Override

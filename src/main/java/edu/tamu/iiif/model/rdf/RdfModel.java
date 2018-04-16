@@ -1,14 +1,14 @@
-package edu.tamu.iiif.model.rdf.fedora;
+package edu.tamu.iiif.model.rdf;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 
-public abstract class FedoraRdfModel {
+public abstract class RdfModel {
 
     private final Model model;
 
-    public FedoraRdfModel(Model model) {
+    public RdfModel(Model model) {
         this.model = model;
     }
 
