@@ -183,22 +183,17 @@ public class FedoraPresentationManifestService extends AbstractFedoraManifestSer
 
                 RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, resource.getURI());
 
-                Optional<String> mimetype = getMimeType(fileFedoraRdfResource);
+                Image image = generateImage(fileFedoraRdfResource, canvasId);
+                rdfCanvas.addImage(image);
 
-                if (mimetype.isPresent() && mimetype.get().startsWith("image")) {
+                int height = image.getResource().getHeight();
+                if (height > rdfCanvas.getHeight()) {
+                    rdfCanvas.setHeight(height);
+                }
 
-                    Image image = generateImage(fileFedoraRdfResource, canvasId);
-                    rdfCanvas.addImage(image);
-
-                    int height = image.getResource().getHeight();
-                    if (height > rdfCanvas.getHeight()) {
-                        rdfCanvas.setHeight(height);
-                    }
-
-                    int width = image.getResource().getWidth();
-                    if (width > rdfCanvas.getWidth()) {
-                        rdfCanvas.setWidth(width);
-                    }
+                int width = image.getResource().getWidth();
+                if (width > rdfCanvas.getWidth()) {
+                    rdfCanvas.setWidth(width);
                 }
             }
         }

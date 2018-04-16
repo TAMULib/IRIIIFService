@@ -1,44 +1,31 @@
 package edu.tamu.iiif.service.fedora;
 
 import static edu.tamu.iiif.constants.rdf.Constants.COLLECECTION_IDENTIFIER;
-import static edu.tamu.iiif.constants.rdf.Constants.DUBLIN_CORE_PREFIX;
 import static edu.tamu.iiif.constants.rdf.Constants.DUBLIN_CORE_TITLE_PREDICATE;
 import static edu.tamu.iiif.constants.rdf.Constants.EBUCORE_HAS_MIME_TYPE_PREDICATE;
 import static edu.tamu.iiif.constants.rdf.Constants.EBUCORE_HEIGHT_PREDICATE;
 import static edu.tamu.iiif.constants.rdf.Constants.EBUCORE_WIDTH_PREDICATE;
 import static edu.tamu.iiif.constants.rdf.Constants.FEDORA_FCR_METADATA;
 import static edu.tamu.iiif.constants.rdf.Constants.FEDORA_IDENTIFIER;
-import static edu.tamu.iiif.constants.rdf.Constants.IIIF_IMAGE_API_CONTEXT;
-import static edu.tamu.iiif.constants.rdf.Constants.IIIF_IMAGE_API_LEVEL_ZERO_PROFILE;
 import static edu.tamu.iiif.constants.rdf.Constants.IMAGE_IDENTIFIER;
 import static edu.tamu.iiif.constants.rdf.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.model.RepositoryType.FEDORA;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
-import org.apache.jena.rdf.model.StmtIterator;
 import org.springframework.beans.factory.annotation.Value;
 
-import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
-import de.digitalcollections.iiif.presentation.model.api.v2.Service;
-import de.digitalcollections.iiif.presentation.model.impl.v2.MetadataImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
-import de.digitalcollections.iiif.presentation.model.impl.v2.ServiceImpl;
 import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
@@ -52,9 +39,8 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     private String pcdmRdfExtUrl;
 
     protected RdfResource getRdfResource(String path) {
-        String fedoraRdfUri = getId(path);
-        String rdf = getRdf(fedoraRdfUri);
-        System.out.println("\n" + rdf + "\n");
+        String fedoraRdfUri = getFedoraUrl(path);
+        String rdf = getPCDMRdf(fedoraRdfUri);
         Model model = generateRdfModel(rdf);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");
@@ -116,69 +102,20 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         return metadatum;
     }
 
-    protected List<Metadata> getDublinCoreMetadata(RdfResource rdfResource) throws IOException {
-        return getMetadata(rdfResource, DUBLIN_CORE_PREFIX);
+    protected URI getFedoraIIIFCollectionUri(String url) throws URISyntaxException {
+        return getFedoraIIIFUri(url, COLLECECTION_IDENTIFIER);
     }
 
-    protected List<Metadata> getMetadata(RdfResource rdfResource, String prefix) throws IOException {
-        List<Metadata> metadata = new ArrayList<Metadata>();
-        StmtIterator statements = rdfResource.getModel().listStatements();
-        while (statements.hasNext()) {
-            Statement statement = statements.nextStatement();
-            Property predicate = statement.getPredicate();
-            if (rdfResource.getResource().getURI().equals(statement.getSubject().getURI()) && predicate.getNameSpace().equals(prefix)) {
-                metadata.add(generateMetadatum(statement));
-            }
-        }
-        return metadata;
+    protected URI getFedoraIIIFPresentationUri(String url) throws URISyntaxException {
+        return getFedoraIIIFUri(url, PRESENTATION_IDENTIFIER);
     }
 
-    protected URI getFedoraIIIFCollectionUri(String id) throws URISyntaxException {
-        return getFedoraIIIFUri(id, COLLECECTION_IDENTIFIER);
+    protected URI getFedoraIIIFImageUri(String url) throws URISyntaxException {
+        return getFedoraIIIFUri(url, IMAGE_IDENTIFIER);
     }
 
-    protected URI getFedoraIIIFPresentationUri(String id) throws URISyntaxException {
-        return getFedoraIIIFUri(id, PRESENTATION_IDENTIFIER);
-    }
-
-    protected URI getFedoraIIIFImageUri(String id) throws URISyntaxException {
-        return getFedoraIIIFUri(id, IMAGE_IDENTIFIER);
-    }
-
-    private URI getFedoraIIIFUri(String id, String type) throws URISyntaxException {
-        return URI.create(id.replace(fedoraUrl + "/", getIiifServiceUrl() + "/" + type + "?path="));
-    }
-
-    protected URI getImageUri(String id) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(id)));
-    }
-
-    protected URI getImageFullUrl(String id) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(id), "full/full/0/default.jpg"));
-    }
-
-    protected URI getImageThumbnailUrl(String id) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(id), "full/!200,200/0/default.jpg"));
-    }
-
-    protected URI getImageInfoUri(String id) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(id), "info.json"));
-    }
-
-    protected List<Service> getServices(RdfResource rdfResource, String... names) throws URISyntaxException {
-        List<Service> services = new ArrayList<Service>();
-        for (String name : names) {
-            services.add(getService(rdfResource, name));
-        }
-        return services;
-    }
-
-    protected Service getService(RdfResource rdfResource, String name) throws URISyntaxException {
-        Service service = new ServiceImpl(getImageUri(rdfResource.getResource().getURI()));
-        service.setLabel(new PropertyValueSimpleImpl(name));
-        service.setContext(IIIF_IMAGE_API_CONTEXT);
-        service.setProfile(IIIF_IMAGE_API_LEVEL_ZERO_PROFILE);
-        return service;
+    private URI getFedoraIIIFUri(String url, String type) throws URISyntaxException {
+        return URI.create(url.replace(fedoraUrl + "/", getIiifServiceUrl() + "/" + type + "?path="));
     }
 
     @Override
@@ -196,11 +133,11 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         return FEDORA;
     }
 
-    private String getId(String path) {
+    private String getFedoraUrl(String path) {
         return joinPath(fedoraUrl, path);
     }
 
-    private String getRdf(String fedoraPath) {
+    private String getPCDMRdf(String fedoraPath) {
         return httpService.get(pcdmRdfExtUrl, fedoraPath);
     }
 
@@ -209,17 +146,6 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         Model model = ModelFactory.createDefaultModel();
         model.read(stream, null, "TTL");
         return model;
-    }
-
-    private Metadata generateMetadatum(Statement statement) throws IOException {
-        Property predicate = statement.getPredicate();
-        RDFNode object = statement.getObject();
-        if (object instanceof Resource) {
-            throw new IOException("RDF statement object is a resource, not a literal value!");
-        }
-        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(formalize(predicate.getLocalName()));
-        PropertyValueSimpleImpl value = new PropertyValueSimpleImpl(object.toString());
-        return new MetadataImpl(label, value);
     }
 
 }

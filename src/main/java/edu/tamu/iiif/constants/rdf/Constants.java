@@ -19,6 +19,7 @@ public class Constants {
     // DSpace
     public final static String DSPACE_PREFIX = "http://digital-repositories.org/ontologies/dspace/0.1.0#";
 
+    public final static String DSPACE_HAS_BITSTREAM_PREDICATE = DSPACE_PREFIX + "hasBitstream";
     public final static String DSPACE_HAS_ITEM_PREDICATE = DSPACE_PREFIX + "hasItem";
     public final static String DSPACE_HAS_COLLECTION_PREDICATE = DSPACE_PREFIX + "hasCollection";
     public final static String DSPACE_HAS_SUB_COMMUNITY_PREDICATE = DSPACE_PREFIX + "hasSubcommunity";

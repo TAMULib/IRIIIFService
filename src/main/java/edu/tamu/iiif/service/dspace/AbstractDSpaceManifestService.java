@@ -2,6 +2,7 @@ package edu.tamu.iiif.service.dspace;
 
 import static edu.tamu.iiif.constants.rdf.Constants.COLLECECTION_IDENTIFIER;
 import static edu.tamu.iiif.constants.rdf.Constants.DSPACE_IDENTIFIER;
+import static edu.tamu.iiif.constants.rdf.Constants.IMAGE_IDENTIFIER;
 import static edu.tamu.iiif.constants.rdf.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.model.RepositoryType.DSPACE;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
@@ -28,9 +29,8 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
     protected String dspaceUrl;
 
     protected RdfResource getDSpaceRdfModel(String handle) {
-        String dspaceRdfUri = getId(handle);
+        String dspaceRdfUri = getRdfUrl(handle);
         String rdf = getRdf(dspaceRdfUri);
-        System.out.println("\n" + rdf + "\n");
         Model model = generateRdfModel(rdf);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");
@@ -61,26 +61,20 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         return new PropertyValueSimpleImpl("");
     }
 
-    protected String getHandle(String uri) {
-        String handle;
-        if (uri.contains("/handle/")) {
-            handle = uri.split("/handle/")[1];
-        } else {
-            handle = uri.split("/resource/")[1];
-        }
-        return handle;
-    }
-
     protected URI getDSpaceIIIFCollectionUri(String handle) throws URISyntaxException {
-        return URI.create(getIiifServiceUrl() + "/" + COLLECECTION_IDENTIFIER + "?path=" + handle);
+        return getDSpaceIIIFUri(handle, COLLECECTION_IDENTIFIER);
     }
 
     protected URI getDSpaceIIIFPresentationUri(String handle) throws URISyntaxException {
-        return URI.create(getIiifServiceUrl() + "/" + PRESENTATION_IDENTIFIER + "?path=" + handle);
+        return getDSpaceIIIFUri(handle, PRESENTATION_IDENTIFIER);
     }
 
-    protected URI getImageUri(String id) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(id)));
+    protected URI getDSpaceIIIFImageUri(String handle) throws URISyntaxException {
+        return getDSpaceIIIFUri(handle, IMAGE_IDENTIFIER);
+    }
+
+    protected URI getImageUri(String url) throws URISyntaxException {
+        return URI.create(joinPath(imageServerUrl, pathIdentifier(url)));
     }
 
     @Override
@@ -98,12 +92,16 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         return DSPACE;
     }
 
-    private String getId(String handle) {
-        return joinPath(dspaceUrl, "handle", handle);
+    private String getRdfUrl(String handle) {
+        return joinPath(dspaceUrl, "rdf", "handle", handle);
     }
 
     private String getRdf(String dspaceRdfUri) {
         return httpService.get(dspaceRdfUri);
+    }
+
+    private URI getDSpaceIIIFUri(String handle, String type) throws URISyntaxException {
+        return URI.create(getIiifServiceUrl() + "/" + type + "?path=" + handle);
     }
 
     private Model generateRdfModel(String rdf) {
