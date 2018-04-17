@@ -140,7 +140,6 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected URI getImageInfoUri(String url) throws URISyntaxException {
-        System.out.println("\n\n" + url + "\n\n");
         return URI.create(joinPath(imageServerUrl, pathIdentifier(url), "info.json"));
     }
 

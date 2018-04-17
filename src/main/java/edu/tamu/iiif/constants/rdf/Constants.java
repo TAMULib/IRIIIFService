@@ -23,6 +23,7 @@ public class Constants {
     public final static String DSPACE_HAS_ITEM_PREDICATE = DSPACE_PREFIX + "hasItem";
     public final static String DSPACE_HAS_COLLECTION_PREDICATE = DSPACE_PREFIX + "hasCollection";
     public final static String DSPACE_HAS_SUB_COMMUNITY_PREDICATE = DSPACE_PREFIX + "hasSubcommunity";
+    public final static String DSPACE_IS_PART_OF_COLLECTION_PREDICATE = DSPACE_PREFIX + "isPartOfCollection";
     public final static String DSPACE_IS_PART_OF_COMMUNITY_PREDICATE = DSPACE_PREFIX + "isPartOfCommunity";
     public final static String DSPACE_IS_SUB_COMMUNITY_OF_PREDICATE = DSPACE_PREFIX + "isSubcommunityOf";
     public final static String DSPACE_IS_PART_OF_REPOSITORY_PREDICATE = DSPACE_PREFIX + "isPartOfRepository";

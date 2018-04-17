@@ -53,6 +53,14 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         return getIdByPredicate(model, Constants.DSPACE_IS_PART_OF_COMMUNITY_PREDICATE).isPresent();
     }
 
+    protected boolean hasItems(Model model) {
+        return getIdByPredicate(model, Constants.DSPACE_HAS_ITEM_PREDICATE).isPresent();
+    }
+
+    protected boolean isItem(Model model) {
+        return getIdByPredicate(model, Constants.DSPACE_IS_PART_OF_COLLECTION_PREDICATE).isPresent();
+    }
+
     protected boolean isCommunity(Model model) {
         return isTopLevelCommunity(model) || isSubcommunity(model);
     }
@@ -69,12 +77,8 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         return getDSpaceIIIFUri(handle, PRESENTATION_IDENTIFIER);
     }
 
-    protected URI getDSpaceIIIFImageUri(String handle) throws URISyntaxException {
+    protected URI getDSpaceIIIFImageUri(String handle, String filename) throws URISyntaxException {
         return getDSpaceIIIFUri(handle, IMAGE_IDENTIFIER);
-    }
-
-    protected URI getImageUri(String url) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(url)));
     }
 
     @Override

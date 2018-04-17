@@ -112,11 +112,17 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
 
     private List<ManifestReference> getResourceManifests(RdfResource rdfResource) throws URISyntaxException {
         List<ManifestReference> manifests = new ArrayList<ManifestReference>();
-        NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(Constants.DSPACE_HAS_ITEM_PREDICATE);
-        while (collectionIterator.hasNext()) {
-            String uri = collectionIterator.next().toString();
+        if (isItem(rdfResource.getModel())) {
+            String uri = rdfResource.getResource().getURI();
             String handle = getHandle(uri);
             manifests.add(new ManifestReferenceImpl(getDSpaceIIIFPresentationUri(handle), new PropertyValueSimpleImpl(handle)));
+        } else {
+            NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(Constants.DSPACE_HAS_ITEM_PREDICATE);
+            while (collectionIterator.hasNext()) {
+                String uri = collectionIterator.next().toString();
+                String handle = getHandle(uri);
+                manifests.add(new ManifestReferenceImpl(getDSpaceIIIFPresentationUri(handle), new PropertyValueSimpleImpl(handle)));
+            }
         }
         return manifests;
     }

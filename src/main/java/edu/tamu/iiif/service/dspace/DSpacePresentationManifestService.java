@@ -71,9 +71,29 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
 
     private List<Sequence> getSequences(RdfResource rdfResource) throws IOException, URISyntaxException {
         List<Sequence> sequences = new ArrayList<Sequence>();
+        if (hasCollections(rdfResource.getModel())) {
 
-        sequences.add(generateSequence(rdfResource));
+            NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(Constants.DSPACE_HAS_COLLECTION_PREDICATE);
+            while (collectionIterator.hasNext()) {
+                String uri = collectionIterator.next().toString();
+                String handle = getHandle(uri);
+                sequences.addAll(getSequences(getDSpaceRdfModel(handle)));
+            }
 
+        } else if (hasItems(rdfResource.getModel())) {
+
+            NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(Constants.DSPACE_HAS_ITEM_PREDICATE);
+            while (collectionIterator.hasNext()) {
+                String uri = collectionIterator.next().toString();
+                String handle = getHandle(uri);
+                sequences.addAll(getSequences(getDSpaceRdfModel(handle)));
+            }
+
+        } else {
+            if (isItem(rdfResource.getModel())) {
+                sequences.add(generateSequence(rdfResource));
+            }
+        }
         return sequences;
     }
 
@@ -95,12 +115,13 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
     }
 
     private Canvas generateCanvas(RdfResource rdfResource) throws IOException, URISyntaxException {
-        String id = rdfResource.getResource().getURI();
-        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(formalize(extractLabel(id)));
+        String uri = rdfResource.getResource().getURI();
+        String handle = getHandle(uri);
+        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(handle);
 
         RdfCanvas rdfCanvas = getDSpaceRdfCanvas(rdfResource);
 
-        Canvas canvas = new CanvasImpl(getDSpaceIIIFPresentationUri(id), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
+        Canvas canvas = new CanvasImpl(getDSpaceIIIFPresentationUri(handle), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
 
         canvas.setImages(rdfCanvas.getImages());
 
@@ -111,8 +132,7 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
 
     private RdfCanvas getDSpaceRdfCanvas(RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
         RdfCanvas rdfCanvas = new RdfCanvas();
-
-        String canvasId = rdfResource.getResource().getURI();
+        String canvasId = getHandle(rdfResource.getResource().getURI());
 
         NodeIterator bitstreamIterator = rdfResource.getAllNodesOfPropertyWithId(Constants.DSPACE_HAS_BITSTREAM_PREDICATE);
         while (bitstreamIterator.hasNext()) {
