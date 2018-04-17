@@ -108,9 +108,11 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
 
     private List<Canvas> getCanvases(RdfResource rdfResource) throws IOException, URISyntaxException {
         List<Canvas> canvases = new ArrayList<Canvas>();
-
-        canvases.add(generateCanvas(rdfResource));
-
+        NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(Constants.DSPACE_HAS_BITSTREAM_PREDICATE);
+        while (collectionIterator.hasNext()) {
+            String uri = collectionIterator.next().toString();
+            canvases.add(generateCanvas(new RdfResource(rdfResource, uri)));
+        }
         return canvases;
     }
 
@@ -131,29 +133,24 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
     }
 
     private RdfCanvas getDSpaceRdfCanvas(RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
+        String uri = rdfResource.getResource().getURI();
         RdfCanvas rdfCanvas = new RdfCanvas();
-        String canvasId = getHandle(rdfResource.getResource().getURI());
+        String canvasId = getHandle(uri);
 
-        NodeIterator bitstreamIterator = rdfResource.getAllNodesOfPropertyWithId(Constants.DSPACE_HAS_BITSTREAM_PREDICATE);
-        while (bitstreamIterator.hasNext()) {
-            String uri = bitstreamIterator.next().toString();
+        RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, uri);
 
-            RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, uri);
+        Image image = generateImage(fileFedoraRdfResource, canvasId);
 
-            Image image = generateImage(fileFedoraRdfResource, canvasId);
+        rdfCanvas.addImage(image);
 
-            rdfCanvas.addImage(image);
+        int height = image.getResource().getHeight();
+        if (height > rdfCanvas.getHeight()) {
+            rdfCanvas.setHeight(height);
+        }
 
-            int height = image.getResource().getHeight();
-            if (height > rdfCanvas.getHeight()) {
-                rdfCanvas.setHeight(height);
-            }
-
-            int width = image.getResource().getWidth();
-            if (width > rdfCanvas.getWidth()) {
-                rdfCanvas.setWidth(width);
-            }
-
+        int width = image.getResource().getWidth();
+        if (width > rdfCanvas.getWidth()) {
+            rdfCanvas.setWidth(width);
         }
         return rdfCanvas;
     }
