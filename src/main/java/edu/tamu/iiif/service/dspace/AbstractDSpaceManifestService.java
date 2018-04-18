@@ -127,7 +127,6 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         String url = rdfResource.getResource().getURI();
         ImageResource imageResource = new ImageResourceImpl(getImageFullUrl(url));
 
-        System.out.println("\n\n" + url + "\n\n");
         URI infoUri = getImageInfoUri(url);
 
         JsonNode imageInfoNode = getImageInfo(infoUri.toString());
