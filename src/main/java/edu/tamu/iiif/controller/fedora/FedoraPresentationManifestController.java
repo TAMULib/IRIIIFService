@@ -1,7 +1,7 @@
 package edu.tamu.iiif.controller.fedora;
 
-import static edu.tamu.iiif.constants.rdf.Constants.FEDORA_IDENTIFIER;
-import static edu.tamu.iiif.constants.rdf.Constants.PRESENTATION_IDENTIFIER;
+import static edu.tamu.iiif.constants.Constants.FEDORA_IDENTIFIER;
+import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

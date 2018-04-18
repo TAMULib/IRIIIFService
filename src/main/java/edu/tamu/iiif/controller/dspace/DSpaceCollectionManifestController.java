@@ -1,7 +1,7 @@
 package edu.tamu.iiif.controller.dspace;
 
-import static edu.tamu.iiif.constants.rdf.Constants.COLLECECTION_IDENTIFIER;
-import static edu.tamu.iiif.constants.rdf.Constants.DSPACE_IDENTIFIER;
+import static edu.tamu.iiif.constants.Constants.COLLECECTION_IDENTIFIER;
+import static edu.tamu.iiif.constants.Constants.DSPACE_IDENTIFIER;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

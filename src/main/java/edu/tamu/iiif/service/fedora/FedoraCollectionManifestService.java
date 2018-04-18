@@ -1,10 +1,10 @@
 package edu.tamu.iiif.service.fedora;
 
-import static edu.tamu.iiif.constants.rdf.Constants.IANA_FIRST_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.Constants.IANA_LAST_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.Constants.IANA_NEXT_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.Constants.ORE_PROXY_FOR_PREDICATE;
-import static edu.tamu.iiif.constants.rdf.Constants.PCDM_HAS_MEMBER_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.IANA_FIRST_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.IANA_LAST_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.IANA_NEXT_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.ORE_PROXY_FOR_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.PCDM_HAS_MEMBER_PREDICATE;
 import static edu.tamu.iiif.model.ManifestType.COLLECTION;
 
 import java.io.IOException;

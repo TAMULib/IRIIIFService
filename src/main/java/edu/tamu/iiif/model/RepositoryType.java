@@ -1,7 +1,7 @@
 package edu.tamu.iiif.model;
 
-import static edu.tamu.iiif.constants.rdf.Constants.DSPACE_IDENTIFIER;
-import static edu.tamu.iiif.constants.rdf.Constants.FEDORA_IDENTIFIER;
+import static edu.tamu.iiif.constants.Constants.DSPACE_IDENTIFIER;
+import static edu.tamu.iiif.constants.Constants.FEDORA_IDENTIFIER;
 
 public enum RepositoryType {
 

@@ -1,4 +1,4 @@
-package edu.tamu.iiif.constants.rdf;
+package edu.tamu.iiif.constants;
 
 public class Constants {
 
@@ -8,6 +8,8 @@ public class Constants {
     // General
     public final static String COLLECECTION_IDENTIFIER = "collection";
     public final static String PRESENTATION_IDENTIFIER = "presentation";
+    public final static String SEQUENCE_IDENTIFIER = "sequence";
+    public final static String CANVAS_IDENTIFIER = "canvas";
     public final static String IMAGE_IDENTIFIER = "image";
 
     // Fedora
