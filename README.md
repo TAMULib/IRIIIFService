@@ -109,7 +109,7 @@
 
 | **Title** | Canvas |
 | :-------- | :--------- |
-| **Description** | Returns a generated or cached sequence manifest for the provided Fedora resource. |
+| **Description** | Returns a generated or cached sequence manifest for the provided Fedora container. |
 | **URL** | ```/fedora/canvas``` |
 | **Method** | **GET** |
 | **URL Parameters** | **Required:**<br/>```context=[string]```<br/>**Optional:**<br/>```update=[boolean]``` |
