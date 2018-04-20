@@ -35,50 +35,7 @@
 - [API-X](https://github.com/fcrepo4-labs/fcrepo-api-x/blob/master/src/site/markdown/apix-design-overview.md)
 - [Amherst PCDM](https://github.com/birkland/repository-extension-services/tree/apix-demo/acrepo-exts-pcdm)
 # Configuration
-> Configuration for this service is done in application.properties file located in src/main/resrouces directory.
-
-<details><summary>example application.properties</summary>
-```
-server.port: 9000
-
-server.contextPath:
-
-logging.level.edu.tamu.iiif: INFO
-logging.level.org.springframework: INFO
-
-logging.file: ir-iiif-service.log
-logging.path: /var/log
-
-spring.redis.host: localhost
-
-spring.redis.port: 6379
-
-spring.profiles: production
-spring.profiles.include: dspace, fedora
-
-iiif.service.url: http://localhost:${server.port}${server.contextPath}
-
-iiif.dspace.url: http://localhost:8080
-
-iiif.dspace.webapp: xmlui
-
-iiif.fedora.url: http://localhost:9000/fcrepo/rest
-
-iiif.pcdm.rdf.ext.url: http://localhost:9107/pcdm
-
-iiif.image.server.url: http://localhost:8182/iiif/2
-
-iiif.logo.url: https://localhost/assets/downloads/logos/Logo.png
-
-iiif.service.connection.timeout: 300000
-
-iiif.service.connection.request.timeout: 300000
-
-iiif.service.socket.timeout: 300000
-
-iiif.service.request.retries: 3
-```
-</details>
+> Configuration for this service is done in [application.properties](https://github.com/TAMULib/IRIIIFService/blob/master/src/main/resources/application.properties) file located in src/main/resrouces directory.
 # REST API
 ## Fedora
 | **Title** | Collection |
