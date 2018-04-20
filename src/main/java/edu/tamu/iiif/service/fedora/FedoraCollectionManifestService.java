@@ -27,6 +27,7 @@ import de.digitalcollections.iiif.presentation.model.api.v2.references.ManifestR
 import de.digitalcollections.iiif.presentation.model.impl.v2.CollectionImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.references.ManifestReferenceImpl;
+import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.rdf.RdfOrderedSequence;
 import edu.tamu.iiif.model.rdf.RdfResource;
@@ -68,7 +69,7 @@ public class FedoraCollectionManifestService extends AbstractFedoraManifestServi
         return subcollections;
     }
 
-    private List<ManifestReference> getResourceManifests(RdfResource rdfResource) throws URISyntaxException {
+    private List<ManifestReference> getResourceManifests(RdfResource rdfResource) throws URISyntaxException, NotFoundException {
         List<ManifestReference> manifests = new ArrayList<ManifestReference>();
         List<String> members = getMembers(rdfResource);
         for (String id : members) {
@@ -78,7 +79,7 @@ public class FedoraCollectionManifestService extends AbstractFedoraManifestServi
         return manifests;
     }
 
-    private List<String> getMembers(RdfResource rdfResource) {
+    private List<String> getMembers(RdfResource rdfResource) throws NotFoundException {
 
         List<String> members = new ArrayList<String>();
 
@@ -107,7 +108,7 @@ public class FedoraCollectionManifestService extends AbstractFedoraManifestServi
         return members;
     }
 
-    private void getOrderedMembers(RdfOrderedSequence fedoraRdfOrderedSequence, List<String> members) {
+    private void getOrderedMembers(RdfOrderedSequence fedoraRdfOrderedSequence, List<String> members) throws NotFoundException {
 
         Model model = getRdfModel(fedoraRdfOrderedSequence.getResource().getURI());
 

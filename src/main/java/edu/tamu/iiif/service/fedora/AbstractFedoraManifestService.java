@@ -54,6 +54,7 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.ImageImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ImageResourceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
+import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfOrderedSequence;
@@ -69,7 +70,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     @Value("${iiif.pcdm.rdf.ext.url}")
     private String pcdmRdfExtUrl;
 
-    protected RdfResource getRdfResource(String path) {
+    protected RdfResource getRdfResource(String path) throws NotFoundException {
         String fedoraRdfUri = getFedoraUrl(path);
         String rdf = getPCDMRdf(fedoraRdfUri);
         Model model = generateRdfModel(rdf);
@@ -78,9 +79,12 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         return new RdfResource(model, model.getResource(fedoraRdfUri));
     }
 
-    protected Model getRdfModel(String uri) {
-        String resStr = httpService.get(uri + FEDORA_FCR_METADATA);
-        return generateRdfModel(resStr);
+    protected Model getRdfModel(String uri) throws NotFoundException {
+        Optional<String> fedoraRdf = Optional.ofNullable(httpService.get(uri + FEDORA_FCR_METADATA));
+        if (fedoraRdf.isPresent()) {
+            return generateRdfModel(fedoraRdf.get());
+        }
+        throw new NotFoundException("Fedora RDF not found!");
     }
 
     protected Sequence generateSequence(RdfResource rdfResource) throws IOException, URISyntaxException {
@@ -319,8 +323,12 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         return joinPath(fedoraUrl, path);
     }
 
-    private String getPCDMRdf(String fedoraPath) {
-        return httpService.get(pcdmRdfExtUrl, fedoraPath);
+    private String getPCDMRdf(String fedoraPath) throws NotFoundException {
+        Optional<String> fedoraRdf = Optional.ofNullable(httpService.get(fedoraPath));
+        if (fedoraRdf.isPresent()) {
+            return fedoraRdf.get();
+        }
+        throw new NotFoundException("Fedora PCDM RDF not found!");
     }
 
     private Model generateRdfModel(String rdf) {

@@ -1,6 +1,8 @@
 package edu.tamu.iiif.service;
 
-import static edu.tamu.iiif.constants.Constants.*;
+import static edu.tamu.iiif.constants.Constants.CONTEXT_IDENTIFIER;
+import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_PREFIX;
+import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_PREFIX;
 import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_CONTEXT;
 import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_LEVEL_ZERO_PROFILE;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
@@ -41,7 +43,7 @@ import de.digitalcollections.iiif.presentation.model.impl.jackson.v2.IiifPresent
 import de.digitalcollections.iiif.presentation.model.impl.v2.MetadataImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ServiceImpl;
-
+import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.RepositoryType;
@@ -164,8 +166,12 @@ public abstract class AbstractManifestService implements ManifestService {
         return service;
     }
 
-    protected String fetchImageInfo(String url) {
-        return httpService.get(url);
+    protected String fetchImageInfo(String url) throws NotFoundException {
+        Optional<String> imageInfo = Optional.ofNullable(httpService.get(url));
+        if (imageInfo.isPresent()) {
+            return imageInfo.get();
+        }
+        throw new NotFoundException("Image information not found!");
     }
 
     protected String pathIdentifier(String url) {

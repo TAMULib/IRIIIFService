@@ -22,6 +22,7 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.CollectionImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.references.CollectionReferenceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.references.ManifestReferenceImpl;
+import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.rdf.RdfResource;
 
@@ -33,7 +34,7 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
         return mapper.writeValueAsString(generateCollection(handle));
     }
 
-    private Collection generateCollection(String handle) throws URISyntaxException {
+    private Collection generateCollection(String handle) throws URISyntaxException, NotFoundException {
         RdfResource rdfResource = getDSpaceRdfModel(handle);
 
         URI id = buildId(handle);
@@ -57,7 +58,7 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
         return collection;
     }
 
-    private List<CollectionReference> getSubcollections(RdfResource rdfResource) throws URISyntaxException {
+    private List<CollectionReference> getSubcollections(RdfResource rdfResource) throws URISyntaxException, NotFoundException {
         List<CollectionReference> subcollections = getSubcommunities(rdfResource);
 
         List<CollectionReference> collections = getCollections(rdfResource);
@@ -102,7 +103,7 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
         return collections;
     }
 
-    private List<CollectionReference> getCollectionsToElide(RdfResource rdfResource) throws URISyntaxException {
+    private List<CollectionReference> getCollectionsToElide(RdfResource rdfResource) throws URISyntaxException, NotFoundException {
         List<CollectionReference> collectionsToElide = new ArrayList<CollectionReference>();
         for (CollectionReference subcommunity : getSubcommunities(rdfResource)) {
             String handle = subcommunity.getLabel().getFirstValue();

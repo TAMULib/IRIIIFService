@@ -1,9 +1,16 @@
 package edu.tamu.iiif.service.dspace;
 
-import static edu.tamu.iiif.constants.Constants.*;
+import static edu.tamu.iiif.constants.Constants.CANVAS_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.COLLECECTION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.CONTEXT_IDENTIFIER;
+import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_BITSTREAM_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_COLLECTION_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_ITEM_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IDENTIFIER;
+import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_COLLECTION_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_COMMUNITY_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_REPOSITORY_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.DSPACE_IS_SUB_COMMUNITY_OF_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.IMAGE_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
@@ -19,6 +26,7 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -39,7 +47,7 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.ImageImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ImageResourceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
-
+import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfResource;
@@ -54,7 +62,7 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
     @Value("${iiif.dspace.webapp}")
     protected String dspaceWebapp;
 
-    protected RdfResource getDSpaceRdfModel(String handle) {
+    protected RdfResource getDSpaceRdfModel(String handle) throws NotFoundException {
         String dspaceRdfUri = getRdfUrl(handle);
         String rdf = getRdf(dspaceRdfUri);
         Model model = generateRdfModel(rdf);
@@ -217,8 +225,12 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         return joinPath(dspaceUrl, "rdf", "handle", handle);
     }
 
-    private String getRdf(String dspaceRdfUri) {
-        return httpService.get(dspaceRdfUri);
+    private String getRdf(String dspaceRdfUri) throws NotFoundException {
+        Optional<String> dspaceRdf = Optional.ofNullable(httpService.get(dspaceRdfUri));
+        if (dspaceRdf.isPresent()) {
+            return dspaceRdf.get();
+        }
+        throw new NotFoundException("DSpace RDF not found!");
     }
 
     private URI getDSpaceIiifUri(String handle, String type) throws URISyntaxException {
