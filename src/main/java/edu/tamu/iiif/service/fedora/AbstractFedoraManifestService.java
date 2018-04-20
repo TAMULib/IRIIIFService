@@ -136,7 +136,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
 
         if (id.isPresent()) {
 
-            if (!rdfOrderedSequence.isLast()) {
+            if (!rdfOrderedSequence.isLast() || rdfOrderedSequence.isLast() && rdfOrderedSequence.isFirst()) {
 
                 canvases.add(generateCanvas(new RdfResource(rdfOrderedSequence, rdfOrderedSequence.getModel().getResource(id.get()))));
 
@@ -324,7 +324,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     }
 
     private String getPCDMRdf(String fedoraPath) throws NotFoundException {
-        Optional<String> fedoraRdf = Optional.ofNullable(httpService.get(fedoraPath));
+        Optional<String> fedoraRdf = Optional.ofNullable(httpService.get(pcdmRdfExtUrl, fedoraPath));
         if (fedoraRdf.isPresent()) {
             return fedoraRdf.get();
         }

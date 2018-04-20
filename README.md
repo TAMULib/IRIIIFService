@@ -100,7 +100,7 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/sequence?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21&update=true``` |
+| **Sample Request** | ```/sequence?context=cars_pcdm_objects/vintage&update=true``` |
 | **Notes** | |
 
 | **Title** | Canvas |
@@ -112,7 +112,7 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/canvas?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21/38/63/cb/f5/3863cbf5-6139-4a2b-b679-e92376231732&update=true``` |
+| **Sample Request** | ```/canvas?context=cars_pcdm_objects/vintage/pages/page_0&update=true``` |
 | **Notes** | |
 
 | **Title** | Image |
@@ -124,7 +124,7 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/image?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21/38/63/cb/f5/3863cbf5-6139-4a2b-b679-e92376231732&update=true``` |
+| **Sample Request** | ```/image?context=cars_pcdm_objects/vintage/pages/page_0/files/vintage.jpg&update=true``` |
 | **Notes** | |
 
 ## DSpace
