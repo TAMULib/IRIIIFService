@@ -38,7 +38,8 @@
 > Configuration for this service is done in [application.properties](https://github.com/TAMULib/IRIIIFService/blob/master/src/main/resources/application.properties) file located in src/main/resrouces directory.
 
 <details>
-<summary>Properties Table</summary>
+<summary>Properties</summary>
+
 | **Property** | **Type** | **Description** | **Example** |
 | :----------- | :------- | :-------------- | :---------- |
 | server.port | number | Port in which service is hosted. | 9000 |
@@ -62,6 +63,7 @@
 | iiif.service.connection.request.timeout | number | HTTP connection timeout in milliseconds. | 300000  |
 | iiif.service.socket.timeout | number | HTTP socket timeout in milliseconds. | 300000  |
 | iiif.service.request.retries | number | HTTP number of retries. | 3 |
+
 </details>
 
 # REST API
