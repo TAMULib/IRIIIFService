@@ -37,6 +37,8 @@
 # Configuration
 > Configuration for this service is done in [application.properties](https://github.com/TAMULib/IRIIIFService/blob/master/src/main/resources/application.properties) file located in src/main/resrouces directory.
 
+<details>
+<summary>Properties Table</summary>
 | **Property** | **Type** | **Description** | **Example** |
 | :----------- | :------- | :-------------- | :---------- |
 | server.port | number | Port in which service is hosted. | 9000 |
@@ -60,11 +62,12 @@
 | iiif.service.connection.request.timeout | number | HTTP connection timeout in milliseconds. | 300000  |
 | iiif.service.socket.timeout | number | HTTP socket timeout in milliseconds. | 300000  |
 | iiif.service.request.retries | number | HTTP number of retries. | 3 |
-
+</details>
 # REST API
 ## Fedora
 | **Title** | Collection |
 | :-------- | :--------- |
+| **Description** | Returns a generated or cached collection manifest for the provided Fedora container. |
 | **URL** | ```/fedora/collection``` |
 | **Method** | **GET** |
 | **URL Parameters** | **Required:**<br/>```context=[string]```<br/>**Optional:**<br/>```update=[boolean]``` |
@@ -74,4 +77,111 @@
 | **Sample Request** | ```/collection?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21&update=true``` |
 | **Notes** | |
 
+| **Title** | Presentation |
+| :-------- | :--------- |
+| **Description** | Returns a generated or cached presentation manifest for the provided Fedora container. |
+| **URL** | ```/fedora/presentation``` |
+| **Method** | **GET** |
+| **URL Parameters** | **Required:**<br/>```context=[string]```<br/>**Optional:**<br/>```update=[boolean]``` |
+| **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
+| **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
+| **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
+| **Sample Request** | ```/presentation?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21&update=true``` |
+| **Notes** | |
 
+| **Title** | Sequence |
+| :-------- | :--------- |
+| **Description** | Returns a generated or cached sequence manifest for the provided Fedora container. |
+| **URL** | ```/fedora/sequence``` |
+| **Method** | **GET** |
+| **URL Parameters** | **Required:**<br/>```context=[string]```<br/>**Optional:**<br/>```update=[boolean]``` |
+| **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
+| **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
+| **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
+| **Sample Request** | ```/sequence?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21&update=true``` |
+| **Notes** | |
+
+| **Title** | Canvas |
+| :-------- | :--------- |
+| **Description** | Returns a generated or cached sequence manifest for the provided Fedora resource. |
+| **URL** | ```/fedora/canvas``` |
+| **Method** | **GET** |
+| **URL Parameters** | **Required:**<br/>```context=[string]```<br/>**Optional:**<br/>```update=[boolean]``` |
+| **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
+| **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
+| **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
+| **Sample Request** | ```/canvas?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21/38/63/cb/f5/3863cbf5-6139-4a2b-b679-e92376231732&update=true``` |
+| **Notes** | |
+
+| **Title** | Image |
+| :-------- | :--------- |
+| **Description** | Returns a generated or cached image manifest for the provided Fedora resource. |
+| **URL** | ```/fedora/image``` |
+| **Method** | **GET** |
+| **URL Parameters** | **Required:**<br/>```context=[string]```<br/>**Optional:**<br/>```update=[boolean]``` |
+| **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
+| **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
+| **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
+| **Sample Request** | ```/image?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21/38/63/cb/f5/3863cbf5-6139-4a2b-b679-e92376231732&update=true``` |
+| **Notes** | |
+
+## DSpace
+| **Title** | Collection |
+| :-------- | :--------- |
+| **Description** | Returns a generated or cached collection manifest for the provided DSpace handle. |
+| **URL** | ```/dspace/collection``` |
+| **Method** | **GET** |
+| **URL Parameters** | **Required:**<br/>```context=[string]```<br/>**Optional:**<br/>```update=[boolean]``` |
+| **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
+| **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
+| **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
+| **Sample Request** | ```/collection?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21&update=true``` |
+| **Notes** | |
+
+| **Title** | Presentation |
+| :-------- | :--------- |
+| **Description** | Returns a generated or cached presentation manifest for the provided DSpace handle. |
+| **URL** | ```/dspace/presentation``` |
+| **Method** | **GET** |
+| **URL Parameters** | **Required:**<br/>```context=[string]```<br/>**Optional:**<br/>```update=[boolean]``` |
+| **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
+| **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
+| **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
+| **Sample Request** | ```/presentation?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21&update=true``` |
+| **Notes** | |
+
+| **Title** | Sequence |
+| :-------- | :--------- |
+| **Description** | Returns a generated or cached sequence manifest for the provided DSpace handle. |
+| **URL** | ```/dspace/sequence``` |
+| **Method** | **GET** |
+| **URL Parameters** | **Required:**<br/>```context=[string]```<br/>**Optional:**<br/>```update=[boolean]``` |
+| **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
+| **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
+| **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
+| **Sample Request** | ```/sequence?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21&update=true``` |
+| **Notes** | |
+
+| **Title** | Canvas |
+| :-------- | :--------- |
+| **Description** | Returns a generated or cached sequence manifest for the provided DSpace handle. |
+| **URL** | ```/dspace/canvas``` |
+| **Method** | **GET** |
+| **URL Parameters** | **Required:**<br/>```context=[string]```<br/>**Optional:**<br/>```update=[boolean]``` |
+| **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
+| **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
+| **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
+| **Sample Request** | ```/canvas?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21/38/63/cb/f5/3863cbf5-6139-4a2b-b679-e92376231732&update=true``` |
+| **Notes** | |
+
+| **Title** | Image |
+| :-------- | :--------- |
+| **Description** | Returns a generated or cached image manifest for the provided DSpace handle. |
+| **URL** | ```/dspace/image``` |
+| **Method** | **GET** |
+| **URL Parameters** | **Required:**<br/>```context=[string]```<br/>**Optional:**<br/>```update=[boolean]``` |
+| **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
+| **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
+| **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
+| **Sample Request** | ```/image?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21/38/63/cb/f5/3863cbf5-6139-4a2b-b679-e92376231732&update=true``` |
+| **Notes** | |
