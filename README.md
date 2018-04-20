@@ -65,6 +65,7 @@
 </details>
 # REST API
 ## Fedora
+
 | **Title** | Collection |
 | :-------- | :--------- |
 | **Description** | Returns a generated or cached collection manifest for the provided Fedora container. |
