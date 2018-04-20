@@ -1,5 +1,5 @@
 # IR IIIF Service
-This service provides IIIF manifest generation from DSpace RDF and/or Fedora PCDM.
+> This service provides IIIF manifest generation from DSpace RDF and/or Fedora PCDM.
 ## Requirements
 - [Redis](https://redis.io/)
 	- used to cache manifest
@@ -34,6 +34,55 @@ This service provides IIIF manifest generation from DSpace RDF and/or Fedora PCD
 - [Installation](https://wiki.duraspace.org/display/FEDORA4x/Quick+Start)
 - [API-X](https://github.com/fcrepo4-labs/fcrepo-api-x/blob/master/src/site/markdown/apix-design-overview.md)
 - [Amherst PCDM](https://github.com/birkland/repository-extension-services/tree/apix-demo/acrepo-exts-pcdm)
+# Configuration
+> Configuration for this service is done in application.properties file located in src/main/resrouces directory.
+
+<details><summary>example application.properties</summary>
+```
+server.port: 9000
+
+server.contextPath:
+
+logging.level.edu.tamu.iiif: INFO
+logging.level.org.springframework: INFO
+
+logging.file: ir-iiif-service.log
+logging.path: /var/log
+
+spring.redis.host: localhost
+
+spring.redis.port: 6379
+
+spring.profiles: production
+spring.profiles.include: dspace, fedora
+
+iiif.service.url: http://localhost:${server.port}${server.contextPath}
+
+iiif.dspace.url: http://localhost:8080
+
+iiif.dspace.webapp: xmlui
+
+iiif.fedora.url: http://localhost:9000/fcrepo/rest
+
+iiif.pcdm.rdf.ext.url: http://localhost:9107/pcdm
+
+iiif.image.server.url: http://localhost:8182/iiif/2
+
+iiif.logo.url: https://localhost/assets/downloads/logos/Logo.png
+
+# request connection timeout, 5 minutes in milliseconds
+iiif.service.connection.timeout: 300000
+
+# request connection timeout, 5 minutes in milliseconds
+iiif.service.connection.request.timeout: 300000
+
+# cache request socket timeout, 5 minutes in milliseconds
+iiif.service.socket.timeout: 300000
+
+# number of retries per request
+iiif.service.request.retries: 3
+```
+</details>
 # REST API
 ## Fedora
 | **Title** | Collection |
@@ -41,7 +90,7 @@ This service provides IIIF manifest generation from DSpace RDF and/or Fedora PCD
 | **URL** | ```/fedora/collection``` |
 | **Method** | **GET** |
 | **URL Parameters** | **Required:**<br/>```context=[string]```<br/>**Optional:**<br/>```update=[boolean]``` |
-| **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{ ```<br/>&emsp;```"@context" : "http://iiif.io/api/presentation/2/context.json", ```<br/>&emsp;```"@id" : "http://localhost:8080/fedora/collection?context=cars_pcdm", ```<br/>&emsp;```"@type" : "sc:Collection", ```<br/>&emsp;```"collections" : [ ], ```<br/>&emsp;```"description" : "N/A", ```<br/>&emsp;```"label" : "Cars", ```<br/>&emsp;```"logo" : "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png", ```<br/>&emsp;```"manifests" : [ { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:8080/fedora/presentation?context=cars_pcdm_objects/vintage", ```<br/>&emsp;&emsp;```"@type" : "sc:Manifest", ```<br/>&emsp;&emsp;```"label" : "Vintage"```<br/>&emsp;```}, { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:8080/fedora/presentation?context=cars_pcdm_objects/lamborghini", ```<br/>&emsp;&emsp;```"@type" : "sc:Manifest", ```<br/>&emsp;&emsp;```"label" : "Lamborghini"```<br/>&emsp;```}], ```<br/>&emsp;```"metadata" : [ ], ```<br/>&emsp;```"viewingHint" : "multi-part" ```<br/>&emsp;```}``` |
+| **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{ ```<br/>&emsp;```"@context" : "http://iiif.io/api/presentation/2/context.json", ```<br/>&emsp;```"@id" : "http://localhost:8080/fedora/collection?context=cars_pcdm", ```<br/>&emsp;```"@type" : "sc:Collection", ```<br/>&emsp;```"collections" : [ ], ```<br/>&emsp;```"description" : "N/A", ```<br/>&emsp;```"label" : "Cars", ```<br/>&emsp;```"logo" : "https://localhost/assets/downloads/logos/Logo.png", ```<br/>&emsp;```"manifests" : [ { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:8080/fedora/presentation?context=cars_pcdm_objects/vintage", ```<br/>&emsp;&emsp;```"@type" : "sc:Manifest", ```<br/>&emsp;&emsp;```"label" : "Vintage"```<br/>&emsp;```}, { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:8080/fedora/presentation?context=cars_pcdm_objects/lamborghini", ```<br/>&emsp;&emsp;```"@type" : "sc:Manifest", ```<br/>&emsp;&emsp;```"label" : "Lamborghini"```<br/>&emsp;```}], ```<br/>&emsp;```"metadata" : [ ], ```<br/>&emsp;```"viewingHint" : "multi-part" ```<br/>&emsp;```}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
 | **Sample Request** | ```/collection?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21&update=true``` |
