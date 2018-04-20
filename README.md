@@ -38,7 +38,9 @@
 > Configuration for this service is done in [application.properties](https://github.com/TAMULib/IRIIIFService/blob/master/src/main/resources/application.properties) file located in src/main/resrouces directory.
 
 <details>
-<summary>Properties</summary>
+<summary>View Properties</summary>
+
+<br/>
 
 | **Property** | **Type** | **Description** | **Example** |
 | :----------- | :------- | :-------------- | :---------- |
