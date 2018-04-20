@@ -70,16 +70,12 @@ iiif.image.server.url: http://localhost:8182/iiif/2
 
 iiif.logo.url: https://localhost/assets/downloads/logos/Logo.png
 
-# request connection timeout, 5 minutes in milliseconds
 iiif.service.connection.timeout: 300000
 
-# request connection timeout, 5 minutes in milliseconds
 iiif.service.connection.request.timeout: 300000
 
-# cache request socket timeout, 5 minutes in milliseconds
 iiif.service.socket.timeout: 300000
 
-# number of retries per request
 iiif.service.request.retries: 3
 ```
 </details>
