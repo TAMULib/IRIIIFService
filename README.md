@@ -76,7 +76,7 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{ ```<br/>&emsp;```"@context" : "http://iiif.io/api/presentation/2/context.json", ```<br/>&emsp;```"@id" : "http://localhost:8080/fedora/collection?context=cars_pcdm", ```<br/>&emsp;```"@type" : "sc:Collection", ```<br/>&emsp;```"collections" : [ ], ```<br/>&emsp;```"description" : "N/A", ```<br/>&emsp;```"label" : "Cars", ```<br/>&emsp;```"logo" : "https://localhost/assets/downloads/logos/Logo.png", ```<br/>&emsp;```"manifests" : [ { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:8080/fedora/presentation?context=cars_pcdm_objects/vintage", ```<br/>&emsp;&emsp;```"@type" : "sc:Manifest", ```<br/>&emsp;&emsp;```"label" : "Vintage"```<br/>&emsp;```}, { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:8080/fedora/presentation?context=cars_pcdm_objects/lamborghini", ```<br/>&emsp;&emsp;```"@type" : "sc:Manifest", ```<br/>&emsp;&emsp;```"label" : "Lamborghini"```<br/>&emsp;```}], ```<br/>&emsp;```"metadata" : [ ], ```<br/>&emsp;```"viewingHint" : "multi-part" ```<br/>&emsp;```}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/collection?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21&update=true``` |
+| **Sample Request** | ```/collection?context=cars_pcdm&update=true``` |
 | **Notes** | |
 
 | **Title** | Presentation |
@@ -88,7 +88,7 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/presentation?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21&update=true``` |
+| **Sample Request** | ```/presentation?context=cars_pcdm_objects/vintage&update=true``` |
 | **Notes** | |
 
 | **Title** | Sequence |
