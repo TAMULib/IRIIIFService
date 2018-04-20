@@ -18,7 +18,7 @@ public class DSpaceCanvasManifestService extends AbstractDSpaceManifestService {
         String handle = extractHandle(path);
         RdfResource rdfResource = getDSpaceRdfModel(handle);
         String url = rdfResource.getResource().getURI();
-        Canvas canvas = generateCanvas(new RdfResource(rdfResource, url.replace("rdf/handle", "xmlui/bitstream").replaceAll(handle, path)));
+        Canvas canvas = generateCanvas(new RdfResource(rdfResource, url.replace("rdf/handle", dspaceWebapp + "/bitstream").replaceAll(handle, path)));
         return mapper.writeValueAsString(canvas);
     }
 

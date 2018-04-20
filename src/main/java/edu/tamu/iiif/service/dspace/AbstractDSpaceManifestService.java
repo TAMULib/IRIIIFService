@@ -50,6 +50,9 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
     @Value("${iiif.dspace.url}")
     protected String dspaceUrl;
 
+    @Value("${iiif.dspace.webapp}")
+    protected String dspaceWebapp;
+
     protected RdfResource getDSpaceRdfModel(String handle) {
         String dspaceRdfUri = getRdfUrl(handle);
         String rdf = getRdf(dspaceRdfUri);

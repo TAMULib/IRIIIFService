@@ -15,7 +15,7 @@ import edu.tamu.iiif.model.ManifestType;
 public class DSpaceImageManifestService extends AbstractDSpaceManifestService {
 
     public String generateManifest(String path) throws IOException, URISyntaxException {
-        String dspacePath = joinPath(dspaceUrl, "xmlui", "bitstream", path);
+        String dspacePath = joinPath(dspaceUrl, dspaceWebapp, "bitstream", path);
         URI uri = getImageUri(dspacePath);
         return fetchImageInfo(uri.toString());
     }
