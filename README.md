@@ -36,6 +36,31 @@
 - [Amherst PCDM](https://github.com/birkland/repository-extension-services/tree/apix-demo/acrepo-exts-pcdm)
 # Configuration
 > Configuration for this service is done in [application.properties](https://github.com/TAMULib/IRIIIFService/blob/master/src/main/resources/application.properties) file located in src/main/resrouces directory.
+
+| **Property** | **Type** | **Description** | **Example** |
+| :----------- | :------- | :-------------- | :---------- |
+| server.port | number | Port in which service is hosted. | 9000 |
+| server.contextPath | string | Path in which service is hosted. | /iiif-service |
+| logging.level.edu.tamu.iiif | LOG_LEVEL | Log level for iiif service. | INFO |
+| logging.level.org.springframework | LOG_LEVEL | Log level for spring framework. | INFO |
+| logging.file | string | Log file. | iiif-service.log |
+| logging.path | string | Path for log file. | /var/logs/iiif |
+| spring.redis.host | string | Host for redis server. | localhost |
+| spring.redis.port | number | Port for redis server. | 6379 |
+| spring.profiles | string | Build environment profile. | production |
+| spring.profiles.include | string | Additional build environment profiles. | dspace, fedora |
+| iiif.service.url | url | IIIF service URL. | http://localhost:${server.port}${server.contextPath} |
+| iiif.dspace.url | url | DSpace base URL. | http://localhost:8080 |
+| iiif.dspace.webapp | string | DSpace webapp. | xmlui |
+| iiif.fedora.url | url | Fedora REST URL. | http://localhost:9000/fcrepo/rest |
+| iiif.pcdm.rdf.ext.url | url | Fedora Amherst PCDM service URL. | http://localhost:9107/pcdm |
+| iiif.image.server.url | url | IIIF image server URL. | http://localhost:8182/iiif/2 |
+| iiif.logo.url | url | URL for a default logo. | https://localhostassets/downloads/logos/Logo.png |
+| iiif.service.connection.timeout | number | HTTP connection request timeout in milliseconds. | 300000  |
+| iiif.service.connection.request.timeout | number | HTTP connection timeout in milliseconds. | 300000  |
+| iiif.service.socket.timeout | number | HTTP socket timeout in milliseconds. | 300000  |
+| iiif.service.request.retries | number | HTTP number of retries. | 3 |
+
 # REST API
 ## Fedora
 | **Title** | Collection |
