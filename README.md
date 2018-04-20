@@ -63,6 +63,7 @@
 | iiif.service.socket.timeout | number | HTTP socket timeout in milliseconds. | 300000  |
 | iiif.service.request.retries | number | HTTP number of retries. | 3 |
 </details>
+
 # REST API
 ## Fedora
 
