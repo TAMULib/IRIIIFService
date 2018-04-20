@@ -175,23 +175,23 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
     }
 
     protected URI getDSpaceIIIFCollectionUri(String handle) throws URISyntaxException {
-        return getDSpaceIIIFUri(handle, COLLECECTION_IDENTIFIER);
+        return getDSpaceIiifUri(handle, COLLECECTION_IDENTIFIER);
     }
 
     protected URI getDSpaceIIIFPresentationUri(String handle) throws URISyntaxException {
-        return getDSpaceIIIFUri(handle, PRESENTATION_IDENTIFIER);
+        return getDSpaceIiifUri(handle, PRESENTATION_IDENTIFIER);
     }
 
     protected URI getDSpaceIIIFSequenceUri(String handle) throws URISyntaxException {
-        return getDSpaceIIIFUri(handle, SEQUENCE_IDENTIFIER);
+        return getDSpaceIiifUri(handle, SEQUENCE_IDENTIFIER);
     }
 
     protected URI getDSpaceIIIFCanvasUri(String handle) throws URISyntaxException {
-        return getDSpaceIIIFUri(handle, CANVAS_IDENTIFIER);
+        return getDSpaceIiifUri(handle, CANVAS_IDENTIFIER);
     }
 
     protected URI getDSpaceIIIFImageUri(String handle) throws URISyntaxException {
-        return getDSpaceIIIFUri(handle, IMAGE_IDENTIFIER);
+        return getDSpaceIiifUri(handle, IMAGE_IDENTIFIER);
     }
 
     @Override
@@ -217,7 +217,7 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         return httpService.get(dspaceRdfUri);
     }
 
-    private URI getDSpaceIIIFUri(String handle, String type) throws URISyntaxException {
+    private URI getDSpaceIiifUri(String handle, String type) throws URISyntaxException {
         return URI.create(getIiifServiceUrl() + "/" + type + "?path=" + handle);
     }
 

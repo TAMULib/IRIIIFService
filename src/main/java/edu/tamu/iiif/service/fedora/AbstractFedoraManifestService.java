@@ -85,7 +85,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     protected Sequence generateSequence(RdfResource rdfResource) throws IOException, URISyntaxException {
         String id = rdfResource.getResource().getURI();
         PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(formalize(extractLabel(id)));
-        Sequence sequence = new SequenceImpl(getFedoraIIIFSequenceUri(id), label);
+        Sequence sequence = new SequenceImpl(getFedoraIiifSequenceUri(id), label);
         sequence.setCanvases(getCanvases(rdfResource));
         return sequence;
     }
@@ -154,7 +154,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
 
         RdfCanvas rdfCanvas = getFedoraRdfCanvas(rdfResource);
 
-        Canvas canvas = new CanvasImpl(getFedoraIIIFCanvasUri(id), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
+        Canvas canvas = new CanvasImpl(getFedoraIiifCanvasUri(id), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
 
         canvas.setImages(rdfCanvas.getImages());
 
@@ -199,7 +199,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         String id = rdfResource.getResource().getURI();
         Image image = new ImageImpl(getImageInfoUri(id));
         image.setResource(generateImageResource(rdfResource));
-        image.setOn(getFedoraIIIFCanvasUri(canvasId));
+        image.setOn(getFedoraIiifCanvasUri(canvasId));
         return image;
     }
 
@@ -275,27 +275,27 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         return metadatum;
     }
 
-    protected URI getFedoraIIIFCollectionUri(String url) throws URISyntaxException {
-        return getFedoraIIIFUri(url, COLLECECTION_IDENTIFIER);
+    protected URI getFedoraIiifCollectionUri(String url) throws URISyntaxException {
+        return getFedoraIiifUri(url, COLLECECTION_IDENTIFIER);
     }
 
-    protected URI getFedoraIIIFPresentationUri(String url) throws URISyntaxException {
-        return getFedoraIIIFUri(url, PRESENTATION_IDENTIFIER);
+    protected URI getFedoraIiifPresentationUri(String url) throws URISyntaxException {
+        return getFedoraIiifUri(url, PRESENTATION_IDENTIFIER);
     }
 
-    protected URI getFedoraIIIFSequenceUri(String url) throws URISyntaxException {
-        return getFedoraIIIFUri(url, SEQUENCE_IDENTIFIER);
+    protected URI getFedoraIiifSequenceUri(String url) throws URISyntaxException {
+        return getFedoraIiifUri(url, SEQUENCE_IDENTIFIER);
     }
 
-    protected URI getFedoraIIIFCanvasUri(String url) throws URISyntaxException {
-        return getFedoraIIIFUri(url, CANVAS_IDENTIFIER);
+    protected URI getFedoraIiifCanvasUri(String url) throws URISyntaxException {
+        return getFedoraIiifUri(url, CANVAS_IDENTIFIER);
     }
 
-    protected URI getFedoraIIIFImageUri(String url) throws URISyntaxException {
-        return getFedoraIIIFUri(url, IMAGE_IDENTIFIER);
+    protected URI getFedoraIiifImageUri(String url) throws URISyntaxException {
+        return getFedoraIiifUri(url, IMAGE_IDENTIFIER);
     }
 
-    private URI getFedoraIIIFUri(String url, String type) throws URISyntaxException {
+    private URI getFedoraIiifUri(String url, String type) throws URISyntaxException {
         return URI.create(url.replace(fedoraUrl + "/", getIiifServiceUrl() + "/" + type + "?path="));
     }
 

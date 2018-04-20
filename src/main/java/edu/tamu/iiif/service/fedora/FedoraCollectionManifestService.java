@@ -73,7 +73,7 @@ public class FedoraCollectionManifestService extends AbstractFedoraManifestServi
         List<String> members = getMembers(rdfResource);
         for (String id : members) {
             PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(formalize(extractLabel(id)));
-            manifests.add(new ManifestReferenceImpl(getFedoraIIIFPresentationUri(id), label));
+            manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(id), label));
         }
         return manifests;
     }
