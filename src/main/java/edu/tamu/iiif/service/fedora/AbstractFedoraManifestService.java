@@ -39,6 +39,7 @@ import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -58,6 +59,7 @@ import edu.tamu.iiif.model.rdf.RdfOrderedSequence;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
 
+@Profile(FEDORA_IDENTIFIER)
 public abstract class AbstractFedoraManifestService extends AbstractManifestService {
 
     @Value("${iiif.fedora.url}")

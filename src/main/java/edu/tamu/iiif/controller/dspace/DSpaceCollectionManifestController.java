@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import edu.tamu.iiif.controller.AbstractManifestController;
 import edu.tamu.iiif.service.dspace.DSpaceCollectionManifestService;
 
 @RestController
+@Profile(DSPACE_IDENTIFIER)
 @RequestMapping("/" + DSPACE_IDENTIFIER)
 public class DSpaceCollectionManifestController extends AbstractManifestController<DSpaceCollectionManifestService> {
 
