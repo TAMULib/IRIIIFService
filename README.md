@@ -137,7 +137,7 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/collection?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21&update=true``` |
+| **Sample Request** | ```/collection?context=123456789/158298&update=true``` |
 | **Notes** | |
 
 | **Title** | Presentation |
@@ -149,7 +149,7 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/presentation?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21&update=true``` |
+| **Sample Request** | ```/presentation?context=123456789/158313&update=true``` |
 | **Notes** | |
 
 | **Title** | Sequence |
@@ -161,29 +161,29 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/sequence?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21&update=true``` |
+| **Sample Request** | ```/sequence?context=123456789/158313&update=true``` |
 | **Notes** | |
 
 | **Title** | Canvas |
 | :-------- | :--------- |
-| **Description** | Returns a generated or cached sequence manifest for the provided DSpace handle. |
+| **Description** | Returns a generated or cached sequence manifest for the provided DSpace handle and bitstream path. |
 | **URL** | ```/dspace/canvas``` |
 | **Method** | **GET** |
 | **URL Parameters** | **Required:**<br/>```context=[string]```<br/>**Optional:**<br/>```update=[boolean]``` |
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/canvas?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21/38/63/cb/f5/3863cbf5-6139-4a2b-b679-e92376231732&update=true``` |
+| **Sample Request** | ```/canvas?context=123456789/158313/example.jpg&update=true``` |
 | **Notes** | |
 
 | **Title** | Image |
 | :-------- | :--------- |
-| **Description** | Returns a generated or cached image manifest for the provided DSpace handle. |
+| **Description** | Returns a generated or cached image manifest for the provided DSpace handle and bitstream path. |
 | **URL** | ```/dspace/image``` |
 | **Method** | **GET** |
 | **URL Parameters** | **Required:**<br/>```context=[string]```<br/>**Optional:**<br/>```update=[boolean]``` |
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/image?context=9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21/38/63/cb/f5/3863cbf5-6139-4a2b-b679-e92376231732&update=true``` |
+| **Sample Request** | ```/image?context=123456789/158313/example.jpg&update=true``` |
 | **Notes** | |
