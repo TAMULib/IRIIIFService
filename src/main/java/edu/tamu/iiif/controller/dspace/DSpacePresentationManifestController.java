@@ -1,5 +1,6 @@
 package edu.tamu.iiif.controller.dspace;
 
+import static edu.tamu.iiif.constants.Constants.CONTEXT_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 
@@ -22,7 +23,7 @@ import edu.tamu.iiif.service.dspace.DSpacePresentationManifestService;
 public class DSpacePresentationManifestController extends AbstractManifestController<DSpacePresentationManifestService> {
 
     @RequestMapping("/" + PRESENTATION_IDENTIFIER)
-    public void presentation(HttpServletResponse response, @RequestParam(value = "path", required = true) String path, @RequestParam(value = "update", required = false, defaultValue = "false") boolean update) throws IOException, URISyntaxException {
+    public void presentation(HttpServletResponse response, @RequestParam(value = CONTEXT_IDENTIFIER, required = true) String path, @RequestParam(value = "update", required = false, defaultValue = "false") boolean update) throws IOException, URISyntaxException {
         sendManifest(response, path, update);
     }
 

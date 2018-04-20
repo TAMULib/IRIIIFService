@@ -1,5 +1,6 @@
 package edu.tamu.iiif.service;
 
+import static edu.tamu.iiif.constants.Constants.*;
 import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_CONTEXT;
 import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_LEVEL_ZERO_PROFILE;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
@@ -40,7 +41,7 @@ import de.digitalcollections.iiif.presentation.model.impl.jackson.v2.IiifPresent
 import de.digitalcollections.iiif.presentation.model.impl.v2.MetadataImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ServiceImpl;
-import edu.tamu.iiif.constants.Constants;
+
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.RepositoryType;
@@ -107,7 +108,7 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected URI buildId(String path) throws URISyntaxException {
-        return new URI(getIiifServiceUrl() + "/" + getManifestType().getName() + "?path=" + path);
+        return new URI(getIiifServiceUrl() + "/" + getManifestType().getName() + "?" + CONTEXT_IDENTIFIER + "=" + path);
     }
 
     protected Optional<String> getIdByPredicate(Model model, String predicate) {
@@ -176,11 +177,11 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected List<Metadata> getDublinCoreTermsMetadata(RdfResource rdfResource) {
-        return getMetadata(rdfResource, Constants.DUBLIN_CORE_TERMS_PREFIX);
+        return getMetadata(rdfResource, DUBLIN_CORE_TERMS_PREFIX);
     }
 
     protected List<Metadata> getDublinCoreMetadata(RdfResource rdfResource) {
-        return getMetadata(rdfResource, Constants.DUBLIN_CORE_PREFIX);
+        return getMetadata(rdfResource, DUBLIN_CORE_PREFIX);
     }
 
     protected List<Metadata> getMetadata(RdfResource rdfResource, String prefix) {

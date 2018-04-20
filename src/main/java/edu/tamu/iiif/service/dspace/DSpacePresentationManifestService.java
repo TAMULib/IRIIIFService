@@ -1,5 +1,7 @@
 package edu.tamu.iiif.service.dspace;
 
+import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_COLLECTION_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_ITEM_PREDICATE;
 import static edu.tamu.iiif.model.ManifestType.PRESENTATION;
 
 import java.io.IOException;
@@ -20,7 +22,6 @@ import de.digitalcollections.iiif.presentation.model.api.v2.Thumbnail;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ManifestImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ThumbnailImpl;
-import edu.tamu.iiif.constants.Constants;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.rdf.RdfResource;
 
@@ -62,7 +63,7 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
         List<Sequence> sequences = new ArrayList<Sequence>();
         if (isTopLevelCommunity(rdfResource.getModel()) || isSubcommunity(rdfResource.getModel())) {
 
-            NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(Constants.DSPACE_HAS_COLLECTION_PREDICATE);
+            NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_COLLECTION_PREDICATE);
             while (collectionIterator.hasNext()) {
                 String uri = collectionIterator.next().toString();
                 String handle = getHandle(uri);
@@ -71,7 +72,7 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
 
         } else if (isCollection(rdfResource.getModel())) {
 
-            NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(Constants.DSPACE_HAS_ITEM_PREDICATE);
+            NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_ITEM_PREDICATE);
             while (collectionIterator.hasNext()) {
                 String uri = collectionIterator.next().toString();
                 String handle = getHandle(uri);

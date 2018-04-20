@@ -1,7 +1,8 @@
 package edu.tamu.iiif.service.dspace;
 
-import static edu.tamu.iiif.constants.Constants.CANVAS_IDENTIFIER;
+import static edu.tamu.iiif.constants.Constants.*;
 import static edu.tamu.iiif.constants.Constants.COLLECECTION_IDENTIFIER;
+import static edu.tamu.iiif.constants.Constants.CONTEXT_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.IMAGE_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
@@ -38,7 +39,7 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.ImageImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ImageResourceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
-import edu.tamu.iiif.constants.Constants;
+
 import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfResource;
@@ -73,7 +74,7 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
 
     private List<Canvas> getCanvases(RdfResource rdfResource) throws IOException, URISyntaxException {
         List<Canvas> canvases = new ArrayList<Canvas>();
-        NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(Constants.DSPACE_HAS_BITSTREAM_PREDICATE);
+        NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_BITSTREAM_PREDICATE);
         while (collectionIterator.hasNext()) {
             String uri = collectionIterator.next().toString();
             canvases.add(generateCanvas(new RdfResource(rdfResource, uri)));
@@ -146,27 +147,27 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
     }
 
     protected boolean isTopLevelCommunity(Model model) {
-        return getIdByPredicate(model, Constants.DSPACE_IS_PART_OF_REPOSITORY_PREDICATE).isPresent();
+        return getIdByPredicate(model, DSPACE_IS_PART_OF_REPOSITORY_PREDICATE).isPresent();
     }
 
     protected boolean isSubcommunity(Model model) {
-        return getIdByPredicate(model, Constants.DSPACE_IS_SUB_COMMUNITY_OF_PREDICATE).isPresent();
+        return getIdByPredicate(model, DSPACE_IS_SUB_COMMUNITY_OF_PREDICATE).isPresent();
     }
 
     protected boolean hasCollections(Model model) {
-        return getIdByPredicate(model, Constants.DSPACE_HAS_COLLECTION_PREDICATE).isPresent();
+        return getIdByPredicate(model, DSPACE_HAS_COLLECTION_PREDICATE).isPresent();
     }
 
     protected boolean isCollection(Model model) {
-        return getIdByPredicate(model, Constants.DSPACE_IS_PART_OF_COMMUNITY_PREDICATE).isPresent();
+        return getIdByPredicate(model, DSPACE_IS_PART_OF_COMMUNITY_PREDICATE).isPresent();
     }
 
     protected boolean hasItems(Model model) {
-        return getIdByPredicate(model, Constants.DSPACE_HAS_ITEM_PREDICATE).isPresent();
+        return getIdByPredicate(model, DSPACE_HAS_ITEM_PREDICATE).isPresent();
     }
 
     protected boolean isItem(Model model) {
-        return getIdByPredicate(model, Constants.DSPACE_IS_PART_OF_COLLECTION_PREDICATE).isPresent();
+        return getIdByPredicate(model, DSPACE_IS_PART_OF_COLLECTION_PREDICATE).isPresent();
     }
 
     protected boolean isCommunity(Model model) {
@@ -221,7 +222,7 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
     }
 
     private URI getDSpaceIiifUri(String handle, String type) throws URISyntaxException {
-        return URI.create(getIiifServiceUrl() + "/" + type + "?path=" + handle);
+        return URI.create(getIiifServiceUrl() + "/" + type + "?" + CONTEXT_IDENTIFIER + "=" + handle);
     }
 
     private Model generateRdfModel(String rdf) {

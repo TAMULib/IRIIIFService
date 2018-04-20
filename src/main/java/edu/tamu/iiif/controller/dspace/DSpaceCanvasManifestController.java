@@ -1,6 +1,7 @@
 package edu.tamu.iiif.controller.dspace;
 
 import static edu.tamu.iiif.constants.Constants.CANVAS_IDENTIFIER;
+import static edu.tamu.iiif.constants.Constants.CONTEXT_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IDENTIFIER;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ import edu.tamu.iiif.service.dspace.DSpaceCanvasManifestService;
 public class DSpaceCanvasManifestController extends AbstractManifestController<DSpaceCanvasManifestService> {
 
     @RequestMapping("/" + CANVAS_IDENTIFIER)
-    public void image(HttpServletResponse response, @RequestParam(value = "path", required = true) String path, @RequestParam(value = "update", required = false, defaultValue = "false") boolean update) throws IOException, URISyntaxException {
+    public void image(HttpServletResponse response, @RequestParam(value = CONTEXT_IDENTIFIER, required = true) String path, @RequestParam(value = "update", required = false, defaultValue = "false") boolean update) throws IOException, URISyntaxException {
         sendManifest(response, path, update);
     }
 

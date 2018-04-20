@@ -1,5 +1,8 @@
 package edu.tamu.iiif.service.dspace;
 
+import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_COLLECTION_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_ITEM_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_SUB_COMMUNITY_PREDICATE;
 import static edu.tamu.iiif.model.ManifestType.COLLECTION;
 
 import java.io.IOException;
@@ -19,7 +22,6 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.CollectionImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.references.CollectionReferenceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.references.ManifestReferenceImpl;
-import edu.tamu.iiif.constants.Constants;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.rdf.RdfResource;
 
@@ -80,7 +82,7 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
 
     private List<CollectionReference> getSubcommunities(RdfResource rdfResource) throws URISyntaxException {
         List<CollectionReference> subcommunities = new ArrayList<CollectionReference>();
-        NodeIterator subcommunityIterator = rdfResource.getAllNodesOfPropertyWithId(Constants.DSPACE_HAS_SUB_COMMUNITY_PREDICATE);
+        NodeIterator subcommunityIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_SUB_COMMUNITY_PREDICATE);
         while (subcommunityIterator.hasNext()) {
             String uri = subcommunityIterator.next().toString();
             String handle = getHandle(uri);
@@ -91,7 +93,7 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
 
     private List<CollectionReference> getCollections(RdfResource rdfResource) throws URISyntaxException {
         List<CollectionReference> collections = new ArrayList<CollectionReference>();
-        NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(Constants.DSPACE_HAS_COLLECTION_PREDICATE);
+        NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_COLLECTION_PREDICATE);
         while (collectionIterator.hasNext()) {
             String uri = collectionIterator.next().toString();
             String handle = getHandle(uri);
@@ -117,7 +119,7 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
             String handle = getHandle(uri);
             manifests.add(new ManifestReferenceImpl(getDSpaceIIIFPresentationUri(handle), new PropertyValueSimpleImpl(handle)));
         } else {
-            NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(Constants.DSPACE_HAS_ITEM_PREDICATE);
+            NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_ITEM_PREDICATE);
             while (collectionIterator.hasNext()) {
                 String uri = collectionIterator.next().toString();
                 String handle = getHandle(uri);
