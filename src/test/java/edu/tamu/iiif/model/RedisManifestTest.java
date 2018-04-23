@@ -34,6 +34,7 @@ public class RedisManifestTest {
         redisManifest.setType(ManifestType.PRESENTATION);
         redisManifest.setRepository(RepositoryType.DSPACE);
         redisManifest.setJson("{\"@id\":\"http:localhost/dspace/presentation?context=123456789/123456\"}");
+        Assert.assertEquals("1", redisManifest.getId());
         Assert.assertEquals("new/path", redisManifest.getPath());
         Assert.assertEquals(ManifestType.PRESENTATION, redisManifest.getType());
         Assert.assertEquals(RepositoryType.DSPACE, redisManifest.getRepository());
