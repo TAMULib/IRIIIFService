@@ -81,7 +81,7 @@
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
 | **Sample Request** | ```/collection?context=cars_pcdm&update=true``` |
-| **Notes** | |
+| **Notes** | If the container is a root of a PCDM collection, the collection manifest will contain multiple manifests. If the container is an element of a collection within the PCDM model, the collection manifest will contain a single manifest. There is currently no way to generate a collection of collections. |
 
 | **Title** | Presentation |
 | :-------- | :--------- |
@@ -93,7 +93,7 @@
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
 | **Sample Request** | ```/presentation?context=cars_pcdm_objects/vintage&update=true``` |
-| **Notes** | |
+| **Notes** | <span style="color:red">Caution: </span> Currently, if the container is a root of a PCDM collection it will generate a compound presentation of all elements of the collection. This could take some time. It is planned to have all manifests utilize @id and be grainular. Then to expose an additional query parameter to explode the manifest. |
 
 | **Title** | Sequence |
 | :-------- | :--------- |
@@ -142,7 +142,7 @@
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
 | **Sample Request** | ```/collection?context=123456789/158298&update=true``` |
-| **Notes** | |
+| **Notes** | If the handle is a community or subcommunity, the collection manifest will contain collections of its immediate children subcommunities of collections. If the handle is a collection, the collection manifest will contain presentation manifests of all the collections items. If the handle is an item, the collection manifest will contain a single presentation manifest. |
 
 | **Title** | Presentation |
 | :-------- | :--------- |
@@ -154,7 +154,7 @@
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
 | **Sample Request** | ```/presentation?context=123456789/158313&update=true``` |
-| **Notes** | |
+| **Notes** | <span style="color:red">Caution: </span> Currently, if the handle is a community, subcommunity, or collection, it will generate a compound presentation of all items below. This could take some time. It is planned to have all manifests utilize @id and be grainular. Then to expose an additional query parameter to explode the manifest. Additionally, how the items are nested in sequences and canvases may change in future releases. |
 
 | **Title** | Sequence |
 | :-------- | :--------- |
