@@ -11,6 +11,11 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import edu.tamu.iiif.model.RedisManifest;
 
+/**
+ * Redis configuration.
+ * 
+ * @author wwelling
+ */
 @Configuration
 @EnableRedisRepositories
 public class RedisConfig {
@@ -18,6 +23,11 @@ public class RedisConfig {
     @Autowired
     private JedisConnectionFactory jedisConnectionFactory;
 
+    /**
+     * Configure Redis template bean.
+     * 
+     * @return
+     */
     @Bean
     public RedisTemplate<String, RedisManifest> redisTemplate() {
         RedisTemplate<String, RedisManifest> redisTemplate = new RedisTemplate<String, RedisManifest>();

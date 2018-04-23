@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/TAMULib/IRIIIFService.svg?branch=master)](https://travis-ci.org/TAMULib/IRIIIFService)
+[![Coverage Status](https://coveralls.io/repos/github/TAMULib/IRIIIFService/badge.svg?branch=master)](https://coveralls.io/github/TAMULib/IRIIIFService?branch=master)
+
 # IR IIIF Service
 > This service provides IIIF manifest generation from DSpace RDF and/or Fedora PCDM.
 ## Requirements
