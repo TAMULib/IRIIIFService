@@ -9,6 +9,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class StringUtilityTest {
 
     @Test
+    public void testCreate() {
+        Assert.assertNotNull(new StringUtility());
+    }
+
+    @Test
     public void testJoinPath() {
         Assert.assertEquals("src/main/resources", StringUtility.joinPath("src", "main", "resources"));
     }
