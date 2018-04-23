@@ -1,5 +1,5 @@
 package edu.tamu.iiif.model.rdf;
 
-public class FedoraRdfResourceTest {
+public class RdfModelTest {
 
 }

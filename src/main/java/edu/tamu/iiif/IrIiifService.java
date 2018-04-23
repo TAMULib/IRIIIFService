@@ -11,7 +11,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
  * @author wwelling
  */
 @SpringBootApplication
-public class IRIIIFService extends SpringBootServletInitializer {
+public class IrIiifService extends SpringBootServletInitializer {
 
     /**
      * Entry point for Tomcat deployment.
@@ -19,7 +19,7 @@ public class IRIIIFService extends SpringBootServletInitializer {
      * @param args
      */
     public static void main(String[] args) {
-        SpringApplication.run(IRIIIFService.class, args);
+        SpringApplication.run(IrIiifService.class, args);
     }
 
     /**
@@ -29,7 +29,7 @@ public class IRIIIFService extends SpringBootServletInitializer {
      */
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(IRIIIFService.class);
+        return application.sources(IrIiifService.class);
     }
 
 }
