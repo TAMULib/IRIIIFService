@@ -89,7 +89,7 @@
 | iiif.fedora.url | url | Fedora REST URL. | http://localhost:9000/fcrepo/rest |
 | iiif.pcdm.rdf.ext.url | url | Fedora Amherst PCDM service URL. | http://localhost:9107/pcdm |
 | iiif.image.server.url | url | IIIF image server URL. | http://localhost:8182/iiif/2 |
-| iiif.logo.url | url | URL for a default logo. | https://localhostassets/downloads/logos/Logo.png |
+| iiif.logo.url | url | URL for a default logo. | https://localhost/assets/downloads/logos/Logo.png |
 | iiif.service.connection.timeout | number | HTTP connection request timeout in milliseconds. | 300000  |
 | iiif.service.connection.request.timeout | number | HTTP connection timeout in milliseconds. | 300000  |
 | iiif.service.socket.timeout | number | HTTP socket timeout in milliseconds. | 300000  |
