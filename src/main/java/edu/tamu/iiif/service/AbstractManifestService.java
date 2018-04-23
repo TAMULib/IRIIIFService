@@ -8,7 +8,6 @@ import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_LEVEL_ZERO_PROFIL
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -31,15 +30,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import de.digitalcollections.iiif.presentation.model.api.v2.Image;
+import de.digitalcollections.iiif.presentation.model.api.v2.ImageResource;
 import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
 import de.digitalcollections.iiif.presentation.model.api.v2.Service;
 import de.digitalcollections.iiif.presentation.model.impl.jackson.v2.IiifPresentationApiObjectMapper;
+import de.digitalcollections.iiif.presentation.model.impl.v2.ImageImpl;
+import de.digitalcollections.iiif.presentation.model.impl.v2.ImageResourceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.MetadataImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ServiceImpl;
@@ -113,6 +115,15 @@ public abstract class AbstractManifestService implements ManifestService {
         return new URI(getIiifServiceUrl() + "/" + getManifestType().getName() + "?" + CONTEXT_IDENTIFIER + "=" + path);
     }
 
+    protected Optional<String> getIdByPredicate(Model model, String predicate) {
+        Optional<String> id = Optional.empty();
+        NodeIterator firstNodeItr = model.listObjectsOfProperty(model.getProperty(predicate));
+        while (firstNodeItr.hasNext()) {
+            id = Optional.of(firstNodeItr.next().toString());
+        }
+        return id;
+    }
+
     protected String getLogo(RdfResource rdfResource) {
         return logoUrl;
     }
@@ -121,17 +132,64 @@ public abstract class AbstractManifestService implements ManifestService {
         return Optional.empty();
     }
 
-    protected JsonNode getImageInfo(String url) throws JsonProcessingException, MalformedURLException, IOException, URISyntaxException {
-        return objectMapper.readTree(fetchImageInfo(url));
+    protected String fetchImageInfo(String url) throws NotFoundException {
+        Optional<String> imageInfo = Optional.ofNullable(httpService.get(url));
+        if (imageInfo.isPresent()) {
+            return imageInfo.get();
+        }
+        throw new NotFoundException("Image information not found!");
     }
 
-    protected Optional<String> getIdByPredicate(Model model, String predicate) {
-        Optional<String> id = Optional.empty();
-        NodeIterator firstNodeItr = model.listObjectsOfProperty(model.getProperty(predicate));
-        while (firstNodeItr.hasNext()) {
-            id = Optional.of(firstNodeItr.next().toString());
+    protected Image generateImage(RdfResource rdfResource, String canvasId) throws URISyntaxException {
+        String url = rdfResource.getResource().getURI();
+        Image image = new ImageImpl(getImageInfoUri(url));
+
+        Optional<ImageResource> imageResource = generateImageResource(rdfResource);
+        if (imageResource.isPresent()) {
+            image.setResource(imageResource.get());
         }
-        return id;
+
+        image.setOn(getCanvasUri(canvasId));
+        return image;
+    }
+
+    protected Optional<ImageResource> generateImageResource(RdfResource rdfResource) throws URISyntaxException {
+        String url = rdfResource.getResource().getURI();
+
+        URI infoUri = getImageInfoUri(url);
+
+        Optional<ImageResource> optionalImageResource = Optional.empty();
+
+        Optional<JsonNode> imageInfoNode = getImageInfo(infoUri.toString());
+
+        if (imageInfoNode.isPresent()) {
+            ImageResource imageResource = new ImageResourceImpl(getImageFullUrl(url));
+
+            Optional<String> mimeType = Optional.empty();
+            if (mimeType.isPresent()) {
+                imageResource.setFormat(mimeType.get());
+            }
+
+            imageResource.setHeight(imageInfoNode.get().get("height").asInt());
+
+            imageResource.setWidth(imageInfoNode.get().get("width").asInt());
+
+            imageResource.setServices(getServices(rdfResource, getIiifImageServiceName()));
+        }
+
+        return optionalImageResource;
+    }
+
+    protected Optional<JsonNode> getImageInfo(String url) {
+        Optional<JsonNode> imageInfoNode = Optional.empty();
+
+        try {
+            imageInfoNode = Optional.of(objectMapper.readTree(fetchImageInfo(url)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return imageInfoNode;
     }
 
     protected URI getImageUri(String url) throws URISyntaxException {
@@ -160,14 +218,6 @@ public abstract class AbstractManifestService implements ManifestService {
             services.add(getService(rdfResource, name));
         }
         return services;
-    }
-
-    protected String fetchImageInfo(String url) throws NotFoundException {
-        Optional<String> imageInfo = Optional.ofNullable(httpService.get(url));
-        if (imageInfo.isPresent()) {
-            return imageInfo.get();
-        }
-        throw new NotFoundException("Image information not found!");
     }
 
     protected String pathIdentifier(String url) {
@@ -226,6 +276,10 @@ public abstract class AbstractManifestService implements ManifestService {
     protected abstract String generateManifest(String handle) throws URISyntaxException, IOException;
 
     protected abstract String getIiifServiceUrl();
+
+    protected abstract URI getCanvasUri(String canvasId) throws URISyntaxException;
+
+    protected abstract String getIiifImageServiceName();
 
     protected abstract RepositoryType getRepositoryType();
 

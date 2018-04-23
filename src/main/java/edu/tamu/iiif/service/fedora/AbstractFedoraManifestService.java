@@ -4,9 +4,6 @@ import static edu.tamu.iiif.constants.Constants.CANVAS_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.COLLECECTION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.CONTEXT_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TITLE_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.EBUCORE_HAS_MIME_TYPE_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.EBUCORE_HEIGHT_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.EBUCORE_WIDTH_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.FEDORA_FCR_METADATA;
 import static edu.tamu.iiif.constants.Constants.FEDORA_HAS_PARENT_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.FEDORA_IDENTIFIER;
@@ -43,15 +40,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import de.digitalcollections.iiif.presentation.model.api.v2.Image;
 import de.digitalcollections.iiif.presentation.model.api.v2.ImageResource;
 import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
 import de.digitalcollections.iiif.presentation.model.impl.v2.CanvasImpl;
-import de.digitalcollections.iiif.presentation.model.impl.v2.ImageImpl;
-import de.digitalcollections.iiif.presentation.model.impl.v2.ImageResourceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
 import edu.tamu.iiif.exception.NotFoundException;
@@ -124,28 +118,6 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
             description = Optional.of("N/A");
         }
         return new PropertyValueSimpleImpl(description.get());
-    }
-
-    protected Optional<String> getMimeType(RdfResource rdfResource) {
-        return getObject(rdfResource, EBUCORE_HAS_MIME_TYPE_PREDICATE);
-    }
-
-    protected Optional<Integer> getHeight(RdfResource rdfResource) {
-        Optional<Integer> height = Optional.empty();
-        Optional<String> heightAsString = getObject(rdfResource, EBUCORE_HEIGHT_PREDICATE);
-        if (heightAsString.isPresent()) {
-            height = Optional.of(Integer.parseInt(heightAsString.get()));
-        }
-        return height;
-    }
-
-    protected Optional<Integer> getWidth(RdfResource rdfResource) {
-        Optional<Integer> width = Optional.empty();
-        Optional<String> widthAsString = getObject(rdfResource, EBUCORE_WIDTH_PREDICATE);
-        if (widthAsString.isPresent()) {
-            width = Optional.of(Integer.parseInt(widthAsString.get()));
-        }
-        return width;
     }
 
     private Optional<String> getObject(RdfResource rdfResource, String uri) {
@@ -292,50 +264,33 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
                 RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, resource.getURI());
 
                 Image image = generateImage(fileFedoraRdfResource, canvasId);
+
                 rdfCanvas.addImage(image);
 
-                int height = image.getResource().getHeight();
-                if (height > rdfCanvas.getHeight()) {
-                    rdfCanvas.setHeight(height);
-                }
+                Optional<ImageResource> imageResource = Optional.ofNullable(image.getResource());
 
-                int width = image.getResource().getWidth();
-                if (width > rdfCanvas.getWidth()) {
-                    rdfCanvas.setWidth(width);
+                if (imageResource.isPresent()) {
+                    int height = imageResource.get().getHeight();
+                    if (height > rdfCanvas.getHeight()) {
+                        rdfCanvas.setHeight(height);
+                    }
+
+                    int width = imageResource.get().getWidth();
+                    if (width > rdfCanvas.getWidth()) {
+                        rdfCanvas.setWidth(width);
+                    }
                 }
             }
         }
         return rdfCanvas;
     }
 
-    private Image generateImage(RdfResource rdfResource, String canvasId) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
-        String id = rdfResource.getResource().getURI();
-        Image image = new ImageImpl(getImageInfoUri(id));
-        image.setResource(generateImageResource(rdfResource));
-        image.setOn(getFedoraIiifCanvasUri(canvasId));
-        return image;
+    protected URI getCanvasUri(String canvasId) throws URISyntaxException {
+        return getFedoraIiifCanvasUri(canvasId);
     }
 
-    private ImageResource generateImageResource(RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
-        String id = rdfResource.getResource().getURI();
-        ImageResource imageResource = new ImageResourceImpl(getImageFullUrl(id));
-
-        URI infoUri = getImageInfoUri(id);
-
-        JsonNode imageInfoNode = getImageInfo(infoUri.toString());
-
-        Optional<String> mimeType = getMimeType(rdfResource);
-        if (mimeType.isPresent()) {
-            imageResource.setFormat(mimeType.get());
-        }
-
-        imageResource.setHeight(imageInfoNode.get("height").asInt());
-
-        imageResource.setWidth(imageInfoNode.get("width").asInt());
-
-        imageResource.setServices(getServices(rdfResource, "Fedora IIIF Image Resource Service"));
-
-        return imageResource;
+    protected String getIiifImageServiceName() {
+        return "Fedora IIIF Image Resource Service";
     }
 
 }

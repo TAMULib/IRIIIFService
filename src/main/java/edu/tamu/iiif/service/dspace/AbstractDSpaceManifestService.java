@@ -20,7 +20,6 @@ import static edu.tamu.iiif.utility.StringUtility.joinPath;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -34,17 +33,12 @@ import org.apache.jena.rdf.model.NodeIterator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import de.digitalcollections.iiif.presentation.model.api.v2.Image;
 import de.digitalcollections.iiif.presentation.model.api.v2.ImageResource;
 import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
 import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
 import de.digitalcollections.iiif.presentation.model.impl.v2.CanvasImpl;
-import de.digitalcollections.iiif.presentation.model.impl.v2.ImageImpl;
-import de.digitalcollections.iiif.presentation.model.impl.v2.ImageResourceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
 import edu.tamu.iiif.exception.NotFoundException;
@@ -196,7 +190,7 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         return canvases;
     }
 
-    private RdfCanvas getDSpaceRdfCanvas(RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
+    private RdfCanvas getDSpaceRdfCanvas(RdfResource rdfResource) throws URISyntaxException {
         String uri = rdfResource.getResource().getURI();
         RdfCanvas rdfCanvas = new RdfCanvas();
         String canvasId = getHandle(uri);
@@ -207,41 +201,29 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
 
         rdfCanvas.addImage(image);
 
-        int height = image.getResource().getHeight();
-        if (height > rdfCanvas.getHeight()) {
-            rdfCanvas.setHeight(height);
+        Optional<ImageResource> imageResource = Optional.ofNullable(image.getResource());
+
+        if (imageResource.isPresent()) {
+            int height = imageResource.get().getHeight();
+            if (height > rdfCanvas.getHeight()) {
+                rdfCanvas.setHeight(height);
+            }
+
+            int width = imageResource.get().getWidth();
+            if (width > rdfCanvas.getWidth()) {
+                rdfCanvas.setWidth(width);
+            }
         }
 
-        int width = image.getResource().getWidth();
-        if (width > rdfCanvas.getWidth()) {
-            rdfCanvas.setWidth(width);
-        }
         return rdfCanvas;
     }
 
-    private Image generateImage(RdfResource rdfResource, String canvasId) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
-        String url = rdfResource.getResource().getURI();
-        Image image = new ImageImpl(getImageInfoUri(url));
-        image.setResource(generateImageResource(rdfResource));
-        image.setOn(getDSpaceIIIFCanvasUri(canvasId));
-        return image;
+    protected URI getCanvasUri(String canvasId) throws URISyntaxException {
+        return getDSpaceIIIFCanvasUri(canvasId);
     }
 
-    private ImageResource generateImageResource(RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
-        String url = rdfResource.getResource().getURI();
-        ImageResource imageResource = new ImageResourceImpl(getImageFullUrl(url));
-
-        URI infoUri = getImageInfoUri(url);
-
-        JsonNode imageInfoNode = getImageInfo(infoUri.toString());
-
-        imageResource.setHeight(imageInfoNode.get("height").asInt());
-
-        imageResource.setWidth(imageInfoNode.get("width").asInt());
-
-        imageResource.setServices(getServices(rdfResource, "DSpace IIIF Image Resource Service"));
-
-        return imageResource;
+    protected String getIiifImageServiceName() {
+        return "DSpace IIIF Image Resource Service";
     }
 
 }
