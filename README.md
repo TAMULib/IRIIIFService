@@ -31,7 +31,10 @@
 - [Presentation API v2](http://iiif.io/api/presentation/2.1/)
 - [Image API v2](http://iiif.io/api/image/2.1/)
 
-> Here is an example Cantaloupe resolver delegate
+<details>
+<summary>Example Cantaloupe resolver delegate</summary>
+
+<br/>
 
 ```
   module HttpResolver
@@ -59,6 +62,9 @@
     end
   end
 ```
+
+</details>
+
 ## [DSpace](http://www.dspace.org/)
 - [Installation](https://wiki.duraspace.org/display/DSDOC6x/Installing+DSpace#space-menu-link-content)
 - [RDF](https://wiki.duraspace.org/display/DSDOC6x/Linked+%28Open%29+Data)
