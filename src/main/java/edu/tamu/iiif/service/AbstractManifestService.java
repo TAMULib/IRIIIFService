@@ -113,13 +113,8 @@ public abstract class AbstractManifestService implements ManifestService {
         return new URI(getIiifServiceUrl() + "/" + getManifestType().getName() + "?" + CONTEXT_IDENTIFIER + "=" + path);
     }
 
-    protected Optional<String> getIdByPredicate(Model model, String predicate) {
-        Optional<String> id = Optional.empty();
-        NodeIterator firstNodeItr = model.listObjectsOfProperty(model.getProperty(predicate));
-        while (firstNodeItr.hasNext()) {
-            id = Optional.of(firstNodeItr.next().toString());
-        }
-        return id;
+    protected String getLogo(RdfResource rdfResource) {
+        return logoUrl;
     }
 
     protected Optional<String> getLicense(RdfResource rdfResource) {
@@ -128,6 +123,15 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected JsonNode getImageInfo(String url) throws JsonProcessingException, MalformedURLException, IOException, URISyntaxException {
         return objectMapper.readTree(fetchImageInfo(url));
+    }
+
+    protected Optional<String> getIdByPredicate(Model model, String predicate) {
+        Optional<String> id = Optional.empty();
+        NodeIterator firstNodeItr = model.listObjectsOfProperty(model.getProperty(predicate));
+        while (firstNodeItr.hasNext()) {
+            id = Optional.of(firstNodeItr.next().toString());
+        }
+        return id;
     }
 
     protected URI getImageUri(String url) throws URISyntaxException {
@@ -158,14 +162,6 @@ public abstract class AbstractManifestService implements ManifestService {
         return services;
     }
 
-    protected Service getService(RdfResource rdfResource, String name) throws URISyntaxException {
-        Service service = new ServiceImpl(getImageUri(rdfResource.getResource().getURI()));
-        service.setLabel(new PropertyValueSimpleImpl(name));
-        service.setContext(IIIF_IMAGE_API_CONTEXT);
-        service.setProfile(IIIF_IMAGE_API_LEVEL_ZERO_PROFILE);
-        return service;
-    }
-
     protected String fetchImageInfo(String url) throws NotFoundException {
         Optional<String> imageInfo = Optional.ofNullable(httpService.get(url));
         if (imageInfo.isPresent()) {
@@ -188,36 +184,6 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected List<Metadata> getDublinCoreMetadata(RdfResource rdfResource) {
         return getMetadata(rdfResource, DUBLIN_CORE_PREFIX);
-    }
-
-    protected List<Metadata> getMetadata(RdfResource rdfResource, String prefix) {
-        List<Metadata> metadata = new ArrayList<Metadata>();
-        StmtIterator statements = rdfResource.getModel().listStatements();
-        while (statements.hasNext()) {
-            Statement statement = statements.nextStatement();
-            Property predicate = statement.getPredicate();
-            String resourceUrl = rdfResource.getResource().getURI();
-            String statementUrl = statement.getSubject().getURI();
-            boolean match = resourceUrl.equals(statementUrl);
-            if (getRepositoryType().equals(RepositoryType.DSPACE)) {
-                match = getHandle(resourceUrl).equals(getHandle(statementUrl));
-            } else {
-                match = resourceUrl.equals(statementUrl);
-            }
-            if (match && predicate.getNameSpace().equals(prefix)) {
-
-                Optional<Metadata> metadatum = Optional.empty();
-                try {
-                    metadatum = Optional.of(generateMetadatum(statement));
-                } catch (IOException e) {
-
-                }
-                if (metadatum.isPresent()) {
-                    metadata.add(metadatum.get());
-                }
-            }
-        }
-        return metadata;
     }
 
     protected String getHandle(String uri) {
@@ -257,10 +223,6 @@ public abstract class AbstractManifestService implements ManifestService {
         return formalNameBuilder.toString();
     }
 
-    protected String getLogo(RdfResource rdfResource) {
-        return logoUrl;
-    }
-
     protected abstract String generateManifest(String handle) throws URISyntaxException, IOException;
 
     protected abstract String getIiifServiceUrl();
@@ -271,8 +233,46 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected abstract String getRepositoryPath(String url);
 
+    private Service getService(RdfResource rdfResource, String name) throws URISyntaxException {
+        Service service = new ServiceImpl(getImageUri(rdfResource.getResource().getURI()));
+        service.setLabel(new PropertyValueSimpleImpl(name));
+        service.setContext(IIIF_IMAGE_API_CONTEXT);
+        service.setProfile(IIIF_IMAGE_API_LEVEL_ZERO_PROFILE);
+        return service;
+    }
+
     private Optional<RedisManifest> getRedisManifest(String path) {
         return redisManifestRepo.findByPathAndTypeAndRepository(StringUtility.encode(path), getManifestType(), getRepositoryType());
+    }
+
+    private List<Metadata> getMetadata(RdfResource rdfResource, String prefix) {
+        List<Metadata> metadata = new ArrayList<Metadata>();
+        StmtIterator statements = rdfResource.getModel().listStatements();
+        while (statements.hasNext()) {
+            Statement statement = statements.nextStatement();
+            Property predicate = statement.getPredicate();
+            String resourceUrl = rdfResource.getResource().getURI();
+            String statementUrl = statement.getSubject().getURI();
+            boolean match = resourceUrl.equals(statementUrl);
+            if (getRepositoryType().equals(RepositoryType.DSPACE)) {
+                match = getHandle(resourceUrl).equals(getHandle(statementUrl));
+            } else {
+                match = resourceUrl.equals(statementUrl);
+            }
+            if (match && predicate.getNameSpace().equals(prefix)) {
+
+                Optional<Metadata> metadatum = Optional.empty();
+                try {
+                    metadatum = Optional.of(generateMetadatum(statement));
+                } catch (IOException e) {
+
+                }
+                if (metadatum.isPresent()) {
+                    metadata.add(metadatum.get());
+                }
+            }
+        }
+        return metadata;
     }
 
     private Metadata generateMetadatum(Statement statement) throws IOException {

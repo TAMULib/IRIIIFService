@@ -95,64 +95,6 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         return sequence;
     }
 
-    private List<Canvas> getCanvases(RdfResource rdfResource) throws IOException, URISyntaxException {
-        List<Canvas> canvases = new ArrayList<Canvas>();
-
-        Optional<String> firstId = getIdByPredicate(rdfResource.getModel(), IANA_FIRST_PREDICATE);
-
-        if (firstId.isPresent()) {
-            Optional<String> lastId = getIdByPredicate(rdfResource.getModel(), IANA_LAST_PREDICATE);
-
-            if (lastId.isPresent()) {
-                Resource firstResource = rdfResource.getModel().getResource(firstId.get());
-                generateOrderedCanvases(new RdfOrderedSequence(rdfResource.getModel(), firstResource, firstId.get(), lastId.get()), canvases);
-            }
-        }
-
-        if (canvases.isEmpty()) {
-
-            ResIterator resItr = rdfResource.listResourcesWithPropertyWithId(LDP_CONTAINS_PREDICATE);
-            while (resItr.hasNext()) {
-                Resource resource = resItr.next();
-                if (resource.getProperty(rdfResource.getProperty(PCDM_HAS_FILE_PREDICATE)) != null) {
-                    canvases.add(generateCanvas(new RdfResource(rdfResource, resource)));
-                }
-            }
-
-        }
-
-        return canvases;
-    }
-
-    private void generateOrderedCanvases(RdfOrderedSequence rdfOrderedSequence, List<Canvas> canvases) throws IOException, URISyntaxException {
-
-        Model model = getRdfModel(rdfOrderedSequence.getResource().getURI());
-
-        Optional<String> id = getIdByPredicate(model, ORE_PROXY_FOR_PREDICATE);
-
-        if (!id.isPresent()) {
-            id = getIdByPredicate(model, ORE_PROXY_FOR_PREDICATE.replace("#", "/"));
-        }
-
-        if (id.isPresent()) {
-
-            if (!rdfOrderedSequence.isLast() || rdfOrderedSequence.isLast() && rdfOrderedSequence.isFirst()) {
-
-                canvases.add(generateCanvas(new RdfResource(rdfOrderedSequence, rdfOrderedSequence.getModel().getResource(id.get()))));
-
-                Optional<String> nextId = getIdByPredicate(model, IANA_NEXT_PREDICATE);
-
-                if (nextId.isPresent()) {
-                    Resource resource = rdfOrderedSequence.getModel().getResource(nextId.get());
-                    rdfOrderedSequence.setResource(resource);
-                    rdfOrderedSequence.setCurrentId(nextId.get());
-                    generateOrderedCanvases(rdfOrderedSequence, canvases);
-                }
-            }
-        }
-
-    }
-
     protected Canvas generateCanvas(RdfResource rdfResource) throws IOException, URISyntaxException {
         String id = rdfResource.getResource().getURI();
         PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(formalize(extractLabel(id)));
@@ -166,68 +108,6 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         canvas.setMetadata(getDublinCoreMetadata(rdfResource));
 
         return canvas;
-    }
-
-    private RdfCanvas getFedoraRdfCanvas(RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
-        RdfCanvas rdfCanvas = new RdfCanvas();
-
-        String canvasId = rdfResource.getResource().getURI();
-
-        Statement canvasStatement = rdfResource.getStatementOfPropertyWithId(LDP_CONTAINS_PREDICATE);
-
-        String parentId = canvasStatement.getObject().toString();
-
-        for (Resource resource : rdfResource.listResourcesWithPropertyWithId(FEDORA_HAS_PARENT_PREDICATE).toList()) {
-
-            if (resource.getProperty(rdfResource.getProperty(FEDORA_HAS_PARENT_PREDICATE)).getObject().toString().equals(parentId)) {
-
-                RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, resource.getURI());
-
-                Image image = generateImage(fileFedoraRdfResource, canvasId);
-                rdfCanvas.addImage(image);
-
-                int height = image.getResource().getHeight();
-                if (height > rdfCanvas.getHeight()) {
-                    rdfCanvas.setHeight(height);
-                }
-
-                int width = image.getResource().getWidth();
-                if (width > rdfCanvas.getWidth()) {
-                    rdfCanvas.setWidth(width);
-                }
-            }
-        }
-        return rdfCanvas;
-    }
-
-    private Image generateImage(RdfResource rdfResource, String canvasId) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
-        String id = rdfResource.getResource().getURI();
-        Image image = new ImageImpl(getImageInfoUri(id));
-        image.setResource(generateImageResource(rdfResource));
-        image.setOn(getFedoraIiifCanvasUri(canvasId));
-        return image;
-    }
-
-    private ImageResource generateImageResource(RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
-        String id = rdfResource.getResource().getURI();
-        ImageResource imageResource = new ImageResourceImpl(getImageFullUrl(id));
-
-        URI infoUri = getImageInfoUri(id);
-
-        JsonNode imageInfoNode = getImageInfo(infoUri.toString());
-
-        Optional<String> mimeType = getMimeType(rdfResource);
-        if (mimeType.isPresent()) {
-            imageResource.setFormat(mimeType.get());
-        }
-
-        imageResource.setHeight(imageInfoNode.get("height").asInt());
-
-        imageResource.setWidth(imageInfoNode.get("width").asInt());
-
-        imageResource.setServices(getServices(rdfResource, "Fedora IIIF Image Resource Service"));
-
-        return imageResource;
     }
 
     protected PropertyValueSimpleImpl getTitle(RdfResource rdfResource) {
@@ -336,6 +216,126 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         Model model = ModelFactory.createDefaultModel();
         model.read(stream, null, "TTL");
         return model;
+    }
+
+    private List<Canvas> getCanvases(RdfResource rdfResource) throws IOException, URISyntaxException {
+        List<Canvas> canvases = new ArrayList<Canvas>();
+
+        Optional<String> firstId = getIdByPredicate(rdfResource.getModel(), IANA_FIRST_PREDICATE);
+
+        if (firstId.isPresent()) {
+            Optional<String> lastId = getIdByPredicate(rdfResource.getModel(), IANA_LAST_PREDICATE);
+
+            if (lastId.isPresent()) {
+                Resource firstResource = rdfResource.getModel().getResource(firstId.get());
+                generateOrderedCanvases(new RdfOrderedSequence(rdfResource.getModel(), firstResource, firstId.get(), lastId.get()), canvases);
+            }
+        }
+
+        if (canvases.isEmpty()) {
+
+            ResIterator resItr = rdfResource.listResourcesWithPropertyWithId(LDP_CONTAINS_PREDICATE);
+            while (resItr.hasNext()) {
+                Resource resource = resItr.next();
+                if (resource.getProperty(rdfResource.getProperty(PCDM_HAS_FILE_PREDICATE)) != null) {
+                    canvases.add(generateCanvas(new RdfResource(rdfResource, resource)));
+                }
+            }
+
+        }
+
+        return canvases;
+    }
+
+    private void generateOrderedCanvases(RdfOrderedSequence rdfOrderedSequence, List<Canvas> canvases) throws IOException, URISyntaxException {
+
+        Model model = getRdfModel(rdfOrderedSequence.getResource().getURI());
+
+        Optional<String> id = getIdByPredicate(model, ORE_PROXY_FOR_PREDICATE);
+
+        if (!id.isPresent()) {
+            id = getIdByPredicate(model, ORE_PROXY_FOR_PREDICATE.replace("#", "/"));
+        }
+
+        if (id.isPresent()) {
+
+            if (!rdfOrderedSequence.isLast() || rdfOrderedSequence.isLast() && rdfOrderedSequence.isFirst()) {
+
+                canvases.add(generateCanvas(new RdfResource(rdfOrderedSequence, rdfOrderedSequence.getModel().getResource(id.get()))));
+
+                Optional<String> nextId = getIdByPredicate(model, IANA_NEXT_PREDICATE);
+
+                if (nextId.isPresent()) {
+                    Resource resource = rdfOrderedSequence.getModel().getResource(nextId.get());
+                    rdfOrderedSequence.setResource(resource);
+                    rdfOrderedSequence.setCurrentId(nextId.get());
+                    generateOrderedCanvases(rdfOrderedSequence, canvases);
+                }
+            }
+        }
+
+    }
+
+    private RdfCanvas getFedoraRdfCanvas(RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
+        RdfCanvas rdfCanvas = new RdfCanvas();
+
+        String canvasId = rdfResource.getResource().getURI();
+
+        Statement canvasStatement = rdfResource.getStatementOfPropertyWithId(LDP_CONTAINS_PREDICATE);
+
+        String parentId = canvasStatement.getObject().toString();
+
+        for (Resource resource : rdfResource.listResourcesWithPropertyWithId(FEDORA_HAS_PARENT_PREDICATE).toList()) {
+
+            if (resource.getProperty(rdfResource.getProperty(FEDORA_HAS_PARENT_PREDICATE)).getObject().toString().equals(parentId)) {
+
+                RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, resource.getURI());
+
+                Image image = generateImage(fileFedoraRdfResource, canvasId);
+                rdfCanvas.addImage(image);
+
+                int height = image.getResource().getHeight();
+                if (height > rdfCanvas.getHeight()) {
+                    rdfCanvas.setHeight(height);
+                }
+
+                int width = image.getResource().getWidth();
+                if (width > rdfCanvas.getWidth()) {
+                    rdfCanvas.setWidth(width);
+                }
+            }
+        }
+        return rdfCanvas;
+    }
+
+    private Image generateImage(RdfResource rdfResource, String canvasId) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
+        String id = rdfResource.getResource().getURI();
+        Image image = new ImageImpl(getImageInfoUri(id));
+        image.setResource(generateImageResource(rdfResource));
+        image.setOn(getFedoraIiifCanvasUri(canvasId));
+        return image;
+    }
+
+    private ImageResource generateImageResource(RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
+        String id = rdfResource.getResource().getURI();
+        ImageResource imageResource = new ImageResourceImpl(getImageFullUrl(id));
+
+        URI infoUri = getImageInfoUri(id);
+
+        JsonNode imageInfoNode = getImageInfo(infoUri.toString());
+
+        Optional<String> mimeType = getMimeType(rdfResource);
+        if (mimeType.isPresent()) {
+            imageResource.setFormat(mimeType.get());
+        }
+
+        imageResource.setHeight(imageInfoNode.get("height").asInt());
+
+        imageResource.setWidth(imageInfoNode.get("width").asInt());
+
+        imageResource.setServices(getServices(rdfResource, "Fedora IIIF Image Resource Service"));
+
+        return imageResource;
     }
 
 }

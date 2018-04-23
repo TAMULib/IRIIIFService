@@ -80,16 +80,6 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         return sequence;
     }
 
-    private List<Canvas> getCanvases(RdfResource rdfResource) throws IOException, URISyntaxException {
-        List<Canvas> canvases = new ArrayList<Canvas>();
-        NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_BITSTREAM_PREDICATE);
-        while (collectionIterator.hasNext()) {
-            String uri = collectionIterator.next().toString();
-            canvases.add(generateCanvas(new RdfResource(rdfResource, uri)));
-        }
-        return canvases;
-    }
-
     protected Canvas generateCanvas(RdfResource rdfResource) throws IOException, URISyntaxException {
         String uri = rdfResource.getResource().getURI();
         String handle = getHandle(uri);
@@ -104,54 +94,6 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         canvas.setMetadata(new ArrayList<Metadata>());
 
         return canvas;
-    }
-
-    private RdfCanvas getDSpaceRdfCanvas(RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
-        String uri = rdfResource.getResource().getURI();
-        RdfCanvas rdfCanvas = new RdfCanvas();
-        String canvasId = getHandle(uri);
-
-        RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, uri);
-
-        Image image = generateImage(fileFedoraRdfResource, canvasId);
-
-        rdfCanvas.addImage(image);
-
-        int height = image.getResource().getHeight();
-        if (height > rdfCanvas.getHeight()) {
-            rdfCanvas.setHeight(height);
-        }
-
-        int width = image.getResource().getWidth();
-        if (width > rdfCanvas.getWidth()) {
-            rdfCanvas.setWidth(width);
-        }
-        return rdfCanvas;
-    }
-
-    private Image generateImage(RdfResource rdfResource, String canvasId) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
-        String url = rdfResource.getResource().getURI();
-        Image image = new ImageImpl(getImageInfoUri(url));
-        image.setResource(generateImageResource(rdfResource));
-        image.setOn(getDSpaceIIIFCanvasUri(canvasId));
-        return image;
-    }
-
-    private ImageResource generateImageResource(RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
-        String url = rdfResource.getResource().getURI();
-        ImageResource imageResource = new ImageResourceImpl(getImageFullUrl(url));
-
-        URI infoUri = getImageInfoUri(url);
-
-        JsonNode imageInfoNode = getImageInfo(infoUri.toString());
-
-        imageResource.setHeight(imageInfoNode.get("height").asInt());
-
-        imageResource.setWidth(imageInfoNode.get("width").asInt());
-
-        imageResource.setServices(getServices(rdfResource, "DSpace IIIF Image Resource Service"));
-
-        return imageResource;
     }
 
     protected boolean isTopLevelCommunity(Model model) {
@@ -225,6 +167,10 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         return joinPath(dspaceUrl, "rdf", "handle", handle);
     }
 
+    private URI getDSpaceIiifUri(String handle, String type) throws URISyntaxException {
+        return URI.create(getIiifServiceUrl() + "/" + type + "?" + CONTEXT_IDENTIFIER + "=" + handle);
+    }
+
     private String getRdf(String dspaceRdfUri) throws NotFoundException {
         Optional<String> dspaceRdf = Optional.ofNullable(httpService.get(dspaceRdfUri));
         if (dspaceRdf.isPresent()) {
@@ -233,15 +179,69 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         throw new NotFoundException("DSpace RDF not found!");
     }
 
-    private URI getDSpaceIiifUri(String handle, String type) throws URISyntaxException {
-        return URI.create(getIiifServiceUrl() + "/" + type + "?" + CONTEXT_IDENTIFIER + "=" + handle);
-    }
-
     private Model generateRdfModel(String rdf) {
         InputStream stream = new ByteArrayInputStream(rdf.getBytes(StandardCharsets.UTF_8));
         Model model = ModelFactory.createDefaultModel();
         model.read(stream, null, "TTL");
         return model;
+    }
+
+    private List<Canvas> getCanvases(RdfResource rdfResource) throws IOException, URISyntaxException {
+        List<Canvas> canvases = new ArrayList<Canvas>();
+        NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_BITSTREAM_PREDICATE);
+        while (collectionIterator.hasNext()) {
+            String uri = collectionIterator.next().toString();
+            canvases.add(generateCanvas(new RdfResource(rdfResource, uri)));
+        }
+        return canvases;
+    }
+
+    private RdfCanvas getDSpaceRdfCanvas(RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
+        String uri = rdfResource.getResource().getURI();
+        RdfCanvas rdfCanvas = new RdfCanvas();
+        String canvasId = getHandle(uri);
+
+        RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, uri);
+
+        Image image = generateImage(fileFedoraRdfResource, canvasId);
+
+        rdfCanvas.addImage(image);
+
+        int height = image.getResource().getHeight();
+        if (height > rdfCanvas.getHeight()) {
+            rdfCanvas.setHeight(height);
+        }
+
+        int width = image.getResource().getWidth();
+        if (width > rdfCanvas.getWidth()) {
+            rdfCanvas.setWidth(width);
+        }
+        return rdfCanvas;
+    }
+
+    private Image generateImage(RdfResource rdfResource, String canvasId) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
+        String url = rdfResource.getResource().getURI();
+        Image image = new ImageImpl(getImageInfoUri(url));
+        image.setResource(generateImageResource(rdfResource));
+        image.setOn(getDSpaceIIIFCanvasUri(canvasId));
+        return image;
+    }
+
+    private ImageResource generateImageResource(RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
+        String url = rdfResource.getResource().getURI();
+        ImageResource imageResource = new ImageResourceImpl(getImageFullUrl(url));
+
+        URI infoUri = getImageInfoUri(url);
+
+        JsonNode imageInfoNode = getImageInfo(infoUri.toString());
+
+        imageResource.setHeight(imageInfoNode.get("height").asInt());
+
+        imageResource.setWidth(imageInfoNode.get("width").asInt());
+
+        imageResource.setServices(getServices(rdfResource, "DSpace IIIF Image Resource Service"));
+
+        return imageResource;
     }
 
 }

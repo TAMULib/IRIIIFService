@@ -6,7 +6,6 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
-import org.apache.jena.rdf.model.StmtIterator;
 
 public class RdfResource extends RdfModel {
 
@@ -58,16 +57,8 @@ public class RdfResource extends RdfModel {
         return resource.getProperty(getProperty(id));
     }
 
-    public StmtIterator listStatementsOfPropertyWithId(String id) {
-        return resource.listProperties(getProperty(id));
-    }
-
     public NodeIterator getAllNodesOfPropertyWithId(String id) {
         return getModel().listObjectsOfProperty(getProperty(id));
-    }
-
-    public NodeIterator getNodesOfPropertyWithId(String id) {
-        return getModel().listObjectsOfProperty(resource, getProperty(id));
     }
 
     public ResIterator listResourcesWithPropertyWithId(String id) {
