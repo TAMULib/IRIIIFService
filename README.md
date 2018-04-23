@@ -27,6 +27,35 @@
 		- e.g. ```dspace:xmlui/bitstream/123456789/158319/11/primary.tif```
 - [Presentation API v2](http://iiif.io/api/presentation/2.1/)
 - [Image API v2](http://iiif.io/api/image/2.1/)
+
+> Here is an example Cantaloupe resolver delegate
+
+```
+  module HttpResolver
+    ##
+    # @param identifier [String] Image identifier
+    # @return [String,nil] URL of the image corresponding to the given
+    #                      identifier, or nil if not found.
+    #
+    def self.get_url(_identifier)
+      irid = Base64.decode64(_identifier)
+      if irid.include? ":"
+        parts = irid.split(':')
+        ir = parts[0]
+        path = parts[1]
+        if ir == 'fedora'
+          uri = '<%=@fedora_url%>' + path
+        elsif ir == 'dspace'
+          uri = '<%=@dspace_url%>' + path
+        else
+          uri = irid
+        end
+      else
+        uri = '<%=@fedora_url%>' + irid
+      end
+    end
+  end
+```
 ## [DSpace](http://www.dspace.org/)
 - [Installation](https://wiki.duraspace.org/display/DSDOC6x/Installing+DSpace#space-menu-link-content)
 - [RDF](https://wiki.duraspace.org/display/DSDOC6x/Linked+%28Open%29+Data)
