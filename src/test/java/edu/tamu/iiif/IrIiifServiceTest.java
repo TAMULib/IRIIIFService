@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class IrIiifServiceTest {
 
     @Test
-    public void context() {
+    public void testContext() {
         Assert.assertTrue(true);
     }
 
