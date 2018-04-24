@@ -175,6 +175,8 @@ public abstract class AbstractManifestService implements ManifestService {
             imageResource.setWidth(imageInfoNode.get().get("width").asInt());
 
             imageResource.setServices(getServices(rdfResource, getIiifImageServiceName()));
+
+            optionalImageResource = Optional.of(imageResource);
         }
 
         return optionalImageResource;
