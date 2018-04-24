@@ -61,13 +61,39 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
 
     private List<Sequence> getSequences(RdfResource rdfResource) throws IOException, URISyntaxException {
         List<Sequence> sequences = new ArrayList<Sequence>();
+
+        // NOTE: flattening all sequence canvases into a single canvas, feature parity with Fedora presentation
+        List<Sequence> broadSequences = aggregateSequences(rdfResource);
+
+        if (broadSequences.size() > 0) {
+            Sequence sequence = broadSequences.get(0);
+
+            List<Canvas> canvases = sequence.getCanvases();
+
+            broadSequences.remove(0);
+
+            broadSequences.forEach(seq -> {
+                seq.getCanvases().forEach(canvas -> {
+                    canvases.add(canvas);
+                });
+            });
+
+            sequence.setCanvases(canvases);
+            sequences.add(sequence);
+        }
+
+        return sequences;
+    }
+
+    private List<Sequence> aggregateSequences(RdfResource rdfResource) throws IOException, URISyntaxException {
+        List<Sequence> sequences = new ArrayList<Sequence>();
         if (isTopLevelCommunity(rdfResource.getModel()) || isSubcommunity(rdfResource.getModel())) {
 
             NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_COLLECTION_PREDICATE);
             while (collectionIterator.hasNext()) {
                 String uri = collectionIterator.next().toString();
                 String handle = getHandle(uri);
-                sequences.addAll(getSequences(getDSpaceRdfModel(handle)));
+                sequences.addAll(aggregateSequences(getDSpaceRdfModel(handle)));
             }
 
         } else if (isCollection(rdfResource.getModel())) {
@@ -76,7 +102,7 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
             while (collectionIterator.hasNext()) {
                 String uri = collectionIterator.next().toString();
                 String handle = getHandle(uri);
-                sequences.addAll(getSequences(getDSpaceRdfModel(handle)));
+                sequences.addAll(aggregateSequences(getDSpaceRdfModel(handle)));
             }
 
         } else if (isItem(rdfResource.getModel())) {
