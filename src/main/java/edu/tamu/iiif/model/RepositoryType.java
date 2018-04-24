@@ -5,9 +5,12 @@ import static edu.tamu.iiif.constants.Constants.FEDORA_IDENTIFIER;
 
 public enum RepositoryType {
 
-    FEDORA(FEDORA_IDENTIFIER), DSPACE(DSPACE_IDENTIFIER);
+    // @formatter:off
+    DSPACE(DSPACE_IDENTIFIER),
+    FEDORA(FEDORA_IDENTIFIER);
+    // @formatter:on
 
-    private String name;
+    private final String name;
 
     RepositoryType(String name) {
         this.name = name;
@@ -15,10 +18,6 @@ public enum RepositoryType {
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
 }

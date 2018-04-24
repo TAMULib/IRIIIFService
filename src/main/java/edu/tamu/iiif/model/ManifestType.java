@@ -9,14 +9,14 @@ import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
 public enum ManifestType {
 
     // @formatter:off
-    COLLECTION(COLLECECTION_IDENTIFIER),
-    PRESENTATION(PRESENTATION_IDENTIFIER),
-    SEQUENCE(SEQUENCE_IDENTIFIER),
     CANVAS(CANVAS_IDENTIFIER),
-    IMAGE(IMAGE_IDENTIFIER);
+    COLLECTION(COLLECECTION_IDENTIFIER),
+    IMAGE(IMAGE_IDENTIFIER),
+    PRESENTATION(PRESENTATION_IDENTIFIER),
+    SEQUENCE(SEQUENCE_IDENTIFIER);
     // @formatter:on
 
-    private String name;
+    private final String name;
 
     ManifestType(String name) {
         this.name = name;
@@ -24,10 +24,6 @@ public enum ManifestType {
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
 }
