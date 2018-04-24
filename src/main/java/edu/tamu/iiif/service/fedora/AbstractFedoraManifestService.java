@@ -231,7 +231,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
 
         if (id.isPresent()) {
 
-            if (!rdfOrderedSequence.isLast() || rdfOrderedSequence.isLast() && rdfOrderedSequence.isFirst()) {
+            if (!rdfOrderedSequence.isLast()) {
 
                 canvases.add(generateCanvas(new RdfResource(rdfOrderedSequence, rdfOrderedSequence.getModel().getResource(id.get()))));
 
