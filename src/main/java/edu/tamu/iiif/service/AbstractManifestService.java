@@ -16,8 +16,6 @@ import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
@@ -111,27 +109,6 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected URI buildId(String path) throws URISyntaxException {
         return new URI(getIiifServiceUrl() + "/" + getManifestType().getName() + "?" + CONTEXT_IDENTIFIER + "=" + path);
-    }
-
-    protected Optional<String> getIdByPredicate(Model model, String predicate) {
-        Optional<String> id = Optional.empty();
-        NodeIterator firstNodeItr = model.listObjectsOfProperty(model.getProperty(predicate));
-        while (firstNodeItr.hasNext()) {
-            id = Optional.of(firstNodeItr.next().toString());
-        }
-        return id;
-    }
-
-    protected Optional<String> getObject(RdfResource rdfResource, String uri) {
-        Optional<String> metadatum = Optional.empty();
-        Statement statement = rdfResource.getStatementOfPropertyWithId(uri);
-        if (statement != null) {
-            RDFNode object = statement.getObject();
-            if (!object.toString().isEmpty()) {
-                metadatum = Optional.of(object.toString());
-            }
-        }
-        return metadatum;
     }
 
     protected String getLogo(RdfResource rdfResource) {

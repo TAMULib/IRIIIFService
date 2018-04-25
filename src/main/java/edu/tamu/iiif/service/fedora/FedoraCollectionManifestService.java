@@ -6,6 +6,7 @@ import static edu.tamu.iiif.constants.Constants.IANA_NEXT_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.ORE_PROXY_FOR_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_MEMBER_PREDICATE;
 import static edu.tamu.iiif.model.ManifestType.COLLECTION;
+import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
 
 import java.io.IOException;
 import java.net.URI;

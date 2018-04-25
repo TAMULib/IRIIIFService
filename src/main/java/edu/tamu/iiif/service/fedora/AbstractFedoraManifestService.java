@@ -17,6 +17,9 @@ import static edu.tamu.iiif.constants.Constants.PCDM_HAS_FILE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
 import static edu.tamu.iiif.model.RepositoryType.FEDORA;
+import static edu.tamu.iiif.utility.RdfModelUtility.createRdfModel;
+import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
+import static edu.tamu.iiif.utility.RdfModelUtility.getObject;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
 import java.io.IOException;
@@ -49,7 +52,6 @@ import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfOrderedSequence;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
-import edu.tamu.iiif.utility.RdfModelUtility;
 
 @Profile(FEDORA_IDENTIFIER)
 public abstract class AbstractFedoraManifestService extends AbstractManifestService {
@@ -65,7 +67,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         String rdf = getPCDMRdf(fedoraRdfUri);
         System.out.println("\n\n" + path + "\n");
         System.out.println(rdf + "\n\n");
-        Model model = RdfModelUtility.createRdfModel(rdf);
+        Model model = createRdfModel(rdf);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");
         return new RdfResource(model, model.getResource(fedoraRdfUri));
@@ -74,7 +76,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     protected Model getRdfModel(String uri) throws NotFoundException {
         Optional<String> fedoraRdf = Optional.ofNullable(httpService.get(uri + FEDORA_FCR_METADATA));
         if (fedoraRdf.isPresent()) {
-            return RdfModelUtility.createRdfModel(fedoraRdf.get());
+            return createRdfModel(fedoraRdf.get());
         }
         throw new NotFoundException("Fedora RDF not found!");
     }

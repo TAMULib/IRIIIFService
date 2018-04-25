@@ -3,9 +3,15 @@ package edu.tamu.iiif.utility;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Statement;
+
+import edu.tamu.iiif.model.rdf.RdfResource;
 
 public class RdfModelUtility {
 
@@ -14,6 +20,27 @@ public class RdfModelUtility {
         Model model = ModelFactory.createDefaultModel();
         model.read(stream, null, "TTL");
         return model;
+    }
+    
+    public static Optional<String> getIdByPredicate(Model model, String predicate) {
+        Optional<String> id = Optional.empty();
+        NodeIterator firstNodeItr = model.listObjectsOfProperty(model.getProperty(predicate));
+        while (firstNodeItr.hasNext()) {
+            id = Optional.of(firstNodeItr.next().toString());
+        }
+        return id;
+    }
+    
+    public static Optional<String> getObject(RdfResource rdfResource, String uri) {
+        Optional<String> metadatum = Optional.empty();
+        Statement statement = rdfResource.getStatementOfPropertyWithId(uri);
+        if (statement != null) {
+            RDFNode object = statement.getObject();
+            if (!object.toString().isEmpty()) {
+                metadatum = Optional.of(object.toString());
+            }
+        }
+        return metadatum;
     }
 
 }

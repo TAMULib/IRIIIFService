@@ -17,6 +17,9 @@ import static edu.tamu.iiif.constants.Constants.IMAGE_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
 import static edu.tamu.iiif.model.RepositoryType.DSPACE;
+import static edu.tamu.iiif.utility.RdfModelUtility.createRdfModel;
+import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
+import static edu.tamu.iiif.utility.RdfModelUtility.getObject;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
 import java.io.IOException;
@@ -44,7 +47,6 @@ import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
-import edu.tamu.iiif.utility.RdfModelUtility;
 
 @Profile(DSPACE_IDENTIFIER)
 public abstract class AbstractDSpaceManifestService extends AbstractManifestService {
@@ -60,7 +62,7 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         String rdf = getRdf(dspaceRdfUri);
         System.out.println("\n\n" + handle + "\n");
         System.out.println(rdf + "\n\n");
-        Model model = RdfModelUtility.createRdfModel(rdf);
+        Model model = createRdfModel(rdf);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");
         return new RdfResource(model, model.getResource(dspaceRdfUri));
