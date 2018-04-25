@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,6 +122,18 @@ public abstract class AbstractManifestService implements ManifestService {
         return id;
     }
 
+    protected Optional<String> getObject(RdfResource rdfResource, String uri) {
+        Optional<String> metadatum = Optional.empty();
+        Statement statement = rdfResource.getStatementOfPropertyWithId(uri);
+        if (statement != null) {
+            RDFNode object = statement.getObject();
+            if (!object.toString().isEmpty()) {
+                metadatum = Optional.of(object.toString());
+            }
+        }
+        return metadatum;
+    }
+
     protected String getLogo(RdfResource rdfResource) {
         return logoUrl;
     }
@@ -226,10 +236,6 @@ public abstract class AbstractManifestService implements ManifestService {
         return StringUtility.encode(getRepositoryPath(url));
     }
 
-    protected String extractLabel(String url) {
-        return url.substring(url.lastIndexOf("/") + 1, url.length());
-    }
-
     protected List<Metadata> getDublinCoreTermsMetadata(RdfResource rdfResource) {
         return getMetadata(rdfResource, DUBLIN_CORE_TERMS_PREFIX);
     }
@@ -248,31 +254,6 @@ public abstract class AbstractManifestService implements ManifestService {
             handle = uri.split("/resource/")[1];
         }
         return handle;
-    }
-
-    protected String formalize(String name) {
-        StringBuilder formalNameBuilder = new StringBuilder();
-        name = name.replace("/", "_").trim();
-        Iterator<String> parts = Arrays.asList(name.split("_")).iterator();
-        boolean formalizing = true;
-        while (formalizing) {
-            String part = parts.next();
-            if (!part.isEmpty()) {
-                if (part.length() == 1) {
-                    formalNameBuilder.append(part.toUpperCase());
-                } else {
-                    formalNameBuilder.append(part.substring(0, 1).toUpperCase());
-                    formalNameBuilder.append(part.substring(1, part.length()));
-                }
-            }
-
-            if (parts.hasNext()) {
-                formalNameBuilder.append(" ");
-            } else {
-                formalizing = false;
-            }
-        }
-        return formalNameBuilder.toString();
     }
 
     protected abstract String generateManifest(String handle) throws URISyntaxException, IOException;
@@ -337,7 +318,7 @@ public abstract class AbstractManifestService implements ManifestService {
         if (object instanceof Resource) {
             throw new IOException("RDF statement object is a resource, not a literal value!");
         }
-        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(formalize(predicate.getLocalName()));
+        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(predicate.getLocalName());
         PropertyValueSimpleImpl value = new PropertyValueSimpleImpl(object.toString());
         return new MetadataImpl(label, value);
     }

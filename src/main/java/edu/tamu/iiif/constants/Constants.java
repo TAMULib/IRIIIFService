@@ -49,6 +49,8 @@ public class Constants {
     // Dublin Core Terms
     public final static String DUBLIN_CORE_TERMS_PREFIX = "http://purl.org/dc/terms/";
 
+    public final static String DUBLIN_CORE_TERMS_TITLE = DUBLIN_CORE_TERMS_PREFIX + "title";
+    public final static String DUBLIN_CORE_TERMS_DESCRIPTION = DUBLIN_CORE_TERMS_PREFIX + "description";
     public final static String DUBLIN_CORE_TERMS_HAS_PART = DUBLIN_CORE_TERMS_PREFIX + "hasPart";
     public final static String DUBLIN_CORE_TERMS_IS_PART_OF = DUBLIN_CORE_TERMS_PREFIX + "isPartOf";
 

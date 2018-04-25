@@ -39,7 +39,7 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
 
         URI id = buildId(handle);
 
-        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(handle);
+        PropertyValueSimpleImpl label = getTitle(rdfResource);
 
         List<Metadata> metadata = new ArrayList<Metadata>();
 

@@ -34,7 +34,7 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
 
         URI id = buildId(handle);
 
-        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(handle);
+        PropertyValueSimpleImpl label = getTitle(rdfResource);
 
         Manifest manifest = new ManifestImpl(id, label);
 

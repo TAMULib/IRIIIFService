@@ -32,7 +32,6 @@ import java.util.Optional;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
@@ -67,6 +66,8 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     protected RdfResource getRdfResource(String path) throws NotFoundException {
         String fedoraRdfUri = getFedoraUrl(path);
         String rdf = getPCDMRdf(fedoraRdfUri);
+        System.out.println("\n\n" + path + "\n");
+        System.out.println(rdf + "\n\n");
         Model model = generateRdfModel(rdf);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");
@@ -83,7 +84,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
 
     protected Sequence generateSequence(RdfResource rdfResource) throws IOException, URISyntaxException {
         String id = rdfResource.getResource().getURI();
-        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(formalize(extractLabel(id)));
+        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getRepositoryPath(id));
         Sequence sequence = new SequenceImpl(getFedoraIiifSequenceUri(id), label);
         sequence.setCanvases(getCanvases(rdfResource));
         return sequence;
@@ -91,7 +92,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
 
     protected Canvas generateCanvas(RdfResource rdfResource) throws IOException, URISyntaxException {
         String id = rdfResource.getResource().getURI();
-        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(formalize(extractLabel(id)));
+        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getRepositoryPath(id));
 
         RdfCanvas rdfCanvas = getFedoraRdfCanvas(rdfResource);
 
@@ -107,7 +108,8 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     protected PropertyValueSimpleImpl getTitle(RdfResource rdfResource) {
         Optional<String> title = getObject(rdfResource, DUBLIN_CORE_TITLE_PREDICATE);
         if (!title.isPresent()) {
-            title = Optional.of(formalize(getRepositoryPath(rdfResource.getResource().getURI())));
+            String id = rdfResource.getResource().getURI();
+            title = Optional.of(getRepositoryPath(id));
         }
         return new PropertyValueSimpleImpl(title.get());
     }
@@ -118,18 +120,6 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
             description = Optional.of("N/A");
         }
         return new PropertyValueSimpleImpl(description.get());
-    }
-
-    private Optional<String> getObject(RdfResource rdfResource, String uri) {
-        Optional<String> metadatum = Optional.empty();
-        Statement statement = rdfResource.getStatementOfPropertyWithId(uri);
-        if (statement != null) {
-            RDFNode object = statement.getObject();
-            if (!object.toString().isEmpty()) {
-                metadatum = Optional.of(object.toString());
-            }
-        }
-        return metadatum;
     }
 
     protected URI getFedoraIiifCollectionUri(String url) throws URISyntaxException {

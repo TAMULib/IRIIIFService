@@ -11,6 +11,8 @@ import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_COLLECTION_PRE
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_COMMUNITY_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_REPOSITORY_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_SUB_COMMUNITY_OF_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_DESCRIPTION;
+import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_TITLE;
 import static edu.tamu.iiif.constants.Constants.IMAGE_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
@@ -59,6 +61,8 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
     protected RdfResource getDSpaceRdfModel(String handle) throws NotFoundException {
         String dspaceRdfUri = getRdfUrl(handle);
         String rdf = getRdf(dspaceRdfUri);
+        System.out.println("\n\n" + handle + "\n");
+        System.out.println(rdf + "\n\n");
         Model model = generateRdfModel(rdf);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");
@@ -90,6 +94,23 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         return canvas;
     }
 
+    protected PropertyValueSimpleImpl getTitle(RdfResource rdfResource) {
+        Optional<String> title = getObject(rdfResource, DUBLIN_CORE_TERMS_TITLE);
+        if (!title.isPresent()) {
+            String id = rdfResource.getResource().getURI();
+            title = Optional.of(getRepositoryPath(id));
+        }
+        return new PropertyValueSimpleImpl(title.get());
+    }
+
+    protected PropertyValueSimpleImpl getDescription(RdfResource rdfResource) {
+        Optional<String> description = getObject(rdfResource, DUBLIN_CORE_TERMS_DESCRIPTION);
+        if (!description.isPresent()) {
+            description = Optional.of("N/A");
+        }
+        return new PropertyValueSimpleImpl(description.get());
+    }
+
     protected boolean isTopLevelCommunity(Model model) {
         return getIdByPredicate(model, DSPACE_IS_PART_OF_REPOSITORY_PREDICATE).isPresent();
     }
@@ -116,10 +137,6 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
 
     protected boolean isCommunity(Model model) {
         return isTopLevelCommunity(model) || isSubcommunity(model);
-    }
-
-    protected PropertyValueSimpleImpl getDescription(RdfResource rdfResource) {
-        return new PropertyValueSimpleImpl("");
     }
 
     protected URI getDSpaceIIIFCollectionUri(String handle) throws URISyntaxException {
