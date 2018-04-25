@@ -19,19 +19,15 @@ import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
 import static edu.tamu.iiif.model.RepositoryType.FEDORA;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
@@ -53,6 +49,7 @@ import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfOrderedSequence;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
+import edu.tamu.iiif.utility.RdfModelUtility;
 
 @Profile(FEDORA_IDENTIFIER)
 public abstract class AbstractFedoraManifestService extends AbstractManifestService {
@@ -68,7 +65,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         String rdf = getPCDMRdf(fedoraRdfUri);
         System.out.println("\n\n" + path + "\n");
         System.out.println(rdf + "\n\n");
-        Model model = generateRdfModel(rdf);
+        Model model = RdfModelUtility.createRdfModel(rdf);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");
         return new RdfResource(model, model.getResource(fedoraRdfUri));
@@ -77,7 +74,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     protected Model getRdfModel(String uri) throws NotFoundException {
         Optional<String> fedoraRdf = Optional.ofNullable(httpService.get(uri + FEDORA_FCR_METADATA));
         if (fedoraRdf.isPresent()) {
-            return generateRdfModel(fedoraRdf.get());
+            return RdfModelUtility.createRdfModel(fedoraRdf.get());
         }
         throw new NotFoundException("Fedora RDF not found!");
     }
@@ -171,13 +168,6 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
             return fedoraRdf.get();
         }
         throw new NotFoundException("Fedora PCDM RDF not found!");
-    }
-
-    private Model generateRdfModel(String rdf) {
-        InputStream stream = new ByteArrayInputStream(rdf.getBytes(StandardCharsets.UTF_8));
-        Model model = ModelFactory.createDefaultModel();
-        model.read(stream, null, "TTL");
-        return model;
     }
 
     private List<Canvas> getCanvases(RdfResource rdfResource) throws IOException, URISyntaxException {

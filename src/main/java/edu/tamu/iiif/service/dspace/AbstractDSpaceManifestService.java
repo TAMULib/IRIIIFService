@@ -19,18 +19,14 @@ import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
 import static edu.tamu.iiif.model.RepositoryType.DSPACE;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
@@ -48,6 +44,7 @@ import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
+import edu.tamu.iiif.utility.RdfModelUtility;
 
 @Profile(DSPACE_IDENTIFIER)
 public abstract class AbstractDSpaceManifestService extends AbstractManifestService {
@@ -63,7 +60,7 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         String rdf = getRdf(dspaceRdfUri);
         System.out.println("\n\n" + handle + "\n");
         System.out.println(rdf + "\n\n");
-        Model model = generateRdfModel(rdf);
+        Model model = RdfModelUtility.createRdfModel(rdf);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");
         return new RdfResource(model, model.getResource(dspaceRdfUri));
@@ -188,13 +185,6 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
             return dspaceRdf.get();
         }
         throw new NotFoundException("DSpace RDF not found!");
-    }
-
-    private Model generateRdfModel(String rdf) {
-        InputStream stream = new ByteArrayInputStream(rdf.getBytes(StandardCharsets.UTF_8));
-        Model model = ModelFactory.createDefaultModel();
-        model.read(stream, null, "TTL");
-        return model;
     }
 
     private List<Canvas> getCanvases(RdfResource rdfResource) throws IOException, URISyntaxException {

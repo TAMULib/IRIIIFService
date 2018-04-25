@@ -20,13 +20,13 @@ public class RdfResource extends RdfModel {
         this.resource = resource;
     }
 
-    public RdfResource(RdfResource fedoraRdfResource, String id) {
-        this(fedoraRdfResource.getModel());
+    public RdfResource(RdfResource rdfResource, String id) {
+        this(rdfResource.getModel());
         this.resource = getModel().getResource(id);
     }
 
-    public RdfResource(RdfResource fedoraRdfResource, Resource resource) {
-        this(fedoraRdfResource.getModel(), resource);
+    public RdfResource(RdfResource rdfResource, Resource resource) {
+        this(rdfResource.getModel(), resource);
     }
 
     public Model getModel() {
