@@ -65,7 +65,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     protected RdfResource getRdfResource(String path) throws NotFoundException {
         String fedoraRdfUri = getFedoraUrl(path);
         String rdf = getPCDMRdf(fedoraRdfUri);
-        System.out.println("\n\n" + path + "\n");
+        System.out.println("\n\n" + fedoraRdfUri + "\n");
         System.out.println(rdf + "\n\n");
         Model model = createRdfModel(rdf);
         // model.write(System.out, "JSON-LD");
@@ -74,7 +74,10 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     }
 
     protected Model getRdfModel(String uri) throws NotFoundException {
-        Optional<String> fedoraRdf = Optional.ofNullable(httpService.get(uri + FEDORA_FCR_METADATA));
+        String rdf = httpService.get(uri + FEDORA_FCR_METADATA);
+        System.out.println("\n\n" + uri + "\n");
+        System.out.println(rdf + "\n\n");
+        Optional<String> fedoraRdf = Optional.ofNullable(rdf);
         if (fedoraRdf.isPresent()) {
             return createRdfModel(fedoraRdf.get());
         }
@@ -213,18 +216,15 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
 
         if (id.isPresent()) {
 
-            if (!rdfOrderedSequence.isLast()) {
+            canvases.add(generateCanvas(new RdfResource(rdfOrderedSequence, rdfOrderedSequence.getModel().getResource(id.get()))));
 
-                canvases.add(generateCanvas(new RdfResource(rdfOrderedSequence, rdfOrderedSequence.getModel().getResource(id.get()))));
+            Optional<String> nextId = getIdByPredicate(model, IANA_NEXT_PREDICATE);
 
-                Optional<String> nextId = getIdByPredicate(model, IANA_NEXT_PREDICATE);
-
-                if (nextId.isPresent()) {
-                    Resource resource = rdfOrderedSequence.getModel().getResource(nextId.get());
-                    rdfOrderedSequence.setResource(resource);
-                    rdfOrderedSequence.setCurrentId(nextId.get());
-                    generateOrderedCanvases(rdfOrderedSequence, canvases);
-                }
+            if (nextId.isPresent()) {
+                Resource resource = rdfOrderedSequence.getModel().getResource(nextId.get());
+                rdfOrderedSequence.setResource(resource);
+                rdfOrderedSequence.setCurrentId(nextId.get());
+                generateOrderedCanvases(rdfOrderedSequence, canvases);
             }
         }
 

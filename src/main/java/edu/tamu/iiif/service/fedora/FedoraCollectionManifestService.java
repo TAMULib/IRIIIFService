@@ -121,19 +121,15 @@ public class FedoraCollectionManifestService extends AbstractFedoraManifestServi
 
         if (id.isPresent()) {
 
-            if (!fedoraRdfOrderedSequence.isLast()) {
+            members.add(id.get());
 
-                members.add(id.get());
+            Optional<String> nextId = getIdByPredicate(model, IANA_NEXT_PREDICATE);
 
-                Optional<String> nextId = getIdByPredicate(model, IANA_NEXT_PREDICATE);
-
-                if (nextId.isPresent()) {
-                    Resource resource = fedoraRdfOrderedSequence.getModel().getResource(nextId.get());
-                    fedoraRdfOrderedSequence.setResource(resource);
-                    fedoraRdfOrderedSequence.setCurrentId(nextId.get());
-                    getOrderedMembers(fedoraRdfOrderedSequence, members);
-                }
-
+            if (nextId.isPresent()) {
+                Resource resource = fedoraRdfOrderedSequence.getModel().getResource(nextId.get());
+                fedoraRdfOrderedSequence.setResource(resource);
+                fedoraRdfOrderedSequence.setCurrentId(nextId.get());
+                getOrderedMembers(fedoraRdfOrderedSequence, members);
             }
 
         }
