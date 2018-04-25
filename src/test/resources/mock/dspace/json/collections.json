@@ -1,0 +1,24 @@
+{
+  "@context" : "http://iiif.io/api/presentation/2/context.json",
+  "@id" : "http://janus.evans.tamu.edu:9003/dspace/collection?context=123456789/158298",
+  "@type" : "sc:Collection",
+  "collections" : [ {
+    "@id" : "http://janus.evans.tamu.edu:9003/dspace/collection?context=123456789/158301",
+    "@type" : "sc:Collection",
+    "label" : "123456789/158301"
+  }, {
+    "@id" : "http://janus.evans.tamu.edu:9003/dspace/collection?context=123456789/158299",
+    "@type" : "sc:Collection",
+    "label" : "123456789/158299"
+  }, {
+    "@id" : "http://janus.evans.tamu.edu:9003/dspace/collection?context=123456789/158300",
+    "@type" : "sc:Collection",
+    "label" : "123456789/158300"
+  } ],
+  "description" : "N/A",
+  "label" : "dspace:rdf/handle/123456789/158298",
+  "logo" : "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
+  "manifests" : [ ],
+  "metadata" : [ ],
+  "viewingHint" : "multi-part"
+}

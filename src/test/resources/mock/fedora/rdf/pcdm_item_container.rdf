@@ -1,0 +1,65 @@
+@prefix premis: <http://www.loc.gov/premis/rdf/v1#> .
+@prefix test:  <info:fedora/test/> .
+@prefix ns010: <http://purl.org/dc/elements/1.1/coverage:> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ns004: <http://pcdm.org/models#> .
+@prefix ns003: <http://www.openarchives.org/ore/terms/> .
+@prefix ns002: <http://fedora.info/definitions/v4/api-extension#> .
+@prefix ns001: <http://fedora.info/definitions/v4/service#> .
+@prefix xsi:   <http://www.w3.org/2001/XMLSchema-instance> .
+@prefix ns008: <http://purl.org/dc/elements/1.1/description:> .
+@prefix ns007: <http://purl.org/dc/elements/1.1/date:> .
+@prefix ns006: <http://purl.org/dc/elements/1.1/relation:> .
+@prefix ns005: <http://www.openarchives.org/ore/terms#> .
+@prefix fedora: <http://fedora.info/definitions/v4/repository#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ns009: <http://purl.org/dc/elements/1.1/subject:> .
+@prefix ebucore: <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#> .
+@prefix ldp:   <http://www.w3.org/ns/ldp#> .
+@prefix iana:  <http://www.iana.org/assignments/relation/> .
+@prefix fedoraconfig: <http://fedora.info/definitions/v4/config#> .
+@prefix xs:    <http://www.w3.org/2001/XMLSchema> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix dc:    <http://purl.org/dc/elements/1.1/> .
+
+<http://janus.evans.tamu.edu:9000/fcrepo/rest/cars_pcdm_objects/vintage/pages/page_0/files/vintage.jpg>
+        a                        ldp:NonRDFSource , fedora:Resource , fedora:Binary , ns004:File ;
+        fedora:created           "2018-04-24T13:31:38.146Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+        fedora:createdBy         "bypassAdmin" ;
+        fedora:hasFixityService  <http://janus.evans.tamu.edu:9000/fcrepo/rest/cars_pcdm_objects/vintage/pages/page_0/files/vintage.jpg/fcr:fixity> ;
+        fedora:hasParent         <http://janus.evans.tamu.edu:9000/fcrepo/rest/cars_pcdm_objects/vintage/pages/page_0/files> ;
+        fedora:lastModified      "2018-04-24T13:31:38.146Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+        fedora:lastModifiedBy    "bypassAdmin" ;
+        fedora:writable          true ;
+        dc:filename              "vintage.jpg" ;
+        ebucore:filename         "vintage.jpg" ;
+        ebucore:hasMimeType      "image/jpeg" ;
+        iana:describedby         <http://janus.evans.tamu.edu:9000/fcrepo/rest/cars_pcdm_objects/vintage/pages/page_0/files/vintage.jpg/fcr:metadata> ;
+        premis:hasMessageDigest  <urn:sha1:aac22bd30760bd281c9c8e0f5f688aaa3b007259> ;
+        premis:hasSize           "664715"^^<http://www.w3.org/2001/XMLSchema#long> .
+
+<http://janus.evans.tamu.edu:9000/fcrepo/rest/cars_pcdm_objects/vintage/pages/page_0>
+        a                      ldp:RDFSource , fedora:Resource , ldp:Container , ns004:Object , fedora:Container ;
+        fedora:created         "2018-04-24T13:31:38.146Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+        fedora:createdBy       "bypassAdmin" ;
+        fedora:hasParent       <http://janus.evans.tamu.edu:9000/fcrepo/rest/cars_pcdm_objects/vintage/pages> ;
+        fedora:lastModified    "2018-04-24T13:31:38.146Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+        fedora:lastModifiedBy  "bypassAdmin" ;
+        fedora:writable        true ;
+        ns004:hasFile          <http://janus.evans.tamu.edu:9000/fcrepo/rest/cars_pcdm_objects/vintage/pages/page_0/files/vintage.jpg> ;
+        ldp:contains           <http://janus.evans.tamu.edu:9000/fcrepo/rest/cars_pcdm_objects/vintage/pages/page_0/files> .
+
+<http://janus.evans.tamu.edu:9000/fcrepo/rest/cars_pcdm_objects/vintage>
+        a                      fedora:Resource , ldp:RDFSource , fedora:Container , ns004:Object , ldp:Container ;
+        fedora:created         "2018-04-24T13:31:38.146Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+        fedora:createdBy       "bypassAdmin" ;
+        fedora:hasParent       <http://janus.evans.tamu.edu:9000/fcrepo/rest/cars_pcdm_objects> ;
+        fedora:lastModified    "2018-04-24T13:31:38.146Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+        fedora:lastModifiedBy  "bypassAdmin" ;
+        fedora:writable        true ;
+        ns004:hasMember        <http://janus.evans.tamu.edu:9000/fcrepo/rest/cars_pcdm_objects/vintage/pages/page_0> ;
+        dc:description         "A vintage car" ;
+        dc:title               "Vintage" ;
+        iana:first             <http://janus.evans.tamu.edu:9000/fcrepo/rest/cars_pcdm_objects/vintage/orderProxies/page_0_proxy> ;
+        iana:last              <http://janus.evans.tamu.edu:9000/fcrepo/rest/cars_pcdm_objects/vintage/orderProxies/page_0_proxy> ;
+        ldp:contains           <http://janus.evans.tamu.edu:9000/fcrepo/rest/cars_pcdm_objects/vintage/pages> , <http://janus.evans.tamu.edu:9000/fcrepo/rest/cars_pcdm_objects/vintage/orderProxies> .

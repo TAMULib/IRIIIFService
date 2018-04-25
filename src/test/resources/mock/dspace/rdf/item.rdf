@@ -1,0 +1,20 @@
+@prefix void:  <http://rdfs.org/ns/void#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix bibo:  <http://purl.org/ontology/bibo/> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix dc:    <http://purl.org/dc/elements/1.1/> .
+@prefix dspace: <http://digital-repositories.org/ontologies/dspace/0.1.0#> .
+
+<http://janus.evans.tamu.edu:8080/rdf/resource/123456789/158308>
+        dspace:hasBitstream        <http://janus.evans.tamu.edu:8080/xmlui/bitstream/123456789/158308/1/sports-car-146873_960_720.png> ;
+        dspace:isPartOfCollection  <http://janus.evans.tamu.edu:8080/rdf/resource/123456789/158299> ;
+        dc:date                    "2018-04-24T13:29:59Z"^^xsd:dateTime ;
+        dcterms:available          "2018-04-24T13:29:59Z"^^xsd:dateTime ;
+        dcterms:hasPart            <http://janus.evans.tamu.edu:8080/xmlui/bitstream/123456789/158308/1/sports-car-146873_960_720.png> ;
+        dcterms:isPartOf           <http://janus.evans.tamu.edu:8080/rdf/resource/123456789/158299> ;
+        dcterms:title              "Corvette" ;
+        bibo:uri                   <http://janus.evans.tamu.edu:8080/xmlui/handle/123456789/158308> ;
+        void:sparqlEndpoint        <http://janus.evans.tamu.edu:8983/dspace/sparql> ;
+        foaf:homepage              <http://janus.evans.tamu.edu:8080/xmlui> .

@@ -1,0 +1,54 @@
+{
+  "@context" : "http://iiif.io/api/presentation/2/context.json",
+  "@id" : "http://janus.evans.tamu.edu:9003/dspace/presentation?context=123456789/158308",
+  "@type" : "sc:Manifest",
+  "label" : "dspace:rdf/handle/123456789/158308",
+  "logo" : "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
+  "metadata" : [ {
+    "label" : "available",
+    "value" : "2018-04-24T13:29:59Z^^http://www.w3.org/2001/XMLSchema#dateTime"
+  }, {
+    "label" : "title",
+    "value" : "Corvette"
+  } ],
+  "sequences" : [ {
+    "@id" : "http://janus.evans.tamu.edu:9003/dspace/sequence?context=123456789/158308",
+    "@type" : "sc:Sequence",
+    "canvases" : [ {
+      "@id" : "http://janus.evans.tamu.edu:9003/dspace/canvas?context=123456789/158308/1/sports-car-146873_960_720.png",
+      "@type" : "sc:Canvas",
+      "height" : 480,
+      "images" : [ {
+        "@id" : "http://janus.evans.tamu.edu:8182/iiif/2/ZHNwYWNlOnhtbHVpL2JpdHN0cmVhbS8xMjM0NTY3ODkvMTU4MzA4LzEvc3BvcnRzLWNhci0xNDY4NzNfOTYwXzcyMC5wbmc=/info.json",
+        "@type" : "oa:Annotation",
+        "motivation" : "sc:painting",
+        "on" : "http://janus.evans.tamu.edu:9003/dspace/canvas?context=123456789/158308/1/sports-car-146873_960_720.png",
+        "resource" : {
+          "@id" : "http://janus.evans.tamu.edu:8182/iiif/2/ZHNwYWNlOnhtbHVpL2JpdHN0cmVhbS8xMjM0NTY3ODkvMTU4MzA4LzEvc3BvcnRzLWNhci0xNDY4NzNfOTYwXzcyMC5wbmc=/full/full/0/default.jpg",
+          "@type" : "dctypes:Image",
+          "height" : 480,
+          "service" : {
+            "label" : "DSpace IIIF Image Resource Service",
+            "profile" : "http://iiif.io/api/image/2/level0.json",
+            "@context" : "http://iiif.io/api/image/2/context.json",
+            "@id" : "http://janus.evans.tamu.edu:8182/iiif/2/ZHNwYWNlOnhtbHVpL2JpdHN0cmVhbS8xMjM0NTY3ODkvMTU4MzA4LzEvc3BvcnRzLWNhci0xNDY4NzNfOTYwXzcyMC5wbmc="
+          },
+          "width" : 960
+        }
+      } ],
+      "label" : "123456789/158308/1/sports-car-146873_960_720.png",
+      "metadata" : [ ],
+      "width" : 960
+    } ],
+    "label" : "123456789/158308"
+  } ],
+  "thumbnail" : {
+    "@id" : "http://janus.evans.tamu.edu:8182/iiif/2/ZHNwYWNlOnhtbHVpL2JpdHN0cmVhbS8xMjM0NTY3ODkvMTU4MzA4LzEvc3BvcnRzLWNhci0xNDY4NzNfOTYwXzcyMC5wbmc=/full/!200,200/0/default.jpg",
+    "services" : [ {
+      "@context" : "http://iiif.io/api/image/2/context.json",
+      "@id" : "http://janus.evans.tamu.edu:8182/iiif/2/ZHNwYWNlOnhtbHVpL2JpdHN0cmVhbS8xMjM0NTY3ODkvMTU4MzA4LzEvc3BvcnRzLWNhci0xNDY4NzNfOTYwXzcyMC5wbmc=",
+      "label" : "DSpace IIIF Image Resource Service",
+      "profile" : "http://iiif.io/api/image/2/level0.json"
+    } ]
+  }
+}

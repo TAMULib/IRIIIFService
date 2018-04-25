@@ -1,0 +1,15 @@
+@prefix void:  <http://rdfs.org/ns/void#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix bibo:  <http://purl.org/ontology/bibo/> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix dspace: <http://digital-repositories.org/ontologies/dspace/0.1.0#> .
+
+<http://janus.evans.tamu.edu:8080/rdf/resource/123456789/158301>
+        a                        bibo:Collection ;
+        dspace:hasCollection     <http://janus.evans.tamu.edu:8080/rdf/resource/123456789/158302> ;
+        dspace:isSubcommunityOf  <http://janus.evans.tamu.edu:8080/rdf/resource/123456789/158298> ;
+        dcterms:hasPart          <http://janus.evans.tamu.edu:8080/rdf/resource/123456789/158302> ;
+        dcterms:isPartOf         <http://janus.evans.tamu.edu:8080/rdf/resource/123456789/158298> ;
+        void:sparqlEndpoint      <http://janus.evans.tamu.edu:8983/dspace/sparql> ;
+        foaf:homepage            <http://janus.evans.tamu.edu:8080/xmlui> .
