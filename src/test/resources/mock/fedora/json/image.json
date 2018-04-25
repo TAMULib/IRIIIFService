@@ -1,6 +1,6 @@
 {
   "@context":"http://iiif.io/api/image/2/context.json",
-  "@id":"http://janus.evans.tamu.edu:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn",
+  "@id":"http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn",
   "protocol":"http://iiif.io/api/image",
   "width":1920,
   "height":1080,

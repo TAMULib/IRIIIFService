@@ -1,6 +1,6 @@
 {
   "@context" : "http://iiif.io/api/presentation/2/context.json",
-  "@id" : "http://janus.evans.tamu.edu:9003/fedora/presentation?context=cars_pcdm_objects/vintage",
+  "@id" : "http://localhost:9003/fedora/presentation?context=cars_pcdm_objects/vintage",
   "@type" : "sc:Manifest",
   "description" : "Vintage",
   "label" : "Vintage",
@@ -13,26 +13,26 @@
     "value" : "A vintage car"
   } ],
   "sequences" : [ {
-    "@id" : "http://janus.evans.tamu.edu:9003/fedora/sequence?context=cars_pcdm_objects/vintage",
+    "@id" : "http://localhost:9003/fedora/sequence?context=cars_pcdm_objects/vintage",
     "@type" : "sc:Sequence",
     "canvases" : [ {
-      "@id" : "http://janus.evans.tamu.edu:9003/fedora/canvas?context=cars_pcdm_objects/vintage/pages/page_0",
+      "@id" : "http://localhost:9003/fedora/canvas?context=cars_pcdm_objects/vintage/pages/page_0",
       "@type" : "sc:Canvas",
       "height" : 1080,
       "images" : [ {
-        "@id" : "http://janus.evans.tamu.edu:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn/info.json",
+        "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn/info.json",
         "@type" : "oa:Annotation",
         "motivation" : "sc:painting",
-        "on" : "http://janus.evans.tamu.edu:9003/fedora/canvas?context=cars_pcdm_objects/vintage/pages/page_0",
+        "on" : "http://localhost:9003/fedora/canvas?context=cars_pcdm_objects/vintage/pages/page_0",
         "resource" : {
-          "@id" : "http://janus.evans.tamu.edu:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn/full/full/0/default.jpg",
+          "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn/full/full/0/default.jpg",
           "@type" : "dctypes:Image",
           "height" : 1080,
           "service" : {
             "label" : "Fedora IIIF Image Resource Service",
             "profile" : "http://iiif.io/api/image/2/level0.json",
             "@context" : "http://iiif.io/api/image/2/context.json",
-            "@id" : "http://janus.evans.tamu.edu:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn"
+            "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn"
           },
           "width" : 1920
         }
@@ -44,10 +44,10 @@
     "label" : "fedora:cars_pcdm_objects/vintage"
   } ],
   "thumbnail" : {
-    "@id" : "http://janus.evans.tamu.edu:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn/full/!200,200/0/default.jpg",
+    "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn/full/!200,200/0/default.jpg",
     "services" : [ {
       "@context" : "http://iiif.io/api/image/2/context.json",
-      "@id" : "http://janus.evans.tamu.edu:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn",
+      "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn",
       "label" : "Fedora IIIF Image Resource Service",
       "profile" : "http://iiif.io/api/image/2/level0.json"
     } ]

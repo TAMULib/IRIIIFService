@@ -1,37 +1,37 @@
 {
   "@context" : "http://iiif.io/api/presentation/2/context.json",
-  "@id" : "http://janus.evans.tamu.edu:9003/dspace/collection?context=123456789/158299",
+  "@id" : "http://localhost:9003/dspace/collection?context=123456789/158299",
   "@type" : "sc:Collection",
   "collections" : [ ],
   "description" : "N/A",
   "label" : "dspace:rdf/handle/123456789/158299",
   "logo" : "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "manifests" : [ {
-    "@id" : "http://janus.evans.tamu.edu:9003/dspace/presentation?context=123456789/158308",
+    "@id" : "http://localhost:9003/dspace/presentation?context=123456789/158308",
     "@type" : "sc:Manifest",
     "label" : "123456789/158308"
   }, {
-    "@id" : "http://janus.evans.tamu.edu:9003/dspace/presentation?context=123456789/158310",
+    "@id" : "http://localhost:9003/dspace/presentation?context=123456789/158310",
     "@type" : "sc:Manifest",
     "label" : "123456789/158310"
   }, {
-    "@id" : "http://janus.evans.tamu.edu:9003/dspace/presentation?context=123456789/158312",
+    "@id" : "http://localhost:9003/dspace/presentation?context=123456789/158312",
     "@type" : "sc:Manifest",
     "label" : "123456789/158312"
   }, {
-    "@id" : "http://janus.evans.tamu.edu:9003/dspace/presentation?context=123456789/158313",
+    "@id" : "http://localhost:9003/dspace/presentation?context=123456789/158313",
     "@type" : "sc:Manifest",
     "label" : "123456789/158313"
   }, {
-    "@id" : "http://janus.evans.tamu.edu:9003/dspace/presentation?context=123456789/158316",
+    "@id" : "http://localhost:9003/dspace/presentation?context=123456789/158316",
     "@type" : "sc:Manifest",
     "label" : "123456789/158316"
   }, {
-    "@id" : "http://janus.evans.tamu.edu:9003/dspace/presentation?context=123456789/158307",
+    "@id" : "http://localhost:9003/dspace/presentation?context=123456789/158307",
     "@type" : "sc:Manifest",
     "label" : "123456789/158307"
   }, {
-    "@id" : "http://janus.evans.tamu.edu:9003/dspace/presentation?context=123456789/158317",
+    "@id" : "http://localhost:9003/dspace/presentation?context=123456789/158317",
     "@type" : "sc:Manifest",
     "label" : "123456789/158317"
   } ],

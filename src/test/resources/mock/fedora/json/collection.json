@@ -1,37 +1,37 @@
 {
   "@context" : "http://iiif.io/api/presentation/2/context.json",
-  "@id" : "http://janus.evans.tamu.edu:9003/fedora/collection?context=cars_pcdm",
+  "@id" : "http://localhost:9003/fedora/collection?context=cars_pcdm",
   "@type" : "sc:Collection",
   "collections" : [ ],
   "description" : "N/A",
   "label" : "fedora:cars_pcdm",
   "logo" : "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "manifests" : [ {
-    "@id" : "http://janus.evans.tamu.edu:9003/fedora/presentation?context=cars_pcdm_objects/vintage",
+    "@id" : "http://localhost:9003/fedora/presentation?context=cars_pcdm_objects/vintage",
     "@type" : "sc:Manifest",
     "label" : "fedora:cars_pcdm_objects/vintage"
   }, {
-    "@id" : "http://janus.evans.tamu.edu:9003/fedora/presentation?context=cars_pcdm_objects/lamborghini",
+    "@id" : "http://localhost:9003/fedora/presentation?context=cars_pcdm_objects/lamborghini",
     "@type" : "sc:Manifest",
     "label" : "fedora:cars_pcdm_objects/lamborghini"
   }, {
-    "@id" : "http://janus.evans.tamu.edu:9003/fedora/presentation?context=cars_pcdm_objects/corvette",
+    "@id" : "http://localhost:9003/fedora/presentation?context=cars_pcdm_objects/corvette",
     "@type" : "sc:Manifest",
     "label" : "fedora:cars_pcdm_objects/corvette"
   }, {
-    "@id" : "http://janus.evans.tamu.edu:9003/fedora/presentation?context=cars_pcdm_objects/nissan",
+    "@id" : "http://localhost:9003/fedora/presentation?context=cars_pcdm_objects/nissan",
     "@type" : "sc:Manifest",
     "label" : "fedora:cars_pcdm_objects/nissan"
   }, {
-    "@id" : "http://janus.evans.tamu.edu:9003/fedora/presentation?context=cars_pcdm_objects/mustang",
+    "@id" : "http://localhost:9003/fedora/presentation?context=cars_pcdm_objects/mustang",
     "@type" : "sc:Manifest",
     "label" : "fedora:cars_pcdm_objects/mustang"
   }, {
-    "@id" : "http://janus.evans.tamu.edu:9003/fedora/presentation?context=cars_pcdm_objects/chevy",
+    "@id" : "http://localhost:9003/fedora/presentation?context=cars_pcdm_objects/chevy",
     "@type" : "sc:Manifest",
     "label" : "fedora:cars_pcdm_objects/chevy"
   }, {
-    "@id" : "http://janus.evans.tamu.edu:9003/fedora/presentation?context=cars_pcdm_objects/vw",
+    "@id" : "http://localhost:9003/fedora/presentation?context=cars_pcdm_objects/vw",
     "@type" : "sc:Manifest",
     "label" : "fedora:cars_pcdm_objects/vw"
   } ],
