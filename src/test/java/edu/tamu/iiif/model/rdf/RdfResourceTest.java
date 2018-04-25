@@ -10,7 +10,6 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.assertj.core.util.Files;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -22,11 +21,6 @@ import edu.tamu.iiif.utility.RdfModelUtility;
 public class RdfResourceTest {
 
     private final static String rdf = Files.contentOf(new File("src/test/resources/mock/dspace/rdf/item.rdf"), "UTF-8");
-
-    @Before
-    public void temp() {
-        System.out.println("\n" + rdf + "\n");
-    }
 
     @Test
     public void testCreateDefault() {
