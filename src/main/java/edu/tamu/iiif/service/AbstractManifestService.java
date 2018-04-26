@@ -175,7 +175,7 @@ public abstract class AbstractManifestService implements ManifestService {
         try {
             imageInfoNode = Optional.of(objectMapper.readTree(fetchImageInfo(url)));
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.warn(e.getMessage());
         }
 
         return imageInfoNode;
