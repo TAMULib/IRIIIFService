@@ -120,7 +120,6 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected String fetchImageInfo(String url) throws NotFoundException {
-        System.out.println("\n\n" + url + "\n\n");
         Optional<String> imageInfo = Optional.ofNullable(httpService.get(url));
         if (imageInfo.isPresent()) {
             return imageInfo.get();
