@@ -75,10 +75,10 @@ public class HttpService {
                 LOG.debug("Request failed. Retry attempt " + retry + ".");
                 response = attemptGet(url, parameters, ++retry);
             } else {
-                e.printStackTrace();
+                LOG.warn(e.getMessage());
             }
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            LOG.warn(e.getMessage());
         }
         return response;
     }

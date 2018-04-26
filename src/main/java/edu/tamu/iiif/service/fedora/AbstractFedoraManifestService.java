@@ -65,8 +65,6 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     protected RdfResource getRdfResource(String path) throws NotFoundException {
         String fedoraRdfUri = getFedoraUrl(path);
         String rdf = getPCDMRdf(fedoraRdfUri);
-        System.out.println("\n\n" + fedoraRdfUri + "\n");
-        System.out.println(rdf + "\n\n");
         Model model = createRdfModel(rdf);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");

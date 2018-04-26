@@ -60,8 +60,6 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
     protected RdfResource getDSpaceRdfModel(String handle) throws NotFoundException {
         String dspaceRdfUri = getRdfUrl(handle);
         String rdf = getRdf(dspaceRdfUri);
-        System.out.println("\n\n" + dspaceRdfUri + "\n");
-        System.out.println(rdf + "\n\n");
         Model model = createRdfModel(rdf);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");
