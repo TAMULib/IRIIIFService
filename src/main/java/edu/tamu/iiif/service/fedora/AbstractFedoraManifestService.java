@@ -3,6 +3,7 @@ package edu.tamu.iiif.service.fedora;
 import static edu.tamu.iiif.constants.Constants.CANVAS_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.COLLECECTION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.CONTEXT_IDENTIFIER;
+import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_DESCRIPTION_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TITLE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.FEDORA_FCR_METADATA;
 import static edu.tamu.iiif.constants.Constants.FEDORA_HAS_PARENT_PREDICATE;
@@ -114,7 +115,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     }
 
     protected PropertyValueSimpleImpl getDescription(RdfResource rdfResource) {
-        Optional<String> description = getObject(rdfResource, DUBLIN_CORE_TITLE_PREDICATE);
+        Optional<String> description = getObject(rdfResource, DUBLIN_CORE_DESCRIPTION_PREDICATE);
         if (!description.isPresent()) {
             description = Optional.of("N/A");
         }
