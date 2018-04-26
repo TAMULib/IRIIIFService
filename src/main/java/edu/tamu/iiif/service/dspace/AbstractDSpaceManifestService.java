@@ -180,6 +180,7 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
     }
 
     private String getRdf(String dspaceRdfUri) throws NotFoundException {
+        System.out.println("\n\n" + dspaceRdfUri + "\n\n");
         Optional<String> dspaceRdf = Optional.ofNullable(httpService.get(dspaceRdfUri));
         if (dspaceRdf.isPresent()) {
             return dspaceRdf.get();

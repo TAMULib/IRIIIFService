@@ -41,7 +41,7 @@ public class FedoraCollectionManifestServiceTest extends AbstractFedoraManifestS
 
     @Test
     public void testGetManifest() throws IOException, URISyntaxException {
-        when(httpService.get(eq("http://localhost:9107/pcdm"), any(String.class))).thenReturn(FileUtils.readFileToString(rdf.getFile(), "UTF-8"));
+        when(httpService.get(eq(PCDM_RDF_URL), any(String.class))).thenReturn(FileUtils.readFileToString(rdf.getFile(), "UTF-8"));
 
         String manifest = fedoraCollectionManifestService.getManifest("cars_pcdm", false);
 

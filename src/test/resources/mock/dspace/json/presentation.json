@@ -5,11 +5,11 @@
   "label" : "dspace:rdf/handle/123456789/158308",
   "logo" : "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "metadata" : [ {
-    "label" : "available",
-    "value" : "2018-04-24T13:29:59Z^^http://www.w3.org/2001/XMLSchema#dateTime"
-  }, {
     "label" : "title",
     "value" : "Corvette"
+  }, {
+    "label" : "available",
+    "value" : "2018-04-24T13:29:59Z^^http://www.w3.org/2001/XMLSchema#dateTime"
   } ],
   "sequences" : [ {
     "@id" : "http://localhost:9003/dspace/sequence?context=123456789/158308",

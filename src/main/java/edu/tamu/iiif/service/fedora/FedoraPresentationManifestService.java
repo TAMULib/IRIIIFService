@@ -66,19 +66,21 @@ public class FedoraPresentationManifestService extends AbstractFedoraManifestSer
     }
 
     private Optional<Thumbnail> getThumbnail(List<Sequence> sequences) throws URISyntaxException {
-        for (Sequence sequence : sequences) {
+        Optional<Thumbnail> optionalThumbnail = Optional.empty();
+        exit: for (Sequence sequence : sequences) {
             for (Canvas canvas : sequence.getCanvases()) {
                 for (Image image : canvas.getImages()) {
                     if (Optional.ofNullable(image.getResource()).isPresent()) {
                         URI serviceURI = image.getResource().getServices().get(0).getId();
                         Thumbnail thubmnail = new ThumbnailImpl(serviceUrlToThumbnailUri(serviceURI));
                         thubmnail.setServices(image.getResource().getServices());
-                        return Optional.of(thubmnail);
+                        optionalThumbnail = Optional.of(thubmnail);
+                        continue exit;
                     }
                 }
             }
         }
-        return Optional.empty();
+        return optionalThumbnail;
     }
 
     @Override
