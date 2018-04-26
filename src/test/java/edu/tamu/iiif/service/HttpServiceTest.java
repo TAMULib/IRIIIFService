@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RunWith(SpringRunner.class)
 public class HttpServiceTest {
 
-    private ObjectMapper mapper;
+    private ObjectMapper objectMapper;
 
     private HttpClient httpClient;
 
@@ -54,7 +54,7 @@ public class HttpServiceTest {
     public void setup() throws ClientProtocolException, IOException {
         MockitoAnnotations.initMocks(this);
 
-        mapper = new ObjectMapper();
+        objectMapper = new ObjectMapper();
 
         httpClient = mock(CloseableHttpClient.class);
 
@@ -82,7 +82,7 @@ public class HttpServiceTest {
         when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK"));
         when(entity.getContent()).thenReturn(image.getInputStream());
         String response = httpService.get("http://localhost:8182/iiif/2/test/info.json");
-        Assert.assertEquals(mapper.readValue(image.getFile(), JsonNode.class), mapper.readValue(response, JsonNode.class));
+        Assert.assertEquals(objectMapper.readValue(image.getFile(), JsonNode.class), objectMapper.readValue(response, JsonNode.class));
     }
 
     @Test
