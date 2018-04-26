@@ -4,8 +4,6 @@ import static edu.tamu.iiif.constants.Constants.CANVAS_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.COLLECECTION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.CONTEXT_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_BITSTREAM_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_COLLECTION_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_ITEM_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_COLLECTION_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_COMMUNITY_PREDICATE;
@@ -13,7 +11,6 @@ import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_REPOSITORY_PRE
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_SUB_COMMUNITY_OF_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_DESCRIPTION;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_TITLE;
-import static edu.tamu.iiif.constants.Constants.IMAGE_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
 import static edu.tamu.iiif.model.RepositoryType.DSPACE;
@@ -70,7 +67,7 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         String uri = rdfResource.getResource().getURI();
         String handle = getHandle(uri);
         PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(handle);
-        Sequence sequence = new SequenceImpl(getDSpaceIIIFSequenceUri(handle), label);
+        Sequence sequence = new SequenceImpl(getDSpaceIiifSequenceUri(handle), label);
         sequence.setCanvases(getCanvases(rdfResource));
         return sequence;
     }
@@ -82,7 +79,7 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
 
         RdfCanvas rdfCanvas = getDSpaceRdfCanvas(rdfResource);
 
-        Canvas canvas = new CanvasImpl(getDSpaceIIIFCanvasUri(handle), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
+        Canvas canvas = new CanvasImpl(getDSpaceIiifCanvasUri(handle), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
 
         canvas.setImages(rdfCanvas.getImages());
 
@@ -116,44 +113,28 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         return getIdByPredicate(model, DSPACE_IS_SUB_COMMUNITY_OF_PREDICATE).isPresent();
     }
 
-    protected boolean hasCollections(Model model) {
-        return getIdByPredicate(model, DSPACE_HAS_COLLECTION_PREDICATE).isPresent();
-    }
-
     protected boolean isCollection(Model model) {
         return getIdByPredicate(model, DSPACE_IS_PART_OF_COMMUNITY_PREDICATE).isPresent();
-    }
-
-    protected boolean hasItems(Model model) {
-        return getIdByPredicate(model, DSPACE_HAS_ITEM_PREDICATE).isPresent();
     }
 
     protected boolean isItem(Model model) {
         return getIdByPredicate(model, DSPACE_IS_PART_OF_COLLECTION_PREDICATE).isPresent();
     }
 
-    protected boolean isCommunity(Model model) {
-        return isTopLevelCommunity(model) || isSubcommunity(model);
-    }
-
-    protected URI getDSpaceIIIFCollectionUri(String handle) throws URISyntaxException {
+    protected URI getDSpaceIiifCollectionUri(String handle) throws URISyntaxException {
         return getDSpaceIiifUri(handle, COLLECECTION_IDENTIFIER);
     }
 
-    protected URI getDSpaceIIIFPresentationUri(String handle) throws URISyntaxException {
+    protected URI getDSpaceIiifPresentationUri(String handle) throws URISyntaxException {
         return getDSpaceIiifUri(handle, PRESENTATION_IDENTIFIER);
     }
 
-    protected URI getDSpaceIIIFSequenceUri(String handle) throws URISyntaxException {
+    protected URI getDSpaceIiifSequenceUri(String handle) throws URISyntaxException {
         return getDSpaceIiifUri(handle, SEQUENCE_IDENTIFIER);
     }
 
-    protected URI getDSpaceIIIFCanvasUri(String handle) throws URISyntaxException {
+    protected URI getDSpaceIiifCanvasUri(String handle) throws URISyntaxException {
         return getDSpaceIiifUri(handle, CANVAS_IDENTIFIER);
-    }
-
-    protected URI getDSpaceIIIFImageUri(String handle) throws URISyntaxException {
-        return getDSpaceIiifUri(handle, IMAGE_IDENTIFIER);
     }
 
     @Override
@@ -226,7 +207,7 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
     }
 
     protected URI getCanvasUri(String canvasId) throws URISyntaxException {
-        return getDSpaceIIIFCanvasUri(canvasId);
+        return getDSpaceIiifCanvasUri(canvasId);
     }
 
     protected String getIiifImageServiceName() {

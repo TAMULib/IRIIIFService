@@ -1,7 +1,6 @@
 package edu.tamu.iiif.service.fedora;
 
 import static edu.tamu.iiif.constants.Constants.CANVAS_IDENTIFIER;
-import static edu.tamu.iiif.constants.Constants.COLLECECTION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.CONTEXT_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_DESCRIPTION_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TITLE_PREDICATE;
@@ -11,7 +10,6 @@ import static edu.tamu.iiif.constants.Constants.FEDORA_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.IANA_FIRST_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.IANA_LAST_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.IANA_NEXT_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.IMAGE_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.LDP_CONTAINS_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.ORE_PROXY_FOR_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_FILE_PREDICATE;
@@ -121,10 +119,6 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         return new PropertyValueSimpleImpl(description.get());
     }
 
-    protected URI getFedoraIiifCollectionUri(String url) throws URISyntaxException {
-        return getFedoraIiifUri(url, COLLECECTION_IDENTIFIER);
-    }
-
     protected URI getFedoraIiifPresentationUri(String url) throws URISyntaxException {
         return getFedoraIiifUri(url, PRESENTATION_IDENTIFIER);
     }
@@ -135,10 +129,6 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
 
     protected URI getFedoraIiifCanvasUri(String url) throws URISyntaxException {
         return getFedoraIiifUri(url, CANVAS_IDENTIFIER);
-    }
-
-    protected URI getFedoraIiifImageUri(String url) throws URISyntaxException {
-        return getFedoraIiifUri(url, IMAGE_IDENTIFIER);
     }
 
     private URI getFedoraIiifUri(String url, String type) throws URISyntaxException {

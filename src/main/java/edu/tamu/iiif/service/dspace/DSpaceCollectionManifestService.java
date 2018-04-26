@@ -87,7 +87,7 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
         while (subcommunityIterator.hasNext()) {
             String uri = subcommunityIterator.next().toString();
             String handle = getHandle(uri);
-            subcommunities.add(new CollectionReferenceImpl(getDSpaceIIIFCollectionUri(handle), new PropertyValueSimpleImpl(handle)));
+            subcommunities.add(new CollectionReferenceImpl(getDSpaceIiifCollectionUri(handle), new PropertyValueSimpleImpl(handle)));
         }
         return subcommunities;
     }
@@ -98,7 +98,7 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
         while (collectionIterator.hasNext()) {
             String uri = collectionIterator.next().toString();
             String handle = getHandle(uri);
-            collections.add(new CollectionReferenceImpl(getDSpaceIIIFCollectionUri(handle), new PropertyValueSimpleImpl(handle)));
+            collections.add(new CollectionReferenceImpl(getDSpaceIiifCollectionUri(handle), new PropertyValueSimpleImpl(handle)));
         }
         return collections;
     }
@@ -118,13 +118,13 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
         if (isItem(rdfResource.getModel())) {
             String uri = rdfResource.getResource().getURI();
             String handle = getHandle(uri);
-            manifests.add(new ManifestReferenceImpl(getDSpaceIIIFPresentationUri(handle), new PropertyValueSimpleImpl(handle)));
+            manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(handle), new PropertyValueSimpleImpl(handle)));
         } else {
             NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_ITEM_PREDICATE);
             while (collectionIterator.hasNext()) {
                 String uri = collectionIterator.next().toString();
                 String handle = getHandle(uri);
-                manifests.add(new ManifestReferenceImpl(getDSpaceIIIFPresentationUri(handle), new PropertyValueSimpleImpl(handle)));
+                manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(handle), new PropertyValueSimpleImpl(handle)));
             }
         }
         return manifests;
