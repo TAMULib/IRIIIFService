@@ -73,8 +73,6 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
 
     protected Model getRdfModel(String uri) throws NotFoundException {
         String rdf = httpService.get(uri + FEDORA_FCR_METADATA);
-        System.out.println("\n\n" + uri + "\n");
-        System.out.println(rdf + "\n\n");
         Optional<String> fedoraRdf = Optional.ofNullable(rdf);
         if (fedoraRdf.isPresent()) {
             return createRdfModel(fedoraRdf.get());
