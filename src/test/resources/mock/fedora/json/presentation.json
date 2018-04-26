@@ -2,7 +2,7 @@
   "@context" : "http://iiif.io/api/presentation/2/context.json",
   "@id" : "http://localhost:9003/fedora/presentation?context=cars_pcdm_objects/chevy",
   "@type" : "sc:Manifest",
-  "description" : "Some Chevy Cars",
+  "description" : "Maybe a Chevy Challenge and a Charger",
   "label" : "Some Chevy Cars",
   "logo" : "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "metadata" : [ {
