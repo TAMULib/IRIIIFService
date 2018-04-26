@@ -24,12 +24,12 @@ public class FedoraImageManifestControllerTest extends AbstractManifestControlle
     @MockBean
     private FedoraImageManifestService fedaorImageManifestService;
 
-    @Value("classpath:mock/fedora/json/image.json")
-    private Resource json;
+    @Value("classpath:mock/fedora/json/image0.json")
+    private Resource image0;
 
     @Test
     public void testGetManifest() throws Exception {
-        String expected = FileUtils.readFileToString(json.getFile(), "UTF-8");
+        String expected = FileUtils.readFileToString(image0.getFile(), "UTF-8");
         when(fedaorImageManifestService.getManifest(any(String.class), any(Boolean.class))).thenReturn(expected);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/fedora/image?context=cars_pcdm_objects/chevy/pages/page_0/files/PTAR_800x400.png").accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();

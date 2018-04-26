@@ -6,11 +6,11 @@
   "label" : "Some Chevy Cars",
   "logo" : "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "metadata" : [ {
-    "label" : "description",
-    "value" : "Maybe a Chevy Challenge and a Charger"
-  }, {
     "label" : "title",
     "value" : "Some Chevy Cars"
+  }, {
+    "label" : "description",
+    "value" : "Maybe a Chevy Challenge and a Charger"
   } ],
   "sequences" : [ {
     "@id" : "http://localhost:9003/fedora/sequence?context=cars_pcdm_objects/chevy",

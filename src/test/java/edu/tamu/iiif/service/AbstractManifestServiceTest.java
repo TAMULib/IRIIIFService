@@ -19,7 +19,7 @@ import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
 
 @RunWith(SpringRunner.class)
-public abstract class AbstractManifestServiceTest {
+public abstract class AbstractManifestServiceTest implements ManifestServiceTest {
 
     protected static final String IIIF_SERVICE_URL = "http://localhost:9003";
 

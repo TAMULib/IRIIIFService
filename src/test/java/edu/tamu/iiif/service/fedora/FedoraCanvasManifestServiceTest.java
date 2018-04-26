@@ -26,8 +26,8 @@ public class FedoraCanvasManifestServiceTest extends AbstractFedoraManifestServi
     @Value("classpath:mock/fedora/rdf/pcdm_item_container.rdf")
     private Resource rdf;
 
-    @Value("classpath:mock/fedora/json/image.json")
-    private Resource image;
+    @Value("classpath:mock/fedora/json/image0.json")
+    private Resource image0;
 
     @Value("classpath:mock/fedora/json/canvas.json")
     private Resource canvas;
@@ -45,7 +45,7 @@ public class FedoraCanvasManifestServiceTest extends AbstractFedoraManifestServi
     @Test
     public void testGetManifest() throws IOException, URISyntaxException {
         when(httpService.get(eq("http://localhost:9107/pcdm"), any(String.class))).thenReturn(FileUtils.readFileToString(rdf.getFile(), "UTF-8"));
-        when(httpService.get(any(String.class))).thenReturn(FileUtils.readFileToString(image.getFile(), "UTF-8"));
+        when(httpService.get(any(String.class))).thenReturn(FileUtils.readFileToString(image0.getFile(), "UTF-8"));
         String manifest = fedoraCanvasManifestService.getManifest("cars_pcdm_objects/chevy/pages/page_0", false);
         Assert.assertEquals(objectMapper.readValue(canvas.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }

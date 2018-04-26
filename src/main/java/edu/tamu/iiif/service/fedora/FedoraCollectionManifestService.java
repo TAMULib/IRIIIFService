@@ -1,21 +1,14 @@
 package edu.tamu.iiif.service.fedora;
 
-import static edu.tamu.iiif.constants.Constants.IANA_FIRST_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.IANA_LAST_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.IANA_NEXT_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.ORE_PROXY_FOR_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_MEMBER_PREDICATE;
 import static edu.tamu.iiif.model.ManifestType.COLLECTION;
-import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
@@ -30,7 +23,6 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimple
 import de.digitalcollections.iiif.presentation.model.impl.v2.references.ManifestReferenceImpl;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
-import edu.tamu.iiif.model.rdf.RdfOrderedSequence;
 import edu.tamu.iiif.model.rdf.RdfResource;
 
 @Service
@@ -84,17 +76,6 @@ public class FedoraCollectionManifestService extends AbstractFedoraManifestServi
 
         List<String> members = new ArrayList<String>();
 
-        Optional<String> firstId = getIdByPredicate(rdfResource.getModel(), IANA_FIRST_PREDICATE);
-
-        if (firstId.isPresent()) {
-            Optional<String> lastId = getIdByPredicate(rdfResource.getModel(), IANA_LAST_PREDICATE);
-
-            if (lastId.isPresent()) {
-                Resource firstResource = rdfResource.getModel().getResource(firstId.get());
-                getOrderedMembers(new RdfOrderedSequence(rdfResource.getModel(), firstResource, firstId.get(), lastId.get()), members);
-            }
-        }
-
         if (members.isEmpty()) {
 
             Resource resource = rdfResource.getResource();
@@ -107,32 +88,6 @@ public class FedoraCollectionManifestService extends AbstractFedoraManifestServi
             }
         }
         return members;
-    }
-
-    private void getOrderedMembers(RdfOrderedSequence fedoraRdfOrderedSequence, List<String> members) throws NotFoundException {
-
-        Model model = getRdfModel(fedoraRdfOrderedSequence.getResource().getURI());
-
-        Optional<String> id = getIdByPredicate(model, ORE_PROXY_FOR_PREDICATE);
-
-        if (!id.isPresent()) {
-            id = getIdByPredicate(model, ORE_PROXY_FOR_PREDICATE.replace("#", "/"));
-        }
-
-        if (id.isPresent()) {
-
-            members.add(id.get());
-
-            Optional<String> nextId = getIdByPredicate(model, IANA_NEXT_PREDICATE);
-
-            if (nextId.isPresent()) {
-                Resource resource = fedoraRdfOrderedSequence.getModel().getResource(nextId.get());
-                fedoraRdfOrderedSequence.setResource(resource);
-                fedoraRdfOrderedSequence.setCurrentId(nextId.get());
-                getOrderedMembers(fedoraRdfOrderedSequence, members);
-            }
-
-        }
     }
 
     @Override

@@ -44,8 +44,8 @@ public class HttpServiceTest {
     @InjectMocks
     private HttpService httpService;
 
-    @Value("classpath:mock/fedora/json/image.json")
-    private Resource image;
+    @Value("classpath:mock/fedora/json/image0.json")
+    private Resource image0;
 
     @Value("classpath:mock/fedora/rdf/pcdm_collection_container.rdf")
     private Resource rdf;
@@ -80,15 +80,15 @@ public class HttpServiceTest {
     @Test
     public void testGet() throws UnsupportedOperationException, IOException {
         when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK"));
-        when(entity.getContent()).thenReturn(image.getInputStream());
+        when(entity.getContent()).thenReturn(image0.getInputStream());
         String response = httpService.get("http://localhost:8182/iiif/2/test/info.json");
-        Assert.assertEquals(objectMapper.readValue(image.getFile(), JsonNode.class), objectMapper.readValue(response, JsonNode.class));
+        Assert.assertEquals(objectMapper.readValue(image0.getFile(), JsonNode.class), objectMapper.readValue(response, JsonNode.class));
     }
 
     @Test
     public void testGetIncorrectStatusCode() throws UnsupportedOperationException, IOException {
         when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_BAD_REQUEST, "BAD REQUEST"));
-        when(entity.getContent()).thenReturn(image.getInputStream());
+        when(entity.getContent()).thenReturn(image0.getInputStream());
         String response = httpService.get("http://localhost:8182/iiif/2/fail/info.json");
         Assert.assertNull(response);
     }
@@ -96,7 +96,7 @@ public class HttpServiceTest {
     @Test
     public void testGetMalformedUrl() throws UnsupportedOperationException, IOException {
         when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK"));
-        when(entity.getContent()).thenReturn(image.getInputStream());
+        when(entity.getContent()).thenReturn(image0.getInputStream());
         String response = httpService.get("@foo://invalid.bar");
         Assert.assertNull(response);
     }
