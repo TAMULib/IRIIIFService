@@ -58,12 +58,12 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
     protected String dspaceWebapp;
 
     protected RdfResource getDSpaceRdfModel(String handle) throws NotFoundException {
-        String dspaceRdfUri = getRdfUrl(handle);
-        String rdf = getRdf(dspaceRdfUri);
+        String dspaceRdfUrl = getRdfUrl(handle);
+        String rdf = getRdf(dspaceRdfUrl);
         Model model = createRdfModel(rdf);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");
-        return new RdfResource(model, model.getResource(dspaceRdfUri));
+        return new RdfResource(model, model.getResource(dspaceRdfUrl));
     }
 
     protected Sequence generateSequence(RdfResource rdfResource) throws IOException, URISyntaxException {
@@ -179,8 +179,8 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         return URI.create(getIiifServiceUrl() + "/" + type + "?" + CONTEXT_IDENTIFIER + "=" + handle);
     }
 
-    private String getRdf(String dspaceRdfUri) throws NotFoundException {
-        Optional<String> dspaceRdf = Optional.ofNullable(httpService.get(dspaceRdfUri));
+    private String getRdf(String dspaceRdfUrl) throws NotFoundException {
+        Optional<String> dspaceRdf = Optional.ofNullable(httpService.get(dspaceRdfUrl));
         if (dspaceRdf.isPresent()) {
             return dspaceRdf.get();
         }
