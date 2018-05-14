@@ -94,7 +94,7 @@
 | spring.profiles.include | string | Additional build environment profiles. | dspace, fedora |
 | iiif.service.url | url | IIIF service URL. | http://localhost:${server.port}${server.contextPath} |
 | iiif.dspace.url | url | DSpace base URL. | http://localhost:8080 |
-| iiif.dspace.webapp | string | DSpace webapp. | xmlui |
+| iiif.dspace.webapp | string | DSpace UI webapp. | xmlui |
 | iiif.fedora.url | url | Fedora REST URL. | http://localhost:9000/fcrepo/rest |
 | iiif.pcdm.rdf.ext.url | url | Fedora Amherst PCDM service URL. | http://localhost:9107/pcdm |
 | iiif.image.server.url | url | IIIF image server URL. | http://localhost:8182/iiif/2 |
