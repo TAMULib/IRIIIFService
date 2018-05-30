@@ -41,7 +41,9 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
 
         PropertyValueSimpleImpl label = getTitle(rdfResource);
 
-        List<Metadata> metadata = new ArrayList<Metadata>();
+        List<Metadata> metadata = getDublinCoreMetadata(rdfResource);
+
+        metadata.addAll(getDublinCoreTermsMetadata(rdfResource));
 
         Collection collection = new CollectionImpl(id, label, metadata);
 

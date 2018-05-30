@@ -274,7 +274,6 @@ public abstract class AbstractManifestService implements ManifestService {
                 match = resourceUrl.equals(statementUrl);
             }
             if (match && predicate.getNameSpace().equals(prefix)) {
-
                 Optional<Metadata> metadatum = Optional.empty();
                 try {
                     metadatum = Optional.of(generateMetadatum(statement));

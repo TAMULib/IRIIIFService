@@ -20,6 +20,8 @@ public class DSpaceSequenceManifestService extends AbstractDSpaceManifestService
 
         Sequence sequence = generateSequence(rdfResource);
 
+        sequence.setDescription(getDescription(rdfResource));
+
         return mapper.writeValueAsString(sequence);
     }
 
