@@ -21,7 +21,7 @@ public class RdfModelUtility {
         model.read(stream, null, "TTL");
         return model;
     }
-    
+
     public static Optional<String> getIdByPredicate(Model model, String predicate) {
         Optional<String> id = Optional.empty();
         NodeIterator firstNodeItr = model.listObjectsOfProperty(model.getProperty(predicate));
@@ -30,14 +30,19 @@ public class RdfModelUtility {
         }
         return id;
     }
-    
+
     public static Optional<String> getObject(RdfResource rdfResource, String uri) {
         Optional<String> metadatum = Optional.empty();
-        Statement statement = rdfResource.getStatementOfPropertyWithId(uri);
-        if (statement != null) {
-            RDFNode object = statement.getObject();
+        Optional<Statement> statement = Optional.ofNullable(rdfResource.getStatementOfPropertyWithId(uri));
+        if (statement.isPresent()) {
+            RDFNode object = statement.get().getObject();
             if (!object.toString().isEmpty()) {
                 metadatum = Optional.of(object.toString());
+            }
+        } else {
+            NodeIterator nodeIteerator = rdfResource.getAllNodesOfPropertyWithId(uri);
+            if (nodeIteerator.hasNext()) {
+                metadatum = Optional.of(nodeIteerator.next().toString());
             }
         }
         return metadatum;

@@ -9,6 +9,7 @@ import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_COLLECTION_PRE
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_COMMUNITY_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_REPOSITORY_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_SUB_COMMUNITY_OF_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_ABSTRACT;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_DESCRIPTION;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_TITLE;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
@@ -83,7 +84,11 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
 
         canvas.setImages(rdfCanvas.getImages());
 
-        canvas.setMetadata(new ArrayList<Metadata>());
+        List<Metadata> metadata = getDublinCoreMetadata(rdfResource);
+
+        metadata.addAll(getDublinCoreTermsMetadata(rdfResource));
+
+        canvas.setMetadata(metadata);
 
         return canvas;
     }
@@ -98,7 +103,10 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
     }
 
     protected PropertyValueSimpleImpl getDescription(RdfResource rdfResource) {
-        Optional<String> description = getObject(rdfResource, DUBLIN_CORE_TERMS_DESCRIPTION);
+        Optional<String> description = getObject(rdfResource, DUBLIN_CORE_TERMS_ABSTRACT);
+        if (!description.isPresent()) {
+            description = getObject(rdfResource, DUBLIN_CORE_TERMS_DESCRIPTION);
+        }
         if (!description.isPresent()) {
             description = Optional.of("N/A");
         }
