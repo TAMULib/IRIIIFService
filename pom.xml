@@ -112,6 +112,7 @@
             <ignoreTrivial>true</ignoreTrivial>
             <ignores>
               <ignore>java.util.logging.*</ignore>
+              <ignore>edu.tamu.iiif.IrIiifService</ignore>
             </ignores>
           </instrumentation>
           <formats>

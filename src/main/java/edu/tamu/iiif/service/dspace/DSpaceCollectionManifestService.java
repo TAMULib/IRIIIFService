@@ -47,8 +47,6 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
 
         Collection collection = new CollectionImpl(id, label, metadata);
 
-        collection.setViewingHint("multi-part");
-
         collection.setSubCollections(getSubcollections(rdfResource));
 
         collection.setManifests(getResourceManifests(rdfResource));
@@ -57,7 +55,7 @@ public class DSpaceCollectionManifestService extends AbstractDSpaceManifestServi
 
         collection.setLogo(getLogo(rdfResource));
 
-        collection.setDescription(getDescription(rdfResource));
+        collection.setViewingHint("multi-part");
 
         return collection;
     }
