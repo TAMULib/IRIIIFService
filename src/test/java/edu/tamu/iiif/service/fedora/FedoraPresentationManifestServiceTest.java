@@ -57,6 +57,8 @@ public class FedoraPresentationManifestServiceTest extends AbstractFedoraManifes
     @Test
     public void testGetManifest() throws IOException, URISyntaxException {
         when(httpService.get(eq(PCDM_RDF_URL), any(String.class))).thenReturn(FileUtils.readFileToString(rdf.getFile(), "UTF-8"));
+        
+        when(httpService.contentType(any(String.class))).thenReturn("image/png");
 
         when(httpService.get(eq(FEDORA_URL + "/cars_pcdm_objects/chevy/orderProxies/page_0_proxy/fcr:metadata"))).thenReturn(FileUtils.readFileToString(proxy0Rdf.getFile(), "UTF-8"));
         when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMC9maWxlcy9QVEFSXzgwMHg0MDAucG5n/info.json"))).thenReturn(FileUtils.readFileToString(image0.getFile(), "UTF-8"));
@@ -72,6 +74,8 @@ public class FedoraPresentationManifestServiceTest extends AbstractFedoraManifes
     @Test
     public void testGetManifestWithoutOrder() throws IOException, URISyntaxException {
         when(httpService.get(eq(PCDM_RDF_URL), any(String.class))).thenReturn(FileUtils.readFileToString(rdfWithoutOrder.getFile(), "UTF-8"));
+        
+        when(httpService.contentType(any(String.class))).thenReturn("image/png");
 
         when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMC9maWxlcy9QVEFSXzgwMHg0MDAucG5n/info.json"))).thenReturn(FileUtils.readFileToString(image0.getFile(), "UTF-8"));
 

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
@@ -15,6 +16,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicStatusLine;
 import org.junit.Assert;
 import org.junit.Before;
@@ -41,6 +43,8 @@ public class HttpServiceTest {
 
     private HttpEntity entity;
 
+    private Header header;
+
     @InjectMocks
     private HttpService httpService;
 
@@ -62,16 +66,18 @@ public class HttpServiceTest {
 
         entity = mock(HttpEntity.class);
 
+        header = new BasicHeader("Content-Type", "image/jpeg");
+
         ReflectionTestUtils.setField(httpService, "connectionTimeout", 1000);
         ReflectionTestUtils.setField(httpService, "connectionRequestTimeout", 1000);
         ReflectionTestUtils.setField(httpService, "socketTimeout", 1000);
-        ReflectionTestUtils.setField(httpService, "retries", 3);
 
         ReflectionTestUtils.setField(httpService, "httpClient", httpClient);
 
         Assert.assertNotNull(httpService);
 
         when(response.getEntity()).thenReturn(entity);
+        when(response.getFirstHeader("Content-Type")).thenReturn(header);
 
         when(httpClient.execute(any(HttpGet.class))).thenReturn(response);
 
@@ -83,6 +89,13 @@ public class HttpServiceTest {
         when(entity.getContent()).thenReturn(image0.getInputStream());
         String response = httpService.get("http://localhost:8182/iiif/2/test/info.json");
         Assert.assertEquals(objectMapper.readValue(image0.getFile(), JsonNode.class), objectMapper.readValue(response, JsonNode.class));
+    }
+
+    @Test
+    public void testContentType() throws UnsupportedOperationException, IOException {
+        when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK"));
+        String response = httpService.contentType("http://localhost:8182/iiif/2/test/info.json");
+        Assert.assertEquals(header.getValue(), response);
     }
 
     @Test
