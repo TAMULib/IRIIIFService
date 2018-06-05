@@ -178,6 +178,7 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
 
     private List<Canvas> getCanvases(RdfResource rdfResource) throws IOException, URISyntaxException {
         List<Canvas> canvases = new ArrayList<Canvas>();
+        // NOTE: canvas per bitstream
         NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_BITSTREAM_PREDICATE);
         while (collectionIterator.hasNext()) {
             String uri = collectionIterator.next().toString();
@@ -193,21 +194,23 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
 
         RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, uri);
 
-        Image image = generateImage(fileFedoraRdfResource, canvasId);
+        Optional<Image> image = generateImage(fileFedoraRdfResource, canvasId);
+        if (image.isPresent()) {
 
-        rdfCanvas.addImage(image);
+            rdfCanvas.addImage(image.get());
 
-        Optional<ImageResource> imageResource = Optional.ofNullable(image.getResource());
+            Optional<ImageResource> imageResource = Optional.ofNullable(image.get().getResource());
 
-        if (imageResource.isPresent()) {
-            int height = imageResource.get().getHeight();
-            if (height > rdfCanvas.getHeight()) {
-                rdfCanvas.setHeight(height);
-            }
+            if (imageResource.isPresent()) {
+                int height = imageResource.get().getHeight();
+                if (height > rdfCanvas.getHeight()) {
+                    rdfCanvas.setHeight(height);
+                }
 
-            int width = imageResource.get().getWidth();
-            if (width > rdfCanvas.getWidth()) {
-                rdfCanvas.setWidth(width);
+                int width = imageResource.get().getWidth();
+                if (width > rdfCanvas.getWidth()) {
+                    rdfCanvas.setWidth(width);
+                }
             }
         }
 

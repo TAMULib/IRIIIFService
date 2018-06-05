@@ -119,66 +119,60 @@ public abstract class AbstractManifestService implements ManifestService {
         return Optional.empty();
     }
 
+    protected Optional<Image> generateImage(RdfResource rdfResource, String canvasId) throws URISyntaxException {
+        String url = rdfResource.getResource().getURI();
+        Optional<Image> optionalImage = Optional.empty();
+        Optional<ImageResource> imageResource = generateImageResource(rdfResource);
+        if (imageResource.isPresent()) {
+            Image image = new ImageImpl(getImageInfoUri(url));
+            image.setResource(imageResource.get());
+            image.setOn(getCanvasUri(canvasId));
+            optionalImage = Optional.of(image);
+        }
+        return optionalImage;
+    }
+
+    protected Optional<ImageResource> generateImageResource(RdfResource rdfResource) throws URISyntaxException {
+        String url = rdfResource.getResource().getURI();
+
+        Optional<String> mimeType = getMimeType(url);
+
+        Optional<ImageResource> optionalImageResource = Optional.empty();
+
+        if (mimeType.isPresent()) {
+            URI infoUri = getImageInfoUri(url);
+
+            Optional<JsonNode> imageInfoNode = getImageInfo(infoUri.toString());
+
+            if (imageInfoNode.isPresent()) {
+
+                ImageResource imageResource = new ImageResourceImpl(getImageFullUrl(url));
+
+                imageResource.setFormat(mimeType.get());
+
+                imageResource.setHeight(imageInfoNode.get().get("height").asInt());
+
+                imageResource.setWidth(imageInfoNode.get().get("width").asInt());
+
+                imageResource.setServices(getServices(rdfResource, getIiifImageServiceName()));
+
+                optionalImageResource = Optional.of(imageResource);
+            } else {
+                LOG.info("Unable to get image info: " + infoUri.toString());
+            }
+        } else {
+            LOG.info("Unable to get mime type: " + url);
+        }
+
+        return optionalImageResource;
+    }
+
     protected String fetchImageInfo(String url) throws NotFoundException {
         Optional<String> imageInfo = Optional.ofNullable(httpService.get(url));
         if (imageInfo.isPresent()) {
             return imageInfo.get();
         }
         throw new NotFoundException("Image information not found!");
-    }
-
-    protected Image generateImage(RdfResource rdfResource, String canvasId) throws URISyntaxException {
-        String url = rdfResource.getResource().getURI();
-        Image image = new ImageImpl(getImageInfoUri(url));
-
-        Optional<ImageResource> imageResource = generateImageResource(rdfResource);
-        if (imageResource.isPresent()) {
-            image.setResource(imageResource.get());
-        }
-
-        image.setOn(getCanvasUri(canvasId));
-        return image;
-    }
-
-    protected Optional<ImageResource> generateImageResource(RdfResource rdfResource) throws URISyntaxException {
-        String url = rdfResource.getResource().getURI();
-
-        URI infoUri = getImageInfoUri(url);
-
-        Optional<ImageResource> optionalImageResource = Optional.empty();
-
-        Optional<JsonNode> imageInfoNode = getImageInfo(infoUri.toString());
-
-        if (imageInfoNode.isPresent()) {
-            ImageResource imageResource = new ImageResourceImpl(getImageFullUrl(url));
-
-            Optional<String> mimeType = Optional.empty();
-            if (mimeType.isPresent()) {
-                imageResource.setFormat(mimeType.get());
-            }
-
-            imageResource.setHeight(imageInfoNode.get().get("height").asInt());
-
-            imageResource.setWidth(imageInfoNode.get().get("width").asInt());
-
-            imageResource.setServices(getServices(rdfResource, getIiifImageServiceName()));
-
-            optionalImageResource = Optional.of(imageResource);
-        }
-
-        return optionalImageResource;
-    }
-
-    protected Optional<JsonNode> getImageInfo(String url) {
-        Optional<JsonNode> imageInfoNode = Optional.empty();
-
-        try {
-            imageInfoNode = Optional.of(objectMapper.readTree(fetchImageInfo(url)));
-        } catch (IOException e) {
-            LOG.warn(e.getMessage());
-        }
-
-        return imageInfoNode;
     }
 
     protected URI getImageUri(String url) throws URISyntaxException {
@@ -297,6 +291,23 @@ public abstract class AbstractManifestService implements ManifestService {
         PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(predicate.getLocalName());
         PropertyValueSimpleImpl value = new PropertyValueSimpleImpl(object.toString());
         return new MetadataImpl(label, value);
+    }
+
+    private Optional<JsonNode> getImageInfo(String url) {
+        Optional<JsonNode> imageInfoNode = Optional.empty();
+
+        try {
+            imageInfoNode = Optional.of(objectMapper.readTree(fetchImageInfo(url)));
+        } catch (IOException e) {
+            LOG.info("Unable to get image info: " + url);
+            LOG.warn(e.getMessage());
+        }
+
+        return imageInfoNode;
+    }
+
+    private Optional<String> getMimeType(String url) {
+        return Optional.ofNullable(httpService.contentType(url));
     }
 
 }

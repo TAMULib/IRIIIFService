@@ -226,27 +226,31 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
 
         String parentId = canvasStatement.getObject().toString();
 
+        // NOTE: all resources within container
+
         for (Resource resource : rdfResource.listResourcesWithPropertyWithId(FEDORA_HAS_PARENT_PREDICATE).toList()) {
 
             if (resource.getProperty(rdfResource.getProperty(FEDORA_HAS_PARENT_PREDICATE)).getObject().toString().equals(parentId)) {
 
                 RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, resource.getURI());
 
-                Image image = generateImage(fileFedoraRdfResource, canvasId);
+                Optional<Image> image = generateImage(fileFedoraRdfResource, canvasId);
 
-                rdfCanvas.addImage(image);
+                if (image.isPresent()) {
+                    rdfCanvas.addImage(image.get());
 
-                Optional<ImageResource> imageResource = Optional.ofNullable(image.getResource());
+                    Optional<ImageResource> imageResource = Optional.ofNullable(image.get().getResource());
 
-                if (imageResource.isPresent()) {
-                    int height = imageResource.get().getHeight();
-                    if (height > rdfCanvas.getHeight()) {
-                        rdfCanvas.setHeight(height);
-                    }
+                    if (imageResource.isPresent()) {
+                        int height = imageResource.get().getHeight();
+                        if (height > rdfCanvas.getHeight()) {
+                            rdfCanvas.setHeight(height);
+                        }
 
-                    int width = imageResource.get().getWidth();
-                    if (width > rdfCanvas.getWidth()) {
-                        rdfCanvas.setWidth(width);
+                        int width = imageResource.get().getWidth();
+                        if (width > rdfCanvas.getWidth()) {
+                            rdfCanvas.setWidth(width);
+                        }
                     }
                 }
             }
