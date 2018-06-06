@@ -139,21 +139,28 @@ public abstract class AbstractManifestService implements ManifestService {
 
         Optional<ImageResource> optionalImageResource = Optional.empty();
 
-        Optional<String> mimeType = getMimeType(url);
+        Optional<String> optionalMimeType = getMimeType(url);
 
         boolean include = false;
 
-        if (mimeType.isPresent()) {
+        if (optionalMimeType.isPresent()) {
+
+            String mimeType = optionalMimeType.get();
+
+            if (mimeType.contains(";")) {
+                mimeType = mimeType.split(";")[0];
+            }
+
             include = true;
             String allowed = request.getAllowed();
             if (allowed.length() > 0) {
-                include = allowed.contains(mimeType.get());
+                LOG.info("Allowed: " + allowed);
+                include = allowed.contains(mimeType);
             } else {
                 String disallowed = request.getDisallowed();
                 if (disallowed.length() > 0) {
-                    if (disallowed.contains(mimeType.get())) {
-                        include = false;
-                    }
+                    LOG.info("Disallowed: " + allowed);
+                    include = !disallowed.contains(mimeType);
                 }
             }
         } else {
@@ -169,7 +176,7 @@ public abstract class AbstractManifestService implements ManifestService {
 
                 ImageResource imageResource = new ImageResourceImpl(getImageFullUrl(url));
 
-                imageResource.setFormat(mimeType.get());
+                imageResource.setFormat(optionalMimeType.get());
 
                 imageResource.setHeight(imageInfoNode.get().get("height").asInt());
 
