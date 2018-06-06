@@ -92,10 +92,11 @@ public class HttpServiceTest {
     }
 
     @Test
-    public void testContentType() throws UnsupportedOperationException, IOException {
+    public void testGetWithContext() throws UnsupportedOperationException, IOException {
         when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK"));
-        String response = httpService.contentType("http://localhost:8182/iiif/2/test/info.json");
-        Assert.assertEquals(header.getValue(), response);
+        when(entity.getContent()).thenReturn(rdf.getInputStream());
+        String response = httpService.get("http://localhost:9107", "pcdm_cars");
+        Assert.assertEquals(FileUtils.readFileToString(rdf.getFile(), "UTF-8"), response);
     }
 
     @Test
@@ -115,11 +116,32 @@ public class HttpServiceTest {
     }
 
     @Test
-    public void testGetWithContext() throws UnsupportedOperationException, IOException {
+    public void testContentType() throws UnsupportedOperationException, IOException {
         when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK"));
-        when(entity.getContent()).thenReturn(rdf.getInputStream());
-        String response = httpService.get("http://localhost:9107", "pcdm_cars");
-        Assert.assertEquals(FileUtils.readFileToString(rdf.getFile(), "UTF-8"), response);
+        String response = httpService.contentType("https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png");
+        Assert.assertEquals(header.getValue(), response);
+    }
+
+    @Test
+    public void testContentTypeNoContentTypeHeader() throws UnsupportedOperationException, IOException {
+        when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK"));
+        when(response.getFirstHeader("Content-Type")).thenReturn(null);
+        String response = httpService.contentType("https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png");
+        Assert.assertNull(response);
+    }
+
+    @Test
+    public void testContentTypeIncorrectStatusCode() throws UnsupportedOperationException, IOException {
+        when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_BAD_REQUEST, "BAD REQUEST"));
+        String response = httpService.contentType("https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png");
+        Assert.assertNull(response);
+    }
+
+    @Test
+    public void testContentTypeMalformedUrl() throws UnsupportedOperationException, IOException {
+        when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK"));
+        String response = httpService.contentType("@foo://invalid.bar");
+        Assert.assertNull(response);
     }
 
 }
