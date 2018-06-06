@@ -19,6 +19,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.RepositoryType;
@@ -62,15 +63,15 @@ public class FedoraPresentationManifestServiceTest extends AbstractFedoraManifes
     @Test
     public void testGetManifest() throws IOException, URISyntaxException {
         setupMocks();
-        String manifest = fedoraPresentationManifestService.getManifest("cars_pcdm_objects/chevy", false);
+        String manifest = fedoraPresentationManifestService.getManifest(ManifestRequest.of("cars_pcdm_objects/chevy", false));
         Assert.assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
     @Test
     public void testGetManifestCached() throws IOException, URISyntaxException {
         RedisManifest redisManifest = new RedisManifest("cars_pcdm_objects/chevy", ManifestType.PRESENTATION, RepositoryType.FEDORA, FileUtils.readFileToString(presentation.getFile(), "UTF-8"));
-        when(redisManifestRepo.findByPathAndTypeAndRepository(any(String.class), any(ManifestType.class), any(RepositoryType.class))).thenReturn(Optional.of(redisManifest));
-        String manifest = fedoraPresentationManifestService.getManifest("cars_pcdm_objects/chevy", false);
+        when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(RepositoryType.class), any(String.class), any(String.class))).thenReturn(Optional.of(redisManifest));
+        String manifest = fedoraPresentationManifestService.getManifest(ManifestRequest.of("cars_pcdm_objects/chevy", false));
         Assert.assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
@@ -78,8 +79,8 @@ public class FedoraPresentationManifestServiceTest extends AbstractFedoraManifes
     public void testGetManifestUpdateCached() throws IOException, URISyntaxException {
         setupMocks();
         RedisManifest redisManifest = new RedisManifest("cars_pcdm_objects/chevy", ManifestType.PRESENTATION, RepositoryType.FEDORA, FileUtils.readFileToString(presentation.getFile(), "UTF-8"));
-        when(redisManifestRepo.findByPathAndTypeAndRepository(any(String.class), any(ManifestType.class), any(RepositoryType.class))).thenReturn(Optional.of(redisManifest));
-        String manifest = fedoraPresentationManifestService.getManifest("cars_pcdm_objects/chevy", true);
+        when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(RepositoryType.class), any(String.class), any(String.class))).thenReturn(Optional.of(redisManifest));
+        String manifest = fedoraPresentationManifestService.getManifest(ManifestRequest.of("cars_pcdm_objects/chevy", true));
         Assert.assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
@@ -93,7 +94,7 @@ public class FedoraPresentationManifestServiceTest extends AbstractFedoraManifes
 
         when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMS9maWxlcy9jYXIyLmpwZw==/info.json"))).thenReturn(FileUtils.readFileToString(image1.getFile(), "UTF-8"));
 
-        String manifest = fedoraPresentationManifestService.getManifest("cars_pcdm_objects/chevy", false);
+        String manifest = fedoraPresentationManifestService.getManifest(ManifestRequest.of("cars_pcdm_objects/chevy", false));
 
         Assert.assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }

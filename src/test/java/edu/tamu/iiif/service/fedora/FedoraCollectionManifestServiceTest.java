@@ -18,6 +18,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import edu.tamu.iiif.controller.ManifestRequest;
+
 public class FedoraCollectionManifestServiceTest extends AbstractFedoraManifestServiceTest {
 
     @InjectMocks
@@ -43,7 +45,7 @@ public class FedoraCollectionManifestServiceTest extends AbstractFedoraManifestS
     public void testGetManifest() throws IOException, URISyntaxException {
         when(httpService.get(eq(PCDM_RDF_URL), any(String.class))).thenReturn(FileUtils.readFileToString(rdf.getFile(), "UTF-8"));
 
-        String manifest = fedoraCollectionManifestService.getManifest("cars_pcdm", false);
+        String manifest = fedoraCollectionManifestService.getManifest(ManifestRequest.of("cars_pcdm", false));
 
         Assert.assertEquals(objectMapper.readValue(collection.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }

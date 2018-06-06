@@ -13,28 +13,42 @@ public class RedisManifest {
     private String id;
 
     @Indexed
-    private String path;
+    private final String path;
 
     @Indexed
-    private ManifestType type;
+    private final ManifestType type;
 
     @Indexed
-    private RepositoryType repository;
+    private final RepositoryType repository;
+
+    @Indexed
+    private final String allowed;
+
+    @Indexed
+    private final String disallowed;
 
     private String json;
 
     private final Long creation;
 
-    public RedisManifest() {
-        this.creation = new Date().getTime();
-    }
-
     public RedisManifest(String path, ManifestType type, RepositoryType repository, String json) {
-        this();
+        this.creation = new Date().getTime();
         this.path = path;
         this.type = type;
         this.repository = repository;
         this.json = json;
+        this.allowed = "";
+        this.disallowed = "";
+    }
+
+    public RedisManifest(String path, ManifestType type, RepositoryType repository, String allowed, String disallowed, String json) {
+        this.creation = new Date().getTime();
+        this.path = path;
+        this.type = type;
+        this.repository = repository;
+        this.json = json;
+        this.allowed = allowed;
+        this.disallowed = disallowed;
     }
 
     public String getId() {
@@ -49,24 +63,20 @@ public class RedisManifest {
         return path;
     }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
-
     public ManifestType getType() {
         return type;
-    }
-
-    public void setType(ManifestType type) {
-        this.type = type;
     }
 
     public RepositoryType getRepository() {
         return repository;
     }
 
-    public void setRepository(RepositoryType repository) {
-        this.repository = repository;
+    public String getAllowed() {
+        return allowed;
+    }
+
+    public String getDisallowed() {
+        return disallowed;
     }
 
     public String getJson() {

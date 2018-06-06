@@ -41,6 +41,7 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.ImageResourceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.MetadataImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ServiceImpl;
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.RedisManifest;
@@ -79,24 +80,25 @@ public abstract class AbstractManifestService implements ManifestService {
         mapper.enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
     }
 
-    public String getManifest(String path, boolean update) throws IOException, URISyntaxException {
-
+    public String getManifest(ManifestRequest request) throws IOException, URISyntaxException {
+        String path = request.getContext();
+        boolean update = request.isUpdate();
         String manifest;
-        Optional<RedisManifest> optionalRedisManifest = getRedisManifest(path);
+        Optional<RedisManifest> optionalRedisManifest = getRedisManifest(request);
 
         if (optionalRedisManifest.isPresent()) {
             LOG.info("Manifest already in redis: " + optionalRedisManifest.get().getId() + " (" + optionalRedisManifest.get().getCreation() + ")");
             manifest = optionalRedisManifest.get().getJson();
         } else {
             LOG.info("Generating new manifest.");
-            manifest = generateManifest(path);
-            redisManifestRepo.save(new RedisManifest(StringUtility.encode(path), getManifestType(), getRepositoryType(), manifest));
+            manifest = generateManifest(request);
+            redisManifestRepo.save(new RedisManifest(StringUtility.encode(path), getManifestType(), getRepositoryType(), request.getAllowed(), request.getDisallowed(), manifest));
             update = false;
         }
 
         if (update) {
             RedisManifest redisManifest = optionalRedisManifest.get();
-            manifest = generateManifest(path);
+            manifest = generateManifest(request);
             redisManifest.setJson(manifest);
             redisManifestRepo.save(redisManifest);
             LOG.info("Manifest update requested: " + path);
@@ -119,10 +121,10 @@ public abstract class AbstractManifestService implements ManifestService {
         return Optional.empty();
     }
 
-    protected Optional<Image> generateImage(RdfResource rdfResource, String canvasId) throws URISyntaxException {
+    protected Optional<Image> generateImage(ManifestRequest request, RdfResource rdfResource, String canvasId) throws URISyntaxException {
         String url = rdfResource.getResource().getURI();
         Optional<Image> optionalImage = Optional.empty();
-        Optional<ImageResource> imageResource = generateImageResource(rdfResource);
+        Optional<ImageResource> imageResource = generateImageResource(request, rdfResource);
         if (imageResource.isPresent()) {
             Image image = new ImageImpl(getImageInfoUri(url));
             image.setResource(imageResource.get());
@@ -132,14 +134,33 @@ public abstract class AbstractManifestService implements ManifestService {
         return optionalImage;
     }
 
-    protected Optional<ImageResource> generateImageResource(RdfResource rdfResource) throws URISyntaxException {
+    protected Optional<ImageResource> generateImageResource(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException {
         String url = rdfResource.getResource().getURI();
-
-        Optional<String> mimeType = getMimeType(url);
 
         Optional<ImageResource> optionalImageResource = Optional.empty();
 
+        Optional<String> mimeType = getMimeType(url);
+
+        boolean include = false;
+
         if (mimeType.isPresent()) {
+            include = true;
+            String allowed = request.getAllowed();
+            if (allowed.length() > 0) {
+                include = allowed.contains(mimeType.get());
+            } else {
+                String disallowed = request.getDisallowed();
+                if (disallowed.length() > 0) {
+                    if (disallowed.contains(mimeType.get())) {
+                        include = false;
+                    }
+                }
+            }
+        } else {
+            LOG.info("Unable to get mime type: " + url);
+        }
+
+        if (include) {
             URI infoUri = getImageInfoUri(url);
 
             Optional<JsonNode> imageInfoNode = getImageInfo(infoUri.toString());
@@ -161,7 +182,7 @@ public abstract class AbstractManifestService implements ManifestService {
                 LOG.info("Unable to get image info: " + infoUri.toString());
             }
         } else {
-            LOG.info("Unable to get mime type: " + url);
+            LOG.info("Excluding: " + url);
         }
 
         return optionalImageResource;
@@ -227,7 +248,7 @@ public abstract class AbstractManifestService implements ManifestService {
         return handle;
     }
 
-    protected abstract String generateManifest(String handle) throws URISyntaxException, IOException;
+    protected abstract String generateManifest(ManifestRequest request) throws URISyntaxException, IOException;
 
     protected abstract String getIiifServiceUrl();
 
@@ -249,8 +270,8 @@ public abstract class AbstractManifestService implements ManifestService {
         return service;
     }
 
-    private Optional<RedisManifest> getRedisManifest(String path) {
-        return redisManifestRepo.findByPathAndTypeAndRepository(StringUtility.encode(path), getManifestType(), getRepositoryType());
+    private Optional<RedisManifest> getRedisManifest(ManifestRequest request) {
+        return redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(StringUtility.encode(request.getContext()), getManifestType(), getRepositoryType(), request.getAllowed(), request.getDisallowed());
     }
 
     private List<Metadata> getMetadata(RdfResource rdfResource, String prefix) {

@@ -17,6 +17,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import edu.tamu.iiif.controller.ManifestRequest;
+
 public class FedoraImageManifestServiceTest extends AbstractFedoraManifestServiceTest {
 
     @InjectMocks
@@ -38,7 +40,7 @@ public class FedoraImageManifestServiceTest extends AbstractFedoraManifestServic
     @Test
     public void testGetManifest() throws IOException, URISyntaxException {
         when(httpService.get(any(String.class))).thenReturn(FileUtils.readFileToString(image0.getFile(), "UTF-8"));
-        String manifest = fedoraImageManifestService.getManifest("cars_pcdm_objects/chevy/pages/page_0/files/PTAR_800x400.png", false);
+        String manifest = fedoraImageManifestService.getManifest(ManifestRequest.of("cars_pcdm_objects/chevy/pages/page_0/files/PTAR_800x400.png", false));
         Assert.assertEquals(objectMapper.readValue(image0.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 

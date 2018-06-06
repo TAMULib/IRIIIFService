@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import edu.tamu.iiif.controller.AbstractManifestControllerTest;
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.service.fedora.FedoraCanvasManifestService;
 
 @WebMvcTest(value = FedoraCanvasManifestController.class, secure = false)
@@ -30,7 +31,7 @@ public class FedoraCanvasManifestControllerTest extends AbstractManifestControll
     @Test
     public void testGetManifest() throws Exception {
         String expected = FileUtils.readFileToString(json.getFile(), "UTF-8");
-        when(fedaorCanvasManifestService.getManifest(any(String.class), any(Boolean.class))).thenReturn(expected);
+        when(fedaorCanvasManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/fedora/canvas?context=cars_pcdm_objects/chevy/pages/page_0").accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);

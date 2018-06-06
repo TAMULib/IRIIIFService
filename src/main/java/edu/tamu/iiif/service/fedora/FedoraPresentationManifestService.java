@@ -19,16 +19,18 @@ import de.digitalcollections.iiif.presentation.model.api.v2.Thumbnail;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ManifestImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ThumbnailImpl;
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.rdf.RdfResource;
 
 @Service
 public class FedoraPresentationManifestService extends AbstractFedoraManifestService {
 
-    public String generateManifest(String path) throws IOException, URISyntaxException {
-        RdfResource rdfResource = getRdfResource(path);
+    public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
+        String context = request.getContext();
+        RdfResource rdfResource = getRdfResource(context);
 
-        URI id = buildId(path);
+        URI id = buildId(context);
 
         PropertyValueSimpleImpl label = getTitle(rdfResource);
 
@@ -38,7 +40,7 @@ public class FedoraPresentationManifestService extends AbstractFedoraManifestSer
 
         manifest.setMetadata(getDublinCoreMetadata(rdfResource));
 
-        List<Sequence> sequences = getSequences(rdfResource);
+        List<Sequence> sequences = getSequences(request, rdfResource);
 
         manifest.setSequences(sequences);
 
@@ -57,10 +59,10 @@ public class FedoraPresentationManifestService extends AbstractFedoraManifestSer
         return mapper.writeValueAsString(manifest);
     }
 
-    private List<Sequence> getSequences(RdfResource rdfResource) throws IOException, URISyntaxException {
+    private List<Sequence> getSequences(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         List<Sequence> sequences = new ArrayList<Sequence>();
 
-        sequences.add(generateSequence(rdfResource));
+        sequences.add(generateSequence(request, rdfResource));
 
         return sequences;
     }

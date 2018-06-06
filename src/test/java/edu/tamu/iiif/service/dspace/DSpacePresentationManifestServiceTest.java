@@ -19,6 +19,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.RepositoryType;
@@ -50,15 +51,15 @@ public class DSpacePresentationManifestServiceTest extends AbstractDSpaceManifes
     @Test
     public void testGetManifest() throws IOException, URISyntaxException {
         setupMocks();
-        String manifest = dSpacePresentationManifestService.getManifest("123456789/158308", false);
+        String manifest = dSpacePresentationManifestService.getManifest(ManifestRequest.of("123456789/158308", false));
         Assert.assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
     @Test
     public void testGetManifestCached() throws IOException, URISyntaxException {
         RedisManifest redisManifest = new RedisManifest("123456789/158308", ManifestType.PRESENTATION, RepositoryType.DSPACE, FileUtils.readFileToString(presentation.getFile(), "UTF-8"));
-        when(redisManifestRepo.findByPathAndTypeAndRepository(any(String.class), any(ManifestType.class), any(RepositoryType.class))).thenReturn(Optional.of(redisManifest));
-        String manifest = dSpacePresentationManifestService.getManifest("123456789/158308", false);
+        when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(RepositoryType.class), any(String.class), any(String.class))).thenReturn(Optional.of(redisManifest));
+        String manifest = dSpacePresentationManifestService.getManifest(ManifestRequest.of("123456789/158308", false));
         Assert.assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
@@ -66,8 +67,8 @@ public class DSpacePresentationManifestServiceTest extends AbstractDSpaceManifes
     public void testGetManifestUpdateCached() throws IOException, URISyntaxException {
         setupMocks();
         RedisManifest redisManifest = new RedisManifest("123456789/158308", ManifestType.PRESENTATION, RepositoryType.DSPACE, FileUtils.readFileToString(presentation.getFile(), "UTF-8"));
-        when(redisManifestRepo.findByPathAndTypeAndRepository(any(String.class), any(ManifestType.class), any(RepositoryType.class))).thenReturn(Optional.of(redisManifest));
-        String manifest = dSpacePresentationManifestService.getManifest("123456789/158308", true);
+        when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(RepositoryType.class), any(String.class), any(String.class))).thenReturn(Optional.of(redisManifest));
+        String manifest = dSpacePresentationManifestService.getManifest(ManifestRequest.of("123456789/158308", true));
         Assert.assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 

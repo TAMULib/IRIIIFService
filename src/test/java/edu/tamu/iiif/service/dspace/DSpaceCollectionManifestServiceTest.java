@@ -17,6 +17,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import edu.tamu.iiif.controller.ManifestRequest;
+
 public class DSpaceCollectionManifestServiceTest extends AbstractDSpaceManifestServiceTest {
 
     @InjectMocks
@@ -52,11 +54,11 @@ public class DSpaceCollectionManifestServiceTest extends AbstractDSpaceManifestS
         when(httpService.get(eq(DSPACE_URL + "/rdf/handle/123456789/158299"))).thenReturn(FileUtils.readFileToString(collectionRdf.getFile(), "UTF-8"));
         when(httpService.get(eq(DSPACE_URL + "/rdf/handle/123456789/158301"))).thenReturn(FileUtils.readFileToString(subcommunityRdf.getFile(), "UTF-8"));
         when(httpService.get(eq(DSPACE_URL + "/rdf/handle/123456789/158298"))).thenReturn(FileUtils.readFileToString(communityRdf.getFile(), "UTF-8"));
-        String collectionManifest = dSpaceCollectionManifestService.getManifest("123456789/158299", false);
+        String collectionManifest = dSpaceCollectionManifestService.getManifest(ManifestRequest.of("123456789/158299", false));
 
         Assert.assertEquals(objectMapper.readValue(collection.getFile(), JsonNode.class), objectMapper.readValue(collectionManifest, JsonNode.class));
 
-        String collectionsManifest = dSpaceCollectionManifestService.getManifest("123456789/158298", false);
+        String collectionsManifest = dSpaceCollectionManifestService.getManifest(ManifestRequest.of("123456789/158298", false));
 
         Assert.assertEquals(objectMapper.readValue(collections.getFile(), JsonNode.class), objectMapper.readValue(collectionsManifest, JsonNode.class));
     }

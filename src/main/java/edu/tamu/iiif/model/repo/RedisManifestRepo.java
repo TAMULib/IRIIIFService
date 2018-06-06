@@ -10,6 +10,6 @@ import edu.tamu.iiif.model.RepositoryType;
 
 public interface RedisManifestRepo extends CrudRepository<RedisManifest, String> {
 
-    Optional<RedisManifest> findByPathAndTypeAndRepository(String path, ManifestType type, RepositoryType repository);
+    Optional<RedisManifest> findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(String path, ManifestType type, RepositoryType repository, String allowed, String disallowed);
 
 }

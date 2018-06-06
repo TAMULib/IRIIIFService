@@ -19,9 +19,9 @@ public abstract class AbstractManifestController<S extends ManifestService> {
     @Autowired
     private S manifestService;
 
-    protected void sendManifest(HttpServletResponse response, String path, Boolean update) throws IOException, URISyntaxException {
-        setResponseFile(response, getFileName(path));
-        sendJsonFile(response, manifestService.getManifest(path, update));
+    protected void sendManifest(ManifestBuilder builder) throws IOException, URISyntaxException {
+        setResponseFile(builder.getResponse(), getFileName(builder.getRequest().getContext()));
+        sendJsonFile(builder.getResponse(), manifestService.getManifest(builder.getRequest()));
     }
 
     private void setResponseFile(HttpServletResponse response, String filename) {

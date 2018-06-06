@@ -22,6 +22,7 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.CollectionImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.references.CollectionReferenceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.references.ManifestReferenceImpl;
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.rdf.RdfResource;
@@ -30,8 +31,9 @@ import edu.tamu.iiif.model.rdf.RdfResource;
 public class DSpaceCollectionManifestService extends AbstractDSpaceManifestService {
 
     @Override
-    protected String generateManifest(String handle) throws URISyntaxException, IOException {
-        return mapper.writeValueAsString(generateCollection(handle));
+    protected String generateManifest(ManifestRequest request) throws URISyntaxException, IOException {
+        String context = request.getContext();
+        return mapper.writeValueAsString(generateCollection(context));
     }
 
     private Collection generateCollection(String handle) throws URISyntaxException, NotFoundException {

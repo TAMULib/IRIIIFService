@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import edu.tamu.iiif.controller.AbstractManifestControllerTest;
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.service.dspace.DSpacePresentationManifestService;
 
 @WebMvcTest(value = DSpacePresentationManifestController.class, secure = false)
@@ -30,7 +31,7 @@ public class DSpacePresentationManifestControllerTest extends AbstractManifestCo
     @Test
     public void testGetManifest() throws Exception {
         String expected = FileUtils.readFileToString(json.getFile(), "UTF-8");
-        when(dSpacePresentationManifestService.getManifest(any(String.class), any(Boolean.class))).thenReturn(expected);
+        when(dSpacePresentationManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/dspace/presentation?context=123456789/158308").accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);

@@ -23,17 +23,19 @@ import de.digitalcollections.iiif.presentation.model.api.v2.Thumbnail;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ManifestImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ThumbnailImpl;
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.rdf.RdfResource;
 
 @Service
 public class DSpacePresentationManifestService extends AbstractDSpaceManifestService {
 
-    public String generateManifest(String handle) throws IOException, URISyntaxException {
+    public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
+        String context = request.getContext();
 
-        RdfResource rdfResource = getDSpaceRdfModel(handle);
+        RdfResource rdfResource = getDSpaceRdfModel(context);
 
-        URI id = buildId(handle);
+        URI id = buildId(context);
 
         PropertyValueSimpleImpl label = getTitle(rdfResource);
 
@@ -41,7 +43,7 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
 
         manifest.setDescription(getDescription(rdfResource));
 
-        List<Sequence> sequences = getSequences(rdfResource);
+        List<Sequence> sequences = getSequences(request, rdfResource);
 
         manifest.setSequences(sequences);
 
@@ -66,11 +68,11 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
         return mapper.writeValueAsString(manifest);
     }
 
-    private List<Sequence> getSequences(RdfResource rdfResource) throws IOException, URISyntaxException {
+    private List<Sequence> getSequences(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         List<Sequence> sequences = new ArrayList<Sequence>();
 
         // NOTE: flattening all sequence canvases into a single canvas, feature parity with Fedora presentation
-        List<Sequence> broadSequences = aggregateSequences(rdfResource);
+        List<Sequence> broadSequences = aggregateSequences(request, rdfResource);
 
         if (broadSequences.size() > 0) {
             Sequence sequence = broadSequences.get(0);
@@ -92,7 +94,7 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
         return sequences;
     }
 
-    private List<Sequence> aggregateSequences(RdfResource rdfResource) throws IOException, URISyntaxException {
+    private List<Sequence> aggregateSequences(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         List<Sequence> sequences = new ArrayList<Sequence>();
         if (isTopLevelCommunity(rdfResource.getModel()) || isSubcommunity(rdfResource.getModel())) {
 
@@ -100,7 +102,7 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
             while (collectionIterator.hasNext()) {
                 String uri = collectionIterator.next().toString();
                 String handle = getHandle(uri);
-                sequences.addAll(aggregateSequences(getDSpaceRdfModel(handle)));
+                sequences.addAll(aggregateSequences(request, getDSpaceRdfModel(handle)));
             }
 
         } else if (isCollection(rdfResource.getModel())) {
@@ -109,11 +111,11 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
             while (collectionIterator.hasNext()) {
                 String uri = collectionIterator.next().toString();
                 String handle = getHandle(uri);
-                sequences.addAll(aggregateSequences(getDSpaceRdfModel(handle)));
+                sequences.addAll(aggregateSequences(request, getDSpaceRdfModel(handle)));
             }
 
         } else if (isItem(rdfResource.getModel())) {
-            sequences.add(generateSequence(rdfResource));
+            sequences.add(generateSequence(request, rdfResource));
         } else {
 
         }
