@@ -34,7 +34,7 @@ public abstract class AbstractManifestServiceTest implements ManifestServiceTest
     protected HttpService httpService;
 
     @Mock
-    private RedisManifestRepo redisManifestRepo;
+    protected RedisManifestRepo redisManifestRepo;
 
     @Before
     public void init() {

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
@@ -17,6 +18,10 @@ import org.springframework.core.io.Resource;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
+
+import edu.tamu.iiif.model.ManifestType;
+import edu.tamu.iiif.model.RedisManifest;
+import edu.tamu.iiif.model.RepositoryType;
 
 public class FedoraPresentationManifestServiceTest extends AbstractFedoraManifestServiceTest {
 
@@ -56,14 +61,36 @@ public class FedoraPresentationManifestServiceTest extends AbstractFedoraManifes
 
     @Test
     public void testGetManifest() throws IOException, URISyntaxException {
-        when(httpService.get(eq(PCDM_RDF_URL), any(String.class))).thenReturn(FileUtils.readFileToString(rdf.getFile(), "UTF-8"));
-        
+        setupMocks();
+        String manifest = fedoraPresentationManifestService.getManifest("cars_pcdm_objects/chevy", false);
+        Assert.assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
+    }
+
+    @Test
+    public void testGetManifestCached() throws IOException, URISyntaxException {
+        RedisManifest redisManifest = new RedisManifest("cars_pcdm_objects/chevy", ManifestType.PRESENTATION, RepositoryType.FEDORA, FileUtils.readFileToString(presentation.getFile(), "UTF-8"));
+        when(redisManifestRepo.findByPathAndTypeAndRepository(any(String.class), any(ManifestType.class), any(RepositoryType.class))).thenReturn(Optional.of(redisManifest));
+        String manifest = fedoraPresentationManifestService.getManifest("cars_pcdm_objects/chevy", false);
+        Assert.assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
+    }
+
+    @Test
+    public void testGetManifestUpdateCached() throws IOException, URISyntaxException {
+        setupMocks();
+        RedisManifest redisManifest = new RedisManifest("cars_pcdm_objects/chevy", ManifestType.PRESENTATION, RepositoryType.FEDORA, FileUtils.readFileToString(presentation.getFile(), "UTF-8"));
+        when(redisManifestRepo.findByPathAndTypeAndRepository(any(String.class), any(ManifestType.class), any(RepositoryType.class))).thenReturn(Optional.of(redisManifest));
+        String manifest = fedoraPresentationManifestService.getManifest("cars_pcdm_objects/chevy", true);
+        Assert.assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
+    }
+
+    @Test
+    public void testGetManifestWithoutOrder() throws IOException, URISyntaxException {
+        when(httpService.get(eq(PCDM_RDF_URL), any(String.class))).thenReturn(FileUtils.readFileToString(rdfWithoutOrder.getFile(), "UTF-8"));
+
         when(httpService.contentType(any(String.class))).thenReturn("image/png");
 
-        when(httpService.get(eq(FEDORA_URL + "/cars_pcdm_objects/chevy/orderProxies/page_0_proxy/fcr:metadata"))).thenReturn(FileUtils.readFileToString(proxy0Rdf.getFile(), "UTF-8"));
         when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMC9maWxlcy9QVEFSXzgwMHg0MDAucG5n/info.json"))).thenReturn(FileUtils.readFileToString(image0.getFile(), "UTF-8"));
 
-        when(httpService.get(eq(FEDORA_URL + "/cars_pcdm_objects/chevy/orderProxies/page_1_proxy/fcr:metadata"))).thenReturn(FileUtils.readFileToString(proxy1Rdf.getFile(), "UTF-8"));
         when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMS9maWxlcy9jYXIyLmpwZw==/info.json"))).thenReturn(FileUtils.readFileToString(image1.getFile(), "UTF-8"));
 
         String manifest = fedoraPresentationManifestService.getManifest("cars_pcdm_objects/chevy", false);
@@ -71,19 +98,16 @@ public class FedoraPresentationManifestServiceTest extends AbstractFedoraManifes
         Assert.assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
-    @Test
-    public void testGetManifestWithoutOrder() throws IOException, URISyntaxException {
-        when(httpService.get(eq(PCDM_RDF_URL), any(String.class))).thenReturn(FileUtils.readFileToString(rdfWithoutOrder.getFile(), "UTF-8"));
-        
+    private void setupMocks() throws IOException {
+        when(httpService.get(eq(PCDM_RDF_URL), any(String.class))).thenReturn(FileUtils.readFileToString(rdf.getFile(), "UTF-8"));
+
         when(httpService.contentType(any(String.class))).thenReturn("image/png");
 
+        when(httpService.get(eq(FEDORA_URL + "/cars_pcdm_objects/chevy/orderProxies/page_0_proxy/fcr:metadata"))).thenReturn(FileUtils.readFileToString(proxy0Rdf.getFile(), "UTF-8"));
         when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMC9maWxlcy9QVEFSXzgwMHg0MDAucG5n/info.json"))).thenReturn(FileUtils.readFileToString(image0.getFile(), "UTF-8"));
 
+        when(httpService.get(eq(FEDORA_URL + "/cars_pcdm_objects/chevy/orderProxies/page_1_proxy/fcr:metadata"))).thenReturn(FileUtils.readFileToString(proxy1Rdf.getFile(), "UTF-8"));
         when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMS9maWxlcy9jYXIyLmpwZw==/info.json"))).thenReturn(FileUtils.readFileToString(image1.getFile(), "UTF-8"));
-
-        String manifest = fedoraPresentationManifestService.getManifest("cars_pcdm_objects/chevy", false);
-
-        Assert.assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
 }
