@@ -9,6 +9,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class RedisManifestTest {
 
     @Test
+    public void testCreateDefault() {
+        RedisManifest redisManifest = new RedisManifest();
+        Assert.assertNotNull(redisManifest);
+        Assert.assertNotNull(redisManifest.getCreation());
+        Assert.assertEquals("", redisManifest.getAllowed());
+        Assert.assertEquals("", redisManifest.getDisallowed());
+    }
+
+    @Test
     public void testCreate() {
         RedisManifest redisManifest = new RedisManifest("path", ManifestType.COLLECTION, RepositoryType.FEDORA, "{\"@id\":\"http:localhost/fedora/collection?context=pcdm\"}");
         Assert.assertNotNull(redisManifest);

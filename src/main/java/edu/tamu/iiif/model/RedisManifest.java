@@ -13,36 +13,40 @@ public class RedisManifest {
     private String id;
 
     @Indexed
-    private final String path;
+    private String path;
 
     @Indexed
-    private final ManifestType type;
+    private ManifestType type;
 
     @Indexed
-    private final RepositoryType repository;
+    private RepositoryType repository;
 
     @Indexed
-    private final String allowed;
+    private String allowed;
 
     @Indexed
-    private final String disallowed;
+    private String disallowed;
 
     private String json;
 
     private final Long creation;
 
-    public RedisManifest(String path, ManifestType type, RepositoryType repository, String json) {
+    public RedisManifest() {
         this.creation = new Date().getTime();
-        this.path = path;
-        this.type = type;
-        this.repository = repository;
-        this.json = json;
         this.allowed = "";
         this.disallowed = "";
     }
 
+    public RedisManifest(String path, ManifestType type, RepositoryType repository, String json) {
+        this();
+        this.path = path;
+        this.type = type;
+        this.repository = repository;
+        this.json = json;
+    }
+
     public RedisManifest(String path, ManifestType type, RepositoryType repository, String allowed, String disallowed, String json) {
-        this.creation = new Date().getTime();
+        this();
         this.path = path;
         this.type = type;
         this.repository = repository;
