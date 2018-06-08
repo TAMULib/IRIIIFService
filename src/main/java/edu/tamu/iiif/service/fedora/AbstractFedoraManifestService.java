@@ -45,6 +45,7 @@ import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
 import de.digitalcollections.iiif.presentation.model.impl.v2.CanvasImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
@@ -79,19 +80,19 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         throw new NotFoundException("Fedora RDF not found!");
     }
 
-    protected Sequence generateSequence(RdfResource rdfResource) throws IOException, URISyntaxException {
+    protected Sequence generateSequence(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         String id = rdfResource.getResource().getURI();
         PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getRepositoryPath(id));
         Sequence sequence = new SequenceImpl(getFedoraIiifSequenceUri(id), label);
-        sequence.setCanvases(getCanvases(rdfResource));
+        sequence.setCanvases(getCanvases(request, rdfResource));
         return sequence;
     }
 
-    protected Canvas generateCanvas(RdfResource rdfResource) throws IOException, URISyntaxException {
+    protected Canvas generateCanvas(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         String id = rdfResource.getResource().getURI();
         PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getRepositoryPath(id));
 
-        RdfCanvas rdfCanvas = getFedoraRdfCanvas(rdfResource);
+        RdfCanvas rdfCanvas = getFedoraRdfCanvas(request, rdfResource);
 
         Canvas canvas = new CanvasImpl(getFedoraIiifCanvasUri(id), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
 
@@ -162,7 +163,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         throw new NotFoundException("Fedora PCDM RDF not found!");
     }
 
-    private List<Canvas> getCanvases(RdfResource rdfResource) throws IOException, URISyntaxException {
+    private List<Canvas> getCanvases(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         List<Canvas> canvases = new ArrayList<Canvas>();
 
         Optional<String> firstId = getIdByPredicate(rdfResource.getModel(), IANA_FIRST_PREDICATE);
@@ -172,7 +173,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
 
             if (lastId.isPresent()) {
                 Resource firstResource = rdfResource.getModel().getResource(firstId.get());
-                generateOrderedCanvases(new RdfOrderedSequence(rdfResource.getModel(), firstResource, firstId.get(), lastId.get()), canvases);
+                generateOrderedCanvases(request, new RdfOrderedSequence(rdfResource.getModel(), firstResource, firstId.get(), lastId.get()), canvases);
             }
         }
 
@@ -182,7 +183,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
             while (resItr.hasNext()) {
                 Resource resource = resItr.next();
                 if (resource.getProperty(rdfResource.getProperty(PCDM_HAS_FILE_PREDICATE)) != null) {
-                    canvases.add(generateCanvas(new RdfResource(rdfResource, resource)));
+                    canvases.add(generateCanvas(request, new RdfResource(rdfResource, resource)));
                 }
             }
 
@@ -191,7 +192,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         return canvases;
     }
 
-    private void generateOrderedCanvases(RdfOrderedSequence rdfOrderedSequence, List<Canvas> canvases) throws IOException, URISyntaxException {
+    private void generateOrderedCanvases(ManifestRequest request, RdfOrderedSequence rdfOrderedSequence, List<Canvas> canvases) throws IOException, URISyntaxException {
 
         Model model = getRdfModel(rdfOrderedSequence.getResource().getURI());
 
@@ -203,7 +204,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
 
         if (id.isPresent()) {
 
-            canvases.add(generateCanvas(new RdfResource(rdfOrderedSequence, rdfOrderedSequence.getModel().getResource(id.get()))));
+            canvases.add(generateCanvas(request, new RdfResource(rdfOrderedSequence, rdfOrderedSequence.getModel().getResource(id.get()))));
 
             Optional<String> nextId = getIdByPredicate(model, IANA_NEXT_PREDICATE);
 
@@ -211,13 +212,13 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
                 Resource resource = rdfOrderedSequence.getModel().getResource(nextId.get());
                 rdfOrderedSequence.setResource(resource);
                 rdfOrderedSequence.setCurrentId(nextId.get());
-                generateOrderedCanvases(rdfOrderedSequence, canvases);
+                generateOrderedCanvases(request, rdfOrderedSequence, canvases);
             }
         }
 
     }
 
-    private RdfCanvas getFedoraRdfCanvas(RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
+    private RdfCanvas getFedoraRdfCanvas(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
         RdfCanvas rdfCanvas = new RdfCanvas();
 
         String canvasId = rdfResource.getResource().getURI();
@@ -226,27 +227,31 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
 
         String parentId = canvasStatement.getObject().toString();
 
+        // NOTE: all resources within container
+
         for (Resource resource : rdfResource.listResourcesWithPropertyWithId(FEDORA_HAS_PARENT_PREDICATE).toList()) {
 
             if (resource.getProperty(rdfResource.getProperty(FEDORA_HAS_PARENT_PREDICATE)).getObject().toString().equals(parentId)) {
 
                 RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, resource.getURI());
 
-                Image image = generateImage(fileFedoraRdfResource, canvasId);
+                Optional<Image> image = generateImage(request, fileFedoraRdfResource, canvasId);
 
-                rdfCanvas.addImage(image);
+                if (image.isPresent()) {
+                    rdfCanvas.addImage(image.get());
 
-                Optional<ImageResource> imageResource = Optional.ofNullable(image.getResource());
+                    Optional<ImageResource> imageResource = Optional.ofNullable(image.get().getResource());
 
-                if (imageResource.isPresent()) {
-                    int height = imageResource.get().getHeight();
-                    if (height > rdfCanvas.getHeight()) {
-                        rdfCanvas.setHeight(height);
-                    }
+                    if (imageResource.isPresent()) {
+                        int height = imageResource.get().getHeight();
+                        if (height > rdfCanvas.getHeight()) {
+                            rdfCanvas.setHeight(height);
+                        }
 
-                    int width = imageResource.get().getWidth();
-                    if (width > rdfCanvas.getWidth()) {
-                        rdfCanvas.setWidth(width);
+                        int width = imageResource.get().getWidth();
+                        if (width > rdfCanvas.getWidth()) {
+                            rdfCanvas.setWidth(width);
+                        }
                     }
                 }
             }

@@ -9,13 +9,15 @@ import java.net.URISyntaxException;
 
 import org.springframework.stereotype.Service;
 
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.model.ManifestType;
 
 @Service
 public class FedoraImageManifestService extends AbstractFedoraManifestService {
 
-    public String generateManifest(String path) throws IOException, URISyntaxException {
-        String fedoraPath = joinPath(fedoraUrl, path);
+    public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
+        String context = request.getContext();
+        String fedoraPath = joinPath(fedoraUrl, context);
         URI uri = getImageUri(fedoraPath);
         return fetchImageInfo(uri.toString());
     }

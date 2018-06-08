@@ -8,17 +8,19 @@ import java.net.URISyntaxException;
 import org.springframework.stereotype.Service;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.rdf.RdfResource;
 
 @Service
 public class DSpaceSequenceManifestService extends AbstractDSpaceManifestService {
 
-    public String generateManifest(String handle) throws IOException, URISyntaxException {
+    public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
+        String context = request.getContext();
 
-        RdfResource rdfResource = getDSpaceRdfModel(handle);
+        RdfResource rdfResource = getDSpaceRdfModel(context);
 
-        Sequence sequence = generateSequence(rdfResource);
+        Sequence sequence = generateSequence(request, rdfResource);
 
         sequence.setDescription(getDescription(rdfResource));
 

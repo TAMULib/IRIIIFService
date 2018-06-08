@@ -21,6 +21,7 @@ import de.digitalcollections.iiif.presentation.model.api.v2.references.ManifestR
 import de.digitalcollections.iiif.presentation.model.impl.v2.CollectionImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.references.ManifestReferenceImpl;
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.rdf.RdfResource;
@@ -29,14 +30,15 @@ import edu.tamu.iiif.model.rdf.RdfResource;
 public class FedoraCollectionManifestService extends AbstractFedoraManifestService {
 
     @Override
-    protected String generateManifest(String handle) throws URISyntaxException, IOException {
-        return mapper.writeValueAsString(generateCollection(handle));
+    protected String generateManifest(ManifestRequest request) throws URISyntaxException, IOException {
+        String context = request.getContext();
+        return mapper.writeValueAsString(generateCollection(context));
     }
 
-    private Collection generateCollection(String path) throws URISyntaxException, IOException {
-        RdfResource rdfResource = getRdfResource(path);
+    private Collection generateCollection(String context) throws URISyntaxException, IOException {
+        RdfResource rdfResource = getRdfResource(context);
 
-        URI id = buildId(path);
+        URI id = buildId(context);
 
         PropertyValueSimpleImpl label = getTitle(rdfResource);
 

@@ -9,13 +9,15 @@ import java.net.URISyntaxException;
 
 import org.springframework.stereotype.Service;
 
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.model.ManifestType;
 
 @Service
 public class DSpaceImageManifestService extends AbstractDSpaceManifestService {
 
-    public String generateManifest(String path) throws IOException, URISyntaxException {
-        String dspacePath = dspaceWebapp != null && dspaceWebapp.length() > 0 ? joinPath(dspaceUrl, dspaceWebapp, "bitstream", path) : joinPath(dspaceUrl, "bitstream", path);
+    public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
+        String context = request.getContext();
+        String dspacePath = dspaceWebapp != null && dspaceWebapp.length() > 0 ? joinPath(dspaceUrl, dspaceWebapp, "bitstream", context) : joinPath(dspaceUrl, "bitstream", context);
         URI uri = getImageUri(dspacePath);
         return fetchImageInfo(uri.toString());
     }

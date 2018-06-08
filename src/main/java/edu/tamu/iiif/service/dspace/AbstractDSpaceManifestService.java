@@ -40,6 +40,7 @@ import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
 import de.digitalcollections.iiif.presentation.model.impl.v2.CanvasImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
@@ -64,21 +65,21 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         return new RdfResource(model, model.getResource(dspaceRdfUrl));
     }
 
-    protected Sequence generateSequence(RdfResource rdfResource) throws IOException, URISyntaxException {
+    protected Sequence generateSequence(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         String uri = rdfResource.getResource().getURI();
         String handle = getHandle(uri);
         PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(handle);
         Sequence sequence = new SequenceImpl(getDSpaceIiifSequenceUri(handle), label);
-        sequence.setCanvases(getCanvases(rdfResource));
+        sequence.setCanvases(getCanvases(request, rdfResource));
         return sequence;
     }
 
-    protected Canvas generateCanvas(RdfResource rdfResource) throws IOException, URISyntaxException {
+    protected Canvas generateCanvas(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         String uri = rdfResource.getResource().getURI();
         String handle = getHandle(uri);
         PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(handle);
 
-        RdfCanvas rdfCanvas = getDSpaceRdfCanvas(rdfResource);
+        RdfCanvas rdfCanvas = getDSpaceRdfCanvas(request, rdfResource);
 
         Canvas canvas = new CanvasImpl(getDSpaceIiifCanvasUri(handle), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
 
@@ -176,38 +177,41 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         throw new NotFoundException("DSpace RDF not found!");
     }
 
-    private List<Canvas> getCanvases(RdfResource rdfResource) throws IOException, URISyntaxException {
+    private List<Canvas> getCanvases(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         List<Canvas> canvases = new ArrayList<Canvas>();
+        // NOTE: canvas per bitstream
         NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_BITSTREAM_PREDICATE);
         while (collectionIterator.hasNext()) {
             String uri = collectionIterator.next().toString();
-            canvases.add(generateCanvas(new RdfResource(rdfResource, uri)));
+            canvases.add(generateCanvas(request, new RdfResource(rdfResource, uri)));
         }
         return canvases;
     }
 
-    private RdfCanvas getDSpaceRdfCanvas(RdfResource rdfResource) throws URISyntaxException {
+    private RdfCanvas getDSpaceRdfCanvas(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException {
         String uri = rdfResource.getResource().getURI();
         RdfCanvas rdfCanvas = new RdfCanvas();
         String canvasId = getHandle(uri);
 
         RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, uri);
 
-        Image image = generateImage(fileFedoraRdfResource, canvasId);
+        Optional<Image> image = generateImage(request, fileFedoraRdfResource, canvasId);
+        if (image.isPresent()) {
 
-        rdfCanvas.addImage(image);
+            rdfCanvas.addImage(image.get());
 
-        Optional<ImageResource> imageResource = Optional.ofNullable(image.getResource());
+            Optional<ImageResource> imageResource = Optional.ofNullable(image.get().getResource());
 
-        if (imageResource.isPresent()) {
-            int height = imageResource.get().getHeight();
-            if (height > rdfCanvas.getHeight()) {
-                rdfCanvas.setHeight(height);
-            }
+            if (imageResource.isPresent()) {
+                int height = imageResource.get().getHeight();
+                if (height > rdfCanvas.getHeight()) {
+                    rdfCanvas.setHeight(height);
+                }
 
-            int width = imageResource.get().getWidth();
-            if (width > rdfCanvas.getWidth()) {
-                rdfCanvas.setWidth(width);
+                int width = imageResource.get().getWidth();
+                if (width > rdfCanvas.getWidth()) {
+                    rdfCanvas.setWidth(width);
+                }
             }
         }
 

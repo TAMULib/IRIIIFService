@@ -8,22 +8,24 @@ import java.net.URISyntaxException;
 import org.springframework.stereotype.Service;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.rdf.RdfResource;
 
 @Service
 public class DSpaceCanvasManifestService extends AbstractDSpaceManifestService {
 
-    public String generateManifest(String path) throws IOException, URISyntaxException {
-        String handle = extractHandle(path);
+    public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
+        String context = request.getContext();
+        String handle = extractHandle(context);
         RdfResource rdfResource = getDSpaceRdfModel(handle);
         String url = rdfResource.getResource().getURI();
-        Canvas canvas = generateCanvas(new RdfResource(rdfResource, url.replace("rdf/handle", dspaceWebapp != null && dspaceWebapp.length() > 0 ? dspaceWebapp + "/bitstream" : "bitstream").replaceAll(handle, path)));
+        Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, url.replace("rdf/handle", dspaceWebapp != null && dspaceWebapp.length() > 0 ? dspaceWebapp + "/bitstream" : "bitstream").replaceAll(handle, context)));
         return mapper.writeValueAsString(canvas);
     }
 
-    private String extractHandle(String path) {
-        String[] parts = path.split("/");
+    private String extractHandle(String context) {
+        String[] parts = context.split("/");
         return parts[0] + "/" + parts[1];
     }
 

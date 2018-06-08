@@ -13,10 +13,12 @@ public class RedisManifestTest {
         RedisManifest redisManifest = new RedisManifest();
         Assert.assertNotNull(redisManifest);
         Assert.assertNotNull(redisManifest.getCreation());
+        Assert.assertEquals("", redisManifest.getAllowed());
+        Assert.assertEquals("", redisManifest.getDisallowed());
     }
 
     @Test
-    public void testCreateComplete() {
+    public void testCreate() {
         RedisManifest redisManifest = new RedisManifest("path", ManifestType.COLLECTION, RepositoryType.FEDORA, "{\"@id\":\"http:localhost/fedora/collection?context=pcdm\"}");
         Assert.assertNotNull(redisManifest);
         Assert.assertNotNull(redisManifest.getCreation());
@@ -24,21 +26,32 @@ public class RedisManifestTest {
         Assert.assertEquals(ManifestType.COLLECTION, redisManifest.getType());
         Assert.assertEquals(RepositoryType.FEDORA, redisManifest.getRepository());
         Assert.assertEquals("{\"@id\":\"http:localhost/fedora/collection?context=pcdm\"}", redisManifest.getJson());
+        Assert.assertEquals("", redisManifest.getAllowed());
+        Assert.assertEquals("", redisManifest.getDisallowed());
+    }
+
+    @Test
+    public void testCreateComplete() {
+        RedisManifest redisManifest = new RedisManifest("path", ManifestType.COLLECTION, RepositoryType.FEDORA, "apple,banana", "cat,dog", "{\"@id\":\"http:localhost/fedora/collection?context=pcdm\"}");
+        Assert.assertNotNull(redisManifest);
+        Assert.assertNotNull(redisManifest.getCreation());
+        Assert.assertEquals("path", redisManifest.getPath());
+        Assert.assertEquals(ManifestType.COLLECTION, redisManifest.getType());
+        Assert.assertEquals(RepositoryType.FEDORA, redisManifest.getRepository());
+        Assert.assertEquals("{\"@id\":\"http:localhost/fedora/collection?context=pcdm\"}", redisManifest.getJson());
+        Assert.assertEquals("apple,banana", redisManifest.getAllowed());
+        Assert.assertEquals("cat,dog", redisManifest.getDisallowed());
     }
 
     @Test
     public void testUpdate() {
-        RedisManifest redisManifest = new RedisManifest("path", ManifestType.COLLECTION, RepositoryType.FEDORA, "{\"@id\":\"http:localhost/fedora/collection?context=pcdm\"}");
+        RedisManifest redisManifest = new RedisManifest("path", ManifestType.COLLECTION, RepositoryType.FEDORA, "apple,banana", "cat,dog", "{\"@id\":\"http:localhost/fedora/collection?context=pcdm\"}");
         redisManifest.setId("1");
-        redisManifest.setPath("new/path");
-        redisManifest.setType(ManifestType.PRESENTATION);
-        redisManifest.setRepository(RepositoryType.DSPACE);
         redisManifest.setJson("{\"@id\":\"http:localhost/dspace/presentation?context=123456789/123456\"}");
         Assert.assertEquals("1", redisManifest.getId());
-        Assert.assertEquals("new/path", redisManifest.getPath());
-        Assert.assertEquals(ManifestType.PRESENTATION, redisManifest.getType());
-        Assert.assertEquals(RepositoryType.DSPACE, redisManifest.getRepository());
         Assert.assertEquals("{\"@id\":\"http:localhost/dspace/presentation?context=123456789/123456\"}", redisManifest.getJson());
+        Assert.assertEquals("apple,banana", redisManifest.getAllowed());
+        Assert.assertEquals("cat,dog", redisManifest.getDisallowed());
     }
 
 }

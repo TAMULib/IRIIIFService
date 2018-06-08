@@ -1,19 +1,24 @@
 package edu.tamu.iiif.service;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.apache.http.Header;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -40,9 +45,6 @@ public class HttpService {
     @Value("${iiif.service.socket.timeout}")
     private int socketTimeout;
 
-    @Value("${iiif.service.request.retries}")
-    private int retries;
-
     private CloseableHttpClient httpClient;
 
     @PostConstruct
@@ -57,53 +59,72 @@ public class HttpService {
     }
 
     public String get(String url) {
-        LOG.debug("Request: " + url);
-        return attemptGet(url, EMPTY_PARAMETERS, 0);
+        LOG.debug("GET: " + url);
+        return get(url, EMPTY_PARAMETERS);
     }
 
     public String get(String url, String context) {
-        LOG.debug("Request: " + url.concat("?context=").concat(context));
-        return attemptGet(url, Arrays.asList(new BasicNameValuePair("context", context)), 0);
+        LOG.debug("GET: " + url.concat("?context=").concat(context));
+        return get(url, Arrays.asList(new BasicNameValuePair("context", context)));
     }
 
-    private String attemptGet(String url, List<NameValuePair> parameters, int retry) {
-        String response = null;
+    public String contentType(String url) {
+        LOG.debug("HEAD: " + url);
+        String mimeType = null;
         try {
-            response = get(url, parameters);
-        } catch (IOException e) {
-            if (retry < retries) {
-                LOG.debug("Request failed. Retry attempt " + retry + ".");
-                response = attemptGet(url, parameters, ++retry);
+            CloseableHttpResponse response = request(craftHead(url, EMPTY_PARAMETERS));
+            Optional<Header> contentType = Optional.ofNullable(response.getFirstHeader("Content-Type"));
+            if (contentType.isPresent()) {
+                mimeType = contentType.get().getValue();
+                LOG.debug("Mime Type: " + mimeType);
             } else {
-                LOG.warn(e.getMessage());
+                LOG.warn("No Content-Type!");
             }
+            response.close();
+        } catch (IOException e) {
+            LOG.warn("Error performing GET request: " + url);
         } catch (URISyntaxException e) {
-            LOG.warn(e.getMessage());
+            LOG.warn("Invalid URI: " + url);
+        }
+        return mimeType;
+    }
+
+    private String get(String url, List<NameValuePair> parameters) {
+        String body = null;
+        try {
+            CloseableHttpResponse response = request(craftGet(url, parameters));
+            body = EntityUtils.toString(response.getEntity());
+            response.close();
+        } catch (IOException e) {
+            LOG.warn("Error performing GET request: " + url);
+        } catch (URISyntaxException e) {
+            LOG.warn("Invalid URI: " + url);
+        }
+        return body;
+    }
+
+    private CloseableHttpResponse request(HttpRequestBase request) throws IOException, URISyntaxException {
+        CloseableHttpResponse response = httpClient.execute(request);
+        StatusLine sl = response.getStatusLine();
+        int sc = sl.getStatusCode();
+        if (sc < 200 || sc >= 300) {
+            throw new IOException("Incorrect response status: " + sc);
         }
         return response;
     }
 
-    private String get(String url, List<NameValuePair> parameters) throws IOException, URISyntaxException {
-        CloseableHttpResponse response = httpClient.execute(craftRequest(url, parameters));
-        try {
-            StatusLine sl = response.getStatusLine();
-            int sc = sl.getStatusCode();
-            switch (sc) {
-            case 200:
-                break;
-            default:
-                throw new IOException("Incorrect response status: " + sc);
-            }
-            return EntityUtils.toString(response.getEntity());
-        } finally {
-            response.close();
-        }
+    private HttpGet craftGet(String url, List<NameValuePair> parameters) throws URISyntaxException {
+        return new HttpGet(buildUrl(url, parameters));
     }
 
-    private HttpGet craftRequest(String url, List<NameValuePair> parameters) throws URISyntaxException {
+    private HttpHead craftHead(String url, List<NameValuePair> parameters) throws URISyntaxException {
+        return new HttpHead(buildUrl(url, parameters));
+    }
+
+    private URI buildUrl(String url, List<NameValuePair> parameters) throws URISyntaxException {
         URIBuilder builder = new URIBuilder(url);
         builder.setParameters(parameters);
-        return new HttpGet(builder.build());
+        return builder.build();
     }
 
 }

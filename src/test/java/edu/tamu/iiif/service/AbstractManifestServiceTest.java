@@ -34,12 +34,12 @@ public abstract class AbstractManifestServiceTest implements ManifestServiceTest
     protected HttpService httpService;
 
     @Mock
-    private RedisManifestRepo redisManifestRepo;
+    protected RedisManifestRepo redisManifestRepo;
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        when(redisManifestRepo.findByPathAndTypeAndRepository(any(String.class), any(ManifestType.class), any(RepositoryType.class))).thenReturn(Optional.empty());
+        when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(RepositoryType.class), any(String.class), any(String.class))).thenReturn(Optional.empty());
     }
 
 }

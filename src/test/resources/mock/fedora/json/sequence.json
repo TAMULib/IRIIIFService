@@ -13,6 +13,7 @@
       "resource" : {
         "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMC9maWxlcy9QVEFSXzgwMHg0MDAucG5n/full/full/0/default.jpg",
         "@type" : "dctypes:Image",
+        "format": "image/png",
         "height" : 400,
         "service" : {
           "label" : "Fedora IIIF Image Resource Service",
@@ -38,6 +39,7 @@
       "resource" : {
         "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMS9maWxlcy9jYXIyLmpwZw==/full/full/0/default.jpg",
         "@type" : "dctypes:Image",
+        "format": "image/png",
         "height" : 1080,
         "service" : {
           "label" : "Fedora IIIF Image Resource Service",

@@ -6,6 +6,7 @@ import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.tamu.iiif.controller.AbstractManifestController;
+import edu.tamu.iiif.controller.ManifestBuilder;
 import edu.tamu.iiif.service.fedora.FedoraPresentationManifestService;
 
 @RestController
@@ -23,8 +25,16 @@ import edu.tamu.iiif.service.fedora.FedoraPresentationManifestService;
 public class FedoraPresentationManifestController extends AbstractManifestController<FedoraPresentationManifestService> {
 
     @RequestMapping("/" + PRESENTATION_IDENTIFIER)
-    public void presentation(HttpServletResponse response, @RequestParam(value = CONTEXT_IDENTIFIER, required = true) String path, @RequestParam(value = "update", required = false, defaultValue = "false") boolean update) throws IOException, URISyntaxException {
-        sendManifest(response, path, update);
+    public void presentation(
+        // @formatter:off
+        HttpServletResponse response,
+        @RequestParam(value = CONTEXT_IDENTIFIER, required = true) String path,
+        @RequestParam(value = "update", required = false, defaultValue = "false") boolean update,
+        @RequestParam(value = "allow", required = false, defaultValue = "") List<String> allowed,
+        @RequestParam(value = "disallow", required = false, defaultValue = "") List<String> disallowed
+        // @formatter:on
+    ) throws IOException, URISyntaxException {
+        sendManifest(ManifestBuilder.of(response, path, update, allowed, disallowed));
     }
 
 }

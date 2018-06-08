@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import edu.tamu.iiif.controller.AbstractManifestControllerTest;
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.service.fedora.FedoraSequenceManifestService;
 
 @WebMvcTest(value = FedoraSequenceManifestController.class, secure = false)
@@ -30,7 +31,7 @@ public class FedoraSequenceManifestControllerTest extends AbstractManifestContro
     @Test
     public void testGetManifest() throws Exception {
         String expected = FileUtils.readFileToString(json.getFile(), "UTF-8");
-        when(fedaorSequenceManifestService.getManifest(any(String.class), any(Boolean.class))).thenReturn(expected);
+        when(fedaorSequenceManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/fedora/sequence?context=cars_pcdm_objects/chevy").accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
