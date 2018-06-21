@@ -1,6 +1,7 @@
 package edu.tamu.iiif.resolver;
 
 import java.lang.annotation.Annotation;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,34 +18,23 @@ import edu.tamu.iiif.annotation.Context;
 
 public class ContextArgumentResolver implements HandlerMethodArgumentResolver {
 
+    private AntPathMatcher pathMatcher = new AntPathMatcher();
+
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mvContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
         String bestMatchPattern = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
-        AntPathMatcher apm = new AntPathMatcher();
-        String contextPath = apm.extractPathWithinPattern(bestMatchPattern, path);
-        return contextPath;
+        return pathMatcher.extractPathWithinPattern(bestMatchPattern, path);
     }
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return findMethodAnnotation(Context.class, parameter) != null;
+        return findContextParameterAnnotation(parameter).isPresent();
     }
 
-    private <T extends Annotation> T findMethodAnnotation(Class<T> annotationClass, MethodParameter parameter) {
-        T annotation = parameter.getParameterAnnotation(annotationClass);
-        if (annotation != null) {
-            return annotation;
-        }
-        Annotation[] annotationsToSearch = parameter.getParameterAnnotations();
-        for (Annotation toSearch : annotationsToSearch) {
-            annotation = AnnotationUtils.findAnnotation(toSearch.annotationType(), annotationClass);
-            if (annotation != null) {
-                return annotation;
-            }
-        }
-        return null;
+    private Optional<Context> findContextParameterAnnotation(MethodParameter parameter) {
+        return Optional.ofNullable(parameter.getParameterAnnotation(Context.class));
     }
 
 }
