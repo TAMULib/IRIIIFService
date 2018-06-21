@@ -32,7 +32,7 @@ public class FedoraCanvasManifestControllerTest extends AbstractManifestControll
     public void testGetManifest() throws Exception {
         String expected = FileUtils.readFileToString(json.getFile(), "UTF-8");
         when(fedaorCanvasManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/fedora/canvas?context=cars_pcdm_objects/chevy/pages/page_0").accept(MediaType.APPLICATION_JSON);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/fedora/canvas/cars_pcdm_objects/chevy/pages/page_0").accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }

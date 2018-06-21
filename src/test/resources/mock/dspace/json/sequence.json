@@ -1,15 +1,15 @@
 {
-  "@id": "http://localhost:9003/dspace/sequence?context=123456789/158308",
+  "@id": "http://localhost:9003/dspace/sequence/123456789/158308",
   "@type": "sc:Sequence",
   "canvases": [{
-    "@id": "http://localhost:9003/dspace/canvas?context=123456789/158308/1/sports-car-146873_960_720.png",
+    "@id": "http://localhost:9003/dspace/canvas/123456789/158308/1/sports-car-146873_960_720.png",
     "@type": "sc:Canvas",
     "height": 480,
     "images": [{
       "@id": "http://localhost:8182/iiif/2/ZHNwYWNlOnhtbHVpL2JpdHN0cmVhbS8xMjM0NTY3ODkvMTU4MzA4LzEvc3BvcnRzLWNhci0xNDY4NzNfOTYwXzcyMC5wbmc=/info.json",
       "@type": "oa:Annotation",
       "motivation": "sc:painting",
-      "on": "http://localhost:9003/dspace/canvas?context=123456789/158308/1/sports-car-146873_960_720.png",
+      "on": "http://localhost:9003/dspace/canvas/123456789/158308/1/sports-car-146873_960_720.png",
       "resource": {
         "@id": "http://localhost:8182/iiif/2/ZHNwYWNlOnhtbHVpL2JpdHN0cmVhbS8xMjM0NTY3ODkvMTU4MzA4LzEvc3BvcnRzLWNhci0xNDY4NzNfOTYwXzcyMC5wbmc=/full/full/0/default.jpg",
         "@type": "dctypes:Image",

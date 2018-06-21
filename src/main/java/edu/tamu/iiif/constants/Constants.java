@@ -12,8 +12,6 @@ public class Constants {
     public final static String CANVAS_IDENTIFIER = "canvas";
     public final static String IMAGE_IDENTIFIER = "image";
 
-    public final static String CONTEXT_IDENTIFIER = "context";
-
     // Fedora
     public final static String FEDORA_FCR_METADATA = "/fcr:metadata";
     public final static String FEDORA_X_TURTLE_ACCEPT_TYPE = "application/x-turtle";

@@ -1,7 +1,6 @@
 package edu.tamu.iiif.service.fedora;
 
 import static edu.tamu.iiif.constants.Constants.CANVAS_IDENTIFIER;
-import static edu.tamu.iiif.constants.Constants.CONTEXT_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_DESCRIPTION_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TITLE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.FEDORA_FCR_METADATA;
@@ -132,8 +131,9 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
         return getFedoraIiifUri(url, CANVAS_IDENTIFIER);
     }
 
+    // TODO: update to match getDSpaceIiifUrl
     private URI getFedoraIiifUri(String url, String type) throws URISyntaxException {
-        return URI.create(url.replace(fedoraUrl + "/", getIiifServiceUrl() + "/" + type + "?" + CONTEXT_IDENTIFIER + "="));
+        return URI.create(url.replace(fedoraUrl + "/", getIiifServiceUrl() + "/" + type + "/"));
     }
 
     @Override

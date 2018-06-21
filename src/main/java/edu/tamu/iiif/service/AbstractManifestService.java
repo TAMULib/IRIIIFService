@@ -1,6 +1,5 @@
 package edu.tamu.iiif.service;
 
-import static edu.tamu.iiif.constants.Constants.CONTEXT_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_PREFIX;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_PREFIX;
 import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_CONTEXT;
@@ -110,7 +109,7 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected URI buildId(String path) throws URISyntaxException {
-        return new URI(getIiifServiceUrl() + "/" + getManifestType().getName() + "?" + CONTEXT_IDENTIFIER + "=" + path);
+        return new URI(getIiifServiceUrl() + "/" + getManifestType().getName() + "/" + path);
     }
 
     protected String getLogo(RdfResource rdfResource) {

@@ -2,7 +2,6 @@ package edu.tamu.iiif.service.dspace;
 
 import static edu.tamu.iiif.constants.Constants.CANVAS_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.COLLECECTION_IDENTIFIER;
-import static edu.tamu.iiif.constants.Constants.CONTEXT_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_BITSTREAM_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_COLLECTION_PREDICATE;
@@ -166,7 +165,7 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
     }
 
     private URI getDSpaceIiifUri(String handle, String type) throws URISyntaxException {
-        return URI.create(getIiifServiceUrl() + "/" + type + "?" + CONTEXT_IDENTIFIER + "=" + handle);
+        return URI.create(getIiifServiceUrl() + "/" + type + "/" + handle);
     }
 
     private String getRdf(String dspaceRdfUrl) throws NotFoundException {
