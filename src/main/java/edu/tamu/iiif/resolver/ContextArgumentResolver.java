@@ -1,12 +1,10 @@
 package edu.tamu.iiif.resolver;
 
-import java.lang.annotation.Annotation;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.core.MethodParameter;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -25,7 +23,12 @@ public class ContextArgumentResolver implements HandlerMethodArgumentResolver {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
         String bestMatchPattern = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
-        return pathMatcher.extractPathWithinPattern(bestMatchPattern, path);
+        String query = pathMatcher.extractPathWithinPattern(bestMatchPattern, path);
+        int index;
+        if ((index = query.indexOf("?")) >= 0) {
+            query = query.substring(0, index);
+        }
+        return query;
     }
 
     @Override
