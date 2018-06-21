@@ -32,7 +32,7 @@ public class FedoraSequenceManifestControllerTest extends AbstractManifestContro
     public void testGetManifest() throws Exception {
         String expected = FileUtils.readFileToString(json.getFile(), "UTF-8");
         when(fedaorSequenceManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/fedora/sequence?context=cars_pcdm_objects/chevy").accept(MediaType.APPLICATION_JSON);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/fedora/sequence/cars_pcdm_objects/chevy").accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }

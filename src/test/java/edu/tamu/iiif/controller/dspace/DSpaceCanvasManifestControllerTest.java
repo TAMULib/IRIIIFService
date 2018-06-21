@@ -32,7 +32,7 @@ public class DSpaceCanvasManifestControllerTest extends AbstractManifestControll
     public void testGetManifest() throws Exception {
         String expected = FileUtils.readFileToString(json.getFile(), "UTF-8");
         when(dSpaceCanvasManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/dspace/canvas?context=123456789/158308/1/sports-car-146873_960_720.png").accept(MediaType.APPLICATION_JSON);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/dspace/canvas/123456789/158308/1/sports-car-146873_960_720.png").accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }

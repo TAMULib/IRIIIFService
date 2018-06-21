@@ -1,15 +1,15 @@
 {
-  "@id" : "http://localhost:9003/fedora/sequence?context=cars_pcdm_objects/chevy",
+  "@id" : "http://localhost:9003/fedora/sequence/cars_pcdm_objects/chevy",
   "@type" : "sc:Sequence",
   "canvases" : [ {
-    "@id" : "http://localhost:9003/fedora/canvas?context=cars_pcdm_objects/chevy/pages/page_0",
+    "@id" : "http://localhost:9003/fedora/canvas/cars_pcdm_objects/chevy/pages/page_0",
     "@type" : "sc:Canvas",
     "height" : 400,
     "images" : [ {
       "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMC9maWxlcy9QVEFSXzgwMHg0MDAucG5n/info.json",
       "@type" : "oa:Annotation",
       "motivation" : "sc:painting",
-      "on" : "http://localhost:9003/fedora/canvas?context=cars_pcdm_objects/chevy/pages/page_0",
+      "on" : "http://localhost:9003/fedora/canvas/cars_pcdm_objects/chevy/pages/page_0",
       "resource" : {
         "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMC9maWxlcy9QVEFSXzgwMHg0MDAucG5n/full/full/0/default.jpg",
         "@type" : "dctypes:Image",
@@ -28,14 +28,14 @@
     "metadata" : [ ],
     "width" : 800
   }, {
-    "@id" : "http://localhost:9003/fedora/canvas?context=cars_pcdm_objects/chevy/pages/page_1",
+    "@id" : "http://localhost:9003/fedora/canvas/cars_pcdm_objects/chevy/pages/page_1",
     "@type" : "sc:Canvas",
     "height" : 1080,
     "images" : [ {
       "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMS9maWxlcy9jYXIyLmpwZw==/info.json",
       "@type" : "oa:Annotation",
       "motivation" : "sc:painting",
-      "on" : "http://localhost:9003/fedora/canvas?context=cars_pcdm_objects/chevy/pages/page_1",
+      "on" : "http://localhost:9003/fedora/canvas/cars_pcdm_objects/chevy/pages/page_1",
       "resource" : {
         "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMS9maWxlcy9jYXIyLmpwZw==/full/full/0/default.jpg",
         "@type" : "dctypes:Image",

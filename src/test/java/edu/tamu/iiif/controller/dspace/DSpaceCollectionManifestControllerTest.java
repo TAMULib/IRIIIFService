@@ -32,7 +32,7 @@ public class DSpaceCollectionManifestControllerTest extends AbstractManifestCont
     public void testGetManifest() throws Exception {
         String expected = FileUtils.readFileToString(json.getFile(), "UTF-8");
         when(dSpaceCollectionManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/dspace/collection?context=123456789/158298").accept(MediaType.APPLICATION_JSON);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/dspace/collection/123456789/158298").accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }
