@@ -32,16 +32,7 @@ public class FedoraCollectionManifestControllerTest extends AbstractManifestCont
     public void testGetManifest() throws Exception {
         String expected = FileUtils.readFileToString(json.getFile(), "UTF-8");
         when(fedaorCollectionManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/fedora/collection/cars_pcdm").accept(MediaType.APPLICATION_JSON);
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-        JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
-    }
-    
-    @Test
-    public void testGetManifestUpdate() throws Exception {
-        String expected = FileUtils.readFileToString(json.getFile(), "UTF-8");
-        when(fedaorCollectionManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/fedora/collection/cars_pcdm?update=true").accept(MediaType.APPLICATION_JSON);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/fedora/collection/cars_pcdm").param("update", "true").accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }
