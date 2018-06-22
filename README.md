@@ -107,13 +107,13 @@
 
 # REST API
 
+> All REST endpoints have these optional URL query parameters.
+
 | **Query Parameter** | **Value** | **Functionality** |
 | :----------- | :--------- | :---------------- |
 | update | true | updates the redis cache for the requested manifest |
 | allow | semicolon separated string of MIME types | only process the provided MIME types for resources |
 | disallow | semicolon separated string of MIME types | exclude provided MIME types for resources |
-
-> All of the following REST endpoints have these optional URL query parameters.
 
 ## Fedora
 
