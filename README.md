@@ -106,15 +106,23 @@
 </details>
 
 # REST API
-> URL Query Parameters <br/> - **update**: updates the redis cache for the requested manifest <br/> - **allow**: only process the provided MIME types for resources <br/> - **disallow**: exclude provided MIME types for resources
+
+| **Query Parameter** | **Value** | **Functionality** |
+| :----------- | :--------- | :---------------- |
+| update | true | updates the redis cache for the requested manifest |
+| allow | semicolon separated string of MIME types | only process the provided MIME types for resources |
+| disallow | semicolon separated string of MIME types | exclude provided MIME types for resources |
+
+> All of the following REST endpoints have these optional URL query parameters.
+
 ## Fedora
 
 | **Title** | Collection |
 | :-------- | :--------- |
 | **Description** | Returns a generated or cached collection manifest for the provided Fedora container. |
-| **URL** | ```/fedora/collection``` |
+| **URL** | ```/fedora/collection/**/*``` |
 | **Method** | **GET** |
-| **URL Parameters** | **Optional:**<br/>```update=[boolean]```<br/>**Optional:**<br/>```allow=[semicolon separated string of MIME types]```<br/>**Optional:**<br/>```disallow=[semicolon separated string of MIME types]``` |
+| **URL Parameters** | **Optional:**<br/>```update=[boolean]```<br/>```allow=[semicolon separated string of MIME types]```<br/>```disallow=[semicolon separated string of MIME types]``` |
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{ ```<br/>&emsp;```"@context" : "http://iiif.io/api/presentation/2/context.json", ```<br/>&emsp;```"@id" : "http://localhost:8080/fedora/collection/cars_pcdm", ```<br/>&emsp;```"@type" : "sc:Collection", ```<br/>&emsp;```"collections" : [ ], ```<br/>&emsp;```"description" : "N/A", ```<br/>&emsp;```"label" : "Cars", ```<br/>&emsp;```"logo" : "https://localhost/assets/downloads/logos/Logo.png", ```<br/>&emsp;```"manifests" : [ { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:8080/fedora/presentation/cars_pcdm_objects/vintage", ```<br/>&emsp;&emsp;```"@type" : "sc:Manifest", ```<br/>&emsp;&emsp;```"label" : "Vintage"```<br/>&emsp;```}, { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:8080/fedora/presentation/cars_pcdm_objects/lamborghini", ```<br/>&emsp;&emsp;```"@type" : "sc:Manifest", ```<br/>&emsp;&emsp;```"label" : "Lamborghini"```<br/>&emsp;```}], ```<br/>&emsp;```"metadata" : [ ], ```<br/>&emsp;```"viewingHint" : "multi-part" ```<br/>&emsp;```}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
@@ -124,7 +132,7 @@
 | **Title** | Presentation |
 | :-------- | :--------- |
 | **Description** | Returns a generated or cached presentation manifest for the provided Fedora container. |
-| **URL** | ```/fedora/presentation``` |
+| **URL** | ```/fedora/presentation/**/*``` |
 | **Method** | **GET** |
 | **URL Parameters** | **Optional:**<br/>```update=[boolean]```<br/>**Optional:**<br/>```allow=[semicolon separated string of MIME types]```<br/>**Optional:**<br/>```disallow=[semicolon separated string of MIME types]``` |
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{ ```<br/>&emsp;```"@context" : "http://iiif.io/api/presentation/2/context.json", ```<br/>&emsp;```"@id" : "http://localhost:9003/fedora/presentation/cars_pcdm_objects/vintage", ```<br/>&emsp;```"@type" : "sc:Manifest", ```<br/>&emsp;```"description" : "Vintage", ```<br/>&emsp;```"label" : "Vintage", ```<br/>&emsp;```"logo" : "https://localhost/assets/downloads/logos/Logo.png", ```<br/>&emsp;```"metadata" : [ { ```<br/>&emsp;&emsp;```"label" : "Title", ```<br/>&emsp;&emsp;```"value" : "Vintage" ```<br/>&emsp;```}, { ```<br/>&emsp;&emsp;```"label" : "Description", ```<br/>&emsp;&emsp;```"value" : "A vintage car" ```<br/>&emsp;```} ], ```<br/>&emsp;```"sequences" : [ { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:9003/fedora/sequence/cars_pcdm_objects/vintage", ```<br/>&emsp;&emsp;```"@type" : "sc:Sequence", ```<br/>&emsp;&emsp;```"canvases" : [ { ```<br/>&emsp;&emsp;&emsp;```"@id" : "http://localhost:9003/fedora/canvas/cars_pcdm_objects/vintage/pages/page_0", ```<br/>&emsp;&emsp;&emsp;```"@type" : "sc:Canvas", ```<br/>&emsp;&emsp;&emsp;```"height" : 1080, ```<br/>&emsp;&emsp;&emsp;```"images" : [ { ```<br/>&emsp;&emsp;&emsp;&emsp;```"@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn/info.json", ```<br/>&emsp;&emsp;&emsp;&emsp;```"@type" : "oa:Annotation", ```<br/>&emsp;&emsp;&emsp;&emsp;```"motivation" : "sc:painting", ```<br/>&emsp;&emsp;&emsp;&emsp;```"on" : "http://localhost:9003/fedora/canvas/cars_pcdm_objects/vintage/pages/page_0", ```<br/>&emsp;&emsp;&emsp;&emsp;```"resource" : { ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn/full/full/0/default.jpg", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"@type" : "dctypes:Image", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"format" : "image/jpeg", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"height" : 1080, ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"service" : { ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;```"label" : "Fedora IIIF Image Resource Service", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;```"profile" : "http://iiif.io/api/image/2/level0.json", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;```"@context" : "http://iiif.io/api/image/2/context.json", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;```"@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn" ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```}, ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"width" : 1920 ```<br/>&emsp;&emsp;&emsp;&emsp;```} ```<br/>&emsp;&emsp;&emsp;```} ], ```<br/>&emsp;&emsp;&emsp;```"label" : "Page 0", ```<br/>&emsp;&emsp;&emsp;```"metadata" : [ ], ```<br/>&emsp;&emsp;&emsp;```"width" : 1920 ```<br/>&emsp;&emsp;```} ], ```<br/>&emsp;&emsp;```"label" : "Vintage" ```<br/>&emsp;```} ], ```<br/>&emsp;```"thumbnail" : { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn/full/!200,200/0/default.jpg", ```<br/>&emsp;&emsp;```"services" : [ { ```<br/>&emsp;&emsp;&emsp;```"@context" : "http://iiif.io/api/image/2/context.json", ```<br/>&emsp;&emsp;&emsp;```"@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn", ```<br/>&emsp;&emsp;&emsp;```"label" : "Fedora IIIF Image Resource Service", ```<br/>&emsp;&emsp;&emsp;```"profile" : "http://iiif.io/api/image/2/level0.json" ```<br/>&emsp;&emsp;```} ] ```<br/>&emsp;```} ```<br/>```}``` |
@@ -136,7 +144,7 @@
 | **Title** | Sequence |
 | :-------- | :--------- |
 | **Description** | Returns a generated or cached sequence manifest for the provided Fedora container. |
-| **URL** | ```/fedora/sequence``` |
+| **URL** | ```/fedora/sequence/**/*``` |
 | **Method** | **GET** |
 | **URL Parameters** | **Optional:**<br/>```update=[boolean]```<br/>**Optional:**<br/>```allow=[semicolon separated string of MIME types]```<br/>**Optional:**<br/>```disallow=[semicolon separated string of MIME types]``` |
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
@@ -148,7 +156,7 @@
 | **Title** | Canvas |
 | :-------- | :--------- |
 | **Description** | Returns a generated or cached sequence manifest for the provided Fedora container. |
-| **URL** | ```/fedora/canvas``` |
+| **URL** | ```/fedora/canvas/**/*``` |
 | **Method** | **GET** |
 | **URL Parameters** | **Optional:**<br/>```update=[boolean]```<br/>**Optional:**<br/>```allow=[semicolon separated string of MIME types]```<br/>**Optional:**<br/>```disallow=[semicolon separated string of MIME types]``` |
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
@@ -160,7 +168,7 @@
 | **Title** | Image |
 | :-------- | :--------- |
 | **Description** | Returns a generated or cached image manifest for the provided Fedora resource. |
-| **URL** | ```/fedora/image``` |
+| **URL** | ```/fedora/image/**/*``` |
 | **Method** | **GET** |
 | **URL Parameters** | **Optional:**<br/>```update=[boolean]```<br/>**Optional:**<br/>```allow=[semicolon separated string of MIME types]```<br/>**Optional:**<br/>```disallow=[semicolon separated string of MIME types]``` |
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
@@ -173,7 +181,7 @@
 | **Title** | Collection |
 | :-------- | :--------- |
 | **Description** | Returns a generated or cached collection manifest for the provided DSpace handle. |
-| **URL** | ```/dspace/collection``` |
+| **URL** | ```/dspace/collection/**/*``` |
 | **Method** | **GET** |
 | **URL Parameters** | **Optional:**<br/>```update=[boolean]```<br/>**Optional:**<br/>```allow=[semicolon separated string of MIME types]```<br/>**Optional:**<br/>```disallow=[semicolon separated string of MIME types]``` |
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
@@ -185,7 +193,7 @@
 | **Title** | Presentation |
 | :-------- | :--------- |
 | **Description** | Returns a generated or cached presentation manifest for the provided DSpace handle. |
-| **URL** | ```/dspace/presentation``` |
+| **URL** | ```/dspace/presentation/**/*``` |
 | **Method** | **GET** |
 | **URL Parameters** | **Optional:**<br/>```update=[boolean]```<br/>**Optional:**<br/>```allow=[semicolon separated string of MIME types]```<br/>**Optional:**<br/>```disallow=[semicolon separated string of MIME types]``` |
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
@@ -197,7 +205,7 @@
 | **Title** | Sequence |
 | :-------- | :--------- |
 | **Description** | Returns a generated or cached sequence manifest for the provided DSpace handle. |
-| **URL** | ```/dspace/sequence``` |
+| **URL** | ```/dspace/sequence/**/*``` |
 | **Method** | **GET** |
 | **URL Parameters** | **Optional:**<br/>```update=[boolean]```<br/>**Optional:**<br/>```allow=[semicolon separated string of MIME types]```<br/>**Optional:**<br/>```disallow=[semicolon separated string of MIME types]``` |
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
@@ -209,7 +217,7 @@
 | **Title** | Canvas |
 | :-------- | :--------- |
 | **Description** | Returns a generated or cached sequence manifest for the provided DSpace handle and bitstream path. |
-| **URL** | ```/dspace/canvas``` |
+| **URL** | ```/dspace/canvas/**/*``` |
 | **Method** | **GET** |
 | **URL Parameters** | **Optional:**<br/>```update=[boolean]```<br/>**Optional:**<br/>```allow=[semicolon separated string of MIME types]```<br/>**Optional:**<br/>```disallow=[semicolon separated string of MIME types]``` |
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
@@ -221,7 +229,7 @@
 | **Title** | Image |
 | :-------- | :--------- |
 | **Description** | Returns a generated or cached image manifest for the provided DSpace handle and bitstream path. |
-| **URL** | ```/dspace/image``` |
+| **URL** | ```/dspace/image/**/*``` |
 | **Method** | **GET** |
 | **URL Parameters** | **Optional:**<br/>```update=[boolean]```<br/>**Optional:**<br/>```allow=[semicolon separated string of MIME types]```<br/>**Optional:**<br/>```disallow=[semicolon separated string of MIME types]``` |
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
