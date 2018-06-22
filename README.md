@@ -126,7 +126,7 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{ ```<br/>&emsp;```"@context" : "http://iiif.io/api/presentation/2/context.json", ```<br/>&emsp;```"@id" : "http://localhost:8080/fedora/collection/cars_pcdm", ```<br/>&emsp;```"@type" : "sc:Collection", ```<br/>&emsp;```"collections" : [ ], ```<br/>&emsp;```"description" : "N/A", ```<br/>&emsp;```"label" : "Cars", ```<br/>&emsp;```"logo" : "https://localhost/assets/downloads/logos/Logo.png", ```<br/>&emsp;```"manifests" : [ { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:8080/fedora/presentation/cars_pcdm_objects/vintage", ```<br/>&emsp;&emsp;```"@type" : "sc:Manifest", ```<br/>&emsp;&emsp;```"label" : "Vintage"```<br/>&emsp;```}, { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:8080/fedora/presentation/cars_pcdm_objects/lamborghini", ```<br/>&emsp;&emsp;```"@type" : "sc:Manifest", ```<br/>&emsp;&emsp;```"label" : "Lamborghini"```<br/>&emsp;```}], ```<br/>&emsp;```"metadata" : [ ], ```<br/>&emsp;```"viewingHint" : "multi-part" ```<br/>&emsp;```}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/collection/cars_pcdm``` |
+| **Sample Request** | ```/fedora/collection/cars_pcdm``` |
 | **Notes** | If the container is a root of a PCDM collection, the collection manifest will contain multiple manifests. If the container is an element of a collection within the PCDM model, the collection manifest will contain a single manifest. There is currently no way to generate a collection of collections. |
 
 | **Title** | Presentation |
@@ -138,7 +138,7 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{ ```<br/>&emsp;```"@context" : "http://iiif.io/api/presentation/2/context.json", ```<br/>&emsp;```"@id" : "http://localhost:9003/fedora/presentation/cars_pcdm_objects/vintage", ```<br/>&emsp;```"@type" : "sc:Manifest", ```<br/>&emsp;```"description" : "Vintage", ```<br/>&emsp;```"label" : "Vintage", ```<br/>&emsp;```"logo" : "https://localhost/assets/downloads/logos/Logo.png", ```<br/>&emsp;```"metadata" : [ { ```<br/>&emsp;&emsp;```"label" : "Title", ```<br/>&emsp;&emsp;```"value" : "Vintage" ```<br/>&emsp;```}, { ```<br/>&emsp;&emsp;```"label" : "Description", ```<br/>&emsp;&emsp;```"value" : "A vintage car" ```<br/>&emsp;```} ], ```<br/>&emsp;```"sequences" : [ { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:9003/fedora/sequence/cars_pcdm_objects/vintage", ```<br/>&emsp;&emsp;```"@type" : "sc:Sequence", ```<br/>&emsp;&emsp;```"canvases" : [ { ```<br/>&emsp;&emsp;&emsp;```"@id" : "http://localhost:9003/fedora/canvas/cars_pcdm_objects/vintage/pages/page_0", ```<br/>&emsp;&emsp;&emsp;```"@type" : "sc:Canvas", ```<br/>&emsp;&emsp;&emsp;```"height" : 1080, ```<br/>&emsp;&emsp;&emsp;```"images" : [ { ```<br/>&emsp;&emsp;&emsp;&emsp;```"@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn/info.json", ```<br/>&emsp;&emsp;&emsp;&emsp;```"@type" : "oa:Annotation", ```<br/>&emsp;&emsp;&emsp;&emsp;```"motivation" : "sc:painting", ```<br/>&emsp;&emsp;&emsp;&emsp;```"on" : "http://localhost:9003/fedora/canvas/cars_pcdm_objects/vintage/pages/page_0", ```<br/>&emsp;&emsp;&emsp;&emsp;```"resource" : { ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn/full/full/0/default.jpg", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"@type" : "dctypes:Image", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"format" : "image/jpeg", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"height" : 1080, ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"service" : { ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;```"label" : "Fedora IIIF Image Resource Service", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;```"profile" : "http://iiif.io/api/image/2/level0.json", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;```"@context" : "http://iiif.io/api/image/2/context.json", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;```"@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn" ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```}, ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"width" : 1920 ```<br/>&emsp;&emsp;&emsp;&emsp;```} ```<br/>&emsp;&emsp;&emsp;```} ], ```<br/>&emsp;&emsp;&emsp;```"label" : "Page 0", ```<br/>&emsp;&emsp;&emsp;```"metadata" : [ ], ```<br/>&emsp;&emsp;&emsp;```"width" : 1920 ```<br/>&emsp;&emsp;```} ], ```<br/>&emsp;&emsp;```"label" : "Vintage" ```<br/>&emsp;```} ], ```<br/>&emsp;```"thumbnail" : { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn/full/!200,200/0/default.jpg", ```<br/>&emsp;&emsp;```"services" : [ { ```<br/>&emsp;&emsp;&emsp;```"@context" : "http://iiif.io/api/image/2/context.json", ```<br/>&emsp;&emsp;&emsp;```"@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn", ```<br/>&emsp;&emsp;&emsp;```"label" : "Fedora IIIF Image Resource Service", ```<br/>&emsp;&emsp;&emsp;```"profile" : "http://iiif.io/api/image/2/level0.json" ```<br/>&emsp;&emsp;```} ] ```<br/>&emsp;```} ```<br/>```}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/presentation/cars_pcdm_objects/vintage``` |
+| **Sample Request** | ```/fedora/presentation/cars_pcdm_objects/vintage``` |
 | **Notes** | <span style="color:red">Caution: </span> Currently, if the container is a root of a PCDM collection it will generate a compound presentation of all elements of the collection. This could take some time. It is planned to have all manifests utilize @id and be grainular. Then to expose an additional query parameter to explode the manifest. |
 
 | **Title** | Sequence |
@@ -150,7 +150,7 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/sequence/cars_pcdm_objects/vintage``` |
+| **Sample Request** | ```/fedora/sequence/cars_pcdm_objects/vintage``` |
 | **Notes** | |
 
 | **Title** | Canvas |
@@ -162,7 +162,7 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/canvas/cars_pcdm_objects/vintage/pages/page_0``` |
+| **Sample Request** | ```/fedora/canvas/cars_pcdm_objects/vintage/pages/page_0``` |
 | **Notes** | |
 
 | **Title** | Image |
@@ -174,7 +174,7 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/image/cars_pcdm_objects/vintage/pages/page_0/files/vintage.jpg``` |
+| **Sample Request** | ```/fedora/image/cars_pcdm_objects/vintage/pages/page_0/files/vintage.jpg``` |
 | **Notes** | |
 
 ## DSpace
@@ -187,7 +187,7 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/collection/123456789/158298``` |
+| **Sample Request** | ```/dspace/collection/123456789/158298``` |
 | **Notes** | If the handle is a community or subcommunity, the collection manifest will contain collections of its immediate children subcommunities of collections. If the handle is a collection, the collection manifest will contain presentation manifests of all the collections items. If the handle is an item, the collection manifest will contain a single presentation manifest. |
 
 | **Title** | Presentation |
@@ -199,7 +199,7 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/presentation/123456789/158313``` |
+| **Sample Request** | ```/dspace/presentation/123456789/158313``` |
 | **Notes** | <span style="color:red">Caution: </span> Currently, if the handle is a community, subcommunity, or collection, it will generate a compound presentation of all items below. This could take some time. It is planned to have all manifests utilize @id and be grainular. Then to expose an additional query parameter to explode the manifest. Additionally, how the items are nested in sequences and canvases may change in future releases. |
 
 | **Title** | Sequence |
@@ -211,7 +211,7 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/sequence/123456789/158313``` |
+| **Sample Request** | ```/dspace/sequence/123456789/158313``` |
 | **Notes** | |
 
 | **Title** | Canvas |
@@ -223,7 +223,7 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/canvas/123456789/158313/example.jpg``` |
+| **Sample Request** | ```/dspace/canvas/123456789/158313/example.jpg``` |
 | **Notes** | |
 
 | **Title** | Image |
@@ -235,5 +235,5 @@
 | **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
-| **Sample Request** | ```/image/123456789/158313/example.jpg``` |
+| **Sample Request** | ```/dspace/image/123456789/158313/example.jpg``` |
 | **Notes** | |
