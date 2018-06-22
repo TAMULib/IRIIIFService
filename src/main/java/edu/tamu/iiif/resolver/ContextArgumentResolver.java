@@ -25,10 +25,7 @@ public class ContextArgumentResolver implements HandlerMethodArgumentResolver {
         String bestMatchPattern = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
         String query = pathMatcher.extractPathWithinPattern(bestMatchPattern, path);
         int index;
-        if ((index = query.indexOf("?")) >= 0) {
-            query = query.substring(0, index);
-        }
-        return query;
+        return (index = query.indexOf("?")) >= 0 ? query.substring(0, index) : query;
     }
 
     @Override
