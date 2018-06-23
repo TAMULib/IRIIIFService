@@ -137,6 +137,11 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     }
 
     @Override
+    protected String getMatcherHandle(String uri) {
+        return uri;
+    }
+
+    @Override
     protected String getIiifServiceUrl() {
         return iiifServiceUrl + "/" + FEDORA_IDENTIFIER;
     }

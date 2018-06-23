@@ -145,6 +145,23 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
         return getDSpaceIiifUri(handle, CANVAS_IDENTIFIER);
     }
 
+    protected String getHandle(String uri) {
+        String handle;
+        if (uri.contains("/handle/")) {
+            handle = uri.split("/handle/")[1];
+        } else if (uri.contains("/bitstream/")) {
+            handle = uri.split("/bitstream/")[1];
+        } else {
+            handle = uri.split("/resource/")[1];
+        }
+        return handle;
+    }
+
+    @Override
+    protected String getMatcherHandle(String uri) {
+        return getHandle(uri);
+    }
+
     @Override
     protected String getIiifServiceUrl() {
         return iiifServiceUrl + "/" + DSPACE_IDENTIFIER;
