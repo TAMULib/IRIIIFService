@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -40,12 +39,7 @@ public class DSpacePresentationManifestServiceTest extends AbstractDSpaceManifes
 
     @Before
     public void setup() {
-        ReflectionTestUtils.setField(dSpacePresentationManifestService, "iiifServiceUrl", IIIF_SERVICE_URL);
-        ReflectionTestUtils.setField(dSpacePresentationManifestService, "imageServerUrl", IMAGE_SERVICE_URL);
-        ReflectionTestUtils.setField(dSpacePresentationManifestService, "logoUrl", LOGO_URL);
-
-        ReflectionTestUtils.setField(dSpacePresentationManifestService, "dspaceUrl", DSPACE_URL);
-        ReflectionTestUtils.setField(dSpacePresentationManifestService, "dspaceWebapp", DSPACE_WEBAPP);
+        setup(dSpacePresentationManifestService);
     }
 
     @Test

@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -40,6 +41,12 @@ public abstract class AbstractManifestServiceTest implements ManifestServiceTest
     public void init() {
         MockitoAnnotations.initMocks(this);
         when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(RepositoryType.class), any(String.class), any(String.class))).thenReturn(Optional.empty());
+    }
+
+    protected void setup(AbstractManifestService manifestService) {
+        ReflectionTestUtils.setField(manifestService, "iiifServiceUrl", IIIF_SERVICE_URL);
+        ReflectionTestUtils.setField(manifestService, "imageServerUrl", IMAGE_SERVICE_URL);
+        ReflectionTestUtils.setField(manifestService, "logoUrl", LOGO_URL);
     }
 
 }

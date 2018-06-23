@@ -14,7 +14,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -36,12 +35,7 @@ public class FedoraCanvasManifestServiceTest extends AbstractFedoraManifestServi
 
     @Before
     public void setup() {
-        ReflectionTestUtils.setField(fedoraCanvasManifestService, "iiifServiceUrl", IIIF_SERVICE_URL);
-        ReflectionTestUtils.setField(fedoraCanvasManifestService, "imageServerUrl", IMAGE_SERVICE_URL);
-        ReflectionTestUtils.setField(fedoraCanvasManifestService, "logoUrl", LOGO_URL);
-
-        ReflectionTestUtils.setField(fedoraCanvasManifestService, "fedoraUrl", FEDORA_URL);
-        ReflectionTestUtils.setField(fedoraCanvasManifestService, "fedoraPcdmExtUrl", PCDM_RDF_URL);
+        setup(fedoraCanvasManifestService);
     }
 
     @Test

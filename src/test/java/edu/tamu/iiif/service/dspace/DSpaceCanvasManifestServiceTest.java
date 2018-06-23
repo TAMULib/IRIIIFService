@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -35,12 +34,7 @@ public class DSpaceCanvasManifestServiceTest extends AbstractDSpaceManifestServi
 
     @Before
     public void setup() {
-        ReflectionTestUtils.setField(dSpaceCanvasManifestService, "iiifServiceUrl", IIIF_SERVICE_URL);
-        ReflectionTestUtils.setField(dSpaceCanvasManifestService, "imageServerUrl", IMAGE_SERVICE_URL);
-        ReflectionTestUtils.setField(dSpaceCanvasManifestService, "logoUrl", LOGO_URL);
-
-        ReflectionTestUtils.setField(dSpaceCanvasManifestService, "dspaceUrl", DSPACE_URL);
-        ReflectionTestUtils.setField(dSpaceCanvasManifestService, "dspaceWebapp", DSPACE_WEBAPP);
+        setup(dSpaceCanvasManifestService);
     }
 
     @Test
