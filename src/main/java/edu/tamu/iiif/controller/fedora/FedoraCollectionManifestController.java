@@ -10,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Profile;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ import edu.tamu.iiif.service.fedora.FedoraCollectionManifestService;
 @RequestMapping("/" + FEDORA_IDENTIFIER)
 public class FedoraCollectionManifestController extends AbstractManifestController<FedoraCollectionManifestService> {
 
-    @RequestMapping("/" + COLLECECTION_IDENTIFIER + "/**/*")
+    @GetMapping("/" + COLLECECTION_IDENTIFIER + "/**/*")
     public void collection(
         // @formatter:off
         HttpServletResponse response,

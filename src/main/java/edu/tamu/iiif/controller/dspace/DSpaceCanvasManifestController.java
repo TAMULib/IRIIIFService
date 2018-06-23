@@ -10,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Profile;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ import edu.tamu.iiif.service.dspace.DSpaceCanvasManifestService;
 @RequestMapping("/" + DSPACE_IDENTIFIER)
 public class DSpaceCanvasManifestController extends AbstractManifestController<DSpaceCanvasManifestService> {
 
-    @RequestMapping("/" + CANVAS_IDENTIFIER + "/**/*")
+    @GetMapping("/" + CANVAS_IDENTIFIER + "/**/*")
     public void image(
         // @formatter:off
         HttpServletResponse response,
