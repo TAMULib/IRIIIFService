@@ -41,7 +41,7 @@ public class FedoraCanvasManifestServiceTest extends AbstractFedoraManifestServi
         ReflectionTestUtils.setField(fedoraCanvasManifestService, "logoUrl", LOGO_URL);
 
         ReflectionTestUtils.setField(fedoraCanvasManifestService, "fedoraUrl", FEDORA_URL);
-        ReflectionTestUtils.setField(fedoraCanvasManifestService, "fedoraPcdmRdfExtUrl", PCDM_RDF_URL);
+        ReflectionTestUtils.setField(fedoraCanvasManifestService, "fedoraPcdmExtUrl", PCDM_RDF_URL);
     }
 
     @Test
