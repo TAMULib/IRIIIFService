@@ -34,7 +34,7 @@ public class FedoraImageManifestServiceTest extends AbstractFedoraManifestServic
         ReflectionTestUtils.setField(fedoraImageManifestService, "logoUrl", LOGO_URL);
 
         ReflectionTestUtils.setField(fedoraImageManifestService, "fedoraUrl", FEDORA_URL);
-        ReflectionTestUtils.setField(fedoraImageManifestService, "pcdmRdfExtUrl", PCDM_RDF_URL);
+        ReflectionTestUtils.setField(fedoraImageManifestService, "fedoraPcdmRdfExtUrl", PCDM_RDF_URL);
     }
 
     @Test

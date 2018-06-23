@@ -50,7 +50,7 @@ public class FedoraSequenceManifestServiceTest extends AbstractFedoraManifestSer
         ReflectionTestUtils.setField(fedoraSequenceManifestService, "logoUrl", LOGO_URL);
 
         ReflectionTestUtils.setField(fedoraSequenceManifestService, "fedoraUrl", FEDORA_URL);
-        ReflectionTestUtils.setField(fedoraSequenceManifestService, "pcdmRdfExtUrl", PCDM_RDF_URL);
+        ReflectionTestUtils.setField(fedoraSequenceManifestService, "fedoraPcdmRdfExtUrl", PCDM_RDF_URL);
     }
 
     @Test

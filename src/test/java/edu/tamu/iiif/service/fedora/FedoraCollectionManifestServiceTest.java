@@ -38,7 +38,7 @@ public class FedoraCollectionManifestServiceTest extends AbstractFedoraManifestS
         ReflectionTestUtils.setField(fedoraCollectionManifestService, "logoUrl", LOGO_URL);
 
         ReflectionTestUtils.setField(fedoraCollectionManifestService, "fedoraUrl", FEDORA_URL);
-        ReflectionTestUtils.setField(fedoraCollectionManifestService, "pcdmRdfExtUrl", PCDM_RDF_URL);
+        ReflectionTestUtils.setField(fedoraCollectionManifestService, "fedoraPcdmRdfExtUrl", PCDM_RDF_URL);
     }
 
     @Test
