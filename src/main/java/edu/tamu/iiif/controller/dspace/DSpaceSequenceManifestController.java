@@ -34,7 +34,7 @@ public class DSpaceSequenceManifestController extends AbstractManifestController
         @RequestParam(value = "disallow", required = false, defaultValue = "") List<String> disallowed
         // @formatter:on
     ) throws IOException, URISyntaxException {
-        sendManifest(ManifestBuilder.of(response, path, update, allowed, disallowed));
+        sendManifest(ManifestBuilder.build(response, path, update, allowed, disallowed));
     }
 
 }

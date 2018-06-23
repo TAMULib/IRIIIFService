@@ -23,7 +23,7 @@ public class ManifestBuilder {
         return request;
     }
 
-    public static ManifestBuilder of(HttpServletResponse response, String path, boolean update, List<String> allowed, List<String> disallowed) {
+    public static ManifestBuilder build(HttpServletResponse response, String path, boolean update, List<String> allowed, List<String> disallowed) {
         return new ManifestBuilder(response, ManifestRequest.of(path, update, allowed, disallowed));
     }
 
