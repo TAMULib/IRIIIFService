@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.tamu.iiif.annotation.Context;
+import edu.tamu.iiif.annotation.ContextIdentifier;
 import edu.tamu.iiif.controller.AbstractManifestController;
 import edu.tamu.iiif.controller.ManifestBuilder;
 import edu.tamu.iiif.service.fedora.FedoraSequenceManifestService;
@@ -28,7 +28,7 @@ public class FedoraSequenceManifestController extends AbstractManifestController
     public void image(
         // @formatter:off
         HttpServletResponse response,
-        @Context String path,
+        @ContextIdentifier String path,
         @RequestParam(value = "update", required = false, defaultValue = "false") boolean update,
         @RequestParam(value = "allow", required = false, defaultValue = "") List<String> allowed,
         @RequestParam(value = "disallow", required = false, defaultValue = "") List<String> disallowed

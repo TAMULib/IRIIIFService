@@ -34,8 +34,8 @@ public abstract class AbstractManifestController<S extends ManifestService> {
     }
 
     private void sendJsonFile(HttpServletResponse response, String json) throws IOException {
-        InputStream is = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
-        IOUtils.copy(is, response.getOutputStream());
+        InputStream inputStream = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
+        IOUtils.copy(inputStream, response.getOutputStream());
         response.flushBuffer();
     }
 
