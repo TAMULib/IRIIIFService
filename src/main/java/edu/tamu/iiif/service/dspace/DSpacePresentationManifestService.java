@@ -24,6 +24,7 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.ManifestImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ThumbnailImpl;
 import edu.tamu.iiif.controller.ManifestRequest;
+import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.rdf.RdfResource;
 
@@ -97,27 +98,22 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
     private List<Sequence> aggregateSequences(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         List<Sequence> sequences = new ArrayList<Sequence>();
         if (isTopLevelCommunity(rdfResource.getModel()) || isSubcommunity(rdfResource.getModel())) {
-
-            NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_COLLECTION_PREDICATE);
-            while (collectionIterator.hasNext()) {
-                String uri = collectionIterator.next().toString();
-                String handle = getHandle(uri);
-                sequences.addAll(aggregateSequences(request, getDSpaceRdfModel(handle)));
-            }
-
+            sequences.addAll(getSequencesByPredicate(request, rdfResource, DSPACE_HAS_COLLECTION_PREDICATE));
         } else if (isCollection(rdfResource.getModel())) {
-
-            NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_ITEM_PREDICATE);
-            while (collectionIterator.hasNext()) {
-                String uri = collectionIterator.next().toString();
-                String handle = getHandle(uri);
-                sequences.addAll(aggregateSequences(request, getDSpaceRdfModel(handle)));
-            }
-
+            sequences.addAll(getSequencesByPredicate(request, rdfResource, DSPACE_HAS_ITEM_PREDICATE));
         } else if (isItem(rdfResource.getModel())) {
             sequences.add(generateSequence(request, rdfResource));
-        } else {
+        }
+        return sequences;
+    }
 
+    private List<Sequence> getSequencesByPredicate(ManifestRequest request, RdfResource rdfResource, String predicate) throws NotFoundException, IOException, URISyntaxException {
+        List<Sequence> sequences = new ArrayList<Sequence>();
+        NodeIterator nodeIterator = rdfResource.getAllNodesOfPropertyWithId(predicate);
+        while (nodeIterator.hasNext()) {
+            String uri = nodeIterator.next().toString();
+            String handle = getHandle(uri);
+            sequences.addAll(aggregateSequences(request, getDSpaceRdfModel(handle)));
         }
         return sequences;
     }

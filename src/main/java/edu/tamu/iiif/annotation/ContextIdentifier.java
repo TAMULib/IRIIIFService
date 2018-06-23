@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Target({ ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Context {
+public @interface ContextIdentifier {
 
 }

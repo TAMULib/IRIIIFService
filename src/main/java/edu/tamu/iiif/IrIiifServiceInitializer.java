@@ -6,12 +6,12 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 /**
- * Entry point to the IR IIIF Service.
+ * Entry point to the IR IIIF service initializer.
  * 
  * @author wwelling
  */
 @SpringBootApplication
-public class IrIiifService extends SpringBootServletInitializer {
+public class IrIiifServiceInitializer extends SpringBootServletInitializer {
 
     /**
      * Entry point for Tomcat deployment.
@@ -19,7 +19,7 @@ public class IrIiifService extends SpringBootServletInitializer {
      * @param args
      */
     public static void main(String[] args) {
-        SpringApplication.run(IrIiifService.class, args);
+        SpringApplication.run(IrIiifServiceInitializer.class, args);
     }
 
     /**
@@ -29,7 +29,7 @@ public class IrIiifService extends SpringBootServletInitializer {
      */
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(IrIiifService.class);
+        return application.sources(IrIiifServiceInitializer.class);
     }
 
 }

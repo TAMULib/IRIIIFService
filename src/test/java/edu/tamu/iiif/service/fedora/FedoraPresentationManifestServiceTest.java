@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -52,12 +51,7 @@ public class FedoraPresentationManifestServiceTest extends AbstractFedoraManifes
 
     @Before
     public void setup() {
-        ReflectionTestUtils.setField(fedoraPresentationManifestService, "iiifServiceUrl", IIIF_SERVICE_URL);
-        ReflectionTestUtils.setField(fedoraPresentationManifestService, "imageServerUrl", IMAGE_SERVICE_URL);
-        ReflectionTestUtils.setField(fedoraPresentationManifestService, "logoUrl", LOGO_URL);
-
-        ReflectionTestUtils.setField(fedoraPresentationManifestService, "fedoraUrl", FEDORA_URL);
-        ReflectionTestUtils.setField(fedoraPresentationManifestService, "pcdmRdfExtUrl", PCDM_RDF_URL);
+        setup(fedoraPresentationManifestService);
     }
 
     @Test

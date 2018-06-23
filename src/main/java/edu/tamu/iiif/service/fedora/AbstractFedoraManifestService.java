@@ -59,7 +59,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     protected String fedoraUrl;
 
     @Value("${iiif.pcdm.rdf.ext.url}")
-    private String pcdmRdfExtUrl;
+    private String fedoraPcdmExtUrl;
 
     protected RdfResource getRdfResource(String path) throws NotFoundException {
         String fedoraRdfUri = getFedoraUrl(path);
@@ -137,6 +137,11 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     }
 
     @Override
+    protected String getMatcherHandle(String uri) {
+        return uri;
+    }
+
+    @Override
     protected String getIiifServiceUrl() {
         return iiifServiceUrl + "/" + FEDORA_IDENTIFIER;
     }
@@ -156,7 +161,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     }
 
     private String getPCDMRdf(String fedoraPath) throws NotFoundException {
-        Optional<String> fedoraRdf = Optional.ofNullable(httpService.get(pcdmRdfExtUrl, fedoraPath));
+        Optional<String> fedoraRdf = Optional.ofNullable(httpService.get(fedoraPcdmExtUrl, fedoraPath));
         if (fedoraRdf.isPresent()) {
             return fedoraRdf.get();
         }

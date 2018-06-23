@@ -12,7 +12,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.HandlerMapping;
 
-import edu.tamu.iiif.annotation.Context;
+import edu.tamu.iiif.annotation.ContextIdentifier;
 
 public class ContextArgumentResolver implements HandlerMethodArgumentResolver {
 
@@ -33,8 +33,8 @@ public class ContextArgumentResolver implements HandlerMethodArgumentResolver {
         return findContextParameterAnnotation(parameter).isPresent();
     }
 
-    private Optional<Context> findContextParameterAnnotation(MethodParameter parameter) {
-        return Optional.ofNullable(parameter.getParameterAnnotation(Context.class));
+    private Optional<ContextIdentifier> findContextParameterAnnotation(MethodParameter parameter) {
+        return Optional.ofNullable(parameter.getParameterAnnotation(ContextIdentifier.class));
     }
 
 }

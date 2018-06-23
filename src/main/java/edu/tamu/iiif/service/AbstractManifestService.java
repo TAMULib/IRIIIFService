@@ -245,17 +245,7 @@ public abstract class AbstractManifestService implements ManifestService {
         return getMetadata(rdfResource, DUBLIN_CORE_PREFIX);
     }
 
-    protected String getHandle(String uri) {
-        String handle;
-        if (uri.contains("/handle/")) {
-            handle = uri.split("/handle/")[1];
-        } else if (uri.contains("/bitstream/")) {
-            handle = uri.split("/bitstream/")[1];
-        } else {
-            handle = uri.split("/resource/")[1];
-        }
-        return handle;
-    }
+    protected abstract String getMatcherHandle(String uri);
 
     protected abstract String generateManifest(ManifestRequest request) throws URISyntaxException, IOException;
 
@@ -291,12 +281,7 @@ public abstract class AbstractManifestService implements ManifestService {
             Property predicate = statement.getPredicate();
             String resourceUrl = rdfResource.getResource().getURI();
             String statementUrl = statement.getSubject().getURI();
-            boolean match = resourceUrl.equals(statementUrl);
-            if (getRepositoryType().equals(RepositoryType.DSPACE)) {
-                match = getHandle(resourceUrl).equals(getHandle(statementUrl));
-            } else {
-                match = resourceUrl.equals(statementUrl);
-            }
+            boolean match = getMatcherHandle(resourceUrl).equals(getMatcherHandle(statementUrl));
             if (match && predicate.getNameSpace().equals(prefix)) {
                 Optional<Metadata> metadatum = Optional.empty();
                 try {
