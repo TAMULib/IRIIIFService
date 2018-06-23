@@ -98,16 +98,16 @@ public class DSpacePresentationManifestService extends AbstractDSpaceManifestSer
     private List<Sequence> aggregateSequences(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         List<Sequence> sequences = new ArrayList<Sequence>();
         if (isTopLevelCommunity(rdfResource.getModel()) || isSubcommunity(rdfResource.getModel())) {
-            sequences.addAll(getSequencesByPredicet(request, rdfResource, DSPACE_HAS_COLLECTION_PREDICATE));
+            sequences.addAll(getSequencesByPredicate(request, rdfResource, DSPACE_HAS_COLLECTION_PREDICATE));
         } else if (isCollection(rdfResource.getModel())) {
-            sequences.addAll(getSequencesByPredicet(request, rdfResource, DSPACE_HAS_ITEM_PREDICATE));
+            sequences.addAll(getSequencesByPredicate(request, rdfResource, DSPACE_HAS_ITEM_PREDICATE));
         } else if (isItem(rdfResource.getModel())) {
             sequences.add(generateSequence(request, rdfResource));
         }
         return sequences;
     }
 
-    private List<Sequence> getSequencesByPredicet(ManifestRequest request, RdfResource rdfResource, String predicate) throws NotFoundException, IOException, URISyntaxException {
+    private List<Sequence> getSequencesByPredicate(ManifestRequest request, RdfResource rdfResource, String predicate) throws NotFoundException, IOException, URISyntaxException {
         List<Sequence> sequences = new ArrayList<Sequence>();
         NodeIterator nodeIterator = rdfResource.getAllNodesOfPropertyWithId(predicate);
         while (nodeIterator.hasNext()) {
