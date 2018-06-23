@@ -58,7 +58,7 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
     @Value("${iiif.fedora.url}")
     protected String fedoraUrl;
 
-    @Value("${iiif.fedora.pcdm.ext.url}")
+    @Value("${iiif.pcdm.rdf.ext.url}")
     private String fedoraPcdmExtUrl;
 
     protected RdfResource getRdfResource(String path) throws NotFoundException {
