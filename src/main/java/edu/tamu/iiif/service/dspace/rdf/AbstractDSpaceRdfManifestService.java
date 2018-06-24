@@ -13,7 +13,6 @@ import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_DESCRIPTION;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_TITLE;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
-import static edu.tamu.iiif.utility.RdfModelUtility.createRdfModel;
 import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
 import static edu.tamu.iiif.utility.RdfModelUtility.getObject;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
@@ -55,15 +54,6 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
 
     @Value("${iiif.dspace.identifier.dspace-rdf}")
     protected String dspaceRdfIdentifier;
-
-    protected RdfResource getDSpaceRdfModel(String handle) throws NotFoundException {
-        String dspaceRdfUrl = getRdfUrl(handle);
-        String rdf = getRdf(dspaceRdfUrl);
-        Model model = createRdfModel(rdf);
-        // model.write(System.out, "JSON-LD");
-        // model.write(System.out, "RDF/XML");
-        return new RdfResource(model, model.getResource(dspaceRdfUrl));
-    }
 
     protected Sequence generateSequence(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         String uri = rdfResource.getResource().getURI();
@@ -158,6 +148,14 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         return handle;
     }
 
+    protected URI getCanvasUri(String canvasId) throws URISyntaxException {
+        return getDSpaceIiifCanvasUri(canvasId);
+    }
+
+    protected String getIiifImageServiceName() {
+        return "DSpace IIIF Image Resource Service";
+    }
+
     @Override
     protected String getMatcherHandle(String uri) {
         return getHandle(uri);
@@ -178,20 +176,22 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         return dspaceRdfIdentifier;
     }
 
-    private String getRdfUrl(String handle) {
+    @Override
+    protected String getRdfUrl(String handle) {
         return joinPath(dspaceUrl, "rdf", "handle", handle);
     }
 
-    private URI getDSpaceIiifUri(String handle, String type) throws URISyntaxException {
-        return URI.create(getIiifServiceUrl() + "/" + type + "/" + handle);
-    }
-
-    private String getRdf(String dspaceRdfUrl) throws NotFoundException {
+    @Override
+    protected String getRdf(String dspaceRdfUrl) throws NotFoundException {
         Optional<String> dspaceRdf = Optional.ofNullable(httpService.get(dspaceRdfUrl));
         if (dspaceRdf.isPresent()) {
             return dspaceRdf.get();
         }
         throw new NotFoundException("DSpace RDF not found! " + dspaceRdfUrl);
+    }
+
+    private URI getDSpaceIiifUri(String handle, String type) throws URISyntaxException {
+        return URI.create(getIiifServiceUrl() + "/" + type + "/" + handle);
     }
 
     private List<Canvas> getCanvases(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
@@ -233,14 +233,6 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         }
 
         return rdfCanvas;
-    }
-
-    protected URI getCanvasUri(String canvasId) throws URISyntaxException {
-        return getDSpaceIiifCanvasUri(canvasId);
-    }
-
-    protected String getIiifImageServiceName() {
-        return "DSpace IIIF Image Resource Service";
     }
 
 }

@@ -32,7 +32,7 @@ public class DSpaceRdfPresentationManifestService extends AbstractDSpaceRdfManif
     public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
         String context = request.getContext();
 
-        RdfResource rdfResource = getDSpaceRdfModel(context);
+        RdfResource rdfResource = getRdfResource(context);
 
         URI id = buildId(context);
 
@@ -111,7 +111,7 @@ public class DSpaceRdfPresentationManifestService extends AbstractDSpaceRdfManif
         while (nodeIterator.hasNext()) {
             String uri = nodeIterator.next().toString();
             String handle = getHandle(uri);
-            sequences.addAll(aggregateSequences(request, getDSpaceRdfModel(handle)));
+            sequences.addAll(aggregateSequences(request, getRdfResource(handle)));
         }
         return sequences;
     }

@@ -18,7 +18,7 @@ public class DSpaceRdfCanvasManifestService extends AbstractDSpaceRdfManifestSer
     public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
         String context = request.getContext();
         String handle = extractHandle(context);
-        RdfResource rdfResource = getDSpaceRdfModel(handle);
+        RdfResource rdfResource = getRdfResource(handle);
         String url = rdfResource.getResource().getURI();
         Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, url.replace("rdf/handle", dspaceWebapp != null && dspaceWebapp.length() > 0 ? dspaceWebapp + "/bitstream" : "bitstream").replaceAll(handle, context)));
         return mapper.writeValueAsString(canvas);

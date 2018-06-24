@@ -37,7 +37,7 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
     }
 
     private Collection generateCollection(String handle) throws URISyntaxException, NotFoundException {
-        RdfResource rdfResource = getDSpaceRdfModel(handle);
+        RdfResource rdfResource = getRdfResource(handle);
 
         URI id = buildId(handle);
 
@@ -111,7 +111,7 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
         List<CollectionReference> collectionsToElide = new ArrayList<CollectionReference>();
         for (CollectionReference subcommunity : getSubcommunities(rdfResource)) {
             String handle = subcommunity.getLabel().getFirstValue();
-            RdfResource subcommunityRdfResource = getDSpaceRdfModel(handle);
+            RdfResource subcommunityRdfResource = getRdfResource(handle);
             collectionsToElide.addAll(getCollections(subcommunityRdfResource));
         }
         return collectionsToElide;

@@ -62,24 +62,6 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     @Value("${iiif.fedora.identifier.fedora-pcdm}")
     protected String fedoraPcdmIdentifier;
 
-    protected RdfResource getRdfResource(String path) throws NotFoundException {
-        String fedoraRdfUri = getFedoraUrl(path);
-        String rdf = getPCDMRdf(fedoraRdfUri);
-        Model model = createRdfModel(rdf);
-        // model.write(System.out, "JSON-LD");
-        // model.write(System.out, "RDF/XML");
-        return new RdfResource(model, model.getResource(fedoraRdfUri));
-    }
-
-    protected Model getRdfModel(String url) throws NotFoundException {
-        String rdf = httpService.get(url + FEDORA_FCR_METADATA);
-        Optional<String> fedoraRdf = Optional.ofNullable(rdf);
-        if (fedoraRdf.isPresent()) {
-            return createRdfModel(fedoraRdf.get());
-        }
-        throw new NotFoundException("Fedora RDF not found!");
-    }
-
     protected Sequence generateSequence(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         String id = rdfResource.getResource().getURI();
         PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getRepositoryPath(id));
@@ -132,9 +114,12 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
         return getFedoraIiifUri(url, CANVAS_IDENTIFIER);
     }
 
-    // TODO: update to match getDSpaceIiifUrl
-    private URI getFedoraIiifUri(String url, String type) throws URISyntaxException {
-        return URI.create(url.replace(fedoraUrl + "/", getIiifServiceUrl() + "/" + type + "/"));
+    protected URI getCanvasUri(String canvasId) throws URISyntaxException {
+        return getFedoraIiifCanvasUri(canvasId);
+    }
+
+    protected String getIiifImageServiceName() {
+        return "Fedora IIIF Image Resource Service";
     }
 
     @Override
@@ -157,16 +142,23 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
         return fedoraPcdmIdentifier;
     }
 
-    private String getFedoraUrl(String path) {
+    @Override
+    protected String getRdfUrl(String path) {
         return joinPath(fedoraUrl, path);
     }
 
-    private String getPCDMRdf(String fedoraPath) throws NotFoundException {
+    @Override
+    protected String getRdf(String fedoraPath) throws NotFoundException {
         Optional<String> fedoraRdf = Optional.ofNullable(httpService.get(fedoraPcdmExtUrl, fedoraPath));
         if (fedoraRdf.isPresent()) {
             return fedoraRdf.get();
         }
         throw new NotFoundException("Fedora PCDM RDF not found!");
+    }
+
+    // TODO: update to match getDSpaceIiifUrl
+    private URI getFedoraIiifUri(String url, String type) throws URISyntaxException {
+        return URI.create(url.replace(fedoraUrl + "/", getIiifServiceUrl() + "/" + type + "/"));
     }
 
     private List<Canvas> getCanvases(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
@@ -224,6 +216,15 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
     }
 
+    private Model getRdfModel(String url) throws NotFoundException {
+        String rdf = httpService.get(url + FEDORA_FCR_METADATA);
+        Optional<String> fedoraRdf = Optional.ofNullable(rdf);
+        if (fedoraRdf.isPresent()) {
+            return createRdfModel(fedoraRdf.get());
+        }
+        throw new NotFoundException("Fedora RDF not found!");
+    }
+
     private RdfCanvas getFedoraRdfCanvas(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
         RdfCanvas rdfCanvas = new RdfCanvas();
 
@@ -263,14 +264,6 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
             }
         }
         return rdfCanvas;
-    }
-
-    protected URI getCanvasUri(String canvasId) throws URISyntaxException {
-        return getFedoraIiifCanvasUri(canvasId);
-    }
-
-    protected String getIiifImageServiceName() {
-        return "Fedora IIIF Image Resource Service";
     }
 
 }

@@ -4,6 +4,7 @@ import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_PREFIX;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_PREFIX;
 import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_CONTEXT;
 import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_LEVEL_ZERO_PROFILE;
+import static edu.tamu.iiif.utility.RdfModelUtility.createRdfModel;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
@@ -109,6 +111,15 @@ public abstract class AbstractManifestService implements ManifestService {
         }
 
         return manifest;
+    }
+
+    protected RdfResource getRdfResource(String handle) throws NotFoundException {
+        String rdfUrl = getRdfUrl(handle);
+        String rdf = getRdf(rdfUrl);
+        Model model = createRdfModel(rdf);
+        // model.write(System.out, "JSON-LD");
+        // model.write(System.out, "RDF/XML");
+        return new RdfResource(model, model.getResource(rdfUrl));
     }
 
     protected URI buildId(String path) throws URISyntaxException {
@@ -266,7 +277,11 @@ public abstract class AbstractManifestService implements ManifestService {
         return getMetadata(rdfResource, DUBLIN_CORE_PREFIX);
     }
 
-    protected abstract String getMatcherHandle(String uri);
+    protected abstract String getRdfUrl(String context);
+
+    protected abstract String getRdf(String pathOrUrl) throws NotFoundException;
+
+    protected abstract String getMatcherHandle(String url);
 
     protected abstract String generateManifest(ManifestRequest request) throws URISyntaxException, IOException;
 
