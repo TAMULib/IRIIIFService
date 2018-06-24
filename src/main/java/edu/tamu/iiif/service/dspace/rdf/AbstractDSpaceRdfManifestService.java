@@ -1,12 +1,13 @@
 package edu.tamu.iiif.service.dspace.rdf;
 
 import static edu.tamu.iiif.constants.Constants.CANVAS_IDENTIFIER;
-import static edu.tamu.iiif.constants.Constants.COLLECECTION_IDENTIFIER;
+import static edu.tamu.iiif.constants.Constants.COLLECTION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_BITSTREAM_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_COLLECTION_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_COMMUNITY_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_REPOSITORY_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_SUB_COMMUNITY_OF_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.DSPACE_RDF_CONDITION;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_ABSTRACT;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_DESCRIPTION;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_TITLE;
@@ -43,7 +44,7 @@ import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
 
-@ConditionalOnExpression("'${spring.profiles.include}'.contains('${iiif.dspace.identifier.dspace-rdf}')")
+@ConditionalOnExpression(DSPACE_RDF_CONDITION)
 public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestService {
 
     @Value("${iiif.dspace.url}")
@@ -130,7 +131,7 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
     }
 
     protected URI getDSpaceIiifCollectionUri(String handle) throws URISyntaxException {
-        return getDSpaceIiifUri(handle, COLLECECTION_IDENTIFIER);
+        return getDSpaceIiifUri(handle, COLLECTION_IDENTIFIER);
     }
 
     protected URI getDSpaceIiifPresentationUri(String handle) throws URISyntaxException {

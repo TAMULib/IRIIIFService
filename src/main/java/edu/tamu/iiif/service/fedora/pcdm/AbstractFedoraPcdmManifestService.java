@@ -5,6 +5,7 @@ import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_DESCRIPTION_PREDICAT
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TITLE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.FEDORA_FCR_METADATA;
 import static edu.tamu.iiif.constants.Constants.FEDORA_HAS_PARENT_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.FEDORA_PCDM_CONDITION;
 import static edu.tamu.iiif.constants.Constants.IANA_FIRST_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.IANA_LAST_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.IANA_NEXT_PREDICATE;
@@ -49,7 +50,7 @@ import edu.tamu.iiif.model.rdf.RdfOrderedSequence;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
 
-@ConditionalOnExpression("'${spring.profiles.include}'.contains('${iiif.fedora.identifier.fedora-pcdm}')")
+@ConditionalOnExpression(FEDORA_PCDM_CONDITION)
 public abstract class AbstractFedoraPcdmManifestService extends AbstractManifestService {
 
     @Value("${iiif.fedora.url}")

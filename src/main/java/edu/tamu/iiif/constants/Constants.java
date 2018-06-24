@@ -2,12 +2,27 @@ package edu.tamu.iiif.constants;
 
 public class Constants {
 
-    // General
-    public final static String COLLECECTION_IDENTIFIER = "collection";
+    // Repository Identifiers
+    public final static String DSPACE_RDF_IDENTIFIER = "${iiif.dspace.identifier.dspace-rdf}";
+    public final static String FEDORA_PCDM_IDENTIFIER = "${iiif.fedora.identifier.fedora-pcdm}";
+
+    // Repository Conditions
+    public final static String DSPACE_RDF_CONDITION = "'${spring.profiles.include}'.contains('" + DSPACE_RDF_IDENTIFIER + "')";
+    public final static String FEDORA_PCDM_CONDITION = "'${spring.profiles.include}'.contains('" + FEDORA_PCDM_IDENTIFIER + "')";
+
+    // Manifest Identifiers
+    public final static String COLLECTION_IDENTIFIER = "collection";
     public final static String PRESENTATION_IDENTIFIER = "presentation";
     public final static String SEQUENCE_IDENTIFIER = "sequence";
     public final static String CANVAS_IDENTIFIER = "canvas";
     public final static String IMAGE_IDENTIFIER = "image";
+
+    // Manifest Controller Mappings
+    public final static String COLLECTION_MAPPING = "/" + COLLECTION_IDENTIFIER + "/**/*";
+    public final static String PRESENTATION_MAPPING = "/" + PRESENTATION_IDENTIFIER + "/**/*";
+    public final static String SEQUENCE_MAPPING = "/" + SEQUENCE_IDENTIFIER + "/**/*";
+    public final static String CANVAS_MAPPING = "/" + CANVAS_IDENTIFIER + "/**/*";
+    public final static String IMAGE_MAPPING = "/" + IMAGE_IDENTIFIER + "/**/*";
 
     // Fedora
     public final static String FEDORA_FCR_METADATA = "/fcr:metadata";
