@@ -23,7 +23,7 @@ import edu.tamu.iiif.service.dspace.DSpacePresentationManifestService;
 public class DSpacePresentationManifestControllerTest extends AbstractManifestControllerTest {
 
     @MockBean
-    private DSpacePresentationManifestService dSpacePresentationManifestService;
+    private DSpacePresentationManifestService dspacePresentationManifestService;
 
     @Value("classpath:mock/dspace/json/presentation.json")
     private Resource json;
@@ -31,8 +31,8 @@ public class DSpacePresentationManifestControllerTest extends AbstractManifestCo
     @Test
     public void testGetManifest() throws Exception {
         String expected = FileUtils.readFileToString(json.getFile(), "UTF-8");
-        when(dSpacePresentationManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/dspace/presentation/123456789/158308").accept(MediaType.APPLICATION_JSON);
+        when(dspacePresentationManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/" + dspaceRdfIdentifier + "/presentation/123456789/158308").accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }

@@ -16,7 +16,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.tamu.iiif.model.ManifestType;
-import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
 
 @RunWith(SpringRunner.class)
@@ -40,7 +39,7 @@ public abstract class AbstractManifestServiceTest implements ManifestServiceTest
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(RepositoryType.class), any(String.class), any(String.class))).thenReturn(Optional.empty());
+        when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(String.class), any(String.class), any(String.class))).thenReturn(Optional.empty());
     }
 
     protected void setup(AbstractManifestService manifestService) {

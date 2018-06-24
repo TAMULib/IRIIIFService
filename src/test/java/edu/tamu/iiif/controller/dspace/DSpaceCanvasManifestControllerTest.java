@@ -23,7 +23,7 @@ import edu.tamu.iiif.service.dspace.DSpaceCanvasManifestService;
 public class DSpaceCanvasManifestControllerTest extends AbstractManifestControllerTest {
 
     @MockBean
-    private DSpaceCanvasManifestService dSpaceCanvasManifestService;
+    private DSpaceCanvasManifestService dspaceCanvasManifestService;
 
     @Value("classpath:mock/dspace/json/canvas.json")
     private Resource json;
@@ -31,8 +31,8 @@ public class DSpaceCanvasManifestControllerTest extends AbstractManifestControll
     @Test
     public void testGetManifest() throws Exception {
         String expected = FileUtils.readFileToString(json.getFile(), "UTF-8");
-        when(dSpaceCanvasManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/dspace/canvas/123456789/158308/1/sports-car-146873_960_720.png").accept(MediaType.APPLICATION_JSON);
+        when(dspaceCanvasManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/" + dspaceRdfIdentifier + "/canvas/123456789/158308/1/sports-car-146873_960_720.png").accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }

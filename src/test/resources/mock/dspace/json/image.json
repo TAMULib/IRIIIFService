@@ -1,6 +1,6 @@
 {
   "@context":"http://iiif.io/api/image/2/context.json",
-  "@id":"http://localhost:8182/iiif/2/ZHNwYWNlOnhtbHVpL2JpdHN0cmVhbS8xMjM0NTY3ODkvMTU4MzA4LzEvc3BvcnRzLWNhci0xNDY4NzNfOTYwXzIwLnBuZw%3D%3D",
+  "@id":"http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF8yMC5wbmc=",
   "protocol":"http://iiif.io/api/image",
   "width":960,
   "height":480,

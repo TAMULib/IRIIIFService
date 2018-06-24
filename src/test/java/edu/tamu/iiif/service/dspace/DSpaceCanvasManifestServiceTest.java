@@ -21,7 +21,7 @@ import edu.tamu.iiif.controller.ManifestRequest;
 public class DSpaceCanvasManifestServiceTest extends AbstractDSpaceManifestServiceTest {
 
     @InjectMocks
-    private DSpaceCanvasManifestService dSpaceCanvasManifestService;
+    private DSpaceCanvasManifestService dspaceCanvasManifestService;
 
     @Value("classpath:mock/dspace/rdf/item.rdf")
     private Resource rdf;
@@ -34,15 +34,15 @@ public class DSpaceCanvasManifestServiceTest extends AbstractDSpaceManifestServi
 
     @Before
     public void setup() {
-        setup(dSpaceCanvasManifestService);
+        setup(dspaceCanvasManifestService);
     }
 
     @Test
     public void testGetManifest() throws IOException, URISyntaxException {
         when(httpService.get(eq(DSPACE_URL + "/rdf/handle/123456789/158308"))).thenReturn(FileUtils.readFileToString(rdf.getFile(), "UTF-8"));
         when(httpService.contentType(eq(DSPACE_URL + "/xmlui/bitstream/123456789/158308/1/sports-car-146873_960_720.png"))).thenReturn("image/png");
-        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZHNwYWNlOnhtbHVpL2JpdHN0cmVhbS8xMjM0NTY3ODkvMTU4MzA4LzEvc3BvcnRzLWNhci0xNDY4NzNfOTYwXzcyMC5wbmc=/info.json"))).thenReturn(FileUtils.readFileToString(image.getFile(), "UTF-8"));
-        String manifest = dSpaceCanvasManifestService.getManifest(ManifestRequest.of("123456789/158308/1/sports-car-146873_960_720.png", false));
+        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json"))).thenReturn(FileUtils.readFileToString(image.getFile(), "UTF-8"));
+        String manifest = dspaceCanvasManifestService.getManifest(ManifestRequest.of("123456789/158308/1/sports-car-146873_960_720.png", false));
         Assert.assertEquals(objectMapper.readValue(canvas.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 

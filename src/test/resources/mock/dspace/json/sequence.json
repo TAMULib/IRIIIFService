@@ -1,17 +1,17 @@
 {
-  "@id": "http://localhost:9003/dspace/sequence/123456789/158308",
+  "@id": "http://localhost:9003/dspace-rdf/sequence/123456789/158308",
   "@type": "sc:Sequence",
   "canvases": [{
-    "@id": "http://localhost:9003/dspace/canvas/123456789/158308/1/sports-car-146873_960_720.png",
+    "@id": "http://localhost:9003/dspace-rdf/canvas/123456789/158308/1/sports-car-146873_960_720.png",
     "@type": "sc:Canvas",
     "height": 480,
     "images": [{
-      "@id": "http://localhost:8182/iiif/2/ZHNwYWNlOnhtbHVpL2JpdHN0cmVhbS8xMjM0NTY3ODkvMTU4MzA4LzEvc3BvcnRzLWNhci0xNDY4NzNfOTYwXzcyMC5wbmc=/info.json",
+      "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json",
       "@type": "oa:Annotation",
       "motivation": "sc:painting",
-      "on": "http://localhost:9003/dspace/canvas/123456789/158308/1/sports-car-146873_960_720.png",
+      "on": "http://localhost:9003/dspace-rdf/canvas/123456789/158308/1/sports-car-146873_960_720.png",
       "resource": {
-        "@id": "http://localhost:8182/iiif/2/ZHNwYWNlOnhtbHVpL2JpdHN0cmVhbS8xMjM0NTY3ODkvMTU4MzA4LzEvc3BvcnRzLWNhci0xNDY4NzNfOTYwXzcyMC5wbmc=/full/full/0/default.jpg",
+        "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/full/full/0/default.jpg",
         "@type": "dctypes:Image",
         "format": "image/png",
         "height": 480,
@@ -19,7 +19,7 @@
           "label": "DSpace IIIF Image Resource Service",
           "profile": "http://iiif.io/api/image/2/level0.json",
           "@context": "http://iiif.io/api/image/2/context.json",
-          "@id": "http://localhost:8182/iiif/2/ZHNwYWNlOnhtbHVpL2JpdHN0cmVhbS8xMjM0NTY3ODkvMTU4MzA4LzEvc3BvcnRzLWNhci0xNDY4NzNfOTYwXzcyMC5wbmc="
+          "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n"
         },
         "width": 960
       }

@@ -32,7 +32,7 @@ public class FedoraImageManifestControllerTest extends AbstractManifestControlle
     public void testGetManifest() throws Exception {
         String expected = FileUtils.readFileToString(image0.getFile(), "UTF-8");
         when(fedaorImageManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/fedora/image/cars_pcdm_objects/chevy/pages/page_0/files/PTAR_800x400.png").accept(MediaType.APPLICATION_JSON);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/" + fedoraPcdmIdentifier + "/image/cars_pcdm_objects/chevy/pages/page_0/files/PTAR_800x400.png").accept(MediaType.APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
     }

@@ -10,10 +10,13 @@ public abstract class AbstractDSpaceManifestServiceTest extends AbstractManifest
 
     protected static final String DSPACE_WEBAPP = "xmlui";
 
-    protected void setup(AbstractDSpaceManifestService dSpaceManifestService) {
-        super.setup(dSpaceManifestService);
-        ReflectionTestUtils.setField(dSpaceManifestService, "dspaceUrl", DSPACE_URL);
-        ReflectionTestUtils.setField(dSpaceManifestService, "dspaceWebapp", DSPACE_WEBAPP);
+    protected static final String DSPACE_RDF_IDENTIFIER = "dspace-rdf";
+
+    protected void setup(AbstractDSpaceManifestService dspaceManifestService) {
+        super.setup(dspaceManifestService);
+        ReflectionTestUtils.setField(dspaceManifestService, "dspaceUrl", DSPACE_URL);
+        ReflectionTestUtils.setField(dspaceManifestService, "dspaceWebapp", DSPACE_WEBAPP);
+        ReflectionTestUtils.setField(dspaceManifestService, "dspaceRdfIdentifier", DSPACE_RDF_IDENTIFIER);
     }
 
 }

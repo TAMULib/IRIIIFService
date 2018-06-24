@@ -3,7 +3,6 @@ package edu.tamu.iiif.service.dspace;
 import static edu.tamu.iiif.constants.Constants.CANVAS_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.COLLECECTION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_BITSTREAM_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.DSPACE_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_COLLECTION_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_COMMUNITY_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_REPOSITORY_PREDICATE;
@@ -13,7 +12,6 @@ import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_DESCRIPTION;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_TITLE;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
-import static edu.tamu.iiif.model.RepositoryType.DSPACE;
 import static edu.tamu.iiif.utility.RdfModelUtility.createRdfModel;
 import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
 import static edu.tamu.iiif.utility.RdfModelUtility.getObject;
@@ -29,7 +27,7 @@ import java.util.Optional;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import de.digitalcollections.iiif.presentation.model.api.v2.Image;
@@ -41,12 +39,11 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimple
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
-import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
 
-@Profile(DSPACE_IDENTIFIER)
+@ConditionalOnExpression("'${spring.profiles.include}'.contains('${iiif.dspace.identifier.dspace-rdf}')")
 public abstract class AbstractDSpaceManifestService extends AbstractManifestService {
 
     @Value("${iiif.dspace.url}")
@@ -54,6 +51,9 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
 
     @Value("${iiif.dspace.webapp}")
     protected String dspaceWebapp;
+
+    @Value("${iiif.dspace.identifier.dspace-rdf}")
+    protected String dspaceRdfIdentifier;
 
     protected RdfResource getDSpaceRdfModel(String handle) throws NotFoundException {
         String dspaceRdfUrl = getRdfUrl(handle);
@@ -164,17 +164,17 @@ public abstract class AbstractDSpaceManifestService extends AbstractManifestServ
 
     @Override
     protected String getIiifServiceUrl() {
-        return iiifServiceUrl + "/" + DSPACE_IDENTIFIER;
+        return iiifServiceUrl + "/" + dspaceRdfIdentifier;
     }
 
     @Override
     protected String getRepositoryPath(String url) {
-        return DSPACE_IDENTIFIER + ":" + url.substring(dspaceUrl.length() + 1);
+        return dspaceRdfIdentifier + ":" + url.substring(dspaceUrl.length() + 1);
     }
 
     @Override
-    protected RepositoryType getRepositoryType() {
-        return DSPACE;
+    protected String getRepositoryType() {
+        return dspaceRdfIdentifier;
     }
 
     private String getRdfUrl(String handle) {

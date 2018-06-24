@@ -10,10 +10,13 @@ public abstract class AbstractFedoraManifestServiceTest extends AbstractManifest
 
     protected static final String PCDM_RDF_URL = "http://localhost:9107/pcdm";
 
+    protected static final String FEDORA_PCDM_IDENTIFIER = "fedora-pcdm";
+
     protected void setup(AbstractFedoraManifestService fedoraManifestService) {
         super.setup(fedoraManifestService);
         ReflectionTestUtils.setField(fedoraManifestService, "fedoraUrl", FEDORA_URL);
         ReflectionTestUtils.setField(fedoraManifestService, "fedoraPcdmExtUrl", PCDM_RDF_URL);
+        ReflectionTestUtils.setField(fedoraManifestService, "fedoraPcdmIdentifier", FEDORA_PCDM_IDENTIFIER);
     }
 
 }

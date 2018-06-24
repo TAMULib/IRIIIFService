@@ -21,7 +21,7 @@ import edu.tamu.iiif.controller.ManifestRequest;
 public class DSpaceSequenceManifestServiceTest extends AbstractDSpaceManifestServiceTest {
 
     @InjectMocks
-    private DSpaceSequenceManifestService dSpaceSequenceManifestService;
+    private DSpaceSequenceManifestService dspaceSequenceManifestService;
 
     @Value("classpath:mock/dspace/rdf/item.rdf")
     private Resource rdf;
@@ -34,7 +34,7 @@ public class DSpaceSequenceManifestServiceTest extends AbstractDSpaceManifestSer
 
     @Before
     public void setup() {
-        setup(dSpaceSequenceManifestService);
+        setup(dspaceSequenceManifestService);
     }
 
     @Test
@@ -42,8 +42,8 @@ public class DSpaceSequenceManifestServiceTest extends AbstractDSpaceManifestSer
         when(httpService.get(eq(DSPACE_URL + "/rdf/handle/123456789/158308"))).thenReturn(FileUtils.readFileToString(rdf.getFile(), "UTF-8"));
         when(httpService.contentType(eq(DSPACE_URL + "/xmlui/bitstream/123456789/158308/1/sports-car-146873_960_720.png"))).thenReturn("image/png");
         when(httpService.get(eq(DSPACE_URL + "/rdf/handle/123456789/158308/1/sports-car-146873_960_720.png"))).thenReturn(FileUtils.readFileToString(rdf.getFile(), "UTF-8"));
-        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZHNwYWNlOnhtbHVpL2JpdHN0cmVhbS8xMjM0NTY3ODkvMTU4MzA4LzEvc3BvcnRzLWNhci0xNDY4NzNfOTYwXzcyMC5wbmc=/info.json"))).thenReturn(FileUtils.readFileToString(image.getFile(), "UTF-8"));
-        String manifest = dSpaceSequenceManifestService.getManifest(ManifestRequest.of("123456789/158308", false));
+        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json"))).thenReturn(FileUtils.readFileToString(image.getFile(), "UTF-8"));
+        String manifest = dspaceSequenceManifestService.getManifest(ManifestRequest.of("123456789/158308", false));
 
         Assert.assertEquals(objectMapper.readValue(sequence.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }

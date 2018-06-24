@@ -5,7 +5,6 @@ import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_DESCRIPTION_PREDICAT
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TITLE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.FEDORA_FCR_METADATA;
 import static edu.tamu.iiif.constants.Constants.FEDORA_HAS_PARENT_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.FEDORA_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.IANA_FIRST_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.IANA_LAST_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.IANA_NEXT_PREDICATE;
@@ -14,7 +13,6 @@ import static edu.tamu.iiif.constants.Constants.ORE_PROXY_FOR_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_FILE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
-import static edu.tamu.iiif.model.RepositoryType.FEDORA;
 import static edu.tamu.iiif.utility.RdfModelUtility.createRdfModel;
 import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
 import static edu.tamu.iiif.utility.RdfModelUtility.getObject;
@@ -33,7 +31,7 @@ import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -46,20 +44,22 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimple
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
-import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfOrderedSequence;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
 
-@Profile(FEDORA_IDENTIFIER)
+@ConditionalOnExpression("'${spring.profiles.include}'.contains('${iiif.fedora.identifier.fedora-pcdm}')")
 public abstract class AbstractFedoraManifestService extends AbstractManifestService {
 
     @Value("${iiif.fedora.url}")
     protected String fedoraUrl;
 
-    @Value("${iiif.pcdm.rdf.ext.url}")
+    @Value("${iiif.fedora.pcdm.ext.url}")
     private String fedoraPcdmExtUrl;
+
+    @Value("${iiif.fedora.identifier.fedora-pcdm}")
+    protected String fedoraPcdmIdentifier;
 
     protected RdfResource getRdfResource(String path) throws NotFoundException {
         String fedoraRdfUri = getFedoraUrl(path);
@@ -143,17 +143,17 @@ public abstract class AbstractFedoraManifestService extends AbstractManifestServ
 
     @Override
     protected String getIiifServiceUrl() {
-        return iiifServiceUrl + "/" + FEDORA_IDENTIFIER;
+        return iiifServiceUrl + "/" + fedoraPcdmIdentifier;
     }
 
     @Override
     protected String getRepositoryPath(String url) {
-        return FEDORA_IDENTIFIER + ":" + url.substring(fedoraUrl.length() + 1);
+        return fedoraPcdmIdentifier + ":" + url.substring(fedoraUrl.length() + 1);
     }
 
     @Override
-    protected RepositoryType getRepositoryType() {
-        return FEDORA;
+    protected String getRepositoryType() {
+        return fedoraPcdmIdentifier;
     }
 
     private String getFedoraUrl(String path) {

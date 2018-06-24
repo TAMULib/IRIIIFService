@@ -21,20 +21,20 @@ import edu.tamu.iiif.controller.ManifestRequest;
 public class DSpaceImageManifestServiceTest extends AbstractDSpaceManifestServiceTest {
 
     @InjectMocks
-    private DSpaceImageManifestService dSpaceImageManifestService;
+    private DSpaceImageManifestService dspaceImageManifestService;
 
     @Value("classpath:mock/dspace/json/image.json")
     private Resource image;
 
     @Before
     public void setup() {
-        setup(dSpaceImageManifestService);
+        setup(dspaceImageManifestService);
     }
 
     @Test
     public void testGetManifest() throws IOException, URISyntaxException {
         when(httpService.get(any(String.class))).thenReturn(FileUtils.readFileToString(image.getFile(), "UTF-8"));
-        String manifest = dSpaceImageManifestService.getManifest(ManifestRequest.of("123456789/158308/1/sports-car-146873_960_720.png", false));
+        String manifest = dspaceImageManifestService.getManifest(ManifestRequest.of("123456789/158308/1/sports-car-146873_960_720.png", false));
         Assert.assertEquals(objectMapper.readValue(image.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 

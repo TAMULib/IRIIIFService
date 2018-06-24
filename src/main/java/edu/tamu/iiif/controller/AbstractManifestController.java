@@ -5,12 +5,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import edu.tamu.iiif.annotation.ContextIdentifier;
 import edu.tamu.iiif.service.ManifestService;
 import edu.tamu.iiif.utility.StringUtility;
 
@@ -18,6 +21,16 @@ public abstract class AbstractManifestController<S extends ManifestService> {
 
     @Autowired
     private S manifestService;
+
+    // @formatter:off
+    public abstract void manifest(    
+        HttpServletResponse response,
+        @ContextIdentifier String path,
+        @RequestParam(value = "update", required = false, defaultValue = "false") boolean update,
+        @RequestParam(value = "allow", required = false, defaultValue = "") List<String> allowed,
+        @RequestParam(value = "disallow", required = false, defaultValue = "") List<String> disallowed        
+    ) throws IOException, URISyntaxException;
+    // @formatter:on
 
     protected void sendManifest(ManifestBuilder builder) throws IOException, URISyntaxException {
         setResponseFile(builder.getResponse(), getFileName(builder.getRequest().getContext()));

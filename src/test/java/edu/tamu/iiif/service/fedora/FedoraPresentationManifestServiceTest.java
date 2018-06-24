@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.RedisManifest;
-import edu.tamu.iiif.model.RepositoryType;
 
 public class FedoraPresentationManifestServiceTest extends AbstractFedoraManifestServiceTest {
 
@@ -63,8 +62,8 @@ public class FedoraPresentationManifestServiceTest extends AbstractFedoraManifes
 
     @Test
     public void testGetManifestCached() throws IOException, URISyntaxException {
-        RedisManifest redisManifest = new RedisManifest("cars_pcdm_objects/chevy", ManifestType.PRESENTATION, RepositoryType.FEDORA, FileUtils.readFileToString(presentation.getFile(), "UTF-8"));
-        when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(RepositoryType.class), any(String.class), any(String.class))).thenReturn(Optional.of(redisManifest));
+        RedisManifest redisManifest = new RedisManifest("cars_pcdm_objects/chevy", ManifestType.PRESENTATION, FEDORA_PCDM_IDENTIFIER, FileUtils.readFileToString(presentation.getFile(), "UTF-8"));
+        when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(String.class), any(String.class), any(String.class))).thenReturn(Optional.of(redisManifest));
         String manifest = fedoraPresentationManifestService.getManifest(ManifestRequest.of("cars_pcdm_objects/chevy", false));
         Assert.assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
@@ -72,8 +71,8 @@ public class FedoraPresentationManifestServiceTest extends AbstractFedoraManifes
     @Test
     public void testGetManifestUpdateCached() throws IOException, URISyntaxException {
         setupMocks();
-        RedisManifest redisManifest = new RedisManifest("cars_pcdm_objects/chevy", ManifestType.PRESENTATION, RepositoryType.FEDORA, FileUtils.readFileToString(presentation.getFile(), "UTF-8"));
-        when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(RepositoryType.class), any(String.class), any(String.class))).thenReturn(Optional.of(redisManifest));
+        RedisManifest redisManifest = new RedisManifest("cars_pcdm_objects/chevy", ManifestType.PRESENTATION, FEDORA_PCDM_IDENTIFIER, FileUtils.readFileToString(presentation.getFile(), "UTF-8"));
+        when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(String.class), any(String.class), any(String.class))).thenReturn(Optional.of(redisManifest));
         String manifest = fedoraPresentationManifestService.getManifest(ManifestRequest.of("cars_pcdm_objects/chevy", true));
         Assert.assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
@@ -84,9 +83,9 @@ public class FedoraPresentationManifestServiceTest extends AbstractFedoraManifes
 
         when(httpService.contentType(any(String.class))).thenReturn("image/png");
 
-        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMC9maWxlcy9QVEFSXzgwMHg0MDAucG5n/info.json"))).thenReturn(FileUtils.readFileToString(image0.getFile(), "UTF-8"));
+        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL1BUQVJfODAweDQwMC5wbmc=/info.json"))).thenReturn(FileUtils.readFileToString(image0.getFile(), "UTF-8"));
 
-        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMS9maWxlcy9jYXIyLmpwZw==/info.json"))).thenReturn(FileUtils.readFileToString(image1.getFile(), "UTF-8"));
+        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8xL2ZpbGVzL2NhcjIuanBn/info.json"))).thenReturn(FileUtils.readFileToString(image1.getFile(), "UTF-8"));
 
         String manifest = fedoraPresentationManifestService.getManifest(ManifestRequest.of("cars_pcdm_objects/chevy", false));
 
@@ -99,10 +98,10 @@ public class FedoraPresentationManifestServiceTest extends AbstractFedoraManifes
         when(httpService.contentType(any(String.class))).thenReturn("image/png");
 
         when(httpService.get(eq(FEDORA_URL + "/cars_pcdm_objects/chevy/orderProxies/page_0_proxy/fcr:metadata"))).thenReturn(FileUtils.readFileToString(proxy0Rdf.getFile(), "UTF-8"));
-        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMC9maWxlcy9QVEFSXzgwMHg0MDAucG5n/info.json"))).thenReturn(FileUtils.readFileToString(image0.getFile(), "UTF-8"));
+        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL1BUQVJfODAweDQwMC5wbmc=/info.json"))).thenReturn(FileUtils.readFileToString(image0.getFile(), "UTF-8"));
 
         when(httpService.get(eq(FEDORA_URL + "/cars_pcdm_objects/chevy/orderProxies/page_1_proxy/fcr:metadata"))).thenReturn(FileUtils.readFileToString(proxy1Rdf.getFile(), "UTF-8"));
-        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL2NoZXZ5L3BhZ2VzL3BhZ2VfMS9maWxlcy9jYXIyLmpwZw==/info.json"))).thenReturn(FileUtils.readFileToString(image1.getFile(), "UTF-8"));
+        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8xL2ZpbGVzL2NhcjIuanBn/info.json"))).thenReturn(FileUtils.readFileToString(image1.getFile(), "UTF-8"));
     }
 
 }

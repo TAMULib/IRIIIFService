@@ -44,7 +44,6 @@ import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.RedisManifest;
-import edu.tamu.iiif.model.RepositoryType;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
 import edu.tamu.iiif.utility.StringUtility;
@@ -255,7 +254,7 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected abstract String getIiifImageServiceName();
 
-    protected abstract RepositoryType getRepositoryType();
+    protected abstract String getRepositoryType();
 
     protected abstract ManifestType getManifestType();
 
