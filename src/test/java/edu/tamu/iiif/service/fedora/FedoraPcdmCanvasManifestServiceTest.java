@@ -41,7 +41,7 @@ public class FedoraPcdmCanvasManifestServiceTest extends AbstractFedoraPcdmManif
     @Test
     public void testGetManifest() throws IOException, URISyntaxException {
         when(httpService.get(eq(PCDM_RDF_URL), any(String.class))).thenReturn(FileUtils.readFileToString(rdf.getFile(), "UTF-8"));
-        when(httpService.contentType(any(String.class))).thenReturn("image/png");
+        when(httpService.contentType(any(String.class))).thenReturn("image/png; charset=utf-8");
         when(httpService.get(any(String.class))).thenReturn(FileUtils.readFileToString(image0.getFile(), "UTF-8"));
         String manifest = fedoraPcdmCanvasManifestService.getManifest(ManifestRequest.of("cars_pcdm_objects/chevy/pages/page_0", false));
         Assert.assertEquals(objectMapper.readValue(canvas.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));

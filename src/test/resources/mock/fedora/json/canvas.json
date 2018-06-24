@@ -10,7 +10,7 @@
     "resource" : {
       "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL1BUQVJfODAweDQwMC5wbmc=/full/full/0/default.jpg",
       "@type" : "dctypes:Image",
-      "format": "image/png",
+      "format": "image/png; charset=utf-8",
       "height" : 400,
       "service" : {
         "label" : "Fedora IIIF Image Resource Service",

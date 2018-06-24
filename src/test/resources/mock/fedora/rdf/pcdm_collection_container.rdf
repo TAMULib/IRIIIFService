@@ -75,7 +75,7 @@
         fedora:writable          true ;
         dc:filename              "sports-car-146873_960_720.png" ;
         ebucore:filename         "sports-car-146873_960_720.png" ;
-        ebucore:hasMimeType      "image/png" ;
+        ebucore:hasMimeType      "image/png; charset=utf-8" ;
         iana:describedby         <http://localhost:9000/fcrepo/rest/cars_pcdm_objects/corvette/pages/page_0/files/sports-car-146873_960_720.png/fcr:metadata> ;
         premis:hasMessageDigest  <urn:sha1:b68e8586d27f47eb5ebf1fdbf31b06fc7557deec> ;
         premis:hasSize           "269262"^^<http://www.w3.org/2001/XMLSchema#long> .
@@ -91,7 +91,7 @@
         fedora:writable          true ;
         dc:filename              "hero-car.png" ;
         ebucore:filename         "hero-car.png" ;
-        ebucore:hasMimeType      "image/png" ;
+        ebucore:hasMimeType      "image/png; charset=utf-8" ;
         iana:describedby         <http://localhost:9000/fcrepo/rest/cars_pcdm_objects/vw/pages/page_0/files/hero-car.png/fcr:metadata> ;
         premis:hasMessageDigest  <urn:sha1:dd5248bd25385d52a68498fda07e8e22b2affffa> ;
         premis:hasSize           "228683"^^<http://www.w3.org/2001/XMLSchema#long> .
@@ -107,7 +107,7 @@
         fedora:writable          true ;
         dc:filename              "2017-nissan-versa-sv-auto-sedan-blue_featured.png" ;
         ebucore:filename         "2017-nissan-versa-sv-auto-sedan-blue_featured.png" ;
-        ebucore:hasMimeType      "image/png" ;
+        ebucore:hasMimeType      "image/png; charset=utf-8" ;
         iana:describedby         <http://localhost:9000/fcrepo/rest/cars_pcdm_objects/nissan/pages/page_0/files/2017-nissan-versa-sv-auto-sedan-blue_featured.png/fcr:metadata> ;
         premis:hasMessageDigest  <urn:sha1:dd934b1409d748c147f2309964acb30f2dca6240> ;
         premis:hasSize           "50307"^^<http://www.w3.org/2001/XMLSchema#long> .
@@ -123,7 +123,7 @@
         fedora:writable          true ;
         dc:filename              "PTAR_800x400.png" ;
         ebucore:filename         "PTAR_800x400.png" ;
-        ebucore:hasMimeType      "image/png" ;
+        ebucore:hasMimeType      "image/png; charset=utf-8" ;
         iana:describedby         <http://localhost:9000/fcrepo/rest/cars_pcdm_objects/chevy/pages/page_0/files/PTAR_800x400.png/fcr:metadata> ;
         premis:hasMessageDigest  <urn:sha1:86f177170cf6f49e5d74a253c29be7bc0e75fd44> ;
         premis:hasSize           "268782"^^<http://www.w3.org/2001/XMLSchema#long> .

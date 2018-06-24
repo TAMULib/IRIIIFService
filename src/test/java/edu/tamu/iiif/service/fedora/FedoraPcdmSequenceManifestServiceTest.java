@@ -51,7 +51,7 @@ public class FedoraPcdmSequenceManifestServiceTest extends AbstractFedoraPcdmMan
     public void testGetManifest() throws IOException, URISyntaxException {
         when(httpService.get(eq(PCDM_RDF_URL), any(String.class))).thenReturn(FileUtils.readFileToString(rdf.getFile(), "UTF-8"));
 
-        when(httpService.contentType(any(String.class))).thenReturn("image/png");
+        when(httpService.contentType(any(String.class))).thenReturn("image/png; charset=utf-8");
 
         when(httpService.get(eq(FEDORA_URL + "/cars_pcdm_objects/chevy/orderProxies/page_0_proxy/fcr:metadata"))).thenReturn(FileUtils.readFileToString(proxy0Rdf.getFile(), "UTF-8"));
         when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL1BUQVJfODAweDQwMC5wbmc=/info.json"))).thenReturn(FileUtils.readFileToString(image0.getFile(), "UTF-8"));

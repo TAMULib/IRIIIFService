@@ -10,7 +10,7 @@
     "resource" : {
       "@id" : "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/full/full/0/default.jpg",
       "@type" : "dctypes:Image",
-      "format": "image/png",
+      "format": "image/png; charset=utf-8",
       "height" : 480,
       "service" : {
         "label" : "DSpace IIIF Image Resource Service",
