@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.tamu.iiif.annotation.ContextIdentifier;
-import edu.tamu.iiif.annotation.ManifestEndpoint;
+import edu.tamu.iiif.annotation.ManifestController;
 import edu.tamu.iiif.controller.AbstractManifestController;
 import edu.tamu.iiif.service.fedora.FedoraPcdmPresentationManifestService;
 
 //@formatter:off
-@ManifestEndpoint(
+@ManifestController(
     path = "/${iiif.fedora.identifier.fedora-pcdm}",
     condition = "'${spring.profiles.include}'.contains('${iiif.fedora.identifier.fedora-pcdm}')"
 )

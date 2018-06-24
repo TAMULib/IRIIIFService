@@ -2,16 +2,16 @@ package edu.tamu.iiif.service;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -38,14 +38,14 @@ public abstract class AbstractManifestServiceTest implements ManifestServiceTest
 
     @Before
     public void init() {
-        MockitoAnnotations.initMocks(this);
+        initMocks(this);
         when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(String.class), any(String.class), any(String.class))).thenReturn(Optional.empty());
     }
 
     protected void setup(AbstractManifestService manifestService) {
-        ReflectionTestUtils.setField(manifestService, "iiifServiceUrl", IIIF_SERVICE_URL);
-        ReflectionTestUtils.setField(manifestService, "imageServerUrl", IMAGE_SERVICE_URL);
-        ReflectionTestUtils.setField(manifestService, "logoUrl", LOGO_URL);
+        setField(manifestService, "iiifServiceUrl", IIIF_SERVICE_URL);
+        setField(manifestService, "imageServerUrl", IMAGE_SERVICE_URL);
+        setField(manifestService, "logoUrl", LOGO_URL);
     }
 
 }

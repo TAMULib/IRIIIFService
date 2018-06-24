@@ -11,9 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import edu.tamu.iiif.annotation.ContextIdentifier;
 import edu.tamu.iiif.service.ManifestService;
 import edu.tamu.iiif.utility.StringUtility;
 
@@ -22,15 +20,7 @@ public abstract class AbstractManifestController<S extends ManifestService> {
     @Autowired
     private S manifestService;
 
-    // @formatter:off
-    public abstract void manifest(    
-        HttpServletResponse response,
-        @ContextIdentifier String path,
-        @RequestParam(value = "update", required = false, defaultValue = "false") boolean update,
-        @RequestParam(value = "allow", required = false, defaultValue = "") List<String> allowed,
-        @RequestParam(value = "disallow", required = false, defaultValue = "") List<String> disallowed        
-    ) throws IOException, URISyntaxException;
-    // @formatter:on
+    public abstract void manifest(HttpServletResponse response, String path, boolean update, List<String> allowed, List<String> disallowed) throws IOException, URISyntaxException;
 
     protected void sendManifest(ManifestBuilder builder) throws IOException, URISyntaxException {
         setResponseFile(builder.getResponse(), getFileName(builder.getRequest().getContext()));

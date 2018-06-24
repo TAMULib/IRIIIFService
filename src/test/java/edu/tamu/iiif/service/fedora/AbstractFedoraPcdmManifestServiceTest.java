@@ -1,6 +1,6 @@
 package edu.tamu.iiif.service.fedora;
 
-import org.springframework.test.util.ReflectionTestUtils;
+import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import edu.tamu.iiif.service.AbstractManifestServiceTest;
 
@@ -14,9 +14,9 @@ public abstract class AbstractFedoraPcdmManifestServiceTest extends AbstractMani
 
     protected void setup(AbstractFedoraPcdmManifestService fedoraPcdmManifestService) {
         super.setup(fedoraPcdmManifestService);
-        ReflectionTestUtils.setField(fedoraPcdmManifestService, "fedoraUrl", FEDORA_URL);
-        ReflectionTestUtils.setField(fedoraPcdmManifestService, "fedoraPcdmExtUrl", PCDM_RDF_URL);
-        ReflectionTestUtils.setField(fedoraPcdmManifestService, "fedoraPcdmIdentifier", FEDORA_PCDM_IDENTIFIER);
+        setField(fedoraPcdmManifestService, "fedoraUrl", FEDORA_URL);
+        setField(fedoraPcdmManifestService, "fedoraPcdmExtUrl", PCDM_RDF_URL);
+        setField(fedoraPcdmManifestService, "fedoraPcdmIdentifier", FEDORA_PCDM_IDENTIFIER);
     }
 
 }

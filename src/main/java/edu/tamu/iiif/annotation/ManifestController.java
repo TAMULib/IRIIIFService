@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Documented
 @Target(TYPE)
 @Retention(RUNTIME)
-public @interface ManifestEndpoint {
+public @interface ManifestController {
 
     @AliasFor(annotation = RequestMapping.class, attribute = "value")
     String[] path();

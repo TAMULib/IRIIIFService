@@ -1,13 +1,13 @@
 package edu.tamu.iiif.service.fedora;
 
+import static org.apache.commons.io.FileUtils.readFileToString;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -33,9 +33,9 @@ public class FedoraPcdmImageManifestServiceTest extends AbstractFedoraPcdmManife
 
     @Test
     public void testGetManifest() throws IOException, URISyntaxException {
-        when(httpService.get(any(String.class))).thenReturn(FileUtils.readFileToString(image0.getFile(), "UTF-8"));
+        when(httpService.get(any(String.class))).thenReturn(readFileToString(image0.getFile(), "UTF-8"));
         String manifest = fedoraPcdmImageManifestService.getManifest(ManifestRequest.of("cars_pcdm_objects/chevy/pages/page_0/files/PTAR_800x400.png", false));
-        Assert.assertEquals(objectMapper.readValue(image0.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
+        assertEquals(objectMapper.readValue(image0.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
 }
