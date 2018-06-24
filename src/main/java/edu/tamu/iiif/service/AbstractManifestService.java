@@ -30,16 +30,20 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import de.digitalcollections.iiif.presentation.model.api.v2.Image;
 import de.digitalcollections.iiif.presentation.model.api.v2.ImageResource;
 import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
+import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
 import de.digitalcollections.iiif.presentation.model.api.v2.Service;
+import de.digitalcollections.iiif.presentation.model.api.v2.Thumbnail;
 import de.digitalcollections.iiif.presentation.model.impl.jackson.v2.IiifPresentationApiObjectMapper;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ImageImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ImageResourceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.MetadataImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ServiceImpl;
+import de.digitalcollections.iiif.presentation.model.impl.v2.ThumbnailImpl;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
@@ -230,6 +234,24 @@ public abstract class AbstractManifestService implements ManifestService {
             services.add(getService(rdfResource, name));
         }
         return services;
+    }
+
+    protected Optional<Thumbnail> getThumbnail(List<Sequence> sequences) throws URISyntaxException {
+        Optional<Thumbnail> optionalThumbnail = Optional.empty();
+        exit: for (Sequence sequence : sequences) {
+            for (Canvas canvas : sequence.getCanvases()) {
+                for (Image image : canvas.getImages()) {
+                    if (Optional.ofNullable(image.getResource()).isPresent()) {
+                        URI serviceURI = image.getResource().getServices().get(0).getId();
+                        Thumbnail thubmnail = new ThumbnailImpl(serviceUrlToThumbnailUri(serviceURI));
+                        thubmnail.setServices(image.getResource().getServices());
+                        optionalThumbnail = Optional.of(thubmnail);
+                        continue exit;
+                    }
+                }
+            }
+        }
+        return optionalThumbnail;
     }
 
     protected String pathIdentifier(String url) {

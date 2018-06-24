@@ -15,14 +15,12 @@ import org.apache.jena.rdf.model.NodeIterator;
 import org.springframework.stereotype.Service;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
-import de.digitalcollections.iiif.presentation.model.api.v2.Image;
 import de.digitalcollections.iiif.presentation.model.api.v2.Manifest;
 import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
 import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
 import de.digitalcollections.iiif.presentation.model.api.v2.Thumbnail;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ManifestImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
-import de.digitalcollections.iiif.presentation.model.impl.v2.ThumbnailImpl;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
@@ -116,24 +114,6 @@ public class DSpaceRdfPresentationManifestService extends AbstractDSpaceRdfManif
             sequences.addAll(aggregateSequences(request, getDSpaceRdfModel(handle)));
         }
         return sequences;
-    }
-
-    private Optional<Thumbnail> getThumbnail(List<Sequence> sequences) throws URISyntaxException {
-        Optional<Thumbnail> optionalThumbnail = Optional.empty();
-        exit: for (Sequence sequence : sequences) {
-            for (Canvas canvas : sequence.getCanvases()) {
-                for (Image image : canvas.getImages()) {
-                    if (Optional.ofNullable(image.getResource()).isPresent()) {
-                        URI serviceURI = image.getResource().getServices().get(0).getId();
-                        Thumbnail thubmnail = new ThumbnailImpl(serviceUrlToThumbnailUri(serviceURI));
-                        thubmnail.setServices(image.getResource().getServices());
-                        optionalThumbnail = Optional.of(thubmnail);
-                        continue exit;
-                    }
-                }
-            }
-        }
-        return optionalThumbnail;
     }
 
     @Override
