@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,7 +19,7 @@ public abstract class AbstractManifestController<S extends ManifestService> {
     @Autowired
     private S manifestService;
 
-    public abstract void manifest(HttpServletResponse response, String path, boolean update, List<String> allowed, List<String> disallowed) throws IOException, URISyntaxException;
+    public abstract void manifest(HttpServletResponse response, ManifestRequest request) throws IOException, URISyntaxException;
 
     protected void sendManifest(ManifestBuilder builder) throws IOException, URISyntaxException {
         setResponseFile(builder.getResponse(), getFileName(builder.getRequest().getContext()));
