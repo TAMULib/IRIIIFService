@@ -13,7 +13,7 @@ spring.redis:
   port: 6379
   profiles:
     active: production
-    include: dsapce-rdf, fedora-pcdm
+    include: dspace-rdf, fedora-pcdm
 
 iiif:
   service:
@@ -28,7 +28,7 @@ iiif:
     url: http://localhost:8080
     webapp: xmlui
     identifier: 
-      dspace-rdf: dsapce-rdf
+      dspace-rdf: dspace-rdf
       dspace-rest: dspace-rest
   fedora:
     url: http://localhost:9000/fcrepo/rest
