@@ -64,16 +64,14 @@ public class FedoraPcdmPresentationManifestServiceTest extends AbstractFedoraPcd
 
     @Test
     public void testGetManifestAllowed() throws IOException, URISyntaxException {
-        RedisManifest redisManifest = new RedisManifest("cars_pcdm_objects/chevy", PRESENTATION, FEDORA_PCDM_IDENTIFIER, readFileToString(presentation.getFile(), "UTF-8"));
-        when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(String.class), any(String.class), any(String.class))).thenReturn(Optional.of(redisManifest));
+        setupMocks();
         String manifest = fedoraPcdmPresentationManifestService.getManifest(ManifestRequest.of("cars_pcdm_objects/chevy", false, Arrays.asList(new String[] { "image/png", "image/jpeg" }), Arrays.asList(new String[] {})));
         assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
     @Test
     public void testGetManifestDisallowed() throws IOException, URISyntaxException {
-        RedisManifest redisManifest = new RedisManifest("cars_pcdm_objects/chevy", PRESENTATION, FEDORA_PCDM_IDENTIFIER, readFileToString(presentation.getFile(), "UTF-8"));
-        when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(String.class), any(String.class), any(String.class))).thenReturn(Optional.of(redisManifest));
+        setupMocks();
         String manifest = fedoraPcdmPresentationManifestService.getManifest(ManifestRequest.of("cars_pcdm_objects/chevy", false, Arrays.asList(new String[] {}), Arrays.asList(new String[] { "image/bmp", "image/jpeg" })));
         assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }

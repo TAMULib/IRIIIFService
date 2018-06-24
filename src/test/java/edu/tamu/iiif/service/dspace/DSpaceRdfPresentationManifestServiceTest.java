@@ -53,16 +53,14 @@ public class DSpaceRdfPresentationManifestServiceTest extends AbstractDSpaceRdfM
 
     @Test
     public void testGetManifestAllowed() throws IOException, URISyntaxException {
-        RedisManifest redisManifest = new RedisManifest("123456789/158308", PRESENTATION, DSPACE_RDF_IDENTIFIER, readFileToString(presentation.getFile(), "UTF-8"));
-        when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(String.class), any(String.class), any(String.class))).thenReturn(Optional.of(redisManifest));
+        setupMocks();
         String manifest = dspaceRdfPresentationManifestService.getManifest(ManifestRequest.of("123456789/158308", false, Arrays.asList(new String[] { "image/png", "image/jpeg" }), Arrays.asList(new String[] {})));
         assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
     @Test
     public void testGetManifestDisallowed() throws IOException, URISyntaxException {
-        RedisManifest redisManifest = new RedisManifest("123456789/158308", PRESENTATION, DSPACE_RDF_IDENTIFIER, readFileToString(presentation.getFile(), "UTF-8"));
-        when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(String.class), any(String.class), any(String.class))).thenReturn(Optional.of(redisManifest));
+        setupMocks();
         String manifest = dspaceRdfPresentationManifestService.getManifest(ManifestRequest.of("123456789/158308", false, Arrays.asList(new String[] {}), Arrays.asList(new String[] { "image/bmp", "image/jpeg" })));
         assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
