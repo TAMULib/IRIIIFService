@@ -16,7 +16,7 @@ import org.springframework.web.servlet.HandlerMapping;
 
 import edu.tamu.iiif.controller.ManifestRequest;
 
-public class ContextArgumentResolver implements HandlerMethodArgumentResolver {
+public class ManifestRequestArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final static String UPDATE_PARAMATER_NAME = "update";
     private final static String ALLOW_PARAMATER_NAME = "allow";

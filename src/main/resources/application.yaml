@@ -7,13 +7,14 @@ logging:
   level:
     edu.tamu.iiif: INFO
     org.springframework: INFO
+  path: /var/logs/iiif
 
 spring.redis:
   host: localhost
   port: 6379
   profiles:
     active: production
-    include: dspace-rdf, fedora-pcdm
+    include: dspace, fedora
 
 iiif:
   service:
@@ -28,11 +29,9 @@ iiif:
     url: http://localhost:8080
     webapp: xmlui
     identifier: 
-      dspace-rdf: dspace-rdf
-      dspace-rest: dspace-rest
+      dspace-rdf: dspace
   fedora:
     url: http://localhost:9000/fcrepo/rest
     pcdm.ext.url: http://localhost:9107/pcdm
     identifier:
-      fedora-pcdm: fedora-pcdm
-      fedora: fedora
+      fedora-pcdm: fedora
