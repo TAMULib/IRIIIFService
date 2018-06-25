@@ -9,9 +9,10 @@ logging:
     org.springframework: INFO
   path: /var/logs/iiif
 
-spring.redis:
-  host: localhost
-  port: 6379
+spring:
+  redis:
+    host: localhost
+    port: 6379
   profiles:
     active: test
     include: dspace, fedora
