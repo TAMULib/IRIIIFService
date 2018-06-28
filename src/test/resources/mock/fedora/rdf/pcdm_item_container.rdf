@@ -75,7 +75,7 @@
         fedora:writable          true ;
         dc:filename              "PTAR_800x400.png" ;
         ebucore:filename         "PTAR_800x400.png" ;
-        ebucore:hasMimeType      "image/png" ;
+        ebucore:hasMimeType      "image/png; charset=utf-8" ;
         iana:describedby         <http://localhost:9000/fcrepo/rest/cars_pcdm_objects/chevy/pages/page_0/files/PTAR_800x400.png/fcr:metadata> ;
         premis:hasMessageDigest  <urn:sha1:86f177170cf6f49e5d74a253c29be7bc0e75fd44> ;
         premis:hasSize           "268782"^^<http://www.w3.org/2001/XMLSchema#long> .

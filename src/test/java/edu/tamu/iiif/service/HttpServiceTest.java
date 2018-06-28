@@ -1,8 +1,13 @@
 package edu.tamu.iiif.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.io.IOException;
 
@@ -18,16 +23,13 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicStatusLine;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,7 +58,7 @@ public class HttpServiceTest {
 
     @Before
     public void setup() throws ClientProtocolException, IOException {
-        MockitoAnnotations.initMocks(this);
+        initMocks(this);
 
         objectMapper = new ObjectMapper();
 
@@ -68,13 +70,13 @@ public class HttpServiceTest {
 
         header = new BasicHeader("Content-Type", "image/jpeg");
 
-        ReflectionTestUtils.setField(httpService, "connectionTimeout", 1000);
-        ReflectionTestUtils.setField(httpService, "connectionRequestTimeout", 1000);
-        ReflectionTestUtils.setField(httpService, "socketTimeout", 1000);
+        setField(httpService, "connectionTimeout", 1000);
+        setField(httpService, "connectionRequestTimeout", 1000);
+        setField(httpService, "socketTimeout", 1000);
 
-        ReflectionTestUtils.setField(httpService, "httpClient", httpClient);
+        setField(httpService, "httpClient", httpClient);
 
-        Assert.assertNotNull(httpService);
+        assertNotNull(httpService);
 
         when(response.getEntity()).thenReturn(entity);
         when(response.getFirstHeader("Content-Type")).thenReturn(header);
@@ -88,7 +90,7 @@ public class HttpServiceTest {
         when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK"));
         when(entity.getContent()).thenReturn(image0.getInputStream());
         String response = httpService.get("http://localhost:8182/iiif/2/test/info.json");
-        Assert.assertEquals(objectMapper.readValue(image0.getFile(), JsonNode.class), objectMapper.readValue(response, JsonNode.class));
+        assertEquals(objectMapper.readValue(image0.getFile(), JsonNode.class), objectMapper.readValue(response, JsonNode.class));
     }
 
     @Test
@@ -96,7 +98,7 @@ public class HttpServiceTest {
         when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK"));
         when(entity.getContent()).thenReturn(rdf.getInputStream());
         String response = httpService.get("http://localhost:9107", "pcdm_cars");
-        Assert.assertEquals(FileUtils.readFileToString(rdf.getFile(), "UTF-8"), response);
+        assertEquals(FileUtils.readFileToString(rdf.getFile(), "UTF-8"), response);
     }
 
     @Test
@@ -104,7 +106,7 @@ public class HttpServiceTest {
         when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_BAD_REQUEST, "BAD REQUEST"));
         when(entity.getContent()).thenReturn(image0.getInputStream());
         String response = httpService.get("http://localhost:8182/iiif/2/fail/info.json");
-        Assert.assertNull(response);
+        assertNull(response);
     }
 
     @Test
@@ -112,14 +114,14 @@ public class HttpServiceTest {
         when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK"));
         when(entity.getContent()).thenReturn(image0.getInputStream());
         String response = httpService.get("@foo://invalid.bar");
-        Assert.assertNull(response);
+        assertNull(response);
     }
 
     @Test
     public void testContentType() throws UnsupportedOperationException, IOException {
         when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK"));
         String response = httpService.contentType("https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png");
-        Assert.assertEquals(header.getValue(), response);
+        assertEquals(header.getValue(), response);
     }
 
     @Test
@@ -127,21 +129,21 @@ public class HttpServiceTest {
         when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK"));
         when(response.getFirstHeader("Content-Type")).thenReturn(null);
         String response = httpService.contentType("https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png");
-        Assert.assertNull(response);
+        assertNull(response);
     }
 
     @Test
     public void testContentTypeIncorrectStatusCode() throws UnsupportedOperationException, IOException {
         when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_BAD_REQUEST, "BAD REQUEST"));
         String response = httpService.contentType("https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png");
-        Assert.assertNull(response);
+        assertNull(response);
     }
 
     @Test
     public void testContentTypeMalformedUrl() throws UnsupportedOperationException, IOException {
         when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK"));
         String response = httpService.contentType("@foo://invalid.bar");
-        Assert.assertNull(response);
+        assertNull(response);
     }
 
 }

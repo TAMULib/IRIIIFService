@@ -19,7 +19,7 @@ public class RedisManifest {
     private ManifestType type;
 
     @Indexed
-    private RepositoryType repository;
+    private String repository;
 
     @Indexed
     private String allowed;
@@ -37,7 +37,7 @@ public class RedisManifest {
         this.disallowed = "";
     }
 
-    public RedisManifest(String path, ManifestType type, RepositoryType repository, String json) {
+    public RedisManifest(String path, ManifestType type, String repository, String json) {
         this();
         this.path = path;
         this.type = type;
@@ -45,7 +45,7 @@ public class RedisManifest {
         this.json = json;
     }
 
-    public RedisManifest(String path, ManifestType type, RepositoryType repository, String allowed, String disallowed, String json) {
+    public RedisManifest(String path, ManifestType type, String repository, String allowed, String disallowed, String json) {
         this();
         this.path = path;
         this.type = type;
@@ -71,7 +71,7 @@ public class RedisManifest {
         return type;
     }
 
-    public RepositoryType getRepository() {
+    public String getRepository() {
         return repository;
     }
 

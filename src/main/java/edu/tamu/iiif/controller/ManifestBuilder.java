@@ -1,7 +1,5 @@
 package edu.tamu.iiif.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
 
 public class ManifestBuilder {
@@ -23,8 +21,8 @@ public class ManifestBuilder {
         return request;
     }
 
-    public static ManifestBuilder build(HttpServletResponse response, String path, boolean update, List<String> allowed, List<String> disallowed) {
-        return new ManifestBuilder(response, ManifestRequest.of(path, update, allowed, disallowed));
+    public static ManifestBuilder build(HttpServletResponse response, ManifestRequest request) {
+        return new ManifestBuilder(response, request);
     }
 
 }

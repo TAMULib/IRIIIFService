@@ -73,7 +73,7 @@
 - [API-X](https://github.com/fcrepo4-labs/fcrepo-api-x/blob/master/src/site/markdown/apix-design-overview.md)
 - [Amherst PCDM](https://github.com/birkland/repository-extension-services/tree/apix-demo/acrepo-exts-pcdm)
 # Configuration
-> Configuration for this service is done in [application.properties](https://github.com/TAMULib/IRIIIFService/blob/master/src/main/resources/application.properties) file located in src/main/resrouces directory.
+> Configuration for this service is done in [application.yaml](https://github.com/TAMULib/IRIIIFService/blob/master/src/main/resources/application.yaml) file located in src/main/resrouces directory.
 
 <details>
 <summary>View Properties</summary>
@@ -82,26 +82,30 @@
 
 | **Property** | **Type** | **Description** | **Example** |
 | :----------- | :------- | :-------------- | :---------- |
-| server.port | number | Port in which service is hosted. | 9000 |
 | server.contextPath | string | Path in which service is hosted. | /iiif-service |
+| server.port | number | Port in which service is hosted. | 9000 |
 | logging.level.edu.tamu.iiif | LOG_LEVEL | Log level for iiif service. | INFO |
 | logging.level.org.springframework | LOG_LEVEL | Log level for spring framework. | INFO |
 | logging.file | string | Log file. | iiif-service.log |
 | logging.path | string | Path for log file. | /var/logs/iiif |
 | spring.redis.host | string | Host for redis server. | localhost |
 | spring.redis.port | number | Port for redis server. | 6379 |
-| spring.profiles | string | Build environment profile. | production |
-| spring.profiles.include | string | Additional build environment profiles. | dspace, fedora |
+| spring.profiles.active | string | Build environment profile. | production |
+| spring.profiles.include | string | Additional build environment profiles. Must match repository identifier. | dspace, fedora |
 | iiif.service.url | url | IIIF service URL. | http://localhost:${server.port}${server.contextPath} |
-| iiif.dspace.url | url | DSpace base URL. | http://localhost:8080 |
-| iiif.dspace.webapp | string | DSpace UI webapp. | xmlui |
-| iiif.fedora.url | url | Fedora REST URL. | http://localhost:9000/fcrepo/rest |
-| iiif.pcdm.rdf.ext.url | url | Fedora Amherst PCDM service URL. | http://localhost:9107/pcdm |
-| iiif.image.server.url | url | IIIF image server URL. | http://localhost:8182/iiif/2 |
-| iiif.logo.url | url | URL for a default logo. | https://localhost/assets/downloads/logos/Logo.png |
 | iiif.service.connection.timeout | number | HTTP connection request timeout in milliseconds. | 300000  |
 | iiif.service.connection.request.timeout | number | HTTP connection timeout in milliseconds. | 300000  |
 | iiif.service.socket.timeout | number | HTTP socket timeout in milliseconds. | 300000  |
+| iiif.image.server.url | url | IIIF image server URL. | http://localhost:8182/iiif/2 |
+| iiif.logo.url | url | URL for a default logo. | https://localhost/assets/downloads/logos/Logo.png |
+| iiif.dspace.identifier.dspace-rdf | string | DSpace RDF Identifier. | dspace |
+| iiif.dspace.url | url | DSpace base URL. | http://localhost:8080 |
+| iiif.dspace.webapp | string | DSpace UI webapp. | xmlui |
+| iiif.fedora.identifier.fedora-pcm | string | Fedora PCDM RDF identifier. | fedora |
+| iiif.fedora.url | url | Fedora REST URL. | http://localhost:9000/fcrepo/rest |
+| iiif.fedora.pcdm.ext.url | url | Fedora Amherst PCDM service URL. | http://localhost:9107/pcdm |
+
+
 
 </details>
 
@@ -115,7 +119,8 @@
 | allow | semicolon separated string of MIME types | only process the provided MIME types for resources |
 | disallow | semicolon separated string of MIME types | exclude provided MIME types for resources |
 
-## Fedora
+## Fedora PCDM RDF
+> With identifier ```fedora```
 
 | **Title** | Collection |
 | :-------- | :--------- |
@@ -177,7 +182,9 @@
 | **Sample Request** | ```/fedora/image/cars_pcdm_objects/vintage/pages/page_0/files/vintage.jpg``` |
 | **Notes** | |
 
-## DSpace
+## DSpace RDF
+> With identifier ```dspace```
+
 | **Title** | Collection |
 | :-------- | :--------- |
 | **Description** | Returns a generated or cached collection manifest for the provided DSpace handle. |

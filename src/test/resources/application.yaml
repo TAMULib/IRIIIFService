@@ -1,0 +1,38 @@
+server:
+  contextPath:
+  port: 9003
+
+logging:
+  file: ir-iiif-service.log
+  level:
+    edu.tamu.iiif: DEBUG
+    org.springframework: INFO
+  path: /var/logs/iiif
+
+spring:
+  redis:
+    host: localhost
+    port: 6379
+  profiles:
+    active: test
+    include: dspace, fedora
+
+iiif:
+  service:
+    url: http://localhost:${server.port}${server.contextPath}
+    connection:
+      timeout: 30000
+      request.timeout: 15000
+    socket.timeout: 60000
+  image.server.url: http://localhost:8182/iiif/2
+  logo.url: https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png
+  dspace:
+    url: http://localhost:8080
+    webapp: xmlui
+    identifier: 
+      dspace-rdf: dspace
+  fedora:
+    url: http://localhost:9000/fcrepo/rest
+    pcdm.ext.url: http://localhost:9107/pcdm
+    identifier:
+      fedora-pcdm: fedora

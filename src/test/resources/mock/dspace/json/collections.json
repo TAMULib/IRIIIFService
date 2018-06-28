@@ -1,22 +1,22 @@
 {
   "@context" : "http://iiif.io/api/presentation/2/context.json",
-  "@id" : "http://localhost:9003/dspace/collection/123456789/158298",
+  "@id" : "http://localhost:9003/dspace-rdf/collection/123456789/158298",
   "@type" : "sc:Collection",
   "collections" : [ {
-    "@id" : "http://localhost:9003/dspace/collection/123456789/158301",
+    "@id" : "http://localhost:9003/dspace-rdf/collection/123456789/158301",
     "@type" : "sc:Collection",
     "label" : "123456789/158301"
   }, {
-    "@id" : "http://localhost:9003/dspace/collection/123456789/158299",
+    "@id" : "http://localhost:9003/dspace-rdf/collection/123456789/158299",
     "@type" : "sc:Collection",
     "label" : "123456789/158299"
   }, {
-    "@id" : "http://localhost:9003/dspace/collection/123456789/158300",
+    "@id" : "http://localhost:9003/dspace-rdf/collection/123456789/158300",
     "@type" : "sc:Collection",
     "label" : "123456789/158300"
   } ],
   "description" : "N/A",
-  "label" : "dspace:rdf/handle/123456789/158298",
+  "label" : "dspace-rdf:rdf/handle/123456789/158298",
   "logo" : "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "manifests" : [ ],
   "metadata" : [ ],
