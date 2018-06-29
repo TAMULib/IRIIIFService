@@ -200,7 +200,10 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_BITSTREAM_PREDICATE);
         while (collectionIterator.hasNext()) {
             String uri = collectionIterator.next().toString();
-            canvases.add(generateCanvas(request, new RdfResource(rdfResource, uri)));
+            Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, uri));
+            if (canvas.getImages().size() > 0) {
+                canvases.add(canvas);
+            }
         }
         return canvases;
     }

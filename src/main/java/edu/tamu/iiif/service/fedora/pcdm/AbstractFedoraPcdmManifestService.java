@@ -181,7 +181,10 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
             while (resItr.hasNext()) {
                 Resource resource = resItr.next();
                 if (resource.getProperty(rdfResource.getProperty(PCDM_HAS_FILE_PREDICATE)) != null) {
-                    canvases.add(generateCanvas(request, new RdfResource(rdfResource, resource)));
+                    Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, resource));
+                    if (canvas.getImages().size() > 0) {
+                        canvases.add(canvas);
+                    }
                 }
             }
 
@@ -202,7 +205,10 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
         if (id.isPresent()) {
 
-            canvases.add(generateCanvas(request, new RdfResource(rdfOrderedSequence, rdfOrderedSequence.getModel().getResource(id.get()))));
+            Canvas canvas = generateCanvas(request, new RdfResource(rdfOrderedSequence, rdfOrderedSequence.getModel().getResource(id.get())));
+            if (canvas.getImages().size() > 0) {
+                canvases.add(canvas);
+            }
 
             Optional<String> nextId = getIdByPredicate(model, IANA_NEXT_PREDICATE);
 
