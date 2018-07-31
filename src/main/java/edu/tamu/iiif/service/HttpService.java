@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.http.Header;
+import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.config.RequestConfig;
@@ -21,7 +22,8 @@ import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
@@ -49,8 +51,9 @@ public class HttpService {
 
     @PostConstruct
     private void init() throws URISyntaxException {
+        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
         RequestConfig config = RequestConfig.custom().setConnectTimeout(connectionTimeout).setConnectionRequestTimeout(connectionRequestTimeout).setSocketTimeout(socketTimeout).build();
-        httpClient = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
+        httpClient = HttpClients.custom().setConnectionManager(connectionManager).setDefaultRequestConfig(config).build();
     }
 
     @PreDestroy
@@ -71,8 +74,7 @@ public class HttpService {
     public String contentType(String url) {
         LOG.debug("HEAD: " + url);
         String mimeType = null;
-        try {
-            CloseableHttpResponse response = request(craftHead(url, EMPTY_PARAMETERS));
+        try (CloseableHttpResponse response = request(craftHead(url, EMPTY_PARAMETERS))) {
             Optional<Header> contentType = Optional.ofNullable(response.getFirstHeader("Content-Type"));
             if (contentType.isPresent()) {
                 mimeType = contentType.get().getValue();
@@ -80,7 +82,7 @@ public class HttpService {
             } else {
                 LOG.warn("No Content-Type!");
             }
-            response.close();
+
         } catch (IOException e) {
             LOG.warn("Error performing GET request: " + url);
         } catch (URISyntaxException e) {
@@ -91,8 +93,7 @@ public class HttpService {
 
     private String get(String url, List<NameValuePair> parameters) {
         String body = null;
-        try {
-            CloseableHttpResponse response = request(craftGet(url, parameters));
+        try (CloseableHttpResponse response = request(craftGet(url, parameters))) {
             body = EntityUtils.toString(response.getEntity());
             response.close();
         } catch (IOException e) {
@@ -107,7 +108,8 @@ public class HttpService {
         CloseableHttpResponse response = httpClient.execute(request);
         StatusLine sl = response.getStatusLine();
         int sc = sl.getStatusCode();
-        if (sc < 200 || sc >= 300) {
+        if (sc < HttpStatus.SC_OK || sc >= HttpStatus.SC_MULTIPLE_CHOICES) {
+            response.close();
             throw new IOException("Incorrect response status: " + sc);
         }
         return response;
