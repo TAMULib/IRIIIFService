@@ -47,18 +47,21 @@ public class HttpService {
     @Value("${iiif.service.socket.timeout}")
     private int socketTimeout;
 
-    private CloseableHttpClient httpClient;
+    private static PoolingHttpClientConnectionManager connectionManager;
+
+    private static CloseableHttpClient httpClient;
 
     @PostConstruct
     private void init() throws URISyntaxException {
-        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
         RequestConfig config = RequestConfig.custom().setConnectTimeout(connectionTimeout).setConnectionRequestTimeout(connectionRequestTimeout).setSocketTimeout(socketTimeout).build();
+        connectionManager = new PoolingHttpClientConnectionManager();
         httpClient = HttpClients.custom().setConnectionManager(connectionManager).setDefaultRequestConfig(config).build();
     }
 
     @PreDestroy
     private void cleanUp() throws IOException {
         httpClient.close();
+        connectionManager.close();
     }
 
     public String get(String url) {
