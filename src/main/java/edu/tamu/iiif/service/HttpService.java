@@ -12,8 +12,11 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.http.Header;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
+import org.apache.http.ProtocolException;
 import org.apache.http.StatusLine;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -22,9 +25,11 @@ import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +60,30 @@ public class HttpService {
     private void init() throws URISyntaxException {
         RequestConfig config = RequestConfig.custom().setConnectTimeout(connectionTimeout).setConnectionRequestTimeout(connectionRequestTimeout).setSocketTimeout(socketTimeout).build();
         connectionManager = new PoolingHttpClientConnectionManager();
-        httpClient = HttpClients.custom().setConnectionManager(connectionManager).setDefaultRequestConfig(config).build();
+        httpClient = HttpClients.custom().setRedirectStrategy(new DefaultRedirectStrategy() {
+            @Override
+            public URI getLocationURI(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
+                if (response.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY || response.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY) {
+                    Optional<Header> locationHeader = Optional.ofNullable(response.getFirstHeader("location"));
+                    if (locationHeader.isPresent()) {
+                        try {
+                            URI origUri = new URI(request.getRequestLine().getUri());
+                            String origUrl = origUri.toString();
+                            // TODO: use library to properly encode location
+                            String location = response.getFirstHeader("location").getValue().replaceAll(" ", "%20");
+                            // TODO: build URL using library
+                            String url = origUrl.substring(0, origUrl.indexOf("://") + 3) + origUri.getHost() + location;
+                            return new URI(url);
+                        } catch (URISyntaxException e1) {
+                            throw new RuntimeException("Unable to reconstruct original URI!");
+                        }
+                    }
+                } else {
+                    throw new RuntimeException("No location header provided with redirect!");
+                }
+                return super.getLocationURI(request, response, context);
+            }
+        }).setConnectionManager(connectionManager).setDefaultRequestConfig(config).build();
     }
 
     @PreDestroy
@@ -85,10 +113,11 @@ public class HttpService {
             } else {
                 LOG.warn("No Content-Type!");
             }
-
         } catch (IOException e) {
-            LOG.warn("Error performing GET request: " + url);
+            e.printStackTrace();
+            LOG.warn("Error performing HEAD request: " + url);
         } catch (URISyntaxException e) {
+            e.printStackTrace();
             LOG.warn("Invalid URI: " + url);
         }
         return mimeType;
