@@ -60,30 +60,7 @@ public class HttpService {
     private void init() throws URISyntaxException {
         RequestConfig config = RequestConfig.custom().setConnectTimeout(connectionTimeout).setConnectionRequestTimeout(connectionRequestTimeout).setSocketTimeout(socketTimeout).build();
         connectionManager = new PoolingHttpClientConnectionManager();
-        httpClient = HttpClients.custom().setRedirectStrategy(new DefaultRedirectStrategy() {
-            @Override
-            public URI getLocationURI(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
-                if (response.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY || response.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY) {
-                    Optional<Header> locationHeader = Optional.ofNullable(response.getFirstHeader("location"));
-                    if (locationHeader.isPresent()) {
-                        try {
-                            URI origUri = new URI(request.getRequestLine().getUri());
-                            String origUrl = origUri.toString();
-                            // TODO: use library to properly encode location
-                            String location = response.getFirstHeader("location").getValue().replaceAll(" ", "%20");
-                            // TODO: build URL using library
-                            String url = origUrl.substring(0, origUrl.indexOf("://") + 3) + origUri.getHost() + location;
-                            return new URI(url);
-                        } catch (URISyntaxException e1) {
-                            throw new RuntimeException("Unable to reconstruct original URI!");
-                        }
-                    }
-                } else {
-                    throw new RuntimeException("No location header provided with redirect!");
-                }
-                return super.getLocationURI(request, response, context);
-            }
-        }).setConnectionManager(connectionManager).setDefaultRequestConfig(config).build();
+        httpClient = HttpClients.custom().setRedirectStrategy(new CustomRedirectStrategy()).setConnectionManager(connectionManager).setDefaultRequestConfig(config).build();
     }
 
     @PreDestroy
@@ -159,6 +136,33 @@ public class HttpService {
         URIBuilder builder = new URIBuilder(url);
         builder.setParameters(parameters);
         return builder.build();
+    }
+
+    private class CustomRedirectStrategy extends DefaultRedirectStrategy {
+
+        @Override
+        public URI getLocationURI(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
+            if (isRedirect(response)) {
+                Optional<Header> locationHeader = Optional.ofNullable(response.getFirstHeader("location"));
+                if (locationHeader.isPresent()) {
+                    try {
+                        URI origUri = new URI(request.getRequestLine().getUri());
+                        String path = locationHeader.get().getValue().split("\\?")[0];
+                        return new URI(origUri.getScheme(), origUri.getHost(), path, null);
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException("Unable to reconstruct original URI!");
+                    }
+                } else {
+                    throw new RuntimeException("No location header provided with redirect!");
+                }
+            }
+            return super.getLocationURI(request, response, context);
+        }
+
+        private boolean isRedirect(HttpResponse response) {
+            return response.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY || response.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY;
+        }
+
     }
 
 }

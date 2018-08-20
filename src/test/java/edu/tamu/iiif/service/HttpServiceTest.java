@@ -82,7 +82,6 @@ public class HttpServiceTest {
         when(response.getFirstHeader("Content-Type")).thenReturn(header);
 
         when(httpClient.execute(any(HttpGet.class))).thenReturn(response);
-
     }
 
     @Test
