@@ -1,5 +1,7 @@
 package edu.tamu.iiif.service;
 
+import static edu.tamu.iiif.utility.StringUtility.encodeSpaces;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -133,7 +135,7 @@ public class HttpService {
     }
 
     private URI buildUrl(String url, List<NameValuePair> parameters) throws URISyntaxException {
-        URIBuilder builder = new URIBuilder(url);
+        URIBuilder builder = new URIBuilder(encodeSpaces(url));
         builder.setParameters(parameters);
         return builder.build();
     }

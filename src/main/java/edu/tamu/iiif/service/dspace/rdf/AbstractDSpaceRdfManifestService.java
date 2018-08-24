@@ -15,11 +15,14 @@ import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
 import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
 import static edu.tamu.iiif.utility.RdfModelUtility.getObject;
+import static edu.tamu.iiif.utility.StringUtility.encodeSpaces;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +35,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import de.digitalcollections.iiif.presentation.model.api.v2.Image;
 import de.digitalcollections.iiif.presentation.model.api.v2.ImageResource;
-import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
 import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
 import de.digitalcollections.iiif.presentation.model.impl.v2.CanvasImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
@@ -66,20 +68,18 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
 
     protected Canvas generateCanvas(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         String uri = rdfResource.getResource().getURI();
-        String handle = getHandle(uri);
-        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(handle);
+        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getBitstreamPath(uri));
 
         RdfCanvas rdfCanvas = getDSpaceRdfCanvas(request, rdfResource);
 
-        Canvas canvas = new CanvasImpl(getDSpaceIiifCanvasUri(handle), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
+        Canvas canvas = new CanvasImpl(getDSpaceIiifCanvasUri(getHandlePath(uri)), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
 
         canvas.setImages(rdfCanvas.getImages());
 
-        List<Metadata> metadata = getDublinCoreMetadata(rdfResource);
-
-        metadata.addAll(getDublinCoreTermsMetadata(rdfResource));
-
-        canvas.setMetadata(metadata);
+        // NOTE: eliding canvas metadata as it is redundant with manifest
+        // List<Metadata> metadata = getDublinCoreMetadata(rdfResource);
+        // metadata.addAll(getDublinCoreTermsMetadata(rdfResource));
+        // canvas.setMetadata(metadata);
 
         return canvas;
     }
@@ -121,22 +121,36 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
     }
 
     protected URI getDSpaceIiifCollectionUri(String handle) throws URISyntaxException {
-        return getDSpaceIiifUri(handle, COLLECTION_IDENTIFIER);
+        return getDSpaceIiifUri(encodeSpaces(handle), COLLECTION_IDENTIFIER);
     }
 
     protected URI getDSpaceIiifPresentationUri(String handle) throws URISyntaxException {
-        return getDSpaceIiifUri(handle, PRESENTATION_IDENTIFIER);
+        return getDSpaceIiifUri(encodeSpaces(handle), PRESENTATION_IDENTIFIER);
     }
 
     protected URI getDSpaceIiifSequenceUri(String handle) throws URISyntaxException {
-        return getDSpaceIiifUri(handle, SEQUENCE_IDENTIFIER);
+        return getDSpaceIiifUri(encodeSpaces(handle), SEQUENCE_IDENTIFIER);
     }
 
     protected URI getDSpaceIiifCanvasUri(String handle) throws URISyntaxException {
-        return getDSpaceIiifUri(handle, CANVAS_IDENTIFIER);
+        return getDSpaceIiifUri(encodeSpaces(handle), CANVAS_IDENTIFIER);
     }
 
     protected String getHandle(String uri) {
+        String[] parts = getHandlePath(uri).split("/");
+        return parts[0] + "/" + parts[1];
+    }
+
+    protected String getBitstreamPath(String uri) throws UnsupportedEncodingException {
+        String[] parts = getHandlePath(uri).split("/");
+        String bitstreamPath = "";
+        for (int i = 2; i < parts.length; i++) {
+            bitstreamPath += parts[i];
+        }
+        return URLDecoder.decode(bitstreamPath, "UTF-8");
+    }
+
+    protected String getHandlePath(String uri) {
         String path;
         if (uri.contains("/handle/")) {
             path = uri.split("/handle/")[1];
@@ -145,8 +159,7 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         } else {
             path = uri.split("/resource/")[1];
         }
-        String[] parts = path.split("/");
-        return parts[0] + "/" + parts[1];
+        return path;
     }
 
     protected URI getCanvasUri(String canvasId) throws URISyntaxException {
@@ -212,7 +225,7 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
     private RdfCanvas getDSpaceRdfCanvas(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException {
         String uri = rdfResource.getResource().getURI();
         RdfCanvas rdfCanvas = new RdfCanvas();
-        String canvasId = getHandle(uri);
+        String canvasId = getHandlePath(uri);
 
         RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, uri);
 
