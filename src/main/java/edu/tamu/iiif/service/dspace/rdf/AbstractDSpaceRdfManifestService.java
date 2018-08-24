@@ -137,15 +137,16 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
     }
 
     protected String getHandle(String uri) {
-        String handle;
+        String path;
         if (uri.contains("/handle/")) {
-            handle = uri.split("/handle/")[1];
+            path = uri.split("/handle/")[1];
         } else if (uri.contains("/bitstream/")) {
-            handle = uri.split("/bitstream/")[1];
+            path = uri.split("/bitstream/")[1];
         } else {
-            handle = uri.split("/resource/")[1];
+            path = uri.split("/resource/")[1];
         }
-        return handle;
+        String[] parts = path.split("/");
+        return parts[0] + "/" + parts[1];
     }
 
     protected URI getCanvasUri(String canvasId) throws URISyntaxException {
