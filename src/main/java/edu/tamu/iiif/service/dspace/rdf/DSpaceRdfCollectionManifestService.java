@@ -1,5 +1,6 @@
 package edu.tamu.iiif.service.dspace.rdf;
 
+import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_BITSTREAM_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_COLLECTION_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_ITEM_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_HAS_SUB_COMMUNITY_PREDICATE;
@@ -122,7 +123,11 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
         if (isItem(rdfResource.getModel())) {
             String uri = rdfResource.getResource().getURI();
             String handle = getHandle(uri);
-            manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(handle), new PropertyValueSimpleImpl(handle)));
+            NodeIterator bitstreamIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_BITSTREAM_PREDICATE);
+            while (bitstreamIterator.hasNext()) {
+                String bitstreamHandlePath = getHandlePath(bitstreamIterator.next().toString());
+                manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(bitstreamHandlePath), new PropertyValueSimpleImpl(handle)));
+            }
         } else {
             NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_ITEM_PREDICATE);
             while (collectionIterator.hasNext()) {
