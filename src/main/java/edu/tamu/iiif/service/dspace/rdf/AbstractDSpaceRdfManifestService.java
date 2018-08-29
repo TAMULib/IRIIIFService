@@ -210,13 +210,16 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
 
     private List<Canvas> getCanvases(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         List<Canvas> canvases = new ArrayList<Canvas>();
-        // NOTE: canvas per bitstream
-        NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_BITSTREAM_PREDICATE);
-        while (collectionIterator.hasNext()) {
-            String uri = collectionIterator.next().toString();
-            Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, uri));
-            if (canvas.getImages().size() > 0) {
-                canvases.add(canvas);
+        // NOTE: canvas per bitstream and bitstreams uri must contain the context handle path of the desired resource
+        String contextHandlePath = encodeSpaces(getHandlePath(rdfResource.getId()));
+        NodeIterator bitstreamIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_BITSTREAM_PREDICATE);
+        while (bitstreamIterator.hasNext()) {
+            String uri = bitstreamIterator.next().toString();
+            if (uri.contains(contextHandlePath)) {
+                Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, uri));
+                if (canvas.getImages().size() > 0) {
+                    canvases.add(canvas);
+                }
             }
         }
         return canvases;

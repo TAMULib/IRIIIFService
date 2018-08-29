@@ -5,6 +5,8 @@ import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_PREFIX;
 import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_CONTEXT;
 import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_LEVEL_ZERO_PROFILE;
 import static edu.tamu.iiif.utility.RdfModelUtility.createRdfModel;
+import static edu.tamu.iiif.utility.StringUtility.encode;
+import static edu.tamu.iiif.utility.StringUtility.encodeSpaces;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
 import java.io.IOException;
@@ -52,7 +54,6 @@ import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
-import edu.tamu.iiif.utility.StringUtility;
 
 public abstract class AbstractManifestService implements ManifestService {
 
@@ -96,7 +97,7 @@ public abstract class AbstractManifestService implements ManifestService {
         } else {
             LOG.info("Generating new manifest.");
             manifest = generateManifest(request);
-            redisManifestRepo.save(new RedisManifest(StringUtility.encode(path), getManifestType(), getRepositoryType(), request.getAllowed(), request.getDisallowed(), manifest));
+            redisManifestRepo.save(new RedisManifest(encode(path), getManifestType(), getRepositoryType(), request.getAllowed(), request.getDisallowed(), manifest));
             update = false;
         }
 
@@ -123,7 +124,7 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected URI buildId(String path) throws URISyntaxException {
-        return new URI(getIiifServiceUrl() + "/" + getManifestType().getName() + "/" + path);
+        return new URI(encodeSpaces(getIiifServiceUrl() + "/" + getManifestType().getName() + "/" + path));
     }
 
     protected String getLogo(RdfResource rdfResource) {
@@ -266,7 +267,7 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected String pathIdentifier(String url) {
-        return StringUtility.encode(getRepositoryPath(url));
+        return encode(getRepositoryPath(url));
     }
 
     protected List<Metadata> getDublinCoreTermsMetadata(RdfResource rdfResource) {
@@ -306,7 +307,7 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     private Optional<RedisManifest> getRedisManifest(ManifestRequest request) {
-        return redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(StringUtility.encode(request.getContext()), getManifestType(), getRepositoryType(), request.getAllowed(), request.getDisallowed());
+        return redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(encode(request.getContext()), getManifestType(), getRepositoryType(), request.getAllowed(), request.getDisallowed());
     }
 
     private List<Metadata> getMetadata(RdfResource rdfResource, String prefix) {
