@@ -112,8 +112,10 @@ public class HttpService {
             body = EntityUtils.toString(response.getEntity());
             response.close();
         } catch (IOException e) {
+            e.printStackTrace();
             LOG.warn("Error performing GET request: " + url);
         } catch (URISyntaxException e) {
+            e.printStackTrace();
             LOG.warn("Invalid URI: " + url);
         }
         return body;
