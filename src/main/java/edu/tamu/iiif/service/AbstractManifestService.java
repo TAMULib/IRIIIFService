@@ -59,6 +59,21 @@ public abstract class AbstractManifestService implements ManifestService {
 
     private final static Logger LOG = LoggerFactory.getLogger(AbstractManifestService.class);
 
+    private final static String SEMI_COLON = ";";
+    private final static String FORWARD_SLASH = "/";
+
+    private final static String IIIF_THUMBNAIL_PATH = "full/!200,200/0/default.jpg";
+    private final static String IIIF_FULL_PATH = "full/full/0/default.jpg";
+
+    private final static String APPLICATION_PDF = "application/pdf";
+
+    private final static String IMAGE_JSON = "info.json";
+
+    private final static String IMAGE = "image";
+
+    private final static String HEIGHT = "height";
+    private final static String WIDTH = "width";
+
     protected final static ObjectMapper mapper = new IiifPresentationApiObjectMapper();
 
     @Value("${iiif.service.url}")
@@ -124,7 +139,7 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected URI buildId(String path) throws URISyntaxException {
-        return new URI(encodeSpaces(getIiifServiceUrl() + "/" + getManifestType().getName() + "/" + path));
+        return new URI(encodeSpaces(getIiifServiceUrl() + FORWARD_SLASH + getManifestType().getName() + FORWARD_SLASH + path));
     }
 
     protected String getLogo(RdfResource rdfResource) {
@@ -163,20 +178,22 @@ public abstract class AbstractManifestService implements ManifestService {
 
             LOG.debug("Mime type: " + mimeType);
 
-            if (mimeType.contains(";")) {
-                mimeType = mimeType.split(";")[0];
+            if (mimeType.contains(SEMI_COLON)) {
+                mimeType = mimeType.split(SEMI_COLON)[0];
             }
 
-            include = true;
-            String allowed = request.getAllowed();
-            if (allowed.length() > 0) {
-                LOG.debug("Allowed: " + allowed);
-                include = allowed.contains(mimeType);
-            } else {
-                String disallowed = request.getDisallowed();
-                if (disallowed.length() > 0) {
-                    LOG.debug("Disallowed: " + disallowed);
-                    include = !disallowed.contains(mimeType);
+            include = mimeType.startsWith(IMAGE) || mimeType.equals(APPLICATION_PDF);
+            if (include) {
+                String allowed = request.getAllowed();
+                if (allowed.length() > 0) {
+                    LOG.debug("Allowed: " + allowed);
+                    include = allowed.contains(mimeType);
+                } else {
+                    String disallowed = request.getDisallowed();
+                    if (disallowed.length() > 0) {
+                        LOG.debug("Disallowed: " + disallowed);
+                        include = !disallowed.contains(mimeType);
+                    }
                 }
             }
         } else {
@@ -195,9 +212,9 @@ public abstract class AbstractManifestService implements ManifestService {
 
                 imageResource.setFormat(optionalMimeType.get());
 
-                imageResource.setHeight(imageInfoNode.get().get("height").asInt());
+                imageResource.setHeight(imageInfoNode.get().get(HEIGHT).asInt());
 
-                imageResource.setWidth(imageInfoNode.get().get("width").asInt());
+                imageResource.setWidth(imageInfoNode.get().get(WIDTH).asInt());
 
                 imageResource.setServices(getServices(rdfResource, getIiifImageServiceName()));
 
@@ -225,19 +242,19 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected URI getImageFullUrl(String url) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(url), "full/full/0/default.jpg"));
+        return URI.create(joinPath(imageServerUrl, pathIdentifier(url), IIIF_FULL_PATH));
     }
 
     protected URI getImageThumbnailUrl(String url) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(url), "full/!200,200/0/default.jpg"));
+        return URI.create(joinPath(imageServerUrl, pathIdentifier(url), IIIF_THUMBNAIL_PATH));
     }
 
     protected URI getImageInfoUri(String url) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(url), "info.json"));
+        return URI.create(joinPath(imageServerUrl, pathIdentifier(url), IMAGE_JSON));
     }
 
     protected URI serviceUrlToThumbnailUri(URI serviceUrl) throws URISyntaxException {
-        return URI.create(joinPath(serviceUrl.toString(), "full/!200,200/0/default.jpg"));
+        return URI.create(joinPath(serviceUrl.toString(), IIIF_THUMBNAIL_PATH));
     }
 
     protected List<Service> getServices(RdfResource rdfResource, String... names) throws URISyntaxException {
