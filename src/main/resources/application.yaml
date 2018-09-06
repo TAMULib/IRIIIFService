@@ -21,9 +21,9 @@ iiif:
   service:
     url: http://localhost:${server.port}${server.contextPath}
     connection:
-      timeout: 30000
-      request.timeout: 15000
-    socket.timeout: 60000
+      timeout: 1200000
+      request.timeout: 600000
+    socket.timeout: 1200000
   image.server.url: http://localhost:8182/iiif/2
   logo.url: https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png
   dspace:
