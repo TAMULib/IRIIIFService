@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -45,13 +46,16 @@ public class HttpService {
 
     private final static List<NameValuePair> EMPTY_PARAMETERS = new ArrayList<NameValuePair>();
 
-    @Value("${iiif.service.connection.timeout}")
+    @Value("${iiif.service.connection.timeout:60000}")
     private int connectionTimeout;
 
-    @Value("${iiif.service.connection.request.timeout}")
+    @Value("${iiif.service.connection.timeToLive:60000}")
+    private int connectionTimeToLive;
+
+    @Value("${iiif.service.connection.request.timeout:30000}")
     private int connectionRequestTimeout;
 
-    @Value("${iiif.service.socket.timeout}")
+    @Value("${iiif.service.socket.timeout:60000}")
     private int socketTimeout;
 
     private static PoolingHttpClientConnectionManager connectionManager;
@@ -62,7 +66,7 @@ public class HttpService {
     private void init() throws URISyntaxException {
         RequestConfig config = RequestConfig.custom().setConnectTimeout(connectionTimeout).setConnectionRequestTimeout(connectionRequestTimeout).setSocketTimeout(socketTimeout).build();
         connectionManager = new PoolingHttpClientConnectionManager();
-        httpClient = HttpClients.custom().setRedirectStrategy(new CustomRedirectStrategy()).setConnectionManager(connectionManager).setDefaultRequestConfig(config).build();
+        httpClient = HttpClients.custom().setRedirectStrategy(new CustomRedirectStrategy()).setConnectionManager(connectionManager).setConnectionTimeToLive(connectionTimeToLive, TimeUnit.MILLISECONDS).setDefaultRequestConfig(config).build();
     }
 
     @PreDestroy
