@@ -46,7 +46,10 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
 
         Collection collection = new CollectionImpl(id, label, metadata);
 
-        collection.setSubCollections(getSubcollections(rdfResource));
+        List<CollectionReference> collections = getSubcollections(rdfResource);
+        if (!collections.isEmpty()) {
+            collection.setSubCollections(collections);
+        }
 
         collection.setManifests(getResourceManifests(rdfResource));
 
