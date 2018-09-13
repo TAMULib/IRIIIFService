@@ -1,6 +1,6 @@
 package edu.tamu.iiif.service.fedora.pcdm;
 
-import static edu.tamu.iiif.constants.Constants.PCDM_HAS_MEMBER_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.PCDM_HAS_FILE_PREDICATE;
 import static edu.tamu.iiif.model.ManifestType.COLLECTION;
 
 import java.io.IOException;
@@ -9,8 +9,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.jena.rdf.model.NodeIterator;
-import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.springframework.stereotype.Service;
 
@@ -69,30 +68,14 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
 
     private List<ManifestReference> getResourceManifests(RdfResource rdfResource) throws URISyntaxException, NotFoundException {
         List<ManifestReference> manifests = new ArrayList<ManifestReference>();
-        List<String> members = getMembers(rdfResource);
-        for (String id : members) {
-            PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getRepositoryPath(id));
-            manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(id), label));
+        ResIterator resources = rdfResource.listResourcesWithPropertyWithId(PCDM_HAS_FILE_PREDICATE);
+        while (resources.hasNext()) {
+            Resource resource = resources.next();
+            resource.getModel();
+            PropertyValueSimpleImpl label = getTitle(new RdfResource(resource.getModel(), resource));
+            manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(resource.getURI()), label));
         }
         return manifests;
-    }
-
-    private List<String> getMembers(RdfResource rdfResource) throws NotFoundException {
-
-        List<String> members = new ArrayList<String>();
-
-        if (members.isEmpty()) {
-
-            Resource resource = rdfResource.getResource();
-            Property property = rdfResource.getProperty(PCDM_HAS_MEMBER_PREDICATE);
-            if (resource != null && property != null) {
-                NodeIterator nodes = rdfResource.getModel().listObjectsOfProperty(resource, property);
-                while (nodes.hasNext()) {
-                    members.add(nodes.nextNode().toString());
-                }
-            }
-        }
-        return members;
     }
 
     @Override

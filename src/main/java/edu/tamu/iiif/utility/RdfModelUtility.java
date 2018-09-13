@@ -39,11 +39,6 @@ public class RdfModelUtility {
             if (!object.toString().isEmpty()) {
                 metadatum = Optional.of(object.toString());
             }
-        } else {
-            NodeIterator nodeIteerator = rdfResource.getAllNodesOfPropertyWithId(uri);
-            if (nodeIteerator.hasNext()) {
-                metadatum = Optional.of(nodeIteerator.next().toString());
-            }
         }
         return metadatum;
     }

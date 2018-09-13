@@ -29,7 +29,7 @@
       "@id": "http://localhost:9003/dspace-rdf/canvas/123456789/158308/1/sports-car-146873_960_720.png"
     }
   ],
-  "description": "N/A",
+  "description": "No description available!",
   "label": "123456789/158308",
   "@type": "sc:Sequence",
   "@id": "http://localhost:9003/dspace-rdf/sequence/123456789/158308"
