@@ -2,7 +2,6 @@
   "@context": "http://iiif.io/api/presentation/2/context.json",
   "@id": "http://localhost:9003/fedora-pcdm/collection/cars_pcdm",
   "@type": "sc:Collection",
-  "collections": [],
   "description": "Grocery getter",
   "label": "Some Chevy Cars",
   "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
