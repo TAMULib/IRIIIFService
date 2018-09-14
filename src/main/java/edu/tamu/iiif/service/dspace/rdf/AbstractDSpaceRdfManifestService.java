@@ -76,11 +76,6 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
 
         canvas.setImages(rdfCanvas.getImages());
 
-        // NOTE: eliding canvas metadata as it is redundant with manifest
-        // List<Metadata> metadata = getDublinCoreMetadata(rdfResource);
-        // metadata.addAll(getDublinCoreTermsMetadata(rdfResource));
-        // canvas.setMetadata(metadata);
-
         return canvas;
     }
 
@@ -99,7 +94,7 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
             description = getObject(rdfResource, DUBLIN_CORE_TERMS_DESCRIPTION);
         }
         if (!description.isPresent()) {
-            description = Optional.of("N/A");
+            description = Optional.of("No description available!");
         }
         return new PropertyValueSimpleImpl(description.get());
     }

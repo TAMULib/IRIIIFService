@@ -2,6 +2,7 @@ package edu.tamu.iiif.service.fedora.pcdm;
 
 import static edu.tamu.iiif.constants.Constants.CANVAS_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_DESCRIPTION_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_IDENTIFIER_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TITLE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.FEDORA_FCR_METADATA;
 import static edu.tamu.iiif.constants.Constants.FEDORA_HAS_PARENT_PREDICATE;
@@ -88,6 +89,9 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     protected PropertyValueSimpleImpl getTitle(RdfResource rdfResource) {
         Optional<String> title = getObject(rdfResource, DUBLIN_CORE_TITLE_PREDICATE);
         if (!title.isPresent()) {
+            title = getObject(rdfResource, DUBLIN_CORE_IDENTIFIER_PREDICATE);
+        }
+        if (!title.isPresent()) {
             String id = rdfResource.getResource().getURI();
             title = Optional.of(getRepositoryPath(id));
         }
@@ -97,7 +101,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     protected PropertyValueSimpleImpl getDescription(RdfResource rdfResource) {
         Optional<String> description = getObject(rdfResource, DUBLIN_CORE_DESCRIPTION_PREDICATE);
         if (!description.isPresent()) {
-            description = Optional.of("N/A");
+            description = Optional.of("No description available!");
         }
         return new PropertyValueSimpleImpl(description.get());
     }

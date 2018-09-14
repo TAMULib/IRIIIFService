@@ -17,7 +17,6 @@ import org.springframework.core.io.Resource;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import edu.tamu.iiif.controller.ManifestRequest;
-import edu.tamu.iiif.service.dspace.rdf.DSpaceRdfCollectionManifestService;
 
 public class DSpaceRdfCollectionManifestServiceTest extends AbstractDSpaceRdfManifestServiceTest {
 

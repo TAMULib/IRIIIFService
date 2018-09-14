@@ -54,6 +54,7 @@ public class Constants {
     public final static String DUBLIN_CORE_PREFIX = "http://purl.org/dc/elements/1.1/";
 
     public final static String DUBLIN_CORE_TITLE_PREDICATE = DUBLIN_CORE_PREFIX + "title";
+    public final static String DUBLIN_CORE_IDENTIFIER_PREDICATE = DUBLIN_CORE_PREFIX + "identifier";
     public final static String DUBLIN_CORE_DESCRIPTION_PREDICATE = DUBLIN_CORE_PREFIX + "description";
 
     // Dublin Core Terms

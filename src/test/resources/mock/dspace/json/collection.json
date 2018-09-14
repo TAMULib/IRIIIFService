@@ -1,52 +1,47 @@
 {
-  "@context":"http://iiif.io/api/presentation/2/context.json",
-  "@id":"http://localhost:9003/dspace-rdf/collection/123456789/158299",
-  "@type":"sc:Collection",
-  "collections":[
-
-  ],
-  "description":"N/A",
-  "label":"dspace-rdf:rdf/handle/123456789/158299",
-  "logo":"https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
-  "manifests":[
+  "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
+  "description": "No description available!",
+  "label": "dspace-rdf:rdf/handle/123456789/158299",
+  "metadata": [],
+  "manifests": [
     {
-      "@id":"http://localhost:9003/dspace-rdf/presentation/123456789/158308",
-      "@type":"sc:Manifest",
-      "label":"123456789/158308"
+      "label": "123456789/158308",
+      "@id": "http://localhost:9003/dspace-rdf/presentation/123456789/158308",
+      "@type": "sc:Manifest"
     },
     {
-      "@id":"http://localhost:9003/dspace-rdf/presentation/123456789/158310",
-      "@type":"sc:Manifest",
-      "label":"123456789/158310"
+      "label": "123456789/158310",
+      "@id": "http://localhost:9003/dspace-rdf/presentation/123456789/158310",
+      "@type": "sc:Manifest"
     },
     {
-      "@id":"http://localhost:9003/dspace-rdf/presentation/123456789/158313",
-      "@type":"sc:Manifest",
-      "label":"123456789/158313"
+      "label": "123456789/158313",
+      "@id": "http://localhost:9003/dspace-rdf/presentation/123456789/158313",
+      "@type": "sc:Manifest"
     },
     {
-      "@id":"http://localhost:9003/dspace-rdf/presentation/123456789/158312",
-      "@type":"sc:Manifest",
-      "label":"123456789/158312"
+      "label": "123456789/158312",
+      "@id": "http://localhost:9003/dspace-rdf/presentation/123456789/158312",
+      "@type": "sc:Manifest"
     },
     {
-      "@id":"http://localhost:9003/dspace-rdf/presentation/123456789/158317",
-      "@type":"sc:Manifest",
-      "label":"123456789/158317"
+      "label": "123456789/158317",
+      "@id": "http://localhost:9003/dspace-rdf/presentation/123456789/158317",
+      "@type": "sc:Manifest"
     },
     {
-      "@id":"http://localhost:9003/dspace-rdf/presentation/123456789/158307",
-      "@type":"sc:Manifest",
-      "label":"123456789/158307"
+      "label": "123456789/158307",
+      "@id": "http://localhost:9003/dspace-rdf/presentation/123456789/158307",
+      "@type": "sc:Manifest"
     },
     {
-      "@id":"http://localhost:9003/dspace-rdf/presentation/123456789/158316",
-      "@type":"sc:Manifest",
-      "label":"123456789/158316"
+      "label": "123456789/158316",
+      "@id": "http://localhost:9003/dspace-rdf/presentation/123456789/158316",
+      "@type": "sc:Manifest"
     }
   ],
-  "metadata":[
-
-  ],
-  "viewingHint":"multi-part"
+  "viewingHint": "multi-part",
+  "@type": "sc:Collection",
+  "@id": "http://localhost:9003/dspace-rdf/collection/123456789/158299",
+  "@context": "http://iiif.io/api/presentation/2/context.json"
 }
