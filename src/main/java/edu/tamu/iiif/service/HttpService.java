@@ -5,6 +5,7 @@ import static edu.tamu.iiif.utility.StringUtility.encodeSpaces;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -109,7 +110,7 @@ public class HttpService {
     private String get(String url, List<NameValuePair> parameters) {
         String body = null;
         try (CloseableHttpResponse response = request(craftGet(url, parameters))) {
-            body = EntityUtils.toString(response.getEntity());
+            body = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
             response.close();
         } catch (IOException e) {
             e.printStackTrace();
