@@ -1,52 +1,47 @@
 {
-  "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "http://localhost:9003/fedora-pcdm/collection/cars_pcdm",
+  "@type": "sc:Collection",
   "description": "No description available!",
   "label": "fedora-pcdm:cars_pcdm",
-  "metadata": [],
+  "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "manifests": [
     {
-      "label": "fedora-pcdm:cars_pcdm_objects/chevy/pages/page_0",
-      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/chevy/pages/page_0",
-      "@type": "sc:Manifest"
+      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/vintage",
+      "@type": "sc:Manifest",
+      "label": "fedora-pcdm:cars_pcdm_objects/vintage"
     },
     {
-      "label": "fedora-pcdm:cars_pcdm_objects/mustang/pages/page_0",
-      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/mustang/pages/page_0",
-      "@type": "sc:Manifest"
+      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/lamborghini",
+      "@type": "sc:Manifest",
+      "label": "fedora-pcdm:cars_pcdm_objects/lamborghini"
     },
     {
-      "label": "fedora-pcdm:cars_pcdm_objects/chevy/pages/page_1",
-      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/chevy/pages/page_1",
-      "@type": "sc:Manifest"
+      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/nissan",
+      "@type": "sc:Manifest",
+      "label": "fedora-pcdm:cars_pcdm_objects/nissan"
     },
     {
-      "label": "fedora-pcdm:cars_pcdm_objects/nissan/pages/page_0",
-      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/nissan/pages/page_0",
-      "@type": "sc:Manifest"
+      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/vw",
+      "@type": "sc:Manifest",
+      "label": "fedora-pcdm:cars_pcdm_objects/vw"
     },
     {
-      "label": "fedora-pcdm:cars_pcdm_objects/lamborghini/pages/page_0",
-      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/lamborghini/pages/page_0",
-      "@type": "sc:Manifest"
+      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/chevy",
+      "@type": "sc:Manifest",
+      "label": "fedora-pcdm:cars_pcdm_objects/chevy"
     },
     {
-      "label": "fedora-pcdm:cars_pcdm_objects/vw/pages/page_0",
-      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/vw/pages/page_0",
-      "@type": "sc:Manifest"
+      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/corvette",
+      "@type": "sc:Manifest",
+      "label": "fedora-pcdm:cars_pcdm_objects/corvette"
     },
     {
-      "label": "fedora-pcdm:cars_pcdm_objects/vintage/pages/page_0",
-      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/vintage/pages/page_0",
-      "@type": "sc:Manifest"
-    },
-    {
-      "label": "fedora-pcdm:cars_pcdm_objects/corvette/pages/page_0",
-      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/corvette/pages/page_0",
-      "@type": "sc:Manifest"
+      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/mustang",
+      "@type": "sc:Manifest",
+      "label": "fedora-pcdm:cars_pcdm_objects/mustang"
     }
   ],
-  "viewingHint": "multi-part",
-  "@type": "sc:Collection",
-  "@id": "http://localhost:9003/fedora-pcdm/collection/cars_pcdm",
-  "@context": "http://iiif.io/api/presentation/2/context.json"
+  "metadata": [],
+  "viewingHint": "multi-part"
 }
