@@ -127,7 +127,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             while (nodes.hasNext()) {
                 RDFNode node = nodes.next();
                 String id = node.toString();
-                PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getRepositoryPath(id));
+                PropertyValueSimpleImpl label = getTitle(new RdfResource(rdfResource, node.toString()));
                 manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(id), label));
             }
         }
@@ -162,9 +162,9 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
         return manifests;
     }
 
-    private void gatherResourceManifests(ManifestRequest request, RdfOrderedResource rdfOrderedSequence, List<ManifestReference> manifests) throws IOException, URISyntaxException {
+    private void gatherResourceManifests(ManifestRequest request, RdfOrderedResource rdfOrderedResource, List<ManifestReference> manifests) throws IOException, URISyntaxException {
 
-        Model model = getRdfModel(rdfOrderedSequence.getResource().getURI());
+        Model model = getRdfModel(rdfOrderedResource.getResource().getURI());
 
         Optional<String> id = getIdByPredicate(model, ORE_PROXY_FOR_PREDICATE);
 
@@ -173,17 +173,16 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
         }
 
         if (id.isPresent()) {
-
-            PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getRepositoryPath(id.get()));
+            PropertyValueSimpleImpl label = getTitle(rdfOrderedResource);
             manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(id.get()), label));
 
             Optional<String> nextId = getIdByPredicate(model, IANA_NEXT_PREDICATE);
 
             if (nextId.isPresent()) {
-                Resource resource = rdfOrderedSequence.getModel().getResource(nextId.get());
-                rdfOrderedSequence.setResource(resource);
-                rdfOrderedSequence.setCurrentId(nextId.get());
-                gatherResourceManifests(request, rdfOrderedSequence, manifests);
+                Resource resource = rdfOrderedResource.getModel().getResource(nextId.get());
+                rdfOrderedResource.setResource(resource);
+                rdfOrderedResource.setCurrentId(nextId.get());
+                gatherResourceManifests(request, rdfOrderedResource, manifests);
             }
         }
 
