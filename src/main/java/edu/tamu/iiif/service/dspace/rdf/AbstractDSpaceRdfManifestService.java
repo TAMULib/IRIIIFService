@@ -83,7 +83,7 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         Optional<String> title = getObject(rdfResource, DUBLIN_CORE_TERMS_TITLE);
         if (!title.isPresent()) {
             String id = rdfResource.getResource().getURI();
-            title = Optional.of(getRepositoryPath(id));
+            title = Optional.of(getRepositoryContextIdentifier(id));
         }
         return new PropertyValueSimpleImpl(title.get());
     }
@@ -176,8 +176,13 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
     }
 
     @Override
+    protected String getRepositoryContextIdentifier(String url) {
+        return dspaceRdfIdentifier + ":" + getRepositoryPath(url);
+    }
+
+    @Override
     protected String getRepositoryPath(String url) {
-        return dspaceRdfIdentifier + ":" + url.substring(dspaceUrl.length() + 1);
+        return url.substring(dspaceUrl.length() + 1);
     }
 
     @Override

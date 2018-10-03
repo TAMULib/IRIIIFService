@@ -47,7 +47,7 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
-import edu.tamu.iiif.model.rdf.RdfOrderedSequence;
+import edu.tamu.iiif.model.rdf.RdfOrderedResource;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
 
@@ -65,7 +65,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
     protected Sequence generateSequence(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         String id = rdfResource.getResource().getURI();
-        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getRepositoryPath(id));
+        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getRepositoryContextIdentifier(id));
         Sequence sequence = new SequenceImpl(getFedoraIiifSequenceUri(id), label);
         sequence.setCanvases(getCanvases(request, rdfResource));
         return sequence;
@@ -73,7 +73,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
     protected Canvas generateCanvas(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         String id = rdfResource.getResource().getURI();
-        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getRepositoryPath(id));
+        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getRepositoryContextIdentifier(id));
 
         RdfCanvas rdfCanvas = getFedoraRdfCanvas(request, rdfResource);
 
@@ -93,7 +93,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
         }
         if (!title.isPresent()) {
             String id = rdfResource.getResource().getURI();
-            title = Optional.of(getRepositoryPath(id));
+            title = Optional.of(getRepositoryContextIdentifier(id));
         }
         return new PropertyValueSimpleImpl(title.get());
     }
@@ -137,8 +137,13 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     }
 
     @Override
+    protected String getRepositoryContextIdentifier(String url) {
+        return fedoraPcdmIdentifier + ":" + getRepositoryPath(url);
+    }
+
+    @Override
     protected String getRepositoryPath(String url) {
-        return fedoraPcdmIdentifier + ":" + url.substring(fedoraUrl.length() + 1);
+        return url.substring(fedoraUrl.length() + 1);
     }
 
     @Override
@@ -175,7 +180,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
             if (lastId.isPresent()) {
                 Resource firstResource = rdfResource.getModel().getResource(firstId.get());
-                generateOrderedCanvases(request, new RdfOrderedSequence(rdfResource.getModel(), firstResource, firstId.get(), lastId.get()), canvases);
+                generateOrderedCanvases(request, new RdfOrderedResource(rdfResource.getModel(), firstResource, firstId.get(), lastId.get()), canvases);
             }
         }
 
@@ -197,7 +202,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
         return canvases;
     }
 
-    private void generateOrderedCanvases(ManifestRequest request, RdfOrderedSequence rdfOrderedSequence, List<Canvas> canvases) throws IOException, URISyntaxException {
+    private void generateOrderedCanvases(ManifestRequest request, RdfOrderedResource rdfOrderedSequence, List<Canvas> canvases) throws IOException, URISyntaxException {
 
         Model model = getRdfModel(rdfOrderedSequence.getResource().getURI());
 
