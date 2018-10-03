@@ -32,7 +32,7 @@ public class RdfOrderedSequenceTest {
         System.out.println(firstId.get());
         System.out.println(lastId.get());
 
-        RdfOrderedSequence rdfOrderedSequence = new RdfOrderedSequence(model, resource, firstId.get(), lastId.get());
+        RdfOrderedResource rdfOrderedSequence = new RdfOrderedResource(model, resource, firstId.get(), lastId.get());
         Assert.assertNotNull(rdfOrderedSequence);
         Assert.assertEquals(model, rdfOrderedSequence.getModel());
 

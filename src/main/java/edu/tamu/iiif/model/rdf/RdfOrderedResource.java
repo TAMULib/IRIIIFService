@@ -3,7 +3,7 @@ package edu.tamu.iiif.model.rdf;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 
-public class RdfOrderedSequence extends RdfResource {
+public class RdfOrderedResource extends RdfResource {
 
     private final String firstId;
 
@@ -11,7 +11,7 @@ public class RdfOrderedSequence extends RdfResource {
 
     private String currentId;
 
-    public RdfOrderedSequence(Model model, Resource resource, String firstId, String lastId) {
+    public RdfOrderedResource(Model model, Resource resource, String firstId, String lastId) {
         super(model, resource);
         this.firstId = firstId;
         this.lastId = lastId;

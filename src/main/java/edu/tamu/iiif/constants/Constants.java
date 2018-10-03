@@ -83,6 +83,8 @@ public class Constants {
 
     public final static String PCDM_HAS_FILE_PREDICATE = PCDM_PREFIX + "hasFile";
     public final static String PCDM_HAS_MEMBER_PREDICATE = PCDM_PREFIX + "hasMember";
+    
+    public final static String PCDM_COLLECTION = PCDM_PREFIX + "Collection";
 
     // IANA
     public final static String IANA_PREFIX = "http://www.iana.org/assignments/relation/";

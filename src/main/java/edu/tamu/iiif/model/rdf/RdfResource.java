@@ -60,6 +60,10 @@ public class RdfResource extends RdfModel {
     public NodeIterator getAllNodesOfPropertyWithId(String id) {
         return getModel().listObjectsOfProperty(getProperty(id));
     }
+    
+    public NodeIterator getNodesOfPropertyWithId(String id) {
+        return getModel().listObjectsOfProperty(getResource(), getProperty(id));
+    }
 
     public ResIterator listResourcesWithPropertyWithId(String id) {
         return getModel().listResourcesWithProperty(getProperty(id));

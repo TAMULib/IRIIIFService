@@ -284,7 +284,7 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected String pathIdentifier(String url) {
-        return encode(getRepositoryPath(url));
+        return encode(getRepositoryContextIdentifier(url));
     }
 
     protected List<Metadata> getDublinCoreTermsMetadata(RdfResource rdfResource) {
@@ -312,6 +312,8 @@ public abstract class AbstractManifestService implements ManifestService {
     protected abstract String getRepositoryType();
 
     protected abstract ManifestType getManifestType();
+
+    protected abstract String getRepositoryContextIdentifier(String url);
 
     protected abstract String getRepositoryPath(String url);
 
