@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.tamu.iiif.service.ManifestService;
@@ -36,7 +37,7 @@ public abstract class AbstractManifestController<S extends ManifestService> {
     }
 
     private void sendJsonFile(HttpServletResponse response, String json) throws IOException {
-        InputStream inputStream = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
+        InputStream inputStream = new ByteArrayInputStream(StringEscapeUtils.unescapeJson(json).getBytes(StandardCharsets.UTF_8));
         IOUtils.copy(inputStream, response.getOutputStream());
         response.flushBuffer();
     }
