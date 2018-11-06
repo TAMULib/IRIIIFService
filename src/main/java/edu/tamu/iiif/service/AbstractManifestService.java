@@ -51,8 +51,10 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.ThumbnailImpl;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
+import edu.tamu.iiif.model.RedisFileResolver;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.rdf.RdfResource;
+import edu.tamu.iiif.model.repo.RedisFileResolverRepo;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
 
 public abstract class AbstractManifestService implements ManifestService {
@@ -93,6 +95,9 @@ public abstract class AbstractManifestService implements ManifestService {
 
     @Autowired
     private RedisManifestRepo redisManifestRepo;
+
+    @Autowired
+    private RedisFileResolverRepo redisFileResolverRepo;
 
     @PostConstruct
     private void init() {
@@ -238,19 +243,19 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected URI getImageUri(String url) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(url)));
+        return URI.create(joinPath(imageServerUrl, getFileId(url)));
     }
 
     protected URI getImageFullUrl(String url) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(url), IIIF_FULL_PATH));
+        return URI.create(joinPath(imageServerUrl, getFileId(url), IIIF_FULL_PATH));
     }
 
     protected URI getImageThumbnailUrl(String url) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(url), IIIF_THUMBNAIL_PATH));
+        return URI.create(joinPath(imageServerUrl, getFileId(url), IIIF_THUMBNAIL_PATH));
     }
 
     protected URI getImageInfoUri(String url) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(url), IMAGE_JSON));
+        return URI.create(joinPath(imageServerUrl, getFileId(url), IMAGE_JSON));
     }
 
     protected URI serviceUrlToThumbnailUri(URI serviceUrl) throws URISyntaxException {
@@ -283,8 +288,12 @@ public abstract class AbstractManifestService implements ManifestService {
         return optionalThumbnail;
     }
 
-    protected String pathIdentifier(String url) {
-        return encode(getRepositoryContextIdentifier(url));
+    private String getFileId(String url) {
+        Optional<RedisFileResolver> redisFileResolver = redisFileResolverRepo.findByUrl(url);
+        if (!redisFileResolver.isPresent()) {
+            redisFileResolver = Optional.of(redisFileResolverRepo.save(new RedisFileResolver(url)));
+        }
+        return redisFileResolver.get().getId();
     }
 
     protected List<Metadata> getDublinCoreTermsMetadata(RdfResource rdfResource) {

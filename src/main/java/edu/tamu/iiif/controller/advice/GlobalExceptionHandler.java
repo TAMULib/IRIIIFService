@@ -31,10 +31,10 @@ public class GlobalExceptionHandler {
     public @ResponseBody ResponseEntity<String> handleIOException(IOException exception) {
         ResponseEntity<String> response;
         if (StringUtils.containsIgnoreCase(ExceptionUtils.getRootCauseMessage(exception), "Broken pipe")) {
-            LOG.debug("Client has disconnected before completing request.");
+            LOG.debug("Client has disconnected before completing request.", exception);
             response = null;
         } else {
-            LOG.debug("Exception completing request. " + exception.getMessage());
+            LOG.debug(exception.getMessage(), exception);
             response = new ResponseEntity<String>(exception.getMessage(), SERVICE_UNAVAILABLE);
         }
         return response;
@@ -43,21 +43,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RiotException.class)
     @ResponseStatus(value = SERVICE_UNAVAILABLE)
     public @ResponseBody ResponseEntity<String> handleRiotException(RiotException exception) {
-        LOG.debug("Exception requesting RDF. " + exception.getMessage());
+        LOG.debug(exception.getMessage(), exception);
         return new ResponseEntity<String>(exception.getMessage(), SERVICE_UNAVAILABLE);
     }
 
     @ExceptionHandler(RedisConnectionFailureException.class)
     @ResponseStatus(value = SERVICE_UNAVAILABLE)
     public @ResponseBody ResponseEntity<String> handleRedisConnectionFailureException(RedisConnectionFailureException exception) {
-        LOG.debug("Exception requesting RDF. " + exception.getMessage());
+    	LOG.debug(exception.getMessage(), exception);
         return new ResponseEntity<String>(exception.getMessage(), SERVICE_UNAVAILABLE);
     }
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(value = NOT_FOUND)
     public @ResponseBody ResponseEntity<String> handleNotFoundException(NotFoundException exception) {
-        LOG.debug("Exception requesting RDF. " + exception.getMessage());
+    	LOG.debug(exception.getMessage(), exception);
         return new ResponseEntity<String>(exception.getMessage(), NOT_FOUND);
     }
 
