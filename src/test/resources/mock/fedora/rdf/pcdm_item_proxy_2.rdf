@@ -24,7 +24,7 @@
 @prefix xs:  <http://www.w3.org/2001/XMLSchema> .
 @prefix dc:  <http://purl.org/dc/elements/1.1/> .
 
-<http://localhost:9000/fcrepo/rest/cars_pcdm_objects/chevy/orderProxies/page_1_proxy>
+<http://localhost:9000/fcrepo/rest/cars_pcdm_objects/chevy/orderProxies/page_2_proxy>
         rdf:type               fedora:Container ;
         rdf:type               fedora:Resource ;
         rdf:type               ns004:Object ;
@@ -32,10 +32,9 @@
         fedora:createdBy       "bypassAdmin"^^<http://www.w3.org/2001/XMLSchema#string> ;
         fedora:created         "2018-04-24T13:29:23.218Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
         fedora:lastModified    "2018-04-24T13:29:23.218Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
-        ns005:proxyFor         <http://localhost:9000/fcrepo/rest/cars_pcdm_objects/chevy/pages/page_1> ;
+        ns005:proxyFor         <http://localhost:9000/fcrepo/rest/cars_pcdm_objects/chevy/pages/page_2> ;
         ns005:proxyIn          <http://localhost:9000/fcrepo/rest/cars_pcdm_objects/chevy> ;
-        iana:prev              <http://localhost:9000/fcrepo/rest/cars_pcdm_objects/chevy/orderProxies/page_0_proxy> ;
-        iana:next              <http://localhost:9000/fcrepo/rest/cars_pcdm_objects/chevy/orderProxies/page_2_proxy> ;
+        iana:prev              <http://localhost:9000/fcrepo/rest/cars_pcdm_objects/chevy/orderProxies/page_1_proxy> ;
         rdf:type               ldp:RDFSource ;
         rdf:type               ldp:Container ;
         fedora:writable        "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;

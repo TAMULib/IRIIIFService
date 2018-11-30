@@ -1,27 +1,37 @@
 {
   "@context":"http://iiif.io/api/image/2/context.json",
-  "@id":"http://janus.evans.tamu.edu:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL2NhcjEuanBn",
+  "@id":"http://janus.evans.tamu.edu:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8yL2ZpbGVzL2NhcjMuanBn",
   "protocol":"http://iiif.io/api/image",
-  "width":800,
-  "height":400,
+  "width":1920,
+  "height":1080,
   "sizes":[
     {
-      "width":200,
-      "height":100
+      "width":120,
+      "height":68
     },
     {
-      "width":400,
-      "height":200
+      "width":240,
+      "height":135
+    },
+    {
+      "width":480,
+      "height":270
+    },
+    {
+      "width":960,
+      "height":540
     }
   ],
   "tiles":[
     {
-      "width":800,
-      "height":400,
+      "width":1920,
+      "height":1080,
       "scaleFactors":[
         1,
         2,
-        4
+        4,
+        8,
+        16
       ]
     }
   ],

@@ -8,7 +8,7 @@ import static edu.tamu.iiif.constants.Constants.ORE_PROXY_FOR_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PCDM_COLLECTION;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_FILE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_MEMBER_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.W3_TYPE_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.RDF_TYPE_PREDICATE;
 import static edu.tamu.iiif.model.ManifestType.COLLECTION;
 import static edu.tamu.iiif.utility.RdfModelUtility.createRdfModel;
 import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
@@ -55,7 +55,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
 
         URI id = buildId(context);
 
-        PropertyValueSimpleImpl label = getTitle(rdfResource);
+        PropertyValueSimpleImpl label = getLabel(rdfResource);
 
         boolean isCollection = isCollection(rdfResource);
 
@@ -88,7 +88,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
     }
 
     private boolean isCollection(RdfResource rdfResource) {
-        NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(W3_TYPE_PREDICATE);
+        NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(RDF_TYPE_PREDICATE);
         while (nodes.hasNext()) {
             RDFNode node = nodes.next();
             if (node.toString().equals(PCDM_COLLECTION)) {
@@ -127,7 +127,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             while (nodes.hasNext()) {
                 RDFNode node = nodes.next();
                 String id = node.toString();
-                PropertyValueSimpleImpl label = getTitle(new RdfResource(rdfResource, node.toString()));
+                PropertyValueSimpleImpl label = getLabel(new RdfResource(rdfResource, node.toString()));
                 manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(id), label));
             }
         }
@@ -136,7 +136,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             ResIterator resources = rdfResource.listResourcesWithPropertyWithId(PCDM_HAS_FILE_PREDICATE);
             while (resources.hasNext()) {
                 Resource resource = resources.next();
-                PropertyValueSimpleImpl label = getTitle(new RdfResource(resource.getModel(), resource));
+                PropertyValueSimpleImpl label = getLabel(new RdfResource(resource.getModel(), resource));
                 manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(resource.getURI()), label));
             }
 
@@ -173,7 +173,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
         }
 
         if (id.isPresent()) {
-            PropertyValueSimpleImpl label = getTitle(rdfOrderedResource);
+            PropertyValueSimpleImpl label = getLabel(rdfOrderedResource);
             manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(id.get()), label));
 
             Optional<String> nextId = getIdByPredicate(model, IANA_NEXT_PREDICATE);

@@ -14,6 +14,7 @@ import static edu.tamu.iiif.constants.Constants.LDP_CONTAINS_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.ORE_PROXY_FOR_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_FILE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
+import static edu.tamu.iiif.constants.Constants.RDFS_LABEL_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
 import static edu.tamu.iiif.utility.RdfModelUtility.createRdfModel;
 import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
@@ -65,7 +66,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
     protected Sequence generateSequence(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         String id = rdfResource.getResource().getURI();
-        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getRepositoryContextIdentifier(id));
+        PropertyValueSimpleImpl label = getLabel(rdfResource);
         Sequence sequence = new SequenceImpl(getFedoraIiifSequenceUri(id), label);
         sequence.setCanvases(getCanvases(request, rdfResource));
         return sequence;
@@ -73,7 +74,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
     protected Canvas generateCanvas(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         String id = rdfResource.getResource().getURI();
-        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getRepositoryContextIdentifier(id));
+        PropertyValueSimpleImpl label = getLabel(rdfResource);
 
         RdfCanvas rdfCanvas = getFedoraRdfCanvas(request, rdfResource);
 
@@ -86,10 +87,13 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
         return canvas;
     }
 
-    protected PropertyValueSimpleImpl getTitle(RdfResource rdfResource) {
-        Optional<String> title = getObject(rdfResource, DUBLIN_CORE_TITLE_PREDICATE);
+    protected PropertyValueSimpleImpl getLabel(RdfResource rdfResource) {
+        Optional<String> title = getObject(rdfResource, RDFS_LABEL_PREDICATE);
         if (!title.isPresent()) {
             title = getObject(rdfResource, DUBLIN_CORE_IDENTIFIER_PREDICATE);
+        }
+        if (!title.isPresent()) {
+          title = getObject(rdfResource, DUBLIN_CORE_TITLE_PREDICATE);
         }
         if (!title.isPresent()) {
             String id = rdfResource.getResource().getURI();
