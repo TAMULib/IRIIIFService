@@ -29,7 +29,7 @@ public class FedoraPcdmPresentationManifestService extends AbstractFedoraPcdmMan
 
         URI id = buildId(context);
 
-        PropertyValueSimpleImpl label = getTitle(rdfResource);
+        PropertyValueSimpleImpl label = getLabel(rdfResource);
 
         Manifest manifest = new ManifestImpl(id, label);
 

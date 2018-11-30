@@ -20,12 +20,12 @@
       "@type" : "sc:Canvas",
       "height" : 400,
       "images" : [ {
-        "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL1BUQVJfODAweDQwMC5wbmc=/info.json",
+        "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL2NhcjEuanBn/info.json",
         "@type" : "oa:Annotation",
         "motivation" : "sc:painting",
         "on" : "http://localhost:9003/fedora-pcdm/canvas/cars_pcdm_objects/chevy/pages/page_0",
         "resource" : {
-          "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL1BUQVJfODAweDQwMC5wbmc=/full/full/0/default.jpg",
+          "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL2NhcjEuanBn/full/full/0/default.jpg",
           "@type" : "dctypes:Image",
           "format": "image/png; charset=utf-8",
           "height" : 400,
@@ -33,12 +33,12 @@
             "label" : "Fedora IIIF Image Resource Service",
             "profile" : "http://iiif.io/api/image/2/level0.json",
             "@context" : "http://iiif.io/api/image/2/context.json",
-            "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL1BUQVJfODAweDQwMC5wbmc="
+            "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL2NhcjEuanBn"
           },
           "width" : 800
         }
       } ],
-      "label" : "fedora-pcdm:cars_pcdm_objects/chevy/pages/page_0",
+      "label" : "Chevy 0",
       "metadata" : [ ],
       "width" : 800
     }, {
@@ -64,17 +64,46 @@
           "width" : 1920
         }
       } ],
-      "label" : "fedora-pcdm:cars_pcdm_objects/chevy/pages/page_1",
+      "label" : "Chevy 1",
       "metadata" : [ ],
       "width" : 1920
+    }, {
+      "@id" : "http://localhost:9003/fedora-pcdm/canvas/cars_pcdm_objects/chevy/pages/page_2",
+      "@type" : "sc:Canvas",
+      "height" : 1080,
+      "images" : [ {
+        "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8yL2ZpbGVzL2NhcjMuanBn/info.json",
+        "@type" : "oa:Annotation",
+        "motivation" : "sc:painting",
+        "on" : "http://localhost:9003/fedora-pcdm/canvas/cars_pcdm_objects/chevy/pages/page_2",
+        "resource" : {
+          "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8yL2ZpbGVzL2NhcjMuanBn/full/full/0/default.jpg",
+          "@type" : "dctypes:Image",
+          "format": "image/png; charset=utf-8",
+          "height" : 1080,
+          "service" : {
+            "label" : "Fedora IIIF Image Resource Service",
+            "profile" : "http://iiif.io/api/image/2/level0.json",
+            "@context" : "http://iiif.io/api/image/2/context.json",
+            "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8yL2ZpbGVzL2NhcjMuanBn"
+          },
+          "width" : 1920
+        }
+      } ],
+      "label" : "Chevy 2",
+      "metadata" : [ {
+        "label" : "title",
+        "value" : "Chevy 2"
+      } ],
+      "width" : 1920
     } ],
-    "label" : "fedora-pcdm:cars_pcdm_objects/chevy"
+    "label" : "Some Chevy Cars"
   } ],
   "thumbnail" : {
-    "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL1BUQVJfODAweDQwMC5wbmc=/full/!200,200/0/default.jpg",
+    "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL2NhcjEuanBn/full/!200,200/0/default.jpg",
     "services" : [ {
       "@context" : "http://iiif.io/api/image/2/context.json",
-      "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL1BUQVJfODAweDQwMC5wbmc=",
+      "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL2NhcjEuanBn",
       "label" : "Fedora IIIF Image Resource Service",
       "profile" : "http://iiif.io/api/image/2/level0.json"
     } ]
