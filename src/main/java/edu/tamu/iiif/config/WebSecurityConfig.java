@@ -12,9 +12,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
+import edu.tamu.iiif.config.AdminConfig.Credentials;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private AdminConfig adminConfig;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -41,7 +46,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("admin").password("password").roles("ADMIN");
+        for (Credentials adminCredentials : adminConfig.getAdmins()) {
+            // @formatter:off
+            auth
+                .inMemoryAuthentication()
+                .withUser(adminCredentials.getUsername())
+                .password(adminCredentials.getPassword())
+                .roles("ADMIN");
+            // @formatter:on
+        }
+
     }
 
 }
