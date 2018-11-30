@@ -4,8 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
 
-@RedisHash("file-resolver")
-public class RedisFileResolver {
+@RedisHash("resource")
+public class RedisResource {
 
     @Id
     private String id;
@@ -13,7 +13,7 @@ public class RedisFileResolver {
     @Indexed
     private String url;
 
-    public RedisFileResolver(String url) {
+    public RedisResource(String url) {
         this.url = url;
     }
 
