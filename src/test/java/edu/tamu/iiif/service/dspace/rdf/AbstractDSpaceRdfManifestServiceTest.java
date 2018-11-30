@@ -3,7 +3,6 @@ package edu.tamu.iiif.service.dspace.rdf;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import edu.tamu.iiif.service.AbstractManifestServiceTest;
-import edu.tamu.iiif.service.dspace.rdf.AbstractDSpaceRdfManifestService;
 
 public abstract class AbstractDSpaceRdfManifestServiceTest extends AbstractManifestServiceTest {
 
@@ -18,6 +17,16 @@ public abstract class AbstractDSpaceRdfManifestServiceTest extends AbstractManif
         setField(dspaceRdfManifestService, "dspaceUrl", DSPACE_URL);
         setField(dspaceRdfManifestService, "dspaceWebapp", DSPACE_WEBAPP);
         setField(dspaceRdfManifestService, "dspaceRdfIdentifier", DSPACE_RDF_IDENTIFIER);
+    }
+
+    @Override
+    protected String getRepoRdfIdentifier() {
+        return DSPACE_RDF_IDENTIFIER;
+    }
+
+    @Override
+    protected String getRepoBaseUrl() {
+        return DSPACE_URL + "/";
     }
 
 }

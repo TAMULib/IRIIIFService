@@ -3,7 +3,6 @@ package edu.tamu.iiif.service.fedora.pcdm;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import edu.tamu.iiif.service.AbstractManifestServiceTest;
-import edu.tamu.iiif.service.fedora.pcdm.AbstractFedoraPcdmManifestService;
 
 public abstract class AbstractFedoraPcdmManifestServiceTest extends AbstractManifestServiceTest {
 
@@ -18,6 +17,16 @@ public abstract class AbstractFedoraPcdmManifestServiceTest extends AbstractMani
         setField(fedoraPcdmManifestService, "fedoraUrl", FEDORA_URL);
         setField(fedoraPcdmManifestService, "fedoraPcdmExtUrl", PCDM_RDF_URL);
         setField(fedoraPcdmManifestService, "fedoraPcdmIdentifier", FEDORA_PCDM_IDENTIFIER);
+    }
+
+    @Override
+    protected String getRepoRdfIdentifier() {
+        return FEDORA_PCDM_IDENTIFIER;
+    }
+
+    @Override
+    protected String getRepoBaseUrl() {
+        return FEDORA_URL + "/";
     }
 
 }

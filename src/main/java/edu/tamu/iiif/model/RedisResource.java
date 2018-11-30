@@ -16,6 +16,11 @@ public class RedisResource {
     public RedisResource(String url) {
         this.url = url;
     }
+    
+    public RedisResource(String id, String url) {
+        this(url);
+        this.id = id;
+    }
 
     public String getId() {
         return id;
