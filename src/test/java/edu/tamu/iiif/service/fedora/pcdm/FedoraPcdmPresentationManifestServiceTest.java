@@ -42,11 +42,17 @@ public class FedoraPcdmPresentationManifestServiceTest extends AbstractFedoraPcd
     @Value("classpath:mock/fedora/rdf/pcdm_item_proxy_1.rdf")
     private Resource proxy1Rdf;
 
+    @Value("classpath:mock/fedora/rdf/pcdm_item_proxy_2.rdf")
+    private Resource proxy2Rdf;
+
     @Value("classpath:mock/fedora/json/image0.json")
     private Resource image0;
 
     @Value("classpath:mock/fedora/json/image1.json")
     private Resource image1;
+
+    @Value("classpath:mock/fedora/json/image2.json")
+    private Resource image2;
 
     @Value("classpath:mock/fedora/json/presentation.json")
     private Resource presentation;
@@ -100,9 +106,11 @@ public class FedoraPcdmPresentationManifestServiceTest extends AbstractFedoraPcd
 
         when(httpService.contentType(any(String.class))).thenReturn("image/png; charset=utf-8");
 
-        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL1BUQVJfODAweDQwMC5wbmc=/info.json"))).thenReturn(readFileToString(image0.getFile(), "UTF-8"));
+        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL2NhcjEuanBn/info.json"))).thenReturn(readFileToString(image0.getFile(), "UTF-8"));
 
         when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8xL2ZpbGVzL2NhcjIuanBn/info.json"))).thenReturn(readFileToString(image1.getFile(), "UTF-8"));
+
+        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8yL2ZpbGVzL2NhcjMuanBn/info.json"))).thenReturn(readFileToString(image2.getFile(), "UTF-8"));
 
         String manifest = fedoraPcdmPresentationManifestService.getManifest(ManifestRequest.of("cars_pcdm_objects/chevy", false));
 
@@ -115,10 +123,13 @@ public class FedoraPcdmPresentationManifestServiceTest extends AbstractFedoraPcd
         when(httpService.contentType(any(String.class))).thenReturn("image/png; charset=utf-8");
 
         when(httpService.get(eq(FEDORA_URL + "/cars_pcdm_objects/chevy/orderProxies/page_0_proxy/fcr:metadata"))).thenReturn(readFileToString(proxy0Rdf.getFile(), "UTF-8"));
-        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL1BUQVJfODAweDQwMC5wbmc=/info.json"))).thenReturn(readFileToString(image0.getFile(), "UTF-8"));
+        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL2NhcjEuanBn/info.json"))).thenReturn(readFileToString(image0.getFile(), "UTF-8"));
 
         when(httpService.get(eq(FEDORA_URL + "/cars_pcdm_objects/chevy/orderProxies/page_1_proxy/fcr:metadata"))).thenReturn(readFileToString(proxy1Rdf.getFile(), "UTF-8"));
         when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8xL2ZpbGVzL2NhcjIuanBn/info.json"))).thenReturn(readFileToString(image1.getFile(), "UTF-8"));
+
+        when(httpService.get(eq(FEDORA_URL + "/cars_pcdm_objects/chevy/orderProxies/page_2_proxy/fcr:metadata"))).thenReturn(readFileToString(proxy2Rdf.getFile(), "UTF-8"));
+        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8yL2ZpbGVzL2NhcjMuanBn/info.json"))).thenReturn(readFileToString(image2.getFile(), "UTF-8"));
     }
 
 }

@@ -66,10 +66,15 @@ public class Constants {
     public final static String DUBLIN_CORE_TERMS_HAS_PART = DUBLIN_CORE_TERMS_PREFIX + "hasPart";
     public final static String DUBLIN_CORE_TERMS_IS_PART_OF = DUBLIN_CORE_TERMS_PREFIX + "isPartOf";
 
-    // W3
-    public final static String W3_PREFIX = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+    // RDF
+    public final static String RDF_PREFIX = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 
-    public final static String W3_TYPE_PREDICATE = W3_PREFIX + "type";
+    public final static String RDF_TYPE_PREDICATE = RDF_PREFIX + "type";
+
+    // RDFS
+    public final static String RDFS_PREFIX = "http://www.w3.org/2000/01/rdf-schema#";
+
+    public final static String RDFS_LABEL_PREDICATE = RDFS_PREFIX + "label";
 
     // LDP
     public final static String LDP_PREFIX = "http://www.w3.org/ns/ldp#";
