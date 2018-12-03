@@ -1,5 +1,6 @@
 package edu.tamu.iiif.controller;
 
+import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
@@ -9,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,7 +51,7 @@ public class ResourceController {
         Optional<RedisResource> redisFileResolver = Optional.ofNullable(redisResourceRepo.findOne(id));
         if (redisFileResolver.isPresent()) {
             RedirectView redirect = new RedirectView(redisFileResolver.get().getUrl());
-            redirect.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+            redirect.setStatusCode(MOVED_PERMANENTLY);
             return redirect;
         }
         throw new NotFoundException(String.format("Unable to resolve resource with id %s", id));
