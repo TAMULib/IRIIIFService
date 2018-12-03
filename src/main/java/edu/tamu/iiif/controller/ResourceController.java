@@ -10,11 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -59,17 +61,18 @@ public class ResourceController {
     }
 
     @GetMapping(value = "/lookup", produces = "text/plain")
-    public String getResourceId(@RequestParam(value = "url", required = true) String url) throws NotFoundException {
-        Optional<RedisResource> redisFileResolver = redisResourceRepo.findByUrl(url);
+    public String getResourceId(@RequestParam(value = "uri", required = true) String uri) throws NotFoundException {
+        Optional<RedisResource> redisFileResolver = redisResourceRepo.findByUrl(uri);
         if (redisFileResolver.isPresent()) {
             return redisFileResolver.get().getId();
         }
-        throw new NotFoundException(String.format("No resourse found with url %s", url));
+        throw new NotFoundException(String.format("No resourse found with uri %s", uri));
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = { POST, PUT }, produces = "text/plain")
-    public String putResource(@RequestParam(value = "url", required = true) String url) throws InvalidUrlException {
-        return redisResourceRepo.getOrCreate(url).getId();
+    public String addResource(@RequestParam(value = "uri", required = true) String uri) throws InvalidUrlException {
+        return redisResourceRepo.getOrCreate(uri).getId();
     }
 
     @DeleteMapping(value = "/{id}", produces = "text/plain")
@@ -77,7 +80,7 @@ public class ResourceController {
         Optional<RedisResource> redisFileResolver = Optional.ofNullable(redisResourceRepo.findOne(id));
         if (redisFileResolver.isPresent()) {
             redisResourceRepo.delete(redisFileResolver.get());
-            return "Sucess";
+            return "Success";
         }
         throw new NotFoundException(String.format("Unable to resolve resource with id %s", id));
     }
