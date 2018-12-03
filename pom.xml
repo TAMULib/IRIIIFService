@@ -27,7 +27,6 @@
     <java.version>1.8</java.version>
     <jena-libs.version>3.2.0</jena-libs.version>
     <iiif-presentation.version>3.2.5</iiif-presentation.version>
-    <iiif-image.version>2.2.6</iiif-image.version>
   </properties>
 
   <dependencies>
