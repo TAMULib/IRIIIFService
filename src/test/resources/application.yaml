@@ -5,7 +5,7 @@ server:
 logging:
   file: ir-iiif-service.log
   level:
-    edu.tamu.iiif: DEBUG
+    edu.tamu.iiif: INFO
     org.springframework: INFO
   path: /var/logs/iiif
 
