@@ -47,7 +47,7 @@ public class ResourceController {
     }
 
     @GetMapping(value = "/{id}/redirect")
-    public RedirectView redirectToResourceUrl(@PathVariable String id) throws IOException, NotFoundException {
+    public RedirectView redirectToResource(@PathVariable String id) throws IOException, NotFoundException {
         Optional<RedisResource> redisFileResolver = Optional.ofNullable(redisResourceRepo.findOne(id));
         if (redisFileResolver.isPresent()) {
             RedirectView redirect = new RedirectView(redisFileResolver.get().getUrl());
