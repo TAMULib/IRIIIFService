@@ -3,17 +3,20 @@ package edu.tamu.iiif.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import edu.tamu.iiif.exception.InvalidUrlException;
 import edu.tamu.iiif.exception.NotFoundException;
@@ -27,14 +30,14 @@ public class ResourceController {
     @Autowired
     private RedisResourceRepo redisResourceRepo;
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public List<RedisResource> getResources() {
         List<RedisResource> resources = new ArrayList<RedisResource>();
         redisResourceRepo.findAll().forEach(resources::add);
         return resources;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = "text/plain")
     public String getResourceUrl(@PathVariable String id) throws NotFoundException {
         Optional<RedisResource> redisFileResolver = Optional.ofNullable(redisResourceRepo.findOne(id));
         if (redisFileResolver.isPresent()) {
@@ -43,7 +46,19 @@ public class ResourceController {
         throw new NotFoundException(String.format("Unable to resolve resource with id %s", id));
     }
 
-    @GetMapping("/lookup")
+    @GetMapping(value = "/{id}/redirect")
+    public RedirectView redirectToResourceUrl(@PathVariable String id) throws IOException, NotFoundException {
+        Optional<RedisResource> redisFileResolver = Optional.ofNullable(redisResourceRepo.findOne(id));
+        if (redisFileResolver.isPresent()) {
+            RedirectView redirect = new RedirectView(redisFileResolver.get().getUrl());
+            redirect.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+            return redirect;
+        }
+        throw new NotFoundException(String.format("Unable to resolve resource with id %s", id));
+
+    }
+
+    @GetMapping(value = "/lookup", produces = "text/plain")
     public String getResourceId(@RequestParam(value = "url", required = true) String url) throws NotFoundException {
         Optional<RedisResource> redisFileResolver = redisResourceRepo.findByUrl(url);
         if (redisFileResolver.isPresent()) {
@@ -52,12 +67,12 @@ public class ResourceController {
         throw new NotFoundException(String.format("No resourse found with url %s", url));
     }
 
-    @RequestMapping(method = { POST, PUT })
+    @RequestMapping(method = { POST, PUT }, produces = "text/plain")
     public String putResource(@RequestParam(value = "url", required = true) String url) throws InvalidUrlException {
         return redisResourceRepo.getOrCreate(url).getId();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}", produces = "text/plain")
     public String removeResource(@PathVariable String id) throws NotFoundException {
         Optional<RedisResource> redisFileResolver = Optional.ofNullable(redisResourceRepo.findOne(id));
         if (redisFileResolver.isPresent()) {

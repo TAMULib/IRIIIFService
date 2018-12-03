@@ -13,10 +13,15 @@ public class RedisResource {
     @Indexed
     private String url;
 
+    public RedisResource() {
+        super();
+    }
+
     public RedisResource(String url) {
+        this();
         this.url = url;
     }
-    
+
     public RedisResource(String id, String url) {
         this(url);
         this.id = id;
