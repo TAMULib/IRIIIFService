@@ -12,7 +12,7 @@ import edu.tamu.iiif.model.repo.custom.RedisResourceRepoCustom;
 
 public class RedisResourceRepoImpl implements RedisResourceRepoCustom {
 
-    UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
+    private final static UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" }, UrlValidator.ALLOW_LOCAL_URLS);
 
     @Autowired
     private RedisResourceRepo redisResourceRepo;
