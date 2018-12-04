@@ -148,10 +148,10 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
     private List<ManifestReference> gatherResourceManifests(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException, IOException {
         List<ManifestReference> manifests = new ArrayList<ManifestReference>();
 
-        Optional<String> firstId = getIdByPredicate(rdfResource, IANA_FIRST_PREDICATE);
+        Optional<String> firstId = getIdByPredicate(rdfResource.getModel(), IANA_FIRST_PREDICATE);
 
         if (firstId.isPresent()) {
-            Optional<String> lastId = getIdByPredicate(rdfResource, IANA_LAST_PREDICATE);
+            Optional<String> lastId = getIdByPredicate(rdfResource.getModel(), IANA_LAST_PREDICATE);
 
             if (lastId.isPresent()) {
                 Resource firstResource = rdfResource.getModel().getResource(firstId.get());

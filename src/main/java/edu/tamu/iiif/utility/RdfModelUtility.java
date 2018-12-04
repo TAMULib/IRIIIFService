@@ -31,15 +31,6 @@ public class RdfModelUtility {
         return id;
     }
 
-    public static Optional<String> getIdByPredicate(RdfResource rdfResource, String predicate) {
-        Optional<String> id = Optional.empty();
-        NodeIterator firstNodeItr = rdfResource.getModel().listObjectsOfProperty(rdfResource.getResource(), rdfResource.getModel().getProperty(predicate));
-        while (firstNodeItr.hasNext()) {
-            id = Optional.of(firstNodeItr.next().toString());
-        }
-        return id;
-    }
-
     public static Optional<String> getObject(RdfResource rdfResource, String uri) {
         Optional<String> metadatum = Optional.empty();
         Optional<Statement> statement = Optional.ofNullable(rdfResource.getStatementOfPropertyWithId(uri));
