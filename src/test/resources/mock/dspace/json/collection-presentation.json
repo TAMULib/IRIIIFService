@@ -216,7 +216,7 @@
         "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n"
       }
     ],
-    "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/full/!200,200/0/default.jpg"
+    "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/full/!100,100/0/default.jpg"
   },
   "@type": "sc:Manifest",
   "@id": "http://localhost:9003/dspace-rdf/presentation/123456789/158299",

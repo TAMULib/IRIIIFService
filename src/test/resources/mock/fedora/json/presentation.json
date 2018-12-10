@@ -100,7 +100,7 @@
     "label" : "Some Chevy Cars"
   } ],
   "thumbnail" : {
-    "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL2NhcjEuanBn/full/!200,200/0/default.jpg",
+    "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL2NhcjEuanBn/full/!100,100/0/default.jpg",
     "services" : [ {
       "@context" : "http://iiif.io/api/image/2/context.json",
       "@id" : "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL2NhcjEuanBn",

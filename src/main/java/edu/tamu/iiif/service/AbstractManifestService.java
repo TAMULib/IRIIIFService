@@ -64,7 +64,7 @@ public abstract class AbstractManifestService implements ManifestService {
     private final static String SEMI_COLON = ";";
     private final static String FORWARD_SLASH = "/";
 
-    private final static String IIIF_THUMBNAIL_PATH = "full/!200,200/0/default.jpg";
+    private final static String IIIF_THUMBNAIL_PATH = "full/!100,100/0/default.jpg";
     private final static String IIIF_FULL_PATH = "full/full/0/default.jpg";
 
     private final static String APPLICATION_PDF = "application/pdf";
