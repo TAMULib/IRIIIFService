@@ -49,11 +49,13 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimple
 import de.digitalcollections.iiif.presentation.model.impl.v2.ServiceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ThumbnailImpl;
 import edu.tamu.iiif.controller.ManifestRequest;
+import edu.tamu.iiif.exception.InvalidUrlException;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
+import edu.tamu.iiif.model.repo.RedisResourceRepo;
 
 public abstract class AbstractManifestService implements ManifestService {
 
@@ -62,7 +64,7 @@ public abstract class AbstractManifestService implements ManifestService {
     private final static String SEMI_COLON = ";";
     private final static String FORWARD_SLASH = "/";
 
-    private final static String IIIF_THUMBNAIL_PATH = "full/!200,200/0/default.jpg";
+    private final static String IIIF_THUMBNAIL_PATH = "full/!100,100/0/default.jpg";
     private final static String IIIF_FULL_PATH = "full/full/0/default.jpg";
 
     private final static String APPLICATION_PDF = "application/pdf";
@@ -93,6 +95,9 @@ public abstract class AbstractManifestService implements ManifestService {
 
     @Autowired
     private RedisManifestRepo redisManifestRepo;
+
+    @Autowired
+    private RedisResourceRepo redisResourceRepo;
 
     @PostConstruct
     private void init() {
@@ -150,7 +155,7 @@ public abstract class AbstractManifestService implements ManifestService {
         return Optional.empty();
     }
 
-    protected Optional<Image> generateImage(ManifestRequest request, RdfResource rdfResource, String canvasId) throws URISyntaxException {
+    protected Optional<Image> generateImage(ManifestRequest request, RdfResource rdfResource, String canvasId) throws InvalidUrlException, URISyntaxException {
         String url = rdfResource.getResource().getURI();
         Optional<Image> optionalImage = Optional.empty();
         Optional<ImageResource> imageResource = generateImageResource(request, rdfResource);
@@ -163,7 +168,7 @@ public abstract class AbstractManifestService implements ManifestService {
         return optionalImage;
     }
 
-    protected Optional<ImageResource> generateImageResource(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException {
+    protected Optional<ImageResource> generateImageResource(ManifestRequest request, RdfResource rdfResource) throws InvalidUrlException {
         String url = rdfResource.getResource().getURI();
 
         Optional<ImageResource> optionalImageResource = Optional.empty();
@@ -237,27 +242,27 @@ public abstract class AbstractManifestService implements ManifestService {
         throw new NotFoundException("Image information not found!");
     }
 
-    protected URI getImageUri(String url) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(url)));
+    protected URI getImageUri(String url) throws InvalidUrlException {
+        return URI.create(joinPath(imageServerUrl, getResourceId(url)));
     }
 
-    protected URI getImageFullUrl(String url) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(url), IIIF_FULL_PATH));
+    protected URI getImageFullUrl(String url) throws InvalidUrlException {
+        return URI.create(joinPath(imageServerUrl, getResourceId(url), IIIF_FULL_PATH));
     }
 
-    protected URI getImageThumbnailUrl(String url) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(url), IIIF_THUMBNAIL_PATH));
+    protected URI getImageThumbnailUrl(String url) throws InvalidUrlException {
+        return URI.create(joinPath(imageServerUrl, getResourceId(url), IIIF_THUMBNAIL_PATH));
     }
 
-    protected URI getImageInfoUri(String url) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, pathIdentifier(url), IMAGE_JSON));
+    protected URI getImageInfoUri(String url) throws InvalidUrlException {
+        return URI.create(joinPath(imageServerUrl, getResourceId(url), IMAGE_JSON));
     }
 
     protected URI serviceUrlToThumbnailUri(URI serviceUrl) throws URISyntaxException {
         return URI.create(joinPath(serviceUrl.toString(), IIIF_THUMBNAIL_PATH));
     }
 
-    protected List<Service> getServices(RdfResource rdfResource, String... names) throws URISyntaxException {
+    protected List<Service> getServices(RdfResource rdfResource, String... names) throws InvalidUrlException {
         List<Service> services = new ArrayList<Service>();
         for (String name : names) {
             services.add(getService(rdfResource, name));
@@ -283,8 +288,8 @@ public abstract class AbstractManifestService implements ManifestService {
         return optionalThumbnail;
     }
 
-    protected String pathIdentifier(String url) {
-        return encode(getRepositoryContextIdentifier(url));
+    private String getResourceId(String url) throws InvalidUrlException {
+        return redisResourceRepo.getOrCreate(url).getId();
     }
 
     protected List<Metadata> getDublinCoreTermsMetadata(RdfResource rdfResource) {
@@ -317,7 +322,7 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected abstract String getRepositoryPath(String url);
 
-    private Service getService(RdfResource rdfResource, String name) throws URISyntaxException {
+    private Service getService(RdfResource rdfResource, String name) throws InvalidUrlException {
         Service service = new ServiceImpl(getImageUri(rdfResource.getResource().getURI()));
         service.setLabel(new PropertyValueSimpleImpl(name));
         service.setContext(IIIF_IMAGE_API_CONTEXT);

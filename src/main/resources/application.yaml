@@ -18,6 +18,10 @@ spring:
     include: dspace, fedora
 
 iiif:
+  admins:
+    -
+      username: admin
+      password: abc123
   service:
     url: http://localhost:${server.port}${server.contextPath}
     connection:
