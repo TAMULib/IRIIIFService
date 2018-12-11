@@ -5,8 +5,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +29,6 @@ public class ResourceController {
 
     @Autowired
     private RedisResourceRepo redisResourceRepo;
-
-    @GetMapping(produces = "application/json")
-    public List<RedisResource> getResources() {
-        List<RedisResource> resources = new ArrayList<RedisResource>();
-        redisResourceRepo.findAll().forEach(resources::add);
-        return resources;
-    }
 
     @GetMapping(value = "/{id}", produces = "text/plain")
     public String getResourceUrl(@PathVariable String id) throws NotFoundException {

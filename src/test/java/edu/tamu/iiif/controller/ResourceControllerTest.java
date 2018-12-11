@@ -68,13 +68,6 @@ public class ResourceControllerTest {
     }
 
     @Test
-    public void testGetResources() throws Exception {
-        RequestBuilder requestBuilder = get("/resources").accept(APPLICATION_JSON);
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-        assertEquals(200, result.getResponse().getStatus());
-    }
-
-    @Test
     public void testGetResourceUrl() throws Exception {
         RequestBuilder requestBuilder = get("/resources/26f9b338-f744-11e8-8eb2-f2801f1b9fd1").accept(TEXT_PLAIN);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
