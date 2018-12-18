@@ -137,6 +137,7 @@ public abstract class AbstractManifestService implements ManifestService {
     protected RdfResource getRdfResource(String handle) throws NotFoundException {
         String rdfUrl = getRdfUrl(handle);
         String rdf = getRdf(rdfUrl);
+        System.out.println("\n\nInitial RDF\n" + rdf + "\n\n");
         Model model = createRdfModel(rdf);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");

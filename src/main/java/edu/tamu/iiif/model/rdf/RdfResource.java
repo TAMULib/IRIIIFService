@@ -15,6 +15,11 @@ public class RdfResource extends RdfModel {
         super(model);
     }
 
+    public RdfResource(Model model, String id) {
+        this(model);
+        this.resource = getModel().getResource(id);
+    }
+
     public RdfResource(Model model, Resource resource) {
         this(model);
         this.resource = resource;
@@ -60,7 +65,7 @@ public class RdfResource extends RdfModel {
     public NodeIterator getAllNodesOfPropertyWithId(String id) {
         return getModel().listObjectsOfProperty(getProperty(id));
     }
-    
+
     public NodeIterator getNodesOfPropertyWithId(String id) {
         return getModel().listObjectsOfProperty(getResource(), getProperty(id));
     }

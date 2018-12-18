@@ -17,13 +17,9 @@ public class DSpaceRdfSequenceManifestService extends AbstractDSpaceRdfManifestS
 
     public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
         String context = request.getContext();
-
         RdfResource rdfResource = getRdfResource(context);
-
         Sequence sequence = generateSequence(request, rdfResource);
-
         sequence.setDescription(getDescription(rdfResource));
-
         return mapper.writeValueAsString(sequence);
     }
 

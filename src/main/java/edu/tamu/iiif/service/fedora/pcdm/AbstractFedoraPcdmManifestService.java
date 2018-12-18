@@ -90,7 +90,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
             title = getObject(rdfResource, DUBLIN_CORE_IDENTIFIER_PREDICATE);
         }
         if (!title.isPresent()) {
-          title = getObject(rdfResource, DUBLIN_CORE_TITLE_PREDICATE);
+            title = getObject(rdfResource, DUBLIN_CORE_TITLE_PREDICATE);
         }
         if (!title.isPresent()) {
             String id = rdfResource.getResource().getURI();
@@ -121,6 +121,16 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
     protected URI getCanvasUri(String canvasId) throws URISyntaxException {
         return getFedoraIiifCanvasUri(canvasId);
+    }
+
+    protected Model getRdfModel(String url) throws NotFoundException {
+        String rdf = httpService.get(url + FEDORA_FCR_METADATA);
+        System.out.println("\n\nModel RDF\n" + rdf + "\n\n");
+        Optional<String> fedoraRdf = Optional.ofNullable(rdf);
+        if (fedoraRdf.isPresent()) {
+            return createRdfModel(fedoraRdf.get());
+        }
+        throw new NotFoundException("Fedora RDF not found!");
     }
 
     protected String getIiifImageServiceName() {
@@ -230,15 +240,6 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
             }
         }
 
-    }
-
-    private Model getRdfModel(String url) throws NotFoundException {
-        String rdf = httpService.get(url + FEDORA_FCR_METADATA);
-        Optional<String> fedoraRdf = Optional.ofNullable(rdf);
-        if (fedoraRdf.isPresent()) {
-            return createRdfModel(fedoraRdf.get());
-        }
-        throw new NotFoundException("Fedora RDF not found!");
     }
 
     private RdfCanvas getFedoraRdfCanvas(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
