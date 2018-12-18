@@ -29,14 +29,14 @@ iiif:
       timeToLive: 1200000
       request.timeout: 600000
     socket.timeout: 1800000
-  image.server.url: https://api-pre.library.tamu.edu/iiif/2
+  image.server.url: http://localhost:8182/iiif/2
   logo.url: https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png
   dspace:
-    url: https://dspacepre1.library.tamu.edu
-    webapp: 
+    url: http://localhost:8080
+    webapp: xmlui
     identifier: 
       dspace-rdf: dspace
   fedora:
-    url: https://api-pre.library.tamu.edu/fcrepo/rest
+    url: http://localhost:9000/fcrepo/rest
     identifier:
       fedora-pcdm: fedora
