@@ -1,6 +1,7 @@
 package edu.tamu.iiif.service.fedora.pcdm;
 
 import static edu.tamu.iiif.constants.Constants.CANVAS_IDENTIFIER;
+import static edu.tamu.iiif.constants.Constants.COLLECTION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_DESCRIPTION_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_IDENTIFIER_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TITLE_PREDICATE;
@@ -105,6 +106,10 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
             description = Optional.of("No description available!");
         }
         return new PropertyValueSimpleImpl(description.get());
+    }
+
+    protected URI getFedoraIiifCollectionUri(String url) throws URISyntaxException {
+        return getFedoraIiifUri(url, COLLECTION_IDENTIFIER);
     }
 
     protected URI getFedoraIiifPresentationUri(String url) throws URISyntaxException {
