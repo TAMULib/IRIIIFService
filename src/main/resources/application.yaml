@@ -1,6 +1,6 @@
 server:
   contextPath:
-  port: 9003
+  port: 9000
 
 logging:
   file: ir-iiif-service.log

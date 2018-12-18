@@ -6,22 +6,22 @@
   "manifests": [],
   "viewingHint": "multi-part",
   "@type": "sc:Collection",
-  "@id": "http://localhost:9003/dspace-rdf/collection/123456789/158298",
+  "@id": "http://localhost:9000/dspace-rdf/collection/123456789/158298",
   "@context": "http://iiif.io/api/presentation/2/context.json",
   "collections": [
     {
       "label": "123456789/158301",
-      "@id": "http://localhost:9003/dspace-rdf/collection/123456789/158301",
+      "@id": "http://localhost:9000/dspace-rdf/collection/123456789/158301",
       "@type": "sc:Collection"
     },
     {
       "label": "123456789/158299",
-      "@id": "http://localhost:9003/dspace-rdf/collection/123456789/158299",
+      "@id": "http://localhost:9000/dspace-rdf/collection/123456789/158299",
       "@type": "sc:Collection"
     },
     {
       "label": "123456789/158300",
-      "@id": "http://localhost:9003/dspace-rdf/collection/123456789/158300",
+      "@id": "http://localhost:9000/dspace-rdf/collection/123456789/158300",
       "@type": "sc:Collection"
     }
   ]

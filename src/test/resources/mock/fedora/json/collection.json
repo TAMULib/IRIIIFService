@@ -1,43 +1,43 @@
 {
   "@context": "http://iiif.io/api/presentation/2/context.json",
-  "@id": "http://localhost:9003/fedora-pcdm/collection/cars_pcdm",
+  "@id": "http://localhost:9000/fedora-pcdm/collection/cars_pcdm",
   "@type": "sc:Collection",
   "description": "No description available!",
   "label": "fedora-pcdm:cars_pcdm",
   "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "manifests": [
     {
-      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/vintage",
+      "@id": "http://localhost:9000/fedora-pcdm/presentation/cars_pcdm_objects/vintage",
       "@type": "sc:Manifest",
       "label": "Vintage"
     },
     {
-      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/lamborghini",
+      "@id": "http://localhost:9000/fedora-pcdm/presentation/cars_pcdm_objects/lamborghini",
       "@type": "sc:Manifest",
       "label": "Lamborghini"
     },
     {
-      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/nissan",
+      "@id": "http://localhost:9000/fedora-pcdm/presentation/cars_pcdm_objects/nissan",
       "@type": "sc:Manifest",
       "label": "Nissan"
     },
     {
-      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/vw",
+      "@id": "http://localhost:9000/fedora-pcdm/presentation/cars_pcdm_objects/vw",
       "@type": "sc:Manifest",
       "label": "Volks Wagon"
     },
     {
-      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/chevy",
+      "@id": "http://localhost:9000/fedora-pcdm/presentation/cars_pcdm_objects/chevy",
       "@type": "sc:Manifest",
       "label": "Some Chevy Cars"
     },
     {
-      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/corvette",
+      "@id": "http://localhost:9000/fedora-pcdm/presentation/cars_pcdm_objects/corvette",
       "@type": "sc:Manifest",
       "label": "Corvette"
     },
     {
-      "@id": "http://localhost:9003/fedora-pcdm/presentation/cars_pcdm_objects/mustang",
+      "@id": "http://localhost:9000/fedora-pcdm/presentation/cars_pcdm_objects/mustang",
       "@type": "sc:Manifest",
       "label": "Mustang"
     }
