@@ -59,7 +59,7 @@ import edu.tamu.iiif.model.repo.RedisResourceRepo;
 
 public abstract class AbstractManifestService implements ManifestService {
 
-    private final static Logger LOG = LoggerFactory.getLogger(AbstractManifestService.class);
+    private final static Logger logger = LoggerFactory.getLogger(AbstractManifestService.class);
 
     private final static String SEMI_COLON = ";";
     private final static String FORWARD_SLASH = "/";
@@ -112,10 +112,10 @@ public abstract class AbstractManifestService implements ManifestService {
         Optional<RedisManifest> optionalRedisManifest = getRedisManifest(request);
 
         if (optionalRedisManifest.isPresent()) {
-            LOG.info("Manifest already in redis: " + optionalRedisManifest.get().getId() + " (" + optionalRedisManifest.get().getCreation() + ")");
+            logger.info("Manifest already in redis: " + optionalRedisManifest.get().getId() + " (" + optionalRedisManifest.get().getCreation() + ")");
             manifest = optionalRedisManifest.get().getJson();
         } else {
-            LOG.info("Generating new manifest.");
+            logger.info("Generating new manifest.");
             manifest = generateManifest(request);
             redisManifestRepo.save(new RedisManifest(encode(path), getManifestType(), getRepositoryType(), request.getAllowed(), request.getDisallowed(), manifest));
             update = false;
@@ -126,9 +126,9 @@ public abstract class AbstractManifestService implements ManifestService {
             manifest = generateManifest(request);
             redisManifest.setJson(manifest);
             redisManifestRepo.save(redisManifest);
-            LOG.info("Manifest update requested: " + path);
+            logger.info("Manifest update requested: " + path);
         } else {
-            LOG.info("Manifest requested: " + path);
+            logger.info("Manifest requested: " + path);
         }
 
         return manifest;
@@ -182,7 +182,7 @@ public abstract class AbstractManifestService implements ManifestService {
 
             String mimeType = optionalMimeType.get();
 
-            LOG.debug("Mime type: " + mimeType);
+            logger.debug("Mime type: " + mimeType);
 
             if (mimeType.contains(SEMI_COLON)) {
                 mimeType = mimeType.split(SEMI_COLON)[0];
@@ -192,22 +192,22 @@ public abstract class AbstractManifestService implements ManifestService {
             if (include) {
                 String allowed = request.getAllowed();
                 if (allowed.length() > 0) {
-                    LOG.debug("Allowed: " + allowed);
+                    logger.debug("Allowed: " + allowed);
                     include = allowed.contains(mimeType);
                 } else {
                     String disallowed = request.getDisallowed();
                     if (disallowed.length() > 0) {
-                        LOG.debug("Disallowed: " + disallowed);
+                        logger.debug("Disallowed: " + disallowed);
                         include = !disallowed.contains(mimeType);
                     }
                 }
             }
         } else {
-            LOG.warn("Unable to get mime type: " + url);
+            logger.warn("Unable to get mime type: " + url);
         }
 
         if (include) {
-            LOG.info("Including: " + url);
+            logger.info("Including: " + url);
             URI infoUri = getImageInfoUri(url);
 
             Optional<JsonNode> imageInfoNode = getImageInfo(infoUri.toString());
@@ -226,16 +226,17 @@ public abstract class AbstractManifestService implements ManifestService {
 
                 optionalImageResource = Optional.of(imageResource);
             } else {
-                LOG.info("Unable to get image info: " + infoUri.toString());
+                logger.info("Unable to get image info: " + infoUri.toString());
             }
         } else {
-            LOG.info("Excluding: " + url);
+            logger.info("Excluding: " + url);
         }
 
         return optionalImageResource;
     }
 
     protected String fetchImageInfo(String url) throws NotFoundException {
+        System.out.println("\n\nimage url: " + url + "\n\n");
         Optional<String> imageInfo = Optional.ofNullable(httpService.get(url));
         if (imageInfo.isPresent()) {
             return imageInfo.get();
@@ -376,8 +377,8 @@ public abstract class AbstractManifestService implements ManifestService {
         try {
             imageInfoNode = Optional.of(objectMapper.readTree(fetchImageInfo(url)));
         } catch (IOException e) {
-            LOG.info("Unable to get image info: " + url);
-            LOG.warn(e.getMessage());
+            logger.info("Unable to get image info: " + url);
+            logger.warn(e.getMessage());
         }
 
         return imageInfoNode;

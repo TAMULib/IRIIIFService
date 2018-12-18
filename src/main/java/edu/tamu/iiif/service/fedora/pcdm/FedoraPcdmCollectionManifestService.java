@@ -4,10 +4,8 @@ import static edu.tamu.iiif.constants.Constants.IANA_FIRST_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.IANA_LAST_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.IANA_NEXT_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.ORE_PROXY_FOR_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.PCDM_COLLECTION;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_FILE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_MEMBER_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.RDF_TYPE_PREDICATE;
 import static edu.tamu.iiif.model.ManifestType.COLLECTION;
 import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
 
@@ -90,39 +88,9 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
         return collection;
     }
 
-    private boolean isCollection(RdfResource rdfResource) {
-        NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(RDF_TYPE_PREDICATE);
-        while (nodes.hasNext()) {
-            RDFNode node = nodes.next();
-            if (node.toString().equals(PCDM_COLLECTION)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isCollection(Model model) {
-        NodeIterator nodes = model.listObjectsOfProperty(model.getProperty(RDF_TYPE_PREDICATE));
-        while (nodes.hasNext()) {
-            RDFNode node = nodes.next();
-            if (node.toString().equals(PCDM_COLLECTION)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private String getCollectionObjectsMember(RdfResource rdfResource) {
-        NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(PCDM_HAS_MEMBER_PREDICATE);
-        if (nodes.hasNext()) {
-            RDFNode node = nodes.next();
-            return node.toString();
-        }
-        throw new RuntimeException("Collection does not contain its expected member!");
-    }
-
     private List<CollectionReference> getSubcollections(RdfResource rdfResource) throws URISyntaxException, NotFoundException {
         List<CollectionReference> subcollections = new ArrayList<CollectionReference>();
+        // TODO: follow order proxy if iana available
         NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(PCDM_HAS_MEMBER_PREDICATE);
         while (nodes.hasNext()) {
             RDFNode node = nodes.next();

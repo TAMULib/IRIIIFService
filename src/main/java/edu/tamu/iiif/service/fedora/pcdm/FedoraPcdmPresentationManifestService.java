@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.jena.rdf.model.Model;
 import org.springframework.stereotype.Service;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Manifest;
@@ -30,6 +31,16 @@ public class FedoraPcdmPresentationManifestService extends AbstractFedoraPcdmMan
         URI id = buildId(context);
 
         PropertyValueSimpleImpl label = getLabel(rdfResource);
+        
+        boolean isCollection = isCollection(rdfResource);
+        
+        if (isCollection) {
+            // if container is a collection have to use objects container for rdf resource
+            // as it contains metadata and iana proxies
+            String collectionObjectMemberId = getCollectionObjectsMember(rdfResource);
+            Model collectionObjectMemberModel = getRdfModel(collectionObjectMemberId);
+            rdfResource = new RdfResource(collectionObjectMemberModel, collectionObjectMemberId);
+        }
 
         Manifest manifest = new ManifestImpl(id, label);
 

@@ -41,7 +41,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class HttpService {
 
-    private final static Logger LOG = LoggerFactory.getLogger(HttpService.class);
+    private final static Logger logger = LoggerFactory.getLogger(HttpService.class);
 
     private final static List<NameValuePair> EMPTY_PARAMETERS = new ArrayList<NameValuePair>();
 
@@ -75,27 +75,27 @@ public class HttpService {
     }
 
     public String get(String url) {
-        LOG.debug("GET: " + url);
+        logger.debug("GET: " + url);
         return get(url, EMPTY_PARAMETERS);
     }
 
     public String contentType(String url) {
-        LOG.debug("HEAD: " + url);
+        logger.debug("HEAD: " + url);
         String mimeType = null;
         try (CloseableHttpResponse response = request(craftHead(url, EMPTY_PARAMETERS))) {
             Optional<Header> contentType = Optional.ofNullable(response.getFirstHeader("Content-Type"));
             if (contentType.isPresent()) {
                 mimeType = contentType.get().getValue();
-                LOG.debug("Mime Type: " + mimeType);
+                logger.debug("Mime Type: " + mimeType);
             } else {
-                LOG.warn("No Content-Type!");
+                logger.warn("No Content-Type!");
             }
         } catch (IOException e) {
             e.printStackTrace();
-            LOG.warn("Error performing HEAD request: " + url);
+            logger.warn("Error performing HEAD request: " + url);
         } catch (URISyntaxException e) {
             e.printStackTrace();
-            LOG.warn("Invalid URI: " + url);
+            logger.warn("Invalid URI: " + url);
         }
         return mimeType;
     }
@@ -107,10 +107,10 @@ public class HttpService {
             response.close();
         } catch (IOException e) {
             e.printStackTrace();
-            LOG.warn("Error performing GET request: " + url);
+            logger.warn("Error performing GET request: " + url);
         } catch (URISyntaxException e) {
             e.printStackTrace();
-            LOG.warn("Invalid URI: " + url);
+            logger.warn("Invalid URI: " + url);
         }
         return body;
     }

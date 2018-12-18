@@ -6,16 +6,20 @@ import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_DESCRIPTION_PREDICAT
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_IDENTIFIER_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TITLE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.FEDORA_FCR_METADATA;
-import static edu.tamu.iiif.constants.Constants.FEDORA_HAS_PARENT_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.FEDORA_PCDM_CONDITION;
 import static edu.tamu.iiif.constants.Constants.IANA_FIRST_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.IANA_LAST_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.IANA_NEXT_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.LDP_CONTAINS_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.LDP_HAS_MEMBER_RELATION_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.ORE_PROXY_FOR_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.PCDM_COLLECTION;
+import static edu.tamu.iiif.constants.Constants.PCDM_FILE;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_FILE_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.PCDM_HAS_MEMBER_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.RDFS_LABEL_PREDICATE;
+import static edu.tamu.iiif.constants.Constants.RDF_TYPE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
 import static edu.tamu.iiif.utility.RdfModelUtility.createRdfModel;
 import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
@@ -31,6 +35,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
@@ -138,6 +144,37 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
         throw new NotFoundException("Fedora RDF not found!");
     }
 
+    protected boolean isCollection(RdfResource rdfResource) {
+        NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(RDF_TYPE_PREDICATE);
+        while (nodes.hasNext()) {
+            RDFNode node = nodes.next();
+            if (node.toString().equals(PCDM_COLLECTION)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected boolean isCollection(Model model) {
+        NodeIterator nodes = model.listObjectsOfProperty(model.getProperty(RDF_TYPE_PREDICATE));
+        while (nodes.hasNext()) {
+            RDFNode node = nodes.next();
+            if (node.toString().equals(PCDM_COLLECTION)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected String getCollectionObjectsMember(RdfResource rdfResource) {
+        NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(PCDM_HAS_MEMBER_PREDICATE);
+        if (nodes.hasNext()) {
+            RDFNode node = nodes.next();
+            return node.toString();
+        }
+        throw new RuntimeException("Collection does not contain its expected member!");
+    }
+
     protected String getIiifImageServiceName() {
         return "Fedora IIIF Image Resource Service";
     }
@@ -230,7 +267,9 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
         if (id.isPresent()) {
 
-            Canvas canvas = generateCanvas(request, new RdfResource(rdfOrderedSequence, rdfOrderedSequence.getModel().getResource(id.get())));
+            Model orderedModel = getRdfModel(id.get());
+
+            Canvas canvas = generateCanvas(request, new RdfResource(orderedModel, id.get()));
             if (canvas.getImages().size() > 0) {
                 canvases.add(canvas);
             }
@@ -256,33 +295,40 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
         String parentId = canvasStatement.getObject().toString();
 
-        // NOTE: all resources within container
+        Model parentModel = getRdfModel(parentId);
 
-        for (Resource resource : rdfResource.listResourcesWithPropertyWithId(FEDORA_HAS_PARENT_PREDICATE).toList()) {
+        RdfResource parentRdfResource = new RdfResource(parentModel, parentId);
 
-            if (resource.getProperty(rdfResource.getProperty(FEDORA_HAS_PARENT_PREDICATE)).getObject().toString().equals(parentId)) {
+        if (parentRdfResource.getStatementOfPropertyWithId(LDP_HAS_MEMBER_RELATION_PREDICATE).getResource().toString().equals(PCDM_HAS_FILE_PREDICATE)) {
+            NodeIterator nodeItr = parentRdfResource.getNodesOfPropertyWithId(LDP_CONTAINS_PREDICATE);
+            while (nodeItr.hasNext()) {
+                RDFNode node = nodeItr.next();
 
-                RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, resource.getURI());
+                Model fileModel = getRdfModel(node.toString());
 
-                Optional<Image> image = generateImage(request, fileFedoraRdfResource, canvasId);
+                RdfResource fileRdfResource = new RdfResource(fileModel, node.toString());
 
-                if (image.isPresent()) {
-                    rdfCanvas.addImage(image.get());
+                if (fileRdfResource.getStatementOfPropertyWithId(RDF_TYPE_PREDICATE).getResource().toString().equals(PCDM_FILE)) {
+                    Optional<Image> image = generateImage(request, fileRdfResource, canvasId);
+                    if (image.isPresent()) {
+                        rdfCanvas.addImage(image.get());
 
-                    Optional<ImageResource> imageResource = Optional.ofNullable(image.get().getResource());
+                        Optional<ImageResource> imageResource = Optional.ofNullable(image.get().getResource());
 
-                    if (imageResource.isPresent()) {
-                        int height = imageResource.get().getHeight();
-                        if (height > rdfCanvas.getHeight()) {
-                            rdfCanvas.setHeight(height);
-                        }
+                        if (imageResource.isPresent()) {
+                            int height = imageResource.get().getHeight();
+                            if (height > rdfCanvas.getHeight()) {
+                                rdfCanvas.setHeight(height);
+                            }
 
-                        int width = imageResource.get().getWidth();
-                        if (width > rdfCanvas.getWidth()) {
-                            rdfCanvas.setWidth(width);
+                            int width = imageResource.get().getWidth();
+                            if (width > rdfCanvas.getWidth()) {
+                                rdfCanvas.setWidth(width);
+                            }
                         }
                     }
                 }
+
             }
         }
         return rdfCanvas;
