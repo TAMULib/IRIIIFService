@@ -11,7 +11,6 @@ import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.io.IOException;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
@@ -90,14 +89,6 @@ public class HttpServiceTest {
         when(entity.getContent()).thenReturn(image0.getInputStream());
         String response = httpService.get("http://localhost:8182/iiif/2/test/info.json");
         assertEquals(objectMapper.readValue(image0.getFile(), JsonNode.class), objectMapper.readValue(response, JsonNode.class));
-    }
-
-    @Test
-    public void testGetWithContext() throws UnsupportedOperationException, IOException {
-        when(response.getStatusLine()).thenReturn(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK"));
-        when(entity.getContent()).thenReturn(rdf.getInputStream());
-        String response = httpService.get("http://localhost:9107", "pcdm_cars");
-        assertEquals(FileUtils.readFileToString(rdf.getFile(), "UTF-8"), response);
     }
 
     @Test

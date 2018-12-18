@@ -58,9 +58,6 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     @Value("${iiif.fedora.url}")
     protected String fedoraUrl;
 
-    @Value("${iiif.fedora.pcdm.ext.url}")
-    private String fedoraPcdmExtUrl;
-
     @Value("${iiif.fedora.identifier.fedora-pcdm}")
     protected String fedoraPcdmIdentifier;
 
@@ -161,8 +158,8 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     }
 
     @Override
-    protected String getRdf(String fedoraPath) throws NotFoundException {
-        Optional<String> fedoraRdf = Optional.ofNullable(httpService.get(fedoraPcdmExtUrl, fedoraPath));
+    protected String getRdf(String fedoraUrl) throws NotFoundException {
+        Optional<String> fedoraRdf = Optional.ofNullable(httpService.get(fedoraUrl));
         if (fedoraRdf.isPresent()) {
             return fedoraRdf.get();
         }

@@ -7,7 +7,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -32,7 +31,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
@@ -79,11 +77,6 @@ public class HttpService {
     public String get(String url) {
         LOG.debug("GET: " + url);
         return get(url, EMPTY_PARAMETERS);
-    }
-
-    public String get(String url, String context) {
-        LOG.debug("GET: " + url.concat("?context=").concat(context));
-        return get(url, Arrays.asList(new BasicNameValuePair("context", context)));
     }
 
     public String contentType(String url) {
