@@ -18,8 +18,6 @@
 	- Triplestore
 		- tested with [Fuseki](https://jena.apache.org/documentation/fuseki2/)
 - Fedora
-	- API-X
-	- Amherst PCDM service and extensions
 ## [IIIF](http://iiif.io/) Image Server
 - Image resolution by identifier
 	- ```http://[iiif image server]/iiif/2/[base 64 encoded path]/full/full/0/default.jpg```
@@ -32,33 +30,52 @@
 - [Image API v2](http://iiif.io/api/image/2.1/)
 
 <details>
-<summary>Example Cantaloupe resolver delegate</summary>
+<summary>Example Cantaloupe custom delegate</summary>
 
 <br/>
 
 ```
-  module HttpResolver
+  require 'base64'
+  class CustomDelegate
     ##
-    # @param identifier [String] Image identifier
-    # @return [String,nil] URL of the image corresponding to the given
-    #                      identifier, or nil if not found.
+    # Returns one of the following:
     #
-    def self.get_url(_identifier)
-      irid = Base64.decode64(_identifier)
-      if irid.include? ":"
-        parts = irid.split(':')
-        ir = parts[0]
-        path = parts[1]
-        if ir == 'fedora'
-          uri = '<%=@fedora_url%>' + path
-        elsif ir == 'dspace'
-          uri = '<%=@dspace_url%>' + path
+    # 1. String URI
+    # 2. Hash with the following keys:
+    #     * `uri` [String] (required)
+    #     * `username` [String] For HTTP Basic authentication (optional).
+    #     * `secret` [String] For HTTP Basic authentication (optional).
+    #     * `headers` [Hash<String,String>] Hash of request headers (optional).
+    # 3. nil if not found.
+    #
+    # @param options [Hash] Empty hash.
+    # @return See above.
+    #
+    def httpsource_resource_info(options = {})
+      id = context['identifier']
+      puts id
+      if ( id =~ /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/ )
+        uri = '<%= @iiif_service_url %>resources/' + id + '/redirect'
+      elsif
+        irid = Base64.decode64(id)
+        puts irid
+        if irid.include? ":"
+          parts = irid.split(':')
+          ir = parts[0]
+          path = parts[1]
+          if ir == 'fedora'
+            uri = '<%= @fedora_url %>' + path
+          elsif ir == 'dspace'
+            uri = '<%= @dspace_url %>' + path
+          else
+            uri = irid
+          end
         else
-          uri = irid
+          uri = id
         end
-      else
-        uri = '<%=@fedora_url%>' + irid
       end
+      puts uri
+      return uri
     end
   end
 ```
@@ -70,8 +87,6 @@
 - [RDF](https://wiki.duraspace.org/display/DSDOC6x/Linked+%28Open%29+Data)
 ## [Fedora](https://fedorarepository.org/)
 - [Installation](https://wiki.duraspace.org/display/FEDORA4x/Quick+Start)
-- [API-X](https://github.com/fcrepo4-labs/fcrepo-api-x/blob/master/src/site/markdown/apix-design-overview.md)
-- [Amherst PCDM](https://github.com/birkland/repository-extension-services/tree/apix-demo/acrepo-exts-pcdm)
 # Configuration
 > Configuration for this service is done in [application.yaml](https://github.com/TAMULib/IRIIIFService/blob/master/src/main/resources/application.yaml) file located in src/main/resrouces directory.
 
@@ -103,7 +118,6 @@
 | iiif.dspace.webapp | string | DSpace UI webapp. | xmlui |
 | iiif.fedora.identifier.fedora-pcm | string | Fedora PCDM RDF identifier. | fedora |
 | iiif.fedora.url | url | Fedora REST URL. | http://localhost:9000/fcrepo/rest |
-| iiif.fedora.pcdm.ext.url | url | Fedora Amherst PCDM service URL. | http://localhost:9107/pcdm |
 
 
 
