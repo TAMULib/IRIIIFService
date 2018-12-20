@@ -149,7 +149,7 @@ public abstract class AbstractManifestService implements ManifestService {
     protected String getRdf(String url) throws NotFoundException {
         Optional<String> rdf = Optional.ofNullable(httpService.get(url));
         if (rdf.isPresent()) {
-            System.out.println("\n\n\n\n" + url + "\n\n" + rdf.get() + "\n\n\n\n");
+            // System.out.println("\n\n\n\n" + url + "\n\n" + rdf.get() + "\n\n\n\n");
             return rdf.get();
         }
         throw new NotFoundException("RDF not found! " + url);
