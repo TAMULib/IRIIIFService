@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
+import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.http.Header;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -14,6 +15,8 @@ import org.apache.http.protocol.HttpContext;
 
 public class CustomRedirectStrategy extends DefaultRedirectStrategy {
 
+    private final static UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" }, UrlValidator.ALLOW_LOCAL_URLS);
+
     @Override
     public URI getLocationURI(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
         if (isRedirect(response)) {
@@ -21,8 +24,12 @@ public class CustomRedirectStrategy extends DefaultRedirectStrategy {
             if (locationHeader.isPresent()) {
                 try {
                     URI origUri = new URI(request.getRequestLine().getUri());
-                    String path = locationHeader.get().getValue().split("\\?")[0];
-                    return new URI(origUri.getScheme(), origUri.getHost(), path, null);
+                    String location = locationHeader.get().getValue().split("\\?")[0];
+                    if (urlValidator.isValid(location)) {
+                        return new URI(location);
+                    } else {
+                        return new URI(origUri.getScheme(), null, origUri.getHost(), origUri.getPort(), location, null, null);
+                    }
                 } catch (URISyntaxException e) {
                     throw new RuntimeException("Unable to reconstruct original URI!");
                 }

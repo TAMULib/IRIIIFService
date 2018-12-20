@@ -15,46 +15,50 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 public class CustomRedirectStrategyTest {
 
     @Test
-    public void testGetLocationURI() throws ProtocolException, MalformedURLException {
+    public void testGetLocationURIAbsoluteLocation() throws ProtocolException, MalformedURLException {
         CustomRedirectStrategy customRedirectStrategy = new CustomRedirectStrategy();
         HttpRequest request = new BasicHttpRequest("GET", "http://localhost:9000/test");
-        HttpResponse response = new BasicHttpResponse(HttpVersion.HTTP_1_1, HttpStatus.PERMANENT_REDIRECT.value(), "Gone fishing!");
-        response.setHeader("location", "http://localhost:9001/relocated/test");
+        HttpResponse response = new BasicHttpResponse(HttpVersion.HTTP_1_1, 301, "Gone fishing!");
+        response.setHeader("location", "http://localhost:9000/relocated/test");
         HttpContext context = new BasicHttpContext();
-
         URI uri = customRedirectStrategy.getLocationURI(request, response, context);
-
-        assertEquals("http://localhost:9001/relocated/test", uri.toURL().toString());
+        assertEquals("http://localhost:9000/relocated/test", uri.toString());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
+    public void testGetLocationURIRelativeLocation() throws ProtocolException, MalformedURLException {
+        CustomRedirectStrategy customRedirectStrategy = new CustomRedirectStrategy();
+        HttpRequest request = new BasicHttpRequest("GET", "http://localhost:9000/test");
+        HttpResponse response = new BasicHttpResponse(HttpVersion.HTTP_1_1, 301, "Gone fishing!");
+        response.setHeader("location", "/relocated/test?search=fubar");
+        HttpContext context = new BasicHttpContext();
+        URI uri = customRedirectStrategy.getLocationURI(request, response, context);
+        assertEquals("http://localhost:9000/relocated/test", uri.toString());
+    }
+
+    @Test(expected = RuntimeException.class)
     public void testGetLocationURIWithBadLocation() throws ProtocolException {
         CustomRedirectStrategy customRedirectStrategy = new CustomRedirectStrategy();
         HttpRequest request = new BasicHttpRequest("GET", "http://localhost:9000/test");
-        HttpResponse response = new BasicHttpResponse(HttpVersion.HTTP_1_1, HttpStatus.PERMANENT_REDIRECT.value(), "Gone fishing!");
+        HttpResponse response = new BasicHttpResponse(HttpVersion.HTTP_1_1, 301, "Gone fishing!");
         response.setHeader("location", "this$won't&work");
         HttpContext context = new BasicHttpContext();
-
         customRedirectStrategy.getLocationURI(request, response, context);
-
     }
 
-    @Test(expected = ProtocolException.class)
+    @Test(expected = RuntimeException.class)
     public void testGetLocationURIWithoutLocation() throws ProtocolException {
         CustomRedirectStrategy customRedirectStrategy = new CustomRedirectStrategy();
         HttpRequest request = new BasicHttpRequest("GET", "http://localhost:9000/test");
-        HttpResponse response = new BasicHttpResponse(HttpVersion.HTTP_1_1, HttpStatus.PERMANENT_REDIRECT.value(), "Gone fishing!");
+        HttpResponse response = new BasicHttpResponse(HttpVersion.HTTP_1_1, 301, "Gone fishing!");
         HttpContext context = new BasicHttpContext();
-
         customRedirectStrategy.getLocationURI(request, response, context);
-
     }
 
 }
