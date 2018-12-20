@@ -283,7 +283,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
         RdfResource parentRdfResource = new RdfResource(parentModel, parentId);
 
-        if (parentRdfResource.getStatementOfPropertyWithId(LDP_HAS_MEMBER_RELATION_PREDICATE).getResource().toString().equals(PCDM_HAS_FILE_PREDICATE)) {
+        if (parentRdfResource.containsStatement(LDP_HAS_MEMBER_RELATION_PREDICATE, PCDM_HAS_FILE_PREDICATE)) {
             NodeIterator nodeItr = parentRdfResource.getNodesOfPropertyWithId(LDP_CONTAINS_PREDICATE);
             while (nodeItr.hasNext()) {
                 RDFNode node = nodeItr.next();
@@ -292,7 +292,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
                 RdfResource fileRdfResource = new RdfResource(fileModel, node.toString());
 
-                if (fileRdfResource.getStatementOfPropertyWithId(RDF_TYPE_PREDICATE).getResource().toString().equals(PCDM_FILE)) {
+                if (fileRdfResource.containsStatement(RDF_TYPE_PREDICATE, PCDM_FILE)) {
                     Optional<Image> image = generateImage(request, fileRdfResource, canvasId);
                     if (image.isPresent()) {
                         rdfCanvas.addImage(image.get());

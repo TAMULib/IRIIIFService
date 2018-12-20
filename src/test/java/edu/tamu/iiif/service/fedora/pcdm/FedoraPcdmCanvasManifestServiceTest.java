@@ -3,6 +3,7 @@ package edu.tamu.iiif.service.fedora.pcdm;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -23,8 +24,14 @@ public class FedoraPcdmCanvasManifestServiceTest extends AbstractFedoraPcdmManif
     @InjectMocks
     private FedoraPcdmCanvasManifestService fedoraPcdmCanvasManifestService;
 
-    @Value("classpath:mock/fedora/rdf/pcdm_item_container.rdf")
-    private Resource rdf;
+    @Value("classpath:mock/fedora/rdf/item_container.rdf")
+    private Resource itemRdf;
+
+    @Value("classpath:mock/fedora/rdf/item_container_files.rdf")
+    private Resource itemFilesRdf;
+
+    @Value("classpath:mock/fedora/rdf/item_container_files_entry.rdf")
+    private Resource itemFilesEntryRdf;
 
     @Value("classpath:mock/fedora/json/image0.json")
     private Resource image0;
@@ -39,11 +46,16 @@ public class FedoraPcdmCanvasManifestServiceTest extends AbstractFedoraPcdmManif
 
     @Test
     public void testGetManifest() throws IOException, URISyntaxException {
-        // when(httpService.get(eq(PCDM_RDF_URL), any(String.class))).thenReturn(readFileToString(rdf.getFile(), "UTF-8"));
-        // when(httpService.contentType(any(String.class))).thenReturn("image/png; charset=utf-8");
-        // when(httpService.get(any(String.class))).thenReturn(readFileToString(image0.getFile(), "UTF-8"));
-        // String manifest = fedoraPcdmCanvasManifestService.getManifest(ManifestRequest.of("cars_pcdm_objects/chevy/pages/page_0", false));
-        // assertEquals(objectMapper.readValue(canvas.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
+
+        when(httpService.contentType(any(String.class))).thenReturn("image/png; charset=utf-8");
+        when(httpService.get(any(String.class))).thenReturn(readFileToString(image0.getFile(), "UTF-8"));
+
+        when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084"))).thenReturn(readFileToString(itemRdf.getFile(), "UTF-8"));
+        when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084/files/fcr:metadata"))).thenReturn(readFileToString(itemFilesRdf.getFile(), "UTF-8"));
+        when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084/files/ExCat0084.jpg/fcr:metadata"))).thenReturn(readFileToString(itemFilesEntryRdf.getFile(), "UTF-8"));
+
+        String manifest = fedoraPcdmCanvasManifestService.getManifest(ManifestRequest.of("mwbObjects/TGWCatalog/Pages/ExCat0084", false));
+        assertEquals(objectMapper.readValue(canvas.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
 }

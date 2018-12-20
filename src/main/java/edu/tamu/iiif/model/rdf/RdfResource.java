@@ -6,6 +6,7 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
 
 public class RdfResource {
 
@@ -64,6 +65,10 @@ public class RdfResource {
         return resource.getProperty(getProperty(id));
     }
 
+    public StmtIterator getStatementsOfPropertyWithId(String id) {
+        return resource.listProperties(getProperty(id));
+    }
+
     public NodeIterator getAllNodesOfPropertyWithId(String id) {
         return model.listObjectsOfProperty(getProperty(id));
     }
@@ -74,6 +79,17 @@ public class RdfResource {
 
     public ResIterator listResourcesWithPropertyWithId(String id) {
         return model.listResourcesWithProperty(getProperty(id));
+    }
+
+    public boolean containsStatement(String propertyId, String value) {
+        StmtIterator stmtItr = getStatementsOfPropertyWithId(propertyId);
+        while (stmtItr.hasNext()) {
+            Statement stmnt = stmtItr.next();
+            if (stmnt.getResource().toString().equals(value)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

@@ -1,49 +1,68 @@
 {
-  "@context":"http://iiif.io/api/image/2/context.json",
-  "@id":"http://janus.evans.tamu.edu:8182/iiif/2/ZmVkb3JhLXBjZG06Y2Fyc19wY2RtX29iamVjdHMvY2hldnkvcGFnZXMvcGFnZV8wL2ZpbGVzL2NhcjEuanBn",
-  "protocol":"http://iiif.io/api/image",
-  "width":800,
-  "height":400,
-  "sizes":[
+  "@context": "http://iiif.io/api/image/2/context.json",
+  "@id": "http://localhost:8182/iiif/2/8487f722-ac3b-4c73-9cab-79a65d24c923",
+  "protocol": "http://iiif.io/api/image",
+  "width": 2400,
+  "height": 3000,
+  "sizes": [
     {
-      "width":200,
-      "height":100
+      "width": 75,
+      "height": 94
     },
     {
-      "width":400,
-      "height":200
+      "width": 150,
+      "height": 188
+    },
+    {
+      "width": 300,
+      "height": 375
+    },
+    {
+      "width": 600,
+      "height": 750
+    },
+    {
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "width": 2400,
+      "height": 3000
     }
   ],
-  "tiles":[
+  "tiles": [
     {
-      "width":800,
-      "height":400,
-      "scaleFactors":[
+      "width": 512,
+      "height": 512,
+      "scaleFactors": [
         1,
         2,
-        4
+        4,
+        8,
+        16,
+        32
       ]
     }
   ],
-  "profile":[
+  "profile": [
     "http://iiif.io/api/image/2/level2.json",
     {
-      "formats":[
+      "formats": [
         "jpg",
         "tif",
         "gif",
         "png"
       ],
-      "maxArea":400000000,
-      "qualities":[
+      "maxArea": 400000000,
+      "qualities": [
         "bitonal",
         "default",
         "gray",
         "color"
       ],
-      "supports":[
-        "sizeByW",
+      "supports": [
         "regionByPx",
+        "sizeByW",
         "sizeByWhListed",
         "cors",
         "regionSquare",
@@ -54,8 +73,8 @@
         "sizeByPct",
         "jsonldMediaType",
         "regionByPct",
-        "sizeByH",
         "rotationArbitrary",
+        "sizeByH",
         "baseUriRedirect",
         "rotationBy90s",
         "profileLinkHeader",
