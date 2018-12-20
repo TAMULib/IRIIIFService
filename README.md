@@ -20,12 +20,8 @@
 - Fedora
 ## [IIIF](http://iiif.io/) Image Server
 - Image resolution by identifier
-	- ```http://[iiif image server]/iiif/2/[base 64 encoded path]/full/full/0/default.jpg```
-	- currently identifier is base 64 encoded path prefixed with IR type
-	- path for Fedora is the resource path
-		- e.g. ```fedora:9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21/38/63/cb/f5/3863cbf5-6139-4a2b-b679-e92376231732```
-	- path for DSpace is the webapp bitstream path
-		- e.g. ```dspace:xmlui/bitstream/123456789/158319/11/primary.tif```
+	- ```http://[iiif image server]/iiif/2/[UUID redis key]/full/full/0/default.jpg```
+	- UUID resource location resolution via resources interface
 - [Presentation API v2](http://iiif.io/api/presentation/2.1/)
 - [Image API v2](http://iiif.io/api/image/2.1/)
 
