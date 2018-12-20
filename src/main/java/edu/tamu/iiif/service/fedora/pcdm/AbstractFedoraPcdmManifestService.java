@@ -21,7 +21,6 @@ import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.RDFS_LABEL_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.RDF_TYPE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
-import static edu.tamu.iiif.utility.RdfModelUtility.createRdfModel;
 import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
 import static edu.tamu.iiif.utility.RdfModelUtility.getObject;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
@@ -134,14 +133,8 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
         return getFedoraIiifCanvasUri(canvasId);
     }
 
-    protected Model getRdfModel(String url) throws NotFoundException {
-        String rdf = httpService.get(url + FEDORA_FCR_METADATA);
-        System.out.println("\n\nModel RDF\n" + rdf + "\n\n");
-        Optional<String> fedoraRdf = Optional.ofNullable(rdf);
-        if (fedoraRdf.isPresent()) {
-            return createRdfModel(fedoraRdf.get());
-        }
-        throw new NotFoundException("Fedora RDF not found!");
+    protected Model getFedoraRdfModel(String url) throws NotFoundException {
+        return getRdfModel(url + FEDORA_FCR_METADATA);
     }
 
     protected boolean isCollection(RdfResource rdfResource) {
@@ -209,15 +202,6 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
         return joinPath(fedoraUrl, path);
     }
 
-    @Override
-    protected String getRdf(String fedoraUrl) throws NotFoundException {
-        Optional<String> fedoraRdf = Optional.ofNullable(httpService.get(fedoraUrl));
-        if (fedoraRdf.isPresent()) {
-            return fedoraRdf.get();
-        }
-        throw new NotFoundException("Fedora PCDM RDF not found!");
-    }
-
     // TODO: update to match getDSpaceIiifUrl
     private URI getFedoraIiifUri(String url, String type) throws URISyntaxException {
         return URI.create(url.replace(fedoraUrl + "/", getIiifServiceUrl() + "/" + type + "/"));
@@ -257,7 +241,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
     private void generateOrderedCanvases(ManifestRequest request, RdfOrderedResource rdfOrderedSequence, List<Canvas> canvases) throws IOException, URISyntaxException {
 
-        Model model = getRdfModel(rdfOrderedSequence.getResource().getURI());
+        Model model = getFedoraRdfModel(rdfOrderedSequence.getResource().getURI());
 
         Optional<String> id = getIdByPredicate(model, ORE_PROXY_FOR_PREDICATE);
 
@@ -267,7 +251,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
         if (id.isPresent()) {
 
-            Model orderedModel = getRdfModel(id.get());
+            Model orderedModel = getFedoraRdfModel(id.get());
 
             Canvas canvas = generateCanvas(request, new RdfResource(orderedModel, id.get()));
             if (canvas.getImages().size() > 0) {
@@ -295,7 +279,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
         String parentId = canvasStatement.getObject().toString();
 
-        Model parentModel = getRdfModel(parentId);
+        Model parentModel = getFedoraRdfModel(parentId);
 
         RdfResource parentRdfResource = new RdfResource(parentModel, parentId);
 
@@ -304,7 +288,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
             while (nodeItr.hasNext()) {
                 RDFNode node = nodeItr.next();
 
-                Model fileModel = getRdfModel(node.toString());
+                Model fileModel = getFedoraRdfModel(node.toString());
 
                 RdfResource fileRdfResource = new RdfResource(fileModel, node.toString());
 

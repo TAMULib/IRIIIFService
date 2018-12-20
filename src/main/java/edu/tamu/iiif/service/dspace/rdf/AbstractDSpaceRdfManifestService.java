@@ -41,7 +41,6 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimple
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.InvalidUrlException;
-import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
@@ -194,15 +193,6 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
     @Override
     protected String getRdfUrl(String handle) {
         return joinPath(dspaceUrl, "rdf", "handle", handle);
-    }
-
-    @Override
-    protected String getRdf(String dspaceRdfUrl) throws NotFoundException {
-        Optional<String> dspaceRdf = Optional.ofNullable(httpService.get(dspaceRdfUrl));
-        if (dspaceRdf.isPresent()) {
-            return dspaceRdf.get();
-        }
-        throw new NotFoundException("DSpace RDF not found! " + dspaceRdfUrl);
     }
 
     private URI getDSpaceIiifUri(String handle, String type) throws URISyntaxException {

@@ -65,7 +65,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             // if container is a collection have to use objects container for rdf resource
             // as it contains metadata and iana proxies
             String collectionObjectMemberId = getCollectionObjectsMember(rdfResource);
-            Model collectionObjectMemberModel = getRdfModel(collectionObjectMemberId);
+            Model collectionObjectMemberModel = getFedoraRdfModel(collectionObjectMemberId);
             rdfResource = new RdfResource(collectionObjectMemberModel, collectionObjectMemberId);
         }
 
@@ -95,7 +95,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
         while (nodes.hasNext()) {
             RDFNode node = nodes.next();
             String id = node.toString();
-            Model member = getRdfModel(id);
+            Model member = getFedoraRdfModel(id);
             if (isCollection(member)) {
                 PropertyValueSimpleImpl label = getLabel(new RdfResource(member, id));
                 subcollections.add(new CollectionReferenceImpl(getFedoraIiifCollectionUri(id), label));
@@ -150,7 +150,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
 
     private void gatherResourceManifests(ManifestRequest request, RdfOrderedResource rdfOrderedResource, List<ManifestReference> manifests) throws IOException, URISyntaxException {
 
-        Model model = getRdfModel(rdfOrderedResource.getResource().getURI());
+        Model model = getFedoraRdfModel(rdfOrderedResource.getResource().getURI());
 
         Optional<String> id = getIdByPredicate(model, ORE_PROXY_FOR_PREDICATE);
 

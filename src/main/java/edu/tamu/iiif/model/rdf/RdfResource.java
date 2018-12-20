@@ -7,12 +7,14 @@ import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 
-public class RdfResource extends RdfModel {
+public class RdfResource {
+
+    private final Model model;
 
     private Resource resource;
 
     public RdfResource(Model model) {
-        super(model);
+        this.model = model;
     }
 
     public RdfResource(Model model, String id) {
@@ -27,7 +29,7 @@ public class RdfResource extends RdfModel {
 
     public RdfResource(RdfResource rdfResource, String id) {
         this(rdfResource.getModel());
-        this.resource = getModel().getResource(id);
+        this.resource = model.getResource(id);
     }
 
     public RdfResource(RdfResource rdfResource, Resource resource) {
@@ -35,7 +37,7 @@ public class RdfResource extends RdfModel {
     }
 
     public Model getModel() {
-        return super.getModel();
+        return model;
     }
 
     public String getId() {
@@ -51,11 +53,11 @@ public class RdfResource extends RdfModel {
     }
 
     public Resource getResourceById(String id) {
-        return getModel().getResource(id);
+        return model.getResource(id);
     }
 
     public Property getProperty(String id) {
-        return getModel().getProperty(id);
+        return model.getProperty(id);
     }
 
     public Statement getStatementOfPropertyWithId(String id) {
@@ -63,15 +65,15 @@ public class RdfResource extends RdfModel {
     }
 
     public NodeIterator getAllNodesOfPropertyWithId(String id) {
-        return getModel().listObjectsOfProperty(getProperty(id));
+        return model.listObjectsOfProperty(getProperty(id));
     }
 
     public NodeIterator getNodesOfPropertyWithId(String id) {
-        return getModel().listObjectsOfProperty(getResource(), getProperty(id));
+        return model.listObjectsOfProperty(resource, getProperty(id));
     }
 
     public ResIterator listResourcesWithPropertyWithId(String id) {
-        return getModel().listResourcesWithProperty(getProperty(id));
+        return model.listResourcesWithProperty(getProperty(id));
     }
 
 }

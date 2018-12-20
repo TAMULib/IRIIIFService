@@ -31,14 +31,14 @@ public class FedoraPcdmPresentationManifestService extends AbstractFedoraPcdmMan
         URI id = buildId(context);
 
         PropertyValueSimpleImpl label = getLabel(rdfResource);
-        
+
         boolean isCollection = isCollection(rdfResource);
-        
+
         if (isCollection) {
             // if container is a collection have to use objects container for rdf resource
             // as it contains metadata and iana proxies
             String collectionObjectMemberId = getCollectionObjectsMember(rdfResource);
-            Model collectionObjectMemberModel = getRdfModel(collectionObjectMemberId);
+            Model collectionObjectMemberModel = getFedoraRdfModel(collectionObjectMemberId);
             rdfResource = new RdfResource(collectionObjectMemberModel, collectionObjectMemberId);
         }
 

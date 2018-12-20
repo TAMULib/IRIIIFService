@@ -50,14 +50,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RedisConnectionFailureException.class)
     @ResponseStatus(value = SERVICE_UNAVAILABLE)
     public @ResponseBody ResponseEntity<String> handleRedisConnectionFailureException(RedisConnectionFailureException exception) {
-    	logger.debug(exception.getMessage(), exception);
+        logger.debug(exception.getMessage(), exception);
         return new ResponseEntity<String>(exception.getMessage(), SERVICE_UNAVAILABLE);
     }
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(value = NOT_FOUND)
     public @ResponseBody ResponseEntity<String> handleNotFoundException(NotFoundException exception) {
-    	logger.debug(exception.getMessage(), exception);
+        logger.debug(exception.getMessage(), exception);
         return new ResponseEntity<String>(exception.getMessage(), NOT_FOUND);
     }
 

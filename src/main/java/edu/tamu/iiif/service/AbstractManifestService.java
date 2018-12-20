@@ -136,12 +136,23 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected RdfResource getRdfResource(String handle) throws NotFoundException {
         String rdfUrl = getRdfUrl(handle);
-        String rdf = getRdf(rdfUrl);
-        System.out.println("\n\nInitial RDF\n" + rdf + "\n\n");
-        Model model = createRdfModel(rdf);
+        Model model = getRdfModel(rdfUrl);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");
         return new RdfResource(model, model.getResource(rdfUrl));
+    }
+
+    protected Model getRdfModel(String url) throws NotFoundException {
+        return createRdfModel(getRdf(url));
+    }
+
+    protected String getRdf(String url) throws NotFoundException {
+        Optional<String> rdf = Optional.ofNullable(httpService.get(url));
+        if (rdf.isPresent()) {
+            System.out.println("\n\n\n\n" + url + "\n\n" + rdf.get() + "\n\n\n\n");
+            return rdf.get();
+        }
+        throw new NotFoundException("RDF not found! " + url);
     }
 
     protected URI buildId(String path) throws URISyntaxException {
@@ -236,7 +247,6 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected String fetchImageInfo(String url) throws NotFoundException {
-        System.out.println("\n\nimage url: " + url + "\n\n");
         Optional<String> imageInfo = Optional.ofNullable(httpService.get(url));
         if (imageInfo.isPresent()) {
             return imageInfo.get();
@@ -303,8 +313,6 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected abstract String getRdfUrl(String context);
-
-    protected abstract String getRdf(String pathOrUrl) throws NotFoundException;
 
     protected abstract String getMatcherHandle(String url);
 
@@ -373,14 +381,12 @@ public abstract class AbstractManifestService implements ManifestService {
 
     private Optional<JsonNode> getImageInfo(String url) {
         Optional<JsonNode> imageInfoNode = Optional.empty();
-
         try {
             imageInfoNode = Optional.of(objectMapper.readTree(fetchImageInfo(url)));
         } catch (IOException e) {
             logger.info("Unable to get image info: " + url);
             logger.warn(e.getMessage());
         }
-
         return imageInfoNode;
     }
 
