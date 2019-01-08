@@ -18,47 +18,60 @@
 	- Triplestore
 		- tested with [Fuseki](https://jena.apache.org/documentation/fuseki2/)
 - Fedora
-	- API-X
-	- Amherst PCDM service and extensions
 ## [IIIF](http://iiif.io/) Image Server
 - Image resolution by identifier
-	- ```http://[iiif image server]/iiif/2/[base 64 encoded path]/full/full/0/default.jpg```
-	- currently identifier is base 64 encoded path prefixed with IR type
-	- path for Fedora is the resource path
-		- e.g. ```fedora:9b/e3/2a/4b/9be32a4b-b506-4913-9939-9c7921c00e21/38/63/cb/f5/3863cbf5-6139-4a2b-b679-e92376231732```
-	- path for DSpace is the webapp bitstream path
-		- e.g. ```dspace:xmlui/bitstream/123456789/158319/11/primary.tif```
+	- ```http://[iiif image server]/iiif/2/[UUID redis key]/full/full/0/default.jpg```
+	- UUID resource location resolution via resources interface
 - [Presentation API v2](http://iiif.io/api/presentation/2.1/)
 - [Image API v2](http://iiif.io/api/image/2.1/)
 
 <details>
-<summary>Example Cantaloupe resolver delegate</summary>
+<summary>Example Cantaloupe custom delegate</summary>
 
 <br/>
 
 ```
-  module HttpResolver
+  require 'base64'
+  class CustomDelegate
     ##
-    # @param identifier [String] Image identifier
-    # @return [String,nil] URL of the image corresponding to the given
-    #                      identifier, or nil if not found.
+    # Returns one of the following:
     #
-    def self.get_url(_identifier)
-      irid = Base64.decode64(_identifier)
-      if irid.include? ":"
-        parts = irid.split(':')
-        ir = parts[0]
-        path = parts[1]
-        if ir == 'fedora'
-          uri = '<%=@fedora_url%>' + path
-        elsif ir == 'dspace'
-          uri = '<%=@dspace_url%>' + path
+    # 1. String URI
+    # 2. Hash with the following keys:
+    #     * `uri` [String] (required)
+    #     * `username` [String] For HTTP Basic authentication (optional).
+    #     * `secret` [String] For HTTP Basic authentication (optional).
+    #     * `headers` [Hash<String,String>] Hash of request headers (optional).
+    # 3. nil if not found.
+    #
+    # @param options [Hash] Empty hash.
+    # @return See above.
+    #
+    def httpsource_resource_info(options = {})
+      id = context['identifier']
+      puts id
+      if ( id =~ /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/ )
+        uri = '<%= @iiif_service_url %>resources/' + id + '/redirect'
+      elsif
+        irid = Base64.decode64(id)
+        puts irid
+        if irid.include? ":"
+          parts = irid.split(':')
+          ir = parts[0]
+          path = parts[1]
+          if ir == 'fedora'
+            uri = '<%= @fedora_url %>' + path
+          elsif ir == 'dspace'
+            uri = '<%= @dspace_url %>' + path
+          else
+            uri = irid
+          end
         else
-          uri = irid
+          uri = id
         end
-      else
-        uri = '<%=@fedora_url%>' + irid
       end
+      puts uri
+      return uri
     end
   end
 ```
@@ -70,8 +83,6 @@
 - [RDF](https://wiki.duraspace.org/display/DSDOC6x/Linked+%28Open%29+Data)
 ## [Fedora](https://fedorarepository.org/)
 - [Installation](https://wiki.duraspace.org/display/FEDORA4x/Quick+Start)
-- [API-X](https://github.com/fcrepo4-labs/fcrepo-api-x/blob/master/src/site/markdown/apix-design-overview.md)
-- [Amherst PCDM](https://github.com/birkland/repository-extension-services/tree/apix-demo/acrepo-exts-pcdm)
 # Configuration
 > Configuration for this service is done in [application.yaml](https://github.com/TAMULib/IRIIIFService/blob/master/src/main/resources/application.yaml) file located in src/main/resrouces directory.
 
@@ -103,7 +114,6 @@
 | iiif.dspace.webapp | string | DSpace UI webapp. | xmlui |
 | iiif.fedora.identifier.fedora-pcm | string | Fedora PCDM RDF identifier. | fedora |
 | iiif.fedora.url | url | Fedora REST URL. | http://localhost:9000/fcrepo/rest |
-| iiif.fedora.pcdm.ext.url | url | Fedora Amherst PCDM service URL. | http://localhost:9107/pcdm |
 
 
 
@@ -111,7 +121,7 @@
 
 # REST API
 
-> All REST endpoints have these optional URL query parameters.
+> All manifest REST endpoints have these optional URL query parameters.
 
 | **Query Parameter** | **Value** | **Functionality** |
 | :----------- | :--------- | :---------------- |
@@ -128,11 +138,11 @@
 | **URL** | ```/fedora/collection/**/*``` |
 | **Method** | **GET** |
 | **URL Parameters** | **Optional:**<br/>```update=[boolean]```<br/>```allow=[semicolon separated string of MIME types]```<br/>```disallow=[semicolon separated string of MIME types]``` |
-| **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{ ```<br/>&emsp;```"@context" : "http://iiif.io/api/presentation/2/context.json", ```<br/>&emsp;```"@id" : "http://localhost:8080/fedora/collection/cars_pcdm", ```<br/>&emsp;```"@type" : "sc:Collection", ```<br/>&emsp;```"collections" : [ ], ```<br/>&emsp;```"description" : "N/A", ```<br/>&emsp;```"label" : "Cars", ```<br/>&emsp;```"logo" : "https://localhost/assets/downloads/logos/Logo.png", ```<br/>&emsp;```"manifests" : [ { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:8080/fedora/presentation/cars_pcdm_objects/vintage", ```<br/>&emsp;&emsp;```"@type" : "sc:Manifest", ```<br/>&emsp;&emsp;```"label" : "Vintage"```<br/>&emsp;```}, { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:8080/fedora/presentation/cars_pcdm_objects/lamborghini", ```<br/>&emsp;&emsp;```"@type" : "sc:Manifest", ```<br/>&emsp;&emsp;```"label" : "Lamborghini"```<br/>&emsp;```}], ```<br/>&emsp;```"metadata" : [ ], ```<br/>&emsp;```"viewingHint" : "multi-part" ```<br/>&emsp;```}``` |
+| **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
 | **Sample Request** | ```/fedora/collection/cars_pcdm``` |
-| **Notes** | If the container is a root of a PCDM collection, the collection manifest will contain multiple manifests. If the container is an element of a collection within the PCDM model, the collection manifest will contain a single manifest. There is currently no way to generate a collection of collections. |
+| **Notes** | If the container is a root of a PCDM collection, the collection manifest will contain multiple manifests. If the container is an element of a collection within the PCDM model, the collection manifest will contain a single manifest. |
 
 | **Title** | Presentation |
 | :-------- | :--------- |
@@ -140,7 +150,7 @@
 | **URL** | ```/fedora/presentation/**/*``` |
 | **Method** | **GET** |
 | **URL Parameters** | **Optional:**<br/>```update=[boolean]```<br/>```allow=[semicolon separated string of MIME types]```<br/>```disallow=[semicolon separated string of MIME types]``` |
-| **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{ ```<br/>&emsp;```"@context" : "http://iiif.io/api/presentation/2/context.json", ```<br/>&emsp;```"@id" : "http://localhost:9003/fedora/presentation/cars_pcdm_objects/vintage", ```<br/>&emsp;```"@type" : "sc:Manifest", ```<br/>&emsp;```"description" : "Vintage", ```<br/>&emsp;```"label" : "Vintage", ```<br/>&emsp;```"logo" : "https://localhost/assets/downloads/logos/Logo.png", ```<br/>&emsp;```"metadata" : [ { ```<br/>&emsp;&emsp;```"label" : "Title", ```<br/>&emsp;&emsp;```"value" : "Vintage" ```<br/>&emsp;```}, { ```<br/>&emsp;&emsp;```"label" : "Description", ```<br/>&emsp;&emsp;```"value" : "A vintage car" ```<br/>&emsp;```} ], ```<br/>&emsp;```"sequences" : [ { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:9003/fedora/sequence/cars_pcdm_objects/vintage", ```<br/>&emsp;&emsp;```"@type" : "sc:Sequence", ```<br/>&emsp;&emsp;```"canvases" : [ { ```<br/>&emsp;&emsp;&emsp;```"@id" : "http://localhost:9003/fedora/canvas/cars_pcdm_objects/vintage/pages/page_0", ```<br/>&emsp;&emsp;&emsp;```"@type" : "sc:Canvas", ```<br/>&emsp;&emsp;&emsp;```"height" : 1080, ```<br/>&emsp;&emsp;&emsp;```"images" : [ { ```<br/>&emsp;&emsp;&emsp;&emsp;```"@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn/info.json", ```<br/>&emsp;&emsp;&emsp;&emsp;```"@type" : "oa:Annotation", ```<br/>&emsp;&emsp;&emsp;&emsp;```"motivation" : "sc:painting", ```<br/>&emsp;&emsp;&emsp;&emsp;```"on" : "http://localhost:9003/fedora/canvas/cars_pcdm_objects/vintage/pages/page_0", ```<br/>&emsp;&emsp;&emsp;&emsp;```"resource" : { ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn/full/full/0/default.jpg", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"@type" : "dctypes:Image", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"format" : "image/jpeg", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"height" : 1080, ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"service" : { ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;```"label" : "Fedora IIIF Image Resource Service", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;```"profile" : "http://iiif.io/api/image/2/level0.json", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;```"@context" : "http://iiif.io/api/image/2/context.json", ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;```"@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn" ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```}, ```<br/>&emsp;&emsp;&emsp;&emsp;&emsp;```"width" : 1920 ```<br/>&emsp;&emsp;&emsp;&emsp;```} ```<br/>&emsp;&emsp;&emsp;```} ], ```<br/>&emsp;&emsp;&emsp;```"label" : "Page 0", ```<br/>&emsp;&emsp;&emsp;```"metadata" : [ ], ```<br/>&emsp;&emsp;&emsp;```"width" : 1920 ```<br/>&emsp;&emsp;```} ], ```<br/>&emsp;&emsp;```"label" : "Vintage" ```<br/>&emsp;```} ], ```<br/>&emsp;```"thumbnail" : { ```<br/>&emsp;&emsp;```"@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn/full/!100,100/0/default.jpg", ```<br/>&emsp;&emsp;```"services" : [ { ```<br/>&emsp;&emsp;&emsp;```"@context" : "http://iiif.io/api/image/2/context.json", ```<br/>&emsp;&emsp;&emsp;```"@id" : "http://localhost:8182/iiif/2/ZmVkb3JhOmNhcnNfcGNkbV9vYmplY3RzL3ZpbnRhZ2UvcGFnZXMvcGFnZV8wL2ZpbGVzL3ZpbnRhZ2UuanBn", ```<br/>&emsp;&emsp;&emsp;```"label" : "Fedora IIIF Image Resource Service", ```<br/>&emsp;&emsp;&emsp;```"profile" : "http://iiif.io/api/image/2/level0.json" ```<br/>&emsp;&emsp;```} ] ```<br/>&emsp;```} ```<br/>```}``` |
+| **Success Response** | **Code:** 200 OK<br/>**Content:**<br/>```{}``` |
 | **Error Response** | **Code:** 404 NOT_FOUND<br/>**Content:** ```Fedora PCDM RDF not found!``` |
 | **Error Response** | **Code:** 503 SERVICE_UNAVAILABLE<br/>**Content:** ```[Exception message]``` |
 | **Sample Request** | ```/fedora/presentation/cars_pcdm_objects/vintage``` |

@@ -24,17 +24,17 @@ import edu.tamu.iiif.exception.NotFoundException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    private final static Logger LOG = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private final static Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(IOException.class)
     @ResponseStatus(value = SERVICE_UNAVAILABLE)
     public @ResponseBody ResponseEntity<String> handleIOException(IOException exception) {
         ResponseEntity<String> response;
         if (StringUtils.containsIgnoreCase(ExceptionUtils.getRootCauseMessage(exception), "Broken pipe")) {
-            LOG.debug("Client has disconnected before completing request.", exception);
+            logger.debug("Client has disconnected before completing request.", exception);
             response = null;
         } else {
-            LOG.debug(exception.getMessage(), exception);
+            logger.debug(exception.getMessage(), exception);
             response = new ResponseEntity<String>(exception.getMessage(), SERVICE_UNAVAILABLE);
         }
         return response;
@@ -43,21 +43,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RiotException.class)
     @ResponseStatus(value = SERVICE_UNAVAILABLE)
     public @ResponseBody ResponseEntity<String> handleRiotException(RiotException exception) {
-        LOG.debug(exception.getMessage(), exception);
+        logger.debug(exception.getMessage(), exception);
         return new ResponseEntity<String>(exception.getMessage(), SERVICE_UNAVAILABLE);
     }
 
     @ExceptionHandler(RedisConnectionFailureException.class)
     @ResponseStatus(value = SERVICE_UNAVAILABLE)
     public @ResponseBody ResponseEntity<String> handleRedisConnectionFailureException(RedisConnectionFailureException exception) {
-    	LOG.debug(exception.getMessage(), exception);
+        logger.debug(exception.getMessage(), exception);
         return new ResponseEntity<String>(exception.getMessage(), SERVICE_UNAVAILABLE);
     }
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(value = NOT_FOUND)
     public @ResponseBody ResponseEntity<String> handleNotFoundException(NotFoundException exception) {
-    	LOG.debug(exception.getMessage(), exception);
+        logger.debug(exception.getMessage(), exception);
         return new ResponseEntity<String>(exception.getMessage(), NOT_FOUND);
     }
 

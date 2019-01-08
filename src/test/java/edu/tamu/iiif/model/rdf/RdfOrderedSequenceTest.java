@@ -21,10 +21,10 @@ public class RdfOrderedSequenceTest {
 
     @Test
     public void testRdfOrderedSequence() {
-        String rdf = Files.contentOf(new File("src/test/resources/mock/fedora/rdf/pcdm_item_container.rdf"), "UTF-8");
+        String rdf = Files.contentOf(new File("src/test/resources/mock/fedora/rdf/collection_container.rdf"), "UTF-8");
         Model model = RdfModelUtility.createRdfModel(rdf);
         System.out.println(model);
-        Resource resource = model.getResource("http://localhost:9000/fcrepo/rest/cars_pcdm_objects/chevy");
+        Resource resource = model.getResource("http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog");
         RdfResource rdfResource = new RdfResource(model, resource);
         Optional<String> firstId = RdfModelUtility.getIdByPredicate(rdfResource.getModel(), IANA_FIRST_PREDICATE);
         Optional<String> lastId = RdfModelUtility.getIdByPredicate(rdfResource.getModel(), IANA_LAST_PREDICATE);

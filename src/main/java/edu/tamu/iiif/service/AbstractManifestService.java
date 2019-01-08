@@ -59,7 +59,7 @@ import edu.tamu.iiif.model.repo.RedisResourceRepo;
 
 public abstract class AbstractManifestService implements ManifestService {
 
-    private final static Logger LOG = LoggerFactory.getLogger(AbstractManifestService.class);
+    private final static Logger logger = LoggerFactory.getLogger(AbstractManifestService.class);
 
     private final static String SEMI_COLON = ";";
     private final static String FORWARD_SLASH = "/";
@@ -112,10 +112,10 @@ public abstract class AbstractManifestService implements ManifestService {
         Optional<RedisManifest> optionalRedisManifest = getRedisManifest(request);
 
         if (optionalRedisManifest.isPresent()) {
-            LOG.info("Manifest already in redis: " + optionalRedisManifest.get().getId() + " (" + optionalRedisManifest.get().getCreation() + ")");
+            logger.info("Manifest already in redis: " + optionalRedisManifest.get().getId() + " (" + optionalRedisManifest.get().getCreation() + ")");
             manifest = optionalRedisManifest.get().getJson();
         } else {
-            LOG.info("Generating new manifest.");
+            logger.info("Generating new manifest.");
             manifest = generateManifest(request);
             redisManifestRepo.save(new RedisManifest(encode(path), getManifestType(), getRepositoryType(), request.getAllowed(), request.getDisallowed(), manifest));
             update = false;
@@ -126,9 +126,9 @@ public abstract class AbstractManifestService implements ManifestService {
             manifest = generateManifest(request);
             redisManifest.setJson(manifest);
             redisManifestRepo.save(redisManifest);
-            LOG.info("Manifest update requested: " + path);
+            logger.info("Manifest update requested: " + path);
         } else {
-            LOG.info("Manifest requested: " + path);
+            logger.info("Manifest requested: " + path);
         }
 
         return manifest;
@@ -136,11 +136,23 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected RdfResource getRdfResource(String handle) throws NotFoundException {
         String rdfUrl = getRdfUrl(handle);
-        String rdf = getRdf(rdfUrl);
-        Model model = createRdfModel(rdf);
+        Model model = getRdfModel(rdfUrl);
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");
         return new RdfResource(model, model.getResource(rdfUrl));
+    }
+
+    protected Model getRdfModel(String url) throws NotFoundException {
+        return createRdfModel(getRdf(url));
+    }
+
+    protected String getRdf(String url) throws NotFoundException {
+        Optional<String> rdf = Optional.ofNullable(httpService.get(url));
+        if (rdf.isPresent()) {
+            // System.out.println("\n\n\n\n" + url + "\n\n" + rdf.get() + "\n\n\n\n");
+            return rdf.get();
+        }
+        throw new NotFoundException("RDF not found! " + url);
     }
 
     protected URI buildId(String path) throws URISyntaxException {
@@ -181,7 +193,7 @@ public abstract class AbstractManifestService implements ManifestService {
 
             String mimeType = optionalMimeType.get();
 
-            LOG.debug("Mime type: " + mimeType);
+            logger.debug("Mime type: " + mimeType);
 
             if (mimeType.contains(SEMI_COLON)) {
                 mimeType = mimeType.split(SEMI_COLON)[0];
@@ -191,22 +203,22 @@ public abstract class AbstractManifestService implements ManifestService {
             if (include) {
                 String allowed = request.getAllowed();
                 if (allowed.length() > 0) {
-                    LOG.debug("Allowed: " + allowed);
+                    logger.debug("Allowed: " + allowed);
                     include = allowed.contains(mimeType);
                 } else {
                     String disallowed = request.getDisallowed();
                     if (disallowed.length() > 0) {
-                        LOG.debug("Disallowed: " + disallowed);
+                        logger.debug("Disallowed: " + disallowed);
                         include = !disallowed.contains(mimeType);
                     }
                 }
             }
         } else {
-            LOG.warn("Unable to get mime type: " + url);
+            logger.warn("Unable to get mime type: " + url);
         }
 
         if (include) {
-            LOG.info("Including: " + url);
+            logger.info("Including: " + url);
             URI infoUri = getImageInfoUri(url);
 
             Optional<JsonNode> imageInfoNode = getImageInfo(infoUri.toString());
@@ -225,10 +237,10 @@ public abstract class AbstractManifestService implements ManifestService {
 
                 optionalImageResource = Optional.of(imageResource);
             } else {
-                LOG.info("Unable to get image info: " + infoUri.toString());
+                logger.info("Unable to get image info: " + infoUri.toString());
             }
         } else {
-            LOG.info("Excluding: " + url);
+            logger.info("Excluding: " + url);
         }
 
         return optionalImageResource;
@@ -302,8 +314,6 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected abstract String getRdfUrl(String context);
 
-    protected abstract String getRdf(String pathOrUrl) throws NotFoundException;
-
     protected abstract String getMatcherHandle(String url);
 
     protected abstract String generateManifest(ManifestRequest request) throws URISyntaxException, IOException;
@@ -371,14 +381,12 @@ public abstract class AbstractManifestService implements ManifestService {
 
     private Optional<JsonNode> getImageInfo(String url) {
         Optional<JsonNode> imageInfoNode = Optional.empty();
-
         try {
             imageInfoNode = Optional.of(objectMapper.readTree(fetchImageInfo(url)));
         } catch (IOException e) {
-            LOG.info("Unable to get image info: " + url);
-            LOG.warn(e.getMessage());
+            logger.info("Unable to get image info: " + url);
+            logger.warn(e.getMessage());
         }
-
         return imageInfoNode;
     }
 

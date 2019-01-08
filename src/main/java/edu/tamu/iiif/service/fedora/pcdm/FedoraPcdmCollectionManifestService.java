@@ -1,16 +1,12 @@
 package edu.tamu.iiif.service.fedora.pcdm;
 
-import static edu.tamu.iiif.constants.Constants.FEDORA_FCR_METADATA;
 import static edu.tamu.iiif.constants.Constants.IANA_FIRST_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.IANA_LAST_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.IANA_NEXT_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.ORE_PROXY_FOR_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.PCDM_COLLECTION;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_FILE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_MEMBER_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.RDF_TYPE_PREDICATE;
 import static edu.tamu.iiif.model.ManifestType.COLLECTION;
-import static edu.tamu.iiif.utility.RdfModelUtility.createRdfModel;
 import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
 
 import java.io.IOException;
@@ -33,6 +29,7 @@ import de.digitalcollections.iiif.presentation.model.api.v2.references.Collectio
 import de.digitalcollections.iiif.presentation.model.api.v2.references.ManifestReference;
 import de.digitalcollections.iiif.presentation.model.impl.v2.CollectionImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
+import de.digitalcollections.iiif.presentation.model.impl.v2.references.CollectionReferenceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.references.ManifestReferenceImpl;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
@@ -59,19 +56,23 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
 
         boolean isCollection = isCollection(rdfResource);
 
-        List<Metadata> metadata;
+        // NOTE: this will check for members if if not a collection container
+        // it may be desired to require subcollections to be in a collection container
+        // also, this is done before switching to the objects container as to have redundant rdf model lookups
+        List<CollectionReference> collections = getSubcollections(rdfResource);
 
         if (isCollection) {
-            // this is the case we are requesting a collection manifest from the collection container
-            // lets get the metadata from the objects container
-            metadata = getDublinCoreMetadata(new RdfResource(rdfResource, getCollectionObjectsMember(rdfResource)));
-        } else {
-            metadata = getDublinCoreMetadata(rdfResource);
+            // if container is a collection have to use objects container for rdf resource
+            // as it contains metadata and iana proxies
+            String collectionObjectMemberId = getCollectionObjectsMember(rdfResource);
+            Model collectionObjectMemberModel = getFedoraRdfModel(collectionObjectMemberId);
+            rdfResource = new RdfResource(collectionObjectMemberModel, collectionObjectMemberId);
         }
+
+        List<Metadata> metadata = getDublinCoreMetadata(rdfResource);
 
         Collection collection = new CollectionImpl(id, label, metadata);
 
-        List<CollectionReference> collections = getSubcollections(rdfResource);
         if (!collections.isEmpty()) {
             collection.setSubCollections(collections);
         }
@@ -87,43 +88,29 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
         return collection;
     }
 
-    private boolean isCollection(RdfResource rdfResource) {
-        NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(RDF_TYPE_PREDICATE);
+    private List<CollectionReference> getSubcollections(RdfResource rdfResource) throws URISyntaxException, NotFoundException {
+        List<CollectionReference> subcollections = new ArrayList<CollectionReference>();
+        // TODO: follow order proxy if iana available
+        NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(PCDM_HAS_MEMBER_PREDICATE);
         while (nodes.hasNext()) {
             RDFNode node = nodes.next();
-            if (node.toString().equals(PCDM_COLLECTION)) {
-                return true;
+            String id = node.toString();
+            Model member = getFedoraRdfModel(id);
+            if (isCollection(member)) {
+                PropertyValueSimpleImpl label = getLabel(new RdfResource(member, id));
+                subcollections.add(new CollectionReferenceImpl(getFedoraIiifCollectionUri(id), label));
             }
         }
-        return false;
-    }
-
-    private String getCollectionObjectsMember(RdfResource rdfResource) {
-        NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(PCDM_HAS_MEMBER_PREDICATE);
-        if (nodes.hasNext()) {
-            RDFNode node = nodes.next();
-            return node.toString();
-        }
-        throw new RuntimeException("Collection does not contain its expected member!");
-    }
-
-    private List<CollectionReference> getSubcollections(RdfResource rdfResource) throws URISyntaxException {
-        List<CollectionReference> subcollections = new ArrayList<CollectionReference>();
-
         return subcollections;
     }
 
     private List<ManifestReference> getResourceManifests(ManifestRequest request, RdfResource rdfResource, boolean isCollection) throws URISyntaxException, IOException {
         List<ManifestReference> manifests = new ArrayList<ManifestReference>();
 
-        NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(PCDM_HAS_MEMBER_PREDICATE);
-
         if (isCollection) {
-            while (nodes.hasNext()) {
-                RDFNode node = nodes.next();
-                manifests.addAll(gatherResourceManifests(request, new RdfResource(rdfResource, node.toString())));
-            }
+            manifests.addAll(gatherResourceManifests(request, rdfResource));
         } else {
+            NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(PCDM_HAS_MEMBER_PREDICATE);
             while (nodes.hasNext()) {
                 RDFNode node = nodes.next();
                 String id = node.toString();
@@ -139,7 +126,6 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
                 PropertyValueSimpleImpl label = getLabel(new RdfResource(resource.getModel(), resource));
                 manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(resource.getURI()), label));
             }
-
         }
 
         return manifests;
@@ -164,7 +150,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
 
     private void gatherResourceManifests(ManifestRequest request, RdfOrderedResource rdfOrderedResource, List<ManifestReference> manifests) throws IOException, URISyntaxException {
 
-        Model model = getRdfModel(rdfOrderedResource.getResource().getURI());
+        Model model = getFedoraRdfModel(rdfOrderedResource.getResource().getURI());
 
         Optional<String> id = getIdByPredicate(model, ORE_PROXY_FOR_PREDICATE);
 
@@ -186,15 +172,6 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             }
         }
 
-    }
-
-    private Model getRdfModel(String url) throws NotFoundException {
-        String rdf = httpService.get(url + FEDORA_FCR_METADATA);
-        Optional<String> fedoraRdf = Optional.ofNullable(rdf);
-        if (fedoraRdf.isPresent()) {
-            return createRdfModel(fedoraRdf.get());
-        }
-        throw new NotFoundException("Fedora RDF not found!");
     }
 
     @Override

@@ -27,7 +27,7 @@ import edu.tamu.iiif.model.repo.RedisResourceRepo;
 @RunWith(SpringRunner.class)
 public abstract class AbstractManifestServiceTest implements ManifestServiceTest {
 
-    protected static final String IIIF_SERVICE_URL = "http://localhost:9003";
+    protected static final String IIIF_SERVICE_URL = "http://localhost:9000";
 
     protected static final String IMAGE_SERVICE_URL = "http://localhost:8182/iiif/2";
 

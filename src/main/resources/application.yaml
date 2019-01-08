@@ -1,6 +1,6 @@
 server:
   contextPath:
-  port: 9003
+  port: 9000
 
 logging:
   file: ir-iiif-service.log
@@ -38,6 +38,5 @@ iiif:
       dspace-rdf: dspace
   fedora:
     url: http://localhost:9000/fcrepo/rest
-    pcdm.ext.url: http://localhost:9107/pcdm
     identifier:
       fedora-pcdm: fedora

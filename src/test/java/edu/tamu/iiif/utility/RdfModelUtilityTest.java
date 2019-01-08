@@ -33,12 +33,12 @@ public class RdfModelUtilityTest {
 
     @Test
     public void testGetIdByPredicate() {
-        String rdf = Files.contentOf(new File("src/test/resources/mock/fedora/rdf/pcdm_collection_container.rdf"), "UTF-8");
+        String rdf = Files.contentOf(new File("src/test/resources/mock/fedora/rdf/collection_container.rdf"), "UTF-8");
         Model model = RdfModelUtility.createRdfModel(rdf);
         Assert.assertNotNull(model);
         Optional<String> firstId = RdfModelUtility.getIdByPredicate(model, IANA_FIRST_PREDICATE);
         Assert.assertTrue(firstId.isPresent());
-        Assert.assertEquals("http://localhost:9000/fcrepo/rest/cars_pcdm_objects/vintage/orderProxies/page_0_proxy", firstId.get());
+        Assert.assertEquals("http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/orderProxies/ExCat0001Proxy", firstId.get());
     }
 
     @Test
