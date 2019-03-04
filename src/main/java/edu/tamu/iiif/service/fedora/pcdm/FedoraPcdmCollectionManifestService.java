@@ -114,6 +114,14 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             while (nodes.hasNext()) {
                 RDFNode node = nodes.next();
                 String id = node.toString();
+                
+                if (!request.getAllowed().isEmpty()) {
+                	id += "?allowed=" + request.getAllowed();
+                }
+                else if (!request.getDisallowed().isEmpty()) {
+                	id += "?disallowed=" + request.getDisallowed();
+                }
+                
                 PropertyValueSimpleImpl label = getLabel(new RdfResource(rdfResource, node.toString()));
                 manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(id), label));
             }
@@ -123,8 +131,17 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             ResIterator resources = rdfResource.listResourcesWithPropertyWithId(PCDM_HAS_FILE_PREDICATE);
             while (resources.hasNext()) {
                 Resource resource = resources.next();
+                String id = resource.getURI();
+                
+                if (!request.getAllowed().isEmpty()) {
+                	id += "?allowed=" + request.getAllowed();
+                }
+                else if (!request.getDisallowed().isEmpty()) {
+                	id += "?disallowed=" + request.getDisallowed();
+                }
+                
                 PropertyValueSimpleImpl label = getLabel(new RdfResource(resource.getModel(), resource));
-                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(resource.getURI()), label));
+                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(id), label));
             }
         }
 
