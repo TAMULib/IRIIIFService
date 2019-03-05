@@ -11,6 +11,7 @@ import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Statement;
 
+import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.model.rdf.RdfResource;
 
 public class RdfModelUtility {
@@ -41,6 +42,17 @@ public class RdfModelUtility {
             }
         }
         return metadatum;
+    }
+    
+    //TODO:
+    public static String getParameterizedId(String id, ManifestRequest request) {
+    	if (!request.getAllowed().isEmpty()) {
+        	id += "?allowed=" + request.getAllowed();
+        }
+        else if (!request.getDisallowed().isEmpty()) {
+        	id += "?disallowed=" + request.getDisallowed();
+        }
+    	return id;
     }
 
 }
