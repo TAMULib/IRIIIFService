@@ -34,12 +34,11 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
 
     @Override
     protected String generateManifest(ManifestRequest request) throws URISyntaxException, IOException {
-        //String context = request.getContext();
         return mapper.writeValueAsString(generateCollection(request));
     }
 
     private Collection generateCollection(ManifestRequest request) throws URISyntaxException, NotFoundException {
-    	String handle = request.getContext();
+        String handle = RdfModelUtility.getParameterizedId(request.getContext(), request);
         RdfResource rdfResource = getRdfResource(handle);
 
         URI id = buildId(handle);
