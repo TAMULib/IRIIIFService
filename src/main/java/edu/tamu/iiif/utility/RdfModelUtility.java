@@ -43,16 +43,18 @@ public class RdfModelUtility {
         }
         return metadatum;
     }
-    
-    //TODO:
+
     public static String getParameterizedId(String id, ManifestRequest request) {
-    	if (!request.getAllowed().isEmpty()) {
-        	id += "?allowed=" + request.getAllowed();
+        if (!request.getAllowed().isEmpty()) {
+            id += "?allow=" + request.getAllowed();
+        } else if (!request.getDisallowed().isEmpty()) {
+            id += "?disallow=" + request.getDisallowed();
         }
-        else if (!request.getDisallowed().isEmpty()) {
-        	id += "?disallowed=" + request.getDisallowed();
-        }
-    	return id;
+        return id;
+    }
+
+    public static String getParameterizedId(ManifestRequest request) {
+        return getParameterizedId(request.getContext(), request);
     }
 
 }
