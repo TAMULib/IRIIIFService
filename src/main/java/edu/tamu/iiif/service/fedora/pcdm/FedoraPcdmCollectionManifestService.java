@@ -43,15 +43,15 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
 
     @Override
     protected String generateManifest(ManifestRequest request) throws URISyntaxException, IOException {
-        String context = request.getContext();
-        return mapper.writeValueAsString(generateCollection(request, context));
+
+        return mapper.writeValueAsString(generateCollection(request));
     }
 
-    private Collection generateCollection(ManifestRequest request, String context) throws URISyntaxException, IOException {
+    private Collection generateCollection(ManifestRequest request) throws URISyntaxException, IOException {
 
-        RdfResource rdfResource = getRdfResource(context);
+        RdfResource rdfResource = getRdfResource(request.getContext());
 
-        URI id = buildId(context);
+        URI id = buildId(RdfModelUtility.getParameterizedId(request));
 
         PropertyValueSimpleImpl label = getLabel(rdfResource);
 
@@ -124,7 +124,8 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             ResIterator resources = rdfResource.listResourcesWithPropertyWithId(PCDM_HAS_FILE_PREDICATE);
             while (resources.hasNext()) {
                 Resource resource = resources.next();
-                String id = RdfModelUtility.getParameterizedId(resource.getURI(), request);;
+                String id = RdfModelUtility.getParameterizedId(resource.getURI(), request);
+                ;
                 PropertyValueSimpleImpl label = getLabel(new RdfResource(resource.getModel(), resource));
                 manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(id), label));
             }
@@ -161,10 +162,10 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
         }
 
         if (id.isPresent()) {
-        	
-        	String actualId = RdfModelUtility.getParameterizedId(id.get(), request);            
-        	
-        	PropertyValueSimpleImpl label = getLabel(rdfOrderedResource);
+
+            String actualId = RdfModelUtility.getParameterizedId(id.get(), request);
+
+            PropertyValueSimpleImpl label = getLabel(rdfOrderedResource);
             manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(actualId), label));
 
             Optional<String> nextId = getIdByPredicate(model, IANA_NEXT_PREDICATE);

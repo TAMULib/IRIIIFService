@@ -57,6 +57,7 @@ import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfOrderedResource;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
+import edu.tamu.iiif.utility.RdfModelUtility;
 
 @ConditionalOnExpression(FEDORA_PCDM_CONDITION)
 public abstract class AbstractFedoraPcdmManifestService extends AbstractManifestService {
@@ -68,7 +69,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     protected String fedoraPcdmIdentifier;
 
     protected Sequence generateSequence(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
-        String id = rdfResource.getResource().getURI();
+        String id = RdfModelUtility.getParameterizedId(rdfResource.getResource().getURI(), request);
         PropertyValueSimpleImpl label = getLabel(rdfResource);
         Sequence sequence = new SequenceImpl(getFedoraIiifSequenceUri(id), label);
         sequence.setCanvases(getCanvases(request, rdfResource));
@@ -76,7 +77,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     }
 
     protected Canvas generateCanvas(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
-        String id = rdfResource.getResource().getURI();
+        String id = RdfModelUtility.getParameterizedId(rdfResource.getResource().getURI(), request);
         PropertyValueSimpleImpl label = getLabel(rdfResource);
 
         RdfCanvas rdfCanvas = getFedoraRdfCanvas(request, rdfResource);
@@ -273,7 +274,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     private RdfCanvas getFedoraRdfCanvas(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
         RdfCanvas rdfCanvas = new RdfCanvas();
 
-        String canvasId = rdfResource.getResource().getURI();
+        String canvasId = RdfModelUtility.getParameterizedId(rdfResource.getResource().getURI(), request);
 
         Statement canvasStatement = rdfResource.getStatementOfPropertyWithId(LDP_CONTAINS_PREDICATE);
 
