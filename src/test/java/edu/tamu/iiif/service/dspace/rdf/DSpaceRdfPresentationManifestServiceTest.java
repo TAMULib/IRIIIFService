@@ -38,6 +38,12 @@ public class DSpaceRdfPresentationManifestServiceTest extends AbstractDSpaceRdfM
 
     @Value("classpath:mock/dspace/json/presentation.json")
     private Resource presentation;
+    
+    @Value("classpath:mock/dspace/json/presentation-allow.json")
+    private Resource presentationAllow;
+    
+    @Value("classpath:mock/dspace/json/presentation-disallow.json")
+    private Resource presentationDisallow;
 
     @Value("classpath:mock/dspace/rdf/collection.rdf")
     private Resource collectionRdf;
@@ -99,14 +105,14 @@ public class DSpaceRdfPresentationManifestServiceTest extends AbstractDSpaceRdfM
     public void testGetManifestAllowed() throws IOException, URISyntaxException {
         setupMocks();
         String manifest = dspaceRdfPresentationManifestService.getManifest(ManifestRequest.of("123456789/158308", false, Arrays.asList(new String[] { "image/png", "image/jpeg" }), Arrays.asList(new String[] {})));
-        assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
+        assertEquals(objectMapper.readValue(presentationAllow.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
     @Test
     public void testGetManifestDisallowed() throws IOException, URISyntaxException {
         setupMocks();
         String manifest = dspaceRdfPresentationManifestService.getManifest(ManifestRequest.of("123456789/158308", false, Arrays.asList(new String[] {}), Arrays.asList(new String[] { "image/bmp", "image/jpeg" })));
-        assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
+        assertEquals(objectMapper.readValue(presentationDisallow.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
     @Test
