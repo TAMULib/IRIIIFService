@@ -25,16 +25,18 @@ import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.rdf.RdfResource;
+import edu.tamu.iiif.utility.RdfModelUtility;
 
 @Service
 public class DSpaceRdfPresentationManifestService extends AbstractDSpaceRdfManifestService {
 
     public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
         String context = request.getContext();
+        String parameterizedContext = RdfModelUtility.getParameterizedId(request);
 
         RdfResource rdfResource = getRdfResource(context);
 
-        URI id = buildId(context);
+        URI id = buildId(parameterizedContext);
 
         PropertyValueSimpleImpl label = getTitle(rdfResource);
 
