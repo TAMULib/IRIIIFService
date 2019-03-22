@@ -43,6 +43,12 @@ public class FedoraPcdmPresentationManifestServiceTest extends AbstractFedoraPcd
 
     @Value("classpath:mock/fedora/json/presentation.json")
     private Resource presentation;
+    
+    @Value("classpath:mock/fedora/json/presentation-allow.json")
+    private Resource presentationWithAllow;
+    
+    @Value("classpath:mock/fedora/json/presentation-disallow.json")
+    private Resource presentationWithDisallow;
 
     @Before
     public void setup() {
@@ -59,15 +65,17 @@ public class FedoraPcdmPresentationManifestServiceTest extends AbstractFedoraPcd
     @Test
     public void testGetManifestAllowed() throws IOException, URISyntaxException {
         setupMocks();
+        when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084?allow=image/png;image/jpeg"))).thenReturn(readFileToString(itemRdf.getFile(), "UTF-8"));
         String manifest = fedoraPcdmPresentationManifestService.getManifest(ManifestRequest.of("mwbObjects/TGWCatalog/Pages/ExCat0084", false, Arrays.asList(new String[] { "image/png", "image/jpeg" }), Arrays.asList(new String[] {})));
-        assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
+        assertEquals(objectMapper.readValue(presentationWithAllow.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
     @Test
     public void testGetManifestDisallowed() throws IOException, URISyntaxException {
         setupMocks();
+        when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084?disallow=image/bmp;image/jpeg"))).thenReturn(readFileToString(itemRdf.getFile(), "UTF-8"));
         String manifest = fedoraPcdmPresentationManifestService.getManifest(ManifestRequest.of("mwbObjects/TGWCatalog/Pages/ExCat0084", false, Arrays.asList(new String[] {}), Arrays.asList(new String[] { "image/bmp", "image/jpeg" })));
-        assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
+        assertEquals(objectMapper.readValue(presentationWithDisallow.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
     @Test
