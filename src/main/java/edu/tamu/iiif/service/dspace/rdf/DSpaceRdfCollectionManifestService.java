@@ -38,10 +38,13 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
     }
 
     private Collection generateCollection(ManifestRequest request) throws URISyntaxException, NotFoundException {
-        String handle = RdfModelUtility.getParameterizedId(request.getContext(), request);
-        RdfResource rdfResource = getRdfResource(handle);
+        String context = request.getContext();
 
-        URI id = buildId(handle);
+        String parameterizedContext = RdfModelUtility.getParameterizedId(request);
+
+        RdfResource rdfResource = getRdfResource(context);
+
+        URI id = buildId(parameterizedContext);
 
         PropertyValueSimpleImpl label = getTitle(rdfResource);
 
@@ -130,16 +133,16 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
             NodeIterator bitstreamIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_BITSTREAM_PREDICATE);
             while (bitstreamIterator.hasNext()) {
                 String bitstreamHandlePath = getHandlePath(bitstreamIterator.next().toString());
-                bitstreamHandlePath = RdfModelUtility.getParameterizedId(bitstreamHandlePath, request);
-                manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(bitstreamHandlePath), new PropertyValueSimpleImpl(handle)));
+                String parameterizedBitstreamHandlePath = RdfModelUtility.getParameterizedId(bitstreamHandlePath, request);
+                manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(parameterizedBitstreamHandlePath), new PropertyValueSimpleImpl(handle)));
             }
         } else {
             NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_ITEM_PREDICATE);
             while (collectionIterator.hasNext()) {
                 String uri = collectionIterator.next().toString();
                 String handle = getHandle(uri);
-                handle = RdfModelUtility.getParameterizedId(handle, request);
-                manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(handle), new PropertyValueSimpleImpl(handle)));
+                String parameterizedHandle = RdfModelUtility.getParameterizedId(handle, request);
+                manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(parameterizedHandle), new PropertyValueSimpleImpl(handle)));
             }
         }
         return manifests;

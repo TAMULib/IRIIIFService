@@ -26,11 +26,13 @@ import edu.tamu.iiif.utility.RdfModelUtility;
 public class FedoraPcdmPresentationManifestService extends AbstractFedoraPcdmManifestService {
 
     public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
-        String context = RdfModelUtility.getParameterizedId(request);
-        
+        String context = request.getContext();
+
+        String parameterizedContext = RdfModelUtility.getParameterizedId(request);
+
         RdfResource rdfResource = getRdfResource(context);
 
-        URI id = buildId(context);
+        URI id = buildId(parameterizedContext);
 
         PropertyValueSimpleImpl label = getLabel(rdfResource);
 

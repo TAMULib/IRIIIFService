@@ -12,6 +12,7 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Optional;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -39,16 +40,16 @@ public class FedoraPcdmPresentationManifestServiceTest extends AbstractFedoraPcd
     private Resource itemFilesEntryRdf;
 
     @Value("classpath:mock/fedora/json/image0.json")
-    private Resource image0;
+    private Resource image;
 
     @Value("classpath:mock/fedora/json/presentation.json")
     private Resource presentation;
-    
+
     @Value("classpath:mock/fedora/json/presentation-allow.json")
-    private Resource presentationWithAllow;
-    
+    private Resource presentationAllow;
+
     @Value("classpath:mock/fedora/json/presentation-disallow.json")
-    private Resource presentationWithDisallow;
+    private Resource presentationDisallow;
 
     @Before
     public void setup() {
@@ -65,17 +66,15 @@ public class FedoraPcdmPresentationManifestServiceTest extends AbstractFedoraPcd
     @Test
     public void testGetManifestAllowed() throws IOException, URISyntaxException {
         setupMocks();
-        when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084?allow=image/png;image/jpeg"))).thenReturn(readFileToString(itemRdf.getFile(), "UTF-8"));
         String manifest = fedoraPcdmPresentationManifestService.getManifest(ManifestRequest.of("mwbObjects/TGWCatalog/Pages/ExCat0084", false, Arrays.asList(new String[] { "image/png", "image/jpeg" }), Arrays.asList(new String[] {})));
-        assertEquals(objectMapper.readValue(presentationWithAllow.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
+        assertEquals(objectMapper.readValue(presentationAllow.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
     @Test
     public void testGetManifestDisallowed() throws IOException, URISyntaxException {
         setupMocks();
-        when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084?disallow=image/bmp;image/jpeg"))).thenReturn(readFileToString(itemRdf.getFile(), "UTF-8"));
         String manifest = fedoraPcdmPresentationManifestService.getManifest(ManifestRequest.of("mwbObjects/TGWCatalog/Pages/ExCat0084", false, Arrays.asList(new String[] {}), Arrays.asList(new String[] { "image/bmp", "image/jpeg" })));
-        assertEquals(objectMapper.readValue(presentationWithDisallow.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
+        assertEquals(objectMapper.readValue(presentationDisallow.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
     @Test
@@ -102,11 +101,10 @@ public class FedoraPcdmPresentationManifestServiceTest extends AbstractFedoraPcd
 
     private void setupMocks() throws IOException {
         when(httpService.contentType(any(String.class))).thenReturn("image/png; charset=utf-8");
-        when(httpService.get(any(String.class))).thenReturn(readFileToString(image0.getFile(), "UTF-8"));
-
         when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084"))).thenReturn(readFileToString(itemRdf.getFile(), "UTF-8"));
         when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084/files/fcr:metadata"))).thenReturn(readFileToString(itemFilesRdf.getFile(), "UTF-8"));
         when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084/files/ExCat0084.jpg/fcr:metadata"))).thenReturn(readFileToString(itemFilesEntryRdf.getFile(), "UTF-8"));
+        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn/info.json"))).thenReturn(FileUtils.readFileToString(image.getFile(), "UTF-8"));
     }
 
 }

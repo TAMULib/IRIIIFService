@@ -32,6 +32,7 @@ public class DSpaceRdfPresentationManifestService extends AbstractDSpaceRdfManif
 
     public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
         String context = request.getContext();
+
         String parameterizedContext = RdfModelUtility.getParameterizedId(request);
 
         RdfResource rdfResource = getRdfResource(context);

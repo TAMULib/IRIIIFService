@@ -222,11 +222,11 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
     private RdfCanvas getDSpaceRdfCanvas(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException, InvalidUrlException {
         String uri = rdfResource.getResource().getURI();
         RdfCanvas rdfCanvas = new RdfCanvas();
-        String canvasId = RdfModelUtility.getParameterizedId(getHandlePath(uri), request);
+        String parameterizedCanvasId = RdfModelUtility.getParameterizedId(getHandlePath(uri), request);
 
         RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, uri);
 
-        Optional<Image> image = generateImage(request, fileFedoraRdfResource, canvasId);
+        Optional<Image> image = generateImage(request, fileFedoraRdfResource, parameterizedCanvasId);
         if (image.isPresent()) {
 
             rdfCanvas.addImage(image.get());

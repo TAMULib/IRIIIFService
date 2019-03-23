@@ -69,20 +69,20 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     protected String fedoraPcdmIdentifier;
 
     protected Sequence generateSequence(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
-        String id = RdfModelUtility.getParameterizedId(rdfResource.getResource().getURI(), request);
+        String parameterizedId = RdfModelUtility.getParameterizedId(rdfResource.getResource().getURI(), request);
         PropertyValueSimpleImpl label = getLabel(rdfResource);
-        Sequence sequence = new SequenceImpl(getFedoraIiifSequenceUri(id), label);
+        Sequence sequence = new SequenceImpl(getFedoraIiifSequenceUri(parameterizedId), label);
         sequence.setCanvases(getCanvases(request, rdfResource));
         return sequence;
     }
 
     protected Canvas generateCanvas(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
-        String id = RdfModelUtility.getParameterizedId(rdfResource.getResource().getURI(), request);
+        String parameterizedId = RdfModelUtility.getParameterizedId(rdfResource.getResource().getURI(), request);
         PropertyValueSimpleImpl label = getLabel(rdfResource);
 
         RdfCanvas rdfCanvas = getFedoraRdfCanvas(request, rdfResource);
 
-        Canvas canvas = new CanvasImpl(getFedoraIiifCanvasUri(id), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
+        Canvas canvas = new CanvasImpl(getFedoraIiifCanvasUri(parameterizedId), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
 
         canvas.setImages(rdfCanvas.getImages());
 
@@ -274,7 +274,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     private RdfCanvas getFedoraRdfCanvas(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
         RdfCanvas rdfCanvas = new RdfCanvas();
 
-        String canvasId = RdfModelUtility.getParameterizedId(rdfResource.getResource().getURI(), request);
+        String parameterizedCanvasId = RdfModelUtility.getParameterizedId(rdfResource.getResource().getURI(), request);
 
         Statement canvasStatement = rdfResource.getStatementOfPropertyWithId(LDP_CONTAINS_PREDICATE);
 
@@ -294,7 +294,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
                 RdfResource fileRdfResource = new RdfResource(fileModel, node.toString());
 
                 if (fileRdfResource.containsStatement(RDF_TYPE_PREDICATE, PCDM_FILE)) {
-                    Optional<Image> image = generateImage(request, fileRdfResource, canvasId);
+                    Optional<Image> image = generateImage(request, fileRdfResource, parameterizedCanvasId);
                     if (image.isPresent()) {
                         rdfCanvas.addImage(image.get());
 

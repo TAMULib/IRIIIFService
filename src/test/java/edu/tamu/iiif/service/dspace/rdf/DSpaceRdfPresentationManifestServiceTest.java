@@ -38,10 +38,10 @@ public class DSpaceRdfPresentationManifestServiceTest extends AbstractDSpaceRdfM
 
     @Value("classpath:mock/dspace/json/presentation.json")
     private Resource presentation;
-    
+
     @Value("classpath:mock/dspace/json/presentation-allow.json")
     private Resource presentationAllow;
-    
+
     @Value("classpath:mock/dspace/json/presentation-disallow.json")
     private Resource presentationDisallow;
 
