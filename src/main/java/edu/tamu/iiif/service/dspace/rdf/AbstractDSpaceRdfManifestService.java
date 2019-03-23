@@ -44,6 +44,7 @@ import edu.tamu.iiif.exception.InvalidUrlException;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
+import edu.tamu.iiif.utility.RdfModelUtility;
 
 @ConditionalOnExpression(DSPACE_RDF_CONDITION)
 public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestService {
@@ -61,7 +62,8 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         String uri = rdfResource.getResource().getURI();
         String handle = getHandle(uri);
         PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(handle);
-        Sequence sequence = new SequenceImpl(getDSpaceIiifSequenceUri(handle), label);
+        String parameterizedHandle = RdfModelUtility.getParameterizedId(handle, request);
+        Sequence sequence = new SequenceImpl(getDSpaceIiifSequenceUri(parameterizedHandle), label);
         sequence.setCanvases(getCanvases(request, rdfResource));
         return sequence;
     }
@@ -69,10 +71,11 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
     protected Canvas generateCanvas(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         String uri = rdfResource.getResource().getURI();
         PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getBitstreamPath(uri));
+        String parameterizedUri = RdfModelUtility.getParameterizedId(uri, request);
 
         RdfCanvas rdfCanvas = getDSpaceRdfCanvas(request, rdfResource);
 
-        Canvas canvas = new CanvasImpl(getDSpaceIiifCanvasUri(getHandlePath(uri)), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
+        Canvas canvas = new CanvasImpl(getDSpaceIiifCanvasUri(getHandlePath(parameterizedUri)), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
 
         canvas.setImages(rdfCanvas.getImages());
 
@@ -219,11 +222,11 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
     private RdfCanvas getDSpaceRdfCanvas(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException, InvalidUrlException {
         String uri = rdfResource.getResource().getURI();
         RdfCanvas rdfCanvas = new RdfCanvas();
-        String canvasId = getHandlePath(uri);
+        String parameterizedCanvasId = RdfModelUtility.getParameterizedId(getHandlePath(uri), request);
 
         RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, uri);
 
-        Optional<Image> image = generateImage(request, fileFedoraRdfResource, canvasId);
+        Optional<Image> image = generateImage(request, fileFedoraRdfResource, parameterizedCanvasId);
         if (image.isPresent()) {
 
             rdfCanvas.addImage(image.get());

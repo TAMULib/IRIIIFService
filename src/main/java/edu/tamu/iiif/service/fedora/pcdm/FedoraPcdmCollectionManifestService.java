@@ -36,21 +36,25 @@ import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.rdf.RdfOrderedResource;
 import edu.tamu.iiif.model.rdf.RdfResource;
+import edu.tamu.iiif.utility.RdfModelUtility;
 
 @Service
 public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManifestService {
 
     @Override
     protected String generateManifest(ManifestRequest request) throws URISyntaxException, IOException {
-        String context = request.getContext();
-        return mapper.writeValueAsString(generateCollection(request, context));
+
+        return mapper.writeValueAsString(generateCollection(request));
     }
 
-    private Collection generateCollection(ManifestRequest request, String context) throws URISyntaxException, IOException {
+    private Collection generateCollection(ManifestRequest request) throws URISyntaxException, IOException {
+        String context = request.getContext();
+
+        String parameterizedContext = RdfModelUtility.getParameterizedId(request);
 
         RdfResource rdfResource = getRdfResource(context);
 
-        URI id = buildId(context);
+        URI id = buildId(parameterizedContext);
 
         PropertyValueSimpleImpl label = getLabel(rdfResource);
 
@@ -113,9 +117,9 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(PCDM_HAS_MEMBER_PREDICATE);
             while (nodes.hasNext()) {
                 RDFNode node = nodes.next();
-                String id = node.toString();
+                String parameterizedId = RdfModelUtility.getParameterizedId(node.toString(), request);
                 PropertyValueSimpleImpl label = getLabel(new RdfResource(rdfResource, node.toString()));
-                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(id), label));
+                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedId), label));
             }
         }
 
@@ -123,8 +127,9 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             ResIterator resources = rdfResource.listResourcesWithPropertyWithId(PCDM_HAS_FILE_PREDICATE);
             while (resources.hasNext()) {
                 Resource resource = resources.next();
+                String parameterizedId = RdfModelUtility.getParameterizedId(resource.getURI(), request);
                 PropertyValueSimpleImpl label = getLabel(new RdfResource(resource.getModel(), resource));
-                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(resource.getURI()), label));
+                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedId), label));
             }
         }
 
@@ -159,8 +164,11 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
         }
 
         if (id.isPresent()) {
+
+            String parameterizedActualId = RdfModelUtility.getParameterizedId(id.get(), request);
+
             PropertyValueSimpleImpl label = getLabel(rdfOrderedResource);
-            manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(id.get()), label));
+            manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedActualId), label));
 
             Optional<String> nextId = getIdByPredicate(model, IANA_NEXT_PREDICATE);
 

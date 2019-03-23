@@ -29,11 +29,11 @@ public class ManifestRequest {
     }
 
     public String getAllowed() {
-        return String.join(",", allowed);
+        return String.join(";", allowed);
     }
 
     public String getDisallowed() {
-        return String.join(",", disallowed);
+        return String.join(";", disallowed);
     }
 
     public static ManifestRequest of(String path, boolean update, List<String> allowed, List<String> disallowed) {
