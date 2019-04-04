@@ -86,7 +86,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
         canvas.setImages(rdfCanvas.getImages());
 
-        canvas.setMetadata(getDublinCoreMetadata(rdfResource));
+        canvas.setMetadata(getMetadata(rdfResource));
 
         return canvas;
     }
@@ -94,10 +94,10 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     protected PropertyValueSimpleImpl getLabel(RdfResource rdfResource) {
         Optional<String> title = getObject(rdfResource, RDFS_LABEL_PREDICATE);
         if (!title.isPresent()) {
-            title = getObject(rdfResource, DUBLIN_CORE_IDENTIFIER_PREDICATE);
+            title = getObject(rdfResource, DUBLIN_CORE_TITLE_PREDICATE);
         }
         if (!title.isPresent()) {
-            title = getObject(rdfResource, DUBLIN_CORE_TITLE_PREDICATE);
+            title = getObject(rdfResource, DUBLIN_CORE_IDENTIFIER_PREDICATE);
         }
         if (!title.isPresent()) {
             String id = rdfResource.getResource().getURI();

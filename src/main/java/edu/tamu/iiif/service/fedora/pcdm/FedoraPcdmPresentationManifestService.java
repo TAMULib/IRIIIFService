@@ -50,7 +50,7 @@ public class FedoraPcdmPresentationManifestService extends AbstractFedoraPcdmMan
 
         manifest.setDescription(getDescription(rdfResource));
 
-        manifest.setMetadata(getDublinCoreMetadata(rdfResource));
+        manifest.setMetadata(getMetadata(rdfResource));
 
         List<Sequence> sequences = getSequences(request, rdfResource);
 

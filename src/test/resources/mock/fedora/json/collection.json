@@ -1,7 +1,7 @@
 {
   "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "description": "A page level collection of The Great War exhibit catalog.  The assets are JPEGs created from TIFFs created when the catalog was digitized.",
-  "label": "TGW_Catalog",
+  "label": "The Great War Exhibit Catalog",
   "metadata": [
     {
       "label": "isPartOf",

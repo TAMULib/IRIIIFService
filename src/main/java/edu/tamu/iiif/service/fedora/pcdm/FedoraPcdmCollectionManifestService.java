@@ -43,7 +43,6 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
 
     @Override
     protected String generateManifest(ManifestRequest request) throws URISyntaxException, IOException {
-
         return mapper.writeValueAsString(generateCollection(request));
     }
 
@@ -73,7 +72,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             rdfResource = new RdfResource(collectionObjectMemberModel, collectionObjectMemberId);
         }
 
-        List<Metadata> metadata = getDublinCoreMetadata(rdfResource);
+        List<Metadata> metadata = getMetadata(rdfResource);
 
         Collection collection = new CollectionImpl(id, label, metadata);
 
