@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import de.digitalcollections.iiif.presentation.model.api.v2.Manifest;
-import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
 import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
 import de.digitalcollections.iiif.presentation.model.api.v2.Thumbnail;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ManifestImpl;
@@ -51,11 +50,7 @@ public class DSpaceRdfPresentationManifestService extends AbstractDSpaceRdfManif
 
         manifest.setLogo(getLogo(rdfResource));
 
-        List<Metadata> metadata = getDublinCoreMetadata(rdfResource);
-
-        metadata.addAll(getDublinCoreTermsMetadata(rdfResource));
-
-        manifest.setMetadata(metadata);
+        manifest.setMetadata(getMetadata(rdfResource));
 
         Optional<Thumbnail> thumbnail = getThumbnail(sequences);
         if (thumbnail.isPresent()) {

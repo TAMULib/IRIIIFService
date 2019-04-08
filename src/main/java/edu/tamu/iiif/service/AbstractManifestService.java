@@ -304,12 +304,11 @@ public abstract class AbstractManifestService implements ManifestService {
         return redisResourceRepo.getOrCreate(url).getId();
     }
 
-    protected List<Metadata> getDublinCoreTermsMetadata(RdfResource rdfResource) {
-        return getMetadata(rdfResource, DUBLIN_CORE_TERMS_PREFIX);
-    }
-
-    protected List<Metadata> getDublinCoreMetadata(RdfResource rdfResource) {
-        return getMetadata(rdfResource, DUBLIN_CORE_PREFIX);
+    protected List<Metadata> getMetadata(RdfResource rdfResource) {
+        List<Metadata> metadata = new ArrayList<Metadata>();
+        metadata.addAll(getMetadata(rdfResource, DUBLIN_CORE_PREFIX));
+        metadata.addAll(getMetadata(rdfResource, DUBLIN_CORE_TERMS_PREFIX));
+        return metadata;
     }
 
     protected abstract String getRdfUrl(String context);
