@@ -1,58 +1,10 @@
 {
-  "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
-  "description": "No description available!",
-  "label": "dspace-rdf:rdf/handle/123456789/158308",
-  "sequences": [
-    {
-      "canvases": [
-        {
-          "height": 480,
-          "images": [
-            {
-              "motivation": "sc:painting",
-              "on": "http://localhost:9000/dspace-rdf/canvas/123456789/158308/1/sports-car-146873_960_720.png?disallow=image/bmp;image/jpeg",
-              "resource": {
-                "format": "image/png; charset=utf-8",
-                "height": 480,
-                "width": 960,
-                "service": {
-                  "label": "DSpace IIIF Image Resource Service",
-                  "profile": "http://iiif.io/api/image/2/level0.json",
-                  "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n"
-                },
-                "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/full/full/0/default.jpg",
-                "@type": "dctypes:Image"
-              },
-              "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json",
-              "@type": "oa:Annotation"
-            }
-          ],
-          "label": "1sports-car-146873_960_720.png",
-          "width": 960,
-          "@type": "sc:Canvas",
-          "@id": "http://localhost:9000/dspace-rdf/canvas/123456789/158308/1/sports-car-146873_960_720.png?disallow=image/bmp;image/jpeg"
-        }
-      ],
-      "label": "123456789/158308",
-      "@type": "sc:Sequence",
-      "@id": "http://localhost:9000/dspace-rdf/sequence/123456789/158308?disallow=image/bmp;image/jpeg"
-    }
-  ],
-  "thumbnail": {
-    "services": [
-      {
-        "label": "DSpace IIIF Image Resource Service",
-        "profile": "http://iiif.io/api/image/2/level0.json",
-        "@context": "http://iiif.io/api/image/2/context.json",
-        "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n"
-      }
-    ],
-    "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/full/!100,100/0/default.jpg"
-  },
-  "@type": "sc:Manifest",
-  "@id": "http://localhost:9000/dspace-rdf/presentation/123456789/158308?disallow=image/bmp;image/jpeg",
   "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "http://localhost:9000/dspace-rdf/presentation/123456789/158308?disallow=image/bmp;image/jpeg",
+  "@type": "sc:Manifest",
+  "description": "",
+  "label": "dspace-rdf:rdf/handle/123456789/158308",
+  "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "metadata": [
     {
       "label": "date",
@@ -66,5 +18,53 @@
       "label": "available",
       "value": "2018-04-24T13:29:59Z^^http://www.w3.org/2001/XMLSchema#dateTime"
     }
-  ]
+  ],
+  "sequences": [
+    {
+      "@id": "http://localhost:9000/dspace-rdf/sequence/123456789/158308?disallow=image/bmp;image/jpeg",
+      "@type": "sc:Sequence",
+      "canvases": [
+        {
+          "@id": "http://localhost:9000/dspace-rdf/canvas/123456789/158308/1/sports-car-146873_960_720.png?disallow=image/bmp;image/jpeg",
+          "@type": "sc:Canvas",
+          "height": 480,
+          "images": [
+            {
+              "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "http://localhost:9000/dspace-rdf/canvas/123456789/158308/1/sports-car-146873_960_720.png?disallow=image/bmp;image/jpeg",
+              "resource": {
+                "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/full/full/0/default.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/png; charset=utf-8",
+                "height": 480,
+                "service": {
+                  "label": "DSpace IIIF Image Resource Service",
+                  "profile": "http://iiif.io/api/image/2/level0.json",
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n"
+                },
+                "width": 960
+              }
+            }
+          ],
+          "label": "1sports-car-146873_960_720.png",
+          "width": 960
+        }
+      ],
+      "label": "dspace-rdf:rdf/handle/123456789/158308"
+    }
+  ],
+  "thumbnail": {
+    "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/full/!100,100/0/default.jpg",
+    "services": [
+      {
+        "@context": "http://iiif.io/api/image/2/context.json",
+        "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n",
+        "label": "DSpace IIIF Image Resource Service",
+        "profile": "http://iiif.io/api/image/2/level0.json"
+      }
+    ]
+  }
 }

@@ -3,8 +3,8 @@ package edu.tamu.iiif.constants;
 public class Constants {
 
     // Repository Identifiers
-    public final static String DSPACE_RDF_IDENTIFIER = "${iiif.dspace.identifier.dspace-rdf}";
-    public final static String FEDORA_PCDM_IDENTIFIER = "${iiif.fedora.identifier.fedora-pcdm}";
+    public final static String DSPACE_RDF_IDENTIFIER = "${iiif.dspace.identifier}";
+    public final static String FEDORA_PCDM_IDENTIFIER = "${iiif.fedora.identifier}";
 
     // Repository Conditions
     public final static String DSPACE_RDF_CONDITION = "'${spring.profiles.include}'.contains('" + DSPACE_RDF_IDENTIFIER + "')";
@@ -56,6 +56,7 @@ public class Constants {
     public final static String DUBLIN_CORE_TITLE_PREDICATE = DUBLIN_CORE_PREFIX + "title";
     public final static String DUBLIN_CORE_IDENTIFIER_PREDICATE = DUBLIN_CORE_PREFIX + "identifier";
     public final static String DUBLIN_CORE_DESCRIPTION_PREDICATE = DUBLIN_CORE_PREFIX + "description";
+    public final static String DUBLIN_CORE_DESCRIPTION_ABSTRACT_PREDICATE = DUBLIN_CORE_PREFIX + "description.abstract";
 
     // Dublin Core Terms
     public final static String DUBLIN_CORE_TERMS_PREFIX = "http://purl.org/dc/terms/";

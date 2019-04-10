@@ -13,6 +13,7 @@ import org.apache.jena.rdf.model.Model;
 import org.springframework.stereotype.Service;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Manifest;
+import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
 import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
 import de.digitalcollections.iiif.presentation.model.api.v2.Thumbnail;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ManifestImpl;
@@ -50,7 +51,11 @@ public class FedoraPcdmPresentationManifestService extends AbstractFedoraPcdmMan
 
         manifest.setDescription(getDescription(rdfResource));
 
-        manifest.setMetadata(getMetadata(rdfResource));
+        List<Metadata> metadata = getMetadata(rdfResource);
+
+        if (!metadata.isEmpty()) {
+            manifest.setMetadata(metadata);
+        }
 
         List<Sequence> sequences = getSequences(request, rdfResource);
 

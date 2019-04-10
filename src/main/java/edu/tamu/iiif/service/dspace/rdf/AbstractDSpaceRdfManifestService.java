@@ -8,13 +8,9 @@ import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_COMMUNITY_PRED
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_PART_OF_REPOSITORY_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_IS_SUB_COMMUNITY_OF_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.DSPACE_RDF_CONDITION;
-import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_ABSTRACT;
-import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_DESCRIPTION;
-import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TERMS_TITLE;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
 import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
-import static edu.tamu.iiif.utility.RdfModelUtility.getObject;
 import static edu.tamu.iiif.utility.StringUtility.encodeSpaces;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
@@ -29,7 +25,7 @@ import java.util.Optional;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
@@ -39,6 +35,7 @@ import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
 import de.digitalcollections.iiif.presentation.model.impl.v2.CanvasImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
+import edu.tamu.iiif.config.DSpaceRdfIiifConfig;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.InvalidUrlException;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
@@ -49,14 +46,8 @@ import edu.tamu.iiif.utility.RdfModelUtility;
 @ConditionalOnExpression(DSPACE_RDF_CONDITION)
 public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestService {
 
-    @Value("${iiif.dspace.url}")
-    protected String dspaceUrl;
-
-    @Value("${iiif.dspace.webapp}")
-    protected String dspaceWebapp;
-
-    @Value("${iiif.dspace.identifier.dspace-rdf}")
-    protected String dspaceRdfIdentifier;
+    @Autowired
+    protected DSpaceRdfIiifConfig config;
 
     protected Sequence generateSequence(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         String uri = rdfResource.getResource().getURI();
@@ -80,26 +71,6 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         canvas.setImages(rdfCanvas.getImages());
 
         return canvas;
-    }
-
-    protected PropertyValueSimpleImpl getTitle(RdfResource rdfResource) {
-        Optional<String> title = getObject(rdfResource, DUBLIN_CORE_TERMS_TITLE);
-        if (!title.isPresent()) {
-            String id = rdfResource.getResource().getURI();
-            title = Optional.of(getRepositoryContextIdentifier(id));
-        }
-        return new PropertyValueSimpleImpl(title.get());
-    }
-
-    protected PropertyValueSimpleImpl getDescription(RdfResource rdfResource) {
-        Optional<String> description = getObject(rdfResource, DUBLIN_CORE_TERMS_ABSTRACT);
-        if (!description.isPresent()) {
-            description = getObject(rdfResource, DUBLIN_CORE_TERMS_DESCRIPTION);
-        }
-        if (!description.isPresent()) {
-            description = Optional.of("No description available!");
-        }
-        return new PropertyValueSimpleImpl(description.get());
     }
 
     protected boolean isTopLevelCommunity(Model model) {
@@ -175,27 +146,42 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
 
     @Override
     protected String getIiifServiceUrl() {
-        return iiifServiceUrl + "/" + dspaceRdfIdentifier;
+        return iiifServiceUrl + "/" + config.getIdentifier();
     }
 
     @Override
     protected String getRepositoryContextIdentifier(String url) {
-        return dspaceRdfIdentifier + ":" + getRepositoryPath(url);
+        return config.getIdentifier() + ":" + getRepositoryPath(url);
     }
 
     @Override
     protected String getRepositoryPath(String url) {
-        return url.substring(dspaceUrl.length() + 1);
+        return url.substring(config.getUrl().length() + 1);
     }
 
     @Override
     protected String getRepositoryType() {
-        return dspaceRdfIdentifier;
+        return config.getIdentifier();
     }
 
     @Override
     protected String getRdfUrl(String handle) {
-        return joinPath(dspaceUrl, "rdf", "handle", handle);
+        return joinPath(config.getUrl(), "rdf", "handle", handle);
+    }
+
+    @Override
+    protected List<String> getLabelPrecedence() {
+        return config.getLabelPrecedence();
+    }
+
+    @Override
+    protected List<String> getDescriptionPrecedence() {
+        return config.getDescriptionPrecedence();
+    }
+
+    @Override
+    protected List<String> getMetadataPrefixes() {
+        return config.getMetadataPrefixes();
     }
 
     private URI getDSpaceIiifUri(String handle, String type) throws URISyntaxException {

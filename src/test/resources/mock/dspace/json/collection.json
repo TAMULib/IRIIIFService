@@ -1,47 +1,47 @@
 {
-  "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
-  "description": "No description available!",
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "http://localhost:9000/dspace-rdf/collection/123456789/158299",
+  "@type": "sc:Collection",
+  "description": "",
   "label": "dspace-rdf:rdf/handle/123456789/158299",
-  "metadata": [],
+  "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "manifests": [
     {
-      "label": "123456789/158308",
       "@id": "http://localhost:9000/dspace-rdf/presentation/123456789/158308",
-      "@type": "sc:Manifest"
+      "@type": "sc:Manifest",
+      "label": "dspace-rdf:rdf/handle/123456789/158299"
     },
     {
-      "label": "123456789/158310",
       "@id": "http://localhost:9000/dspace-rdf/presentation/123456789/158310",
-      "@type": "sc:Manifest"
+      "@type": "sc:Manifest",
+      "label": "dspace-rdf:rdf/handle/123456789/158299"
     },
     {
-      "label": "123456789/158313",
       "@id": "http://localhost:9000/dspace-rdf/presentation/123456789/158313",
-      "@type": "sc:Manifest"
+      "@type": "sc:Manifest",
+      "label": "dspace-rdf:rdf/handle/123456789/158299"
     },
     {
-      "label": "123456789/158312",
       "@id": "http://localhost:9000/dspace-rdf/presentation/123456789/158312",
-      "@type": "sc:Manifest"
+      "@type": "sc:Manifest",
+      "label": "dspace-rdf:rdf/handle/123456789/158299"
     },
     {
-      "label": "123456789/158317",
       "@id": "http://localhost:9000/dspace-rdf/presentation/123456789/158317",
-      "@type": "sc:Manifest"
+      "@type": "sc:Manifest",
+      "label": "dspace-rdf:rdf/handle/123456789/158299"
     },
     {
-      "label": "123456789/158307",
       "@id": "http://localhost:9000/dspace-rdf/presentation/123456789/158307",
-      "@type": "sc:Manifest"
+      "@type": "sc:Manifest",
+      "label": "dspace-rdf:rdf/handle/123456789/158299"
     },
     {
-      "label": "123456789/158316",
       "@id": "http://localhost:9000/dspace-rdf/presentation/123456789/158316",
-      "@type": "sc:Manifest"
+      "@type": "sc:Manifest",
+      "label": "dspace-rdf:rdf/handle/123456789/158299"
     }
   ],
-  "viewingHint": "multi-part",
-  "@type": "sc:Collection",
-  "@id": "http://localhost:9000/dspace-rdf/collection/123456789/158299",
-  "@context": "http://iiif.io/api/presentation/2/context.json"
+  "metadata": [],
+  "viewingHint": "multi-part"
 }

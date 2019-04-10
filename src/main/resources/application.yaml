@@ -32,11 +32,33 @@ iiif:
   image.server.url: http://localhost:8182/iiif/2
   logo.url: https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png
   dspace:
+    label-precedence:
+    - "http://purl.org/dc/elements/1.1/title"
+    - "http://purl.org/dc/terms/title"
+    - "http://www.w3.org/2000/01/rdf-schema#label"
+    - "http://purl.org/dc/elements/1.1/identifier"
+    description-precedence:
+    - "http://purl.org/dc/terms/abstract"
+    - "http://purl.org/dc/terms/description"
+    - "http://purl.org/dc/elements/1.1/description"
+    metadata-prefixes:
+    - "http://purl.org/dc/elements/1.1/"
+    - "http://purl.org/dc/terms/"
     url: http://localhost:8080
+    identifier: dspace
     webapp: xmlui
-    identifier: 
-      dspace-rdf: dspace
   fedora:
+    label-precedence:
+    - "http://purl.org/dc/elements/1.1/title"
+    - "http://purl.org/dc/terms/title"
+    - "http://www.w3.org/2000/01/rdf-schema#label"
+    - "http://purl.org/dc/elements/1.1/identifier"
+    description-precedence:
+    - "http://purl.org/dc/terms/abstract"
+    - "http://purl.org/dc/terms/description"
+    - "http://purl.org/dc/elements/1.1/description"
+    metadata-prefixes:
+    - "http://purl.org/dc/elements/1.1/"
+    - "http://purl.org/dc/terms/"
     url: http://localhost:9000/fcrepo/rest
-    identifier:
-      fedora-pcdm: fedora
+    identifier:: fedora

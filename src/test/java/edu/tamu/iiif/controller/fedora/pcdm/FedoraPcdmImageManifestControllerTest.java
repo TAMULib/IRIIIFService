@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.RequestBuilder;
 
 import edu.tamu.iiif.controller.AbstractManifestControllerTest;
 import edu.tamu.iiif.controller.ManifestRequest;
-import edu.tamu.iiif.controller.fedora.pcdm.FedoraPcdmImageManifestController;
 import edu.tamu.iiif.service.fedora.pcdm.FedoraPcdmImageManifestService;
 
 @WebMvcTest(value = FedoraPcdmImageManifestController.class, secure = false)
@@ -33,7 +32,7 @@ public class FedoraPcdmImageManifestControllerTest extends AbstractManifestContr
     public void testGetManifest() throws Exception {
         String expected = readFileToString(image0.getFile(), "UTF-8");
         when(fedoraPcdmImageManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
-        RequestBuilder requestBuilder = get("/" + fedoraPcdmIdentifier + "/image/cars_pcdm_objects/chevy/pages/page_0/files/PTAR_800x400.png").accept(APPLICATION_JSON);
+        RequestBuilder requestBuilder = get("/fedora/image/cars_pcdm_objects/chevy/pages/page_0/files/PTAR_800x400.png").accept(APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         assertEquals(expected, result.getResponse().getContentAsString());
     }

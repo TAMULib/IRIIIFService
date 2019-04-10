@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import de.digitalcollections.iiif.presentation.model.api.v2.Manifest;
+import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
 import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
 import de.digitalcollections.iiif.presentation.model.api.v2.Thumbnail;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ManifestImpl;
@@ -38,7 +39,7 @@ public class DSpaceRdfPresentationManifestService extends AbstractDSpaceRdfManif
 
         URI id = buildId(parameterizedContext);
 
-        PropertyValueSimpleImpl label = getTitle(rdfResource);
+        PropertyValueSimpleImpl label = getLabel(rdfResource);
 
         Manifest manifest = new ManifestImpl(id, label);
 
@@ -50,7 +51,11 @@ public class DSpaceRdfPresentationManifestService extends AbstractDSpaceRdfManif
 
         manifest.setLogo(getLogo(rdfResource));
 
-        manifest.setMetadata(getMetadata(rdfResource));
+        List<Metadata> metadata = getMetadata(rdfResource);
+
+        if (!metadata.isEmpty()) {
+            manifest.setMetadata(metadata);
+        }
 
         Optional<Thumbnail> thumbnail = getThumbnail(sequences);
         if (thumbnail.isPresent()) {
@@ -73,6 +78,8 @@ public class DSpaceRdfPresentationManifestService extends AbstractDSpaceRdfManif
 
         if (broadSequences.size() > 0) {
             Sequence sequence = broadSequences.get(0);
+
+            sequence.setLabel(getLabel(rdfResource));
 
             List<Canvas> canvases = sequence.getCanvases();
 
