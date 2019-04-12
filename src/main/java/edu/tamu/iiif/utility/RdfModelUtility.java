@@ -14,37 +14,37 @@ import edu.tamu.iiif.model.rdf.RdfResource;
 
 public class RdfModelUtility {
 
-	public static Model createRdfModel(String rdf) {
-		InputStream stream = new ByteArrayInputStream(rdf.getBytes(StandardCharsets.UTF_8));
-		Model model = ModelFactory.createDefaultModel();
-		model.read(stream, null, "TTL");
-		return model;
-	}
+    public static Model createRdfModel(String rdf) {
+        InputStream stream = new ByteArrayInputStream(rdf.getBytes(StandardCharsets.UTF_8));
+        Model model = ModelFactory.createDefaultModel();
+        model.read(stream, null, "TTL");
+        return model;
+    }
 
-	public static Optional<String> getObject(Model model, String uri) {
-		Optional<String> id = Optional.empty();
-		NodeIterator firstNodeItr = model.listObjectsOfProperty(model.getProperty(uri));
-		if (firstNodeItr.hasNext()) {
-			id = Optional.of(firstNodeItr.next().toString());
-		}
-		return id;
-	}
+    public static Optional<String> getObject(Model model, String uri) {
+        Optional<String> id = Optional.empty();
+        NodeIterator firstNodeItr = model.listObjectsOfProperty(model.getProperty(uri));
+        if (firstNodeItr.hasNext()) {
+            id = Optional.of(firstNodeItr.next().toString());
+        }
+        return id;
+    }
 
-	public static Optional<String> getObject(RdfResource rdfResource, String uri) {
-		return getObject(rdfResource.getModel(), uri);
-	}
+    public static Optional<String> getObject(RdfResource rdfResource, String uri) {
+        return getObject(rdfResource.getModel(), uri);
+    }
 
-	public static String getParameterizedId(String id, ManifestRequest request) {
-		if (!request.getAllowed().isEmpty()) {
-			id += "?allow=" + request.getAllowed();
-		} else if (!request.getDisallowed().isEmpty()) {
-			id += "?disallow=" + request.getDisallowed();
-		}
-		return id;
-	}
+    public static String getParameterizedId(String id, ManifestRequest request) {
+        if (!request.getAllowed().isEmpty()) {
+            id += "?allow=" + request.getAllowed();
+        } else if (!request.getDisallowed().isEmpty()) {
+            id += "?disallow=" + request.getDisallowed();
+        }
+        return id;
+    }
 
-	public static String getParameterizedId(ManifestRequest request) {
-		return getParameterizedId(request.getContext(), request);
-	}
+    public static String getParameterizedId(ManifestRequest request) {
+        return getParameterizedId(request.getContext(), request);
+    }
 
 }
