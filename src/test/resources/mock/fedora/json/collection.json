@@ -1,7 +1,17 @@
 {
-  "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "http://localhost:9000/fedora-pcdm/collection/mwbObjects/TGWCatalog",
+  "@type": "sc:Collection",
   "description": "A page level collection of The Great War exhibit catalog.  The assets are JPEGs created from TIFFs created when the catalog was digitized.",
   "label": "The Great War Exhibit Catalog",
+  "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
+  "manifests": [
+    {
+      "@id": "http://localhost:9000/fedora-pcdm/presentation/mwbObjects/TGWCatalog/Pages/ExCat0084",
+      "@type": "sc:Manifest",
+      "label": "The Great War Exhibit Catalog"
+    }
+  ],
   "metadata": [
     {
       "label": "isPartOf",
@@ -28,15 +38,5 @@
       "value": "The Great War Exhibit Catalog"
     }
   ],
-  "manifests": [
-    {
-      "label": "fedora-pcdm:mwbObjects/TGWCatalog/Pages/ExCat0084",
-      "@id": "http://localhost:9000/fedora-pcdm/presentation/mwbObjects/TGWCatalog/Pages/ExCat0084",
-      "@type": "sc:Manifest"
-    }
-  ],
-  "viewingHint": "multi-part",
-  "@type": "sc:Collection",
-  "@id": "http://localhost:9000/fedora-pcdm/collection/mwbObjects/TGWCatalog",
-  "@context": "http://iiif.io/api/presentation/2/context.json"
+  "viewingHint": "multi-part"
 }

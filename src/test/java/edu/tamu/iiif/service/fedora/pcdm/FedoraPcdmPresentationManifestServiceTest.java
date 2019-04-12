@@ -39,7 +39,7 @@ public class FedoraPcdmPresentationManifestServiceTest extends AbstractFedoraPcd
     @Value("classpath:mock/fedora/rdf/item_container_files_entry.rdf")
     private Resource itemFilesEntryRdf;
 
-    @Value("classpath:mock/fedora/json/image0.json")
+    @Value("classpath:mock/fedora/json/image.json")
     private Resource image;
 
     @Value("classpath:mock/fedora/json/presentation.json")

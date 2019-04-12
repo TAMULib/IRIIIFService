@@ -39,11 +39,7 @@ public class DSpaceRdfPresentationManifestService extends AbstractDSpaceRdfManif
 
         URI id = buildId(parameterizedContext);
 
-        PropertyValueSimpleImpl label = getLabel(rdfResource);
-
-        Manifest manifest = new ManifestImpl(id, label);
-
-        manifest.setDescription(getDescription(rdfResource));
+        Manifest manifest = new ManifestImpl(id, getLabel(rdfResource));
 
         List<Sequence> sequences = getSequences(request, rdfResource);
 
@@ -52,9 +48,13 @@ public class DSpaceRdfPresentationManifestService extends AbstractDSpaceRdfManif
         manifest.setLogo(getLogo(rdfResource));
 
         List<Metadata> metadata = getMetadata(rdfResource);
-
         if (!metadata.isEmpty()) {
             manifest.setMetadata(metadata);
+        }
+
+        Optional<PropertyValueSimpleImpl> description = getDescription(rdfResource);
+        if (description.isPresent()) {
+            manifest.setDescription(description.get());
         }
 
         Optional<Thumbnail> thumbnail = getThumbnail(sequences);

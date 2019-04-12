@@ -2,9 +2,14 @@
   "@context": "http://iiif.io/api/presentation/2/context.json",
   "@id": "http://localhost:9000/dspace-rdf/presentation/123456789/158299",
   "@type": "sc:Manifest",
-  "description": "",
-  "label": "dspace-rdf:rdf/handle/123456789/158299",
+  "label": "Cool Cars",
   "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
+  "metadata": [
+    {
+      "label": "title",
+      "value": "Cool Cars"
+    }
+  ],
   "sequences": [
     {
       "@id": "http://localhost:9000/dspace-rdf/sequence/123456789/158308",
@@ -37,177 +42,9 @@
           ],
           "label": "1sports-car-146873_960_720.png",
           "width": 960
-        },
-        {
-          "@id": "http://localhost:9000/dspace-rdf/canvas/123456789/158310/1/sports-car-146873_960_720.png",
-          "@type": "sc:Canvas",
-          "height": 480,
-          "images": [
-            {
-              "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxMC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json",
-              "@type": "oa:Annotation",
-              "motivation": "sc:painting",
-              "on": "http://localhost:9000/dspace-rdf/canvas/123456789/158310/1/sports-car-146873_960_720.png",
-              "resource": {
-                "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxMC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/full/full/0/default.jpg",
-                "@type": "dctypes:Image",
-                "format": "image/png; charset=utf-8",
-                "height": 480,
-                "service": {
-                  "label": "DSpace IIIF Image Resource Service",
-                  "profile": "http://iiif.io/api/image/2/level0.json",
-                  "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxMC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n"
-                },
-                "width": 960
-              }
-            }
-          ],
-          "label": "1sports-car-146873_960_720.png",
-          "width": 960
-        },
-        {
-          "@id": "http://localhost:9000/dspace-rdf/canvas/123456789/158313/1/sports-car-146873_960_720.png",
-          "@type": "sc:Canvas",
-          "height": 480,
-          "images": [
-            {
-              "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxMy8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json",
-              "@type": "oa:Annotation",
-              "motivation": "sc:painting",
-              "on": "http://localhost:9000/dspace-rdf/canvas/123456789/158313/1/sports-car-146873_960_720.png",
-              "resource": {
-                "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxMy8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/full/full/0/default.jpg",
-                "@type": "dctypes:Image",
-                "format": "image/png; charset=utf-8",
-                "height": 480,
-                "service": {
-                  "label": "DSpace IIIF Image Resource Service",
-                  "profile": "http://iiif.io/api/image/2/level0.json",
-                  "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxMy8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n"
-                },
-                "width": 960
-              }
-            }
-          ],
-          "label": "1sports-car-146873_960_720.png",
-          "width": 960
-        },
-        {
-          "@id": "http://localhost:9000/dspace-rdf/canvas/123456789/158312/1/sports-car-146873_960_720.png",
-          "@type": "sc:Canvas",
-          "height": 480,
-          "images": [
-            {
-              "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxMi8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json",
-              "@type": "oa:Annotation",
-              "motivation": "sc:painting",
-              "on": "http://localhost:9000/dspace-rdf/canvas/123456789/158312/1/sports-car-146873_960_720.png",
-              "resource": {
-                "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxMi8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/full/full/0/default.jpg",
-                "@type": "dctypes:Image",
-                "format": "image/png; charset=utf-8",
-                "height": 480,
-                "service": {
-                  "label": "DSpace IIIF Image Resource Service",
-                  "profile": "http://iiif.io/api/image/2/level0.json",
-                  "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxMi8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n"
-                },
-                "width": 960
-              }
-            }
-          ],
-          "label": "1sports-car-146873_960_720.png",
-          "width": 960
-        },
-        {
-          "@id": "http://localhost:9000/dspace-rdf/canvas/123456789/158317/1/sports-car-146873_960_720.png",
-          "@type": "sc:Canvas",
-          "height": 480,
-          "images": [
-            {
-              "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxNy8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json",
-              "@type": "oa:Annotation",
-              "motivation": "sc:painting",
-              "on": "http://localhost:9000/dspace-rdf/canvas/123456789/158317/1/sports-car-146873_960_720.png",
-              "resource": {
-                "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxNy8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/full/full/0/default.jpg",
-                "@type": "dctypes:Image",
-                "format": "image/png; charset=utf-8",
-                "height": 480,
-                "service": {
-                  "label": "DSpace IIIF Image Resource Service",
-                  "profile": "http://iiif.io/api/image/2/level0.json",
-                  "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxNy8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n"
-                },
-                "width": 960
-              }
-            }
-          ],
-          "label": "1sports-car-146873_960_720.png",
-          "width": 960
-        },
-        {
-          "@id": "http://localhost:9000/dspace-rdf/canvas/123456789/158307/1/sports-car-146873_960_720.png",
-          "@type": "sc:Canvas",
-          "height": 480,
-          "images": [
-            {
-              "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwNy8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json",
-              "@type": "oa:Annotation",
-              "motivation": "sc:painting",
-              "on": "http://localhost:9000/dspace-rdf/canvas/123456789/158307/1/sports-car-146873_960_720.png",
-              "resource": {
-                "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwNy8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/full/full/0/default.jpg",
-                "@type": "dctypes:Image",
-                "format": "image/png; charset=utf-8",
-                "height": 480,
-                "service": {
-                  "label": "DSpace IIIF Image Resource Service",
-                  "profile": "http://iiif.io/api/image/2/level0.json",
-                  "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwNy8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n"
-                },
-                "width": 960
-              }
-            }
-          ],
-          "label": "1sports-car-146873_960_720.png",
-          "width": 960
-        },
-        {
-          "@id": "http://localhost:9000/dspace-rdf/canvas/123456789/158316/1/sports-car-146873_960_720.png",
-          "@type": "sc:Canvas",
-          "height": 480,
-          "images": [
-            {
-              "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxNi8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json",
-              "@type": "oa:Annotation",
-              "motivation": "sc:painting",
-              "on": "http://localhost:9000/dspace-rdf/canvas/123456789/158316/1/sports-car-146873_960_720.png",
-              "resource": {
-                "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxNi8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/full/full/0/default.jpg",
-                "@type": "dctypes:Image",
-                "format": "image/png; charset=utf-8",
-                "height": 480,
-                "service": {
-                  "label": "DSpace IIIF Image Resource Service",
-                  "profile": "http://iiif.io/api/image/2/level0.json",
-                  "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxNi8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n"
-                },
-                "width": 960
-              }
-            }
-          ],
-          "label": "1sports-car-146873_960_720.png",
-          "width": 960
         }
       ],
-      "label": "dspace-rdf:rdf/handle/123456789/158299"
+      "label": "Cool Cars"
     }
   ],
   "thumbnail": {

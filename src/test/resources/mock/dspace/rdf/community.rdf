@@ -7,10 +7,11 @@
 
 <http://localhost:8080/rdf/resource/123456789/158298>
         a                          bibo:Collection ;
-        dspace:hasCollection       <http://localhost:8080/rdf/resource/123456789/158299> , <http://localhost:8080/rdf/resource/123456789/158300> , <http://localhost:8080/rdf/resource/123456789/158302> ;
+        dspace:hasCollection       <http://localhost:8080/rdf/resource/123456789/158299> ;
         dspace:hasSubcommunity     <http://localhost:8080/rdf/resource/123456789/158301> ;
         dspace:isPartOfRepository  <http://localhost:8080/rdf/resource/123456789/0> ;
-        dcterms:hasPart            <http://localhost:8080/rdf/resource/123456789/158300> , <http://localhost:8080/rdf/resource/123456789/158301> , <http://localhost:8080/rdf/resource/123456789/158302> , <http://localhost:8080/rdf/resource/123456789/158299> ;
+        dcterms:hasPart            <http://localhost:8080/rdf/resource/123456789/158299> , <http://localhost:8080/rdf/resource/123456789/158301> ;
         dcterms:isPartOf           <http://localhost:8080/rdf/resource/123456789/0> ;
+        dcterms:title              "Cars" ;
         void:sparqlEndpoint        <http://localhost:8983/dspace/sparql> ;
         foaf:homepage              <http://localhost:8080/xmlui> .

@@ -35,8 +35,6 @@ public class FedoraPcdmPresentationManifestService extends AbstractFedoraPcdmMan
 
         URI id = buildId(parameterizedContext);
 
-        PropertyValueSimpleImpl label = getLabel(rdfResource);
-
         boolean isCollection = isCollection(rdfResource);
 
         if (isCollection) {
@@ -47,9 +45,7 @@ public class FedoraPcdmPresentationManifestService extends AbstractFedoraPcdmMan
             rdfResource = new RdfResource(collectionObjectMemberModel, collectionObjectMemberId);
         }
 
-        Manifest manifest = new ManifestImpl(id, label);
-
-        manifest.setDescription(getDescription(rdfResource));
+        Manifest manifest = new ManifestImpl(id, getLabel(rdfResource));
 
         List<Metadata> metadata = getMetadata(rdfResource);
 
@@ -62,6 +58,11 @@ public class FedoraPcdmPresentationManifestService extends AbstractFedoraPcdmMan
         manifest.setSequences(sequences);
 
         manifest.setLogo(getLogo(rdfResource));
+
+        Optional<PropertyValueSimpleImpl> description = getDescription(rdfResource);
+        if (description.isPresent()) {
+            manifest.setDescription(description.get());
+        }
 
         Optional<Thumbnail> thumbnail = getThumbnail(sequences);
         if (thumbnail.isPresent()) {

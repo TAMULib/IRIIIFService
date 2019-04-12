@@ -11,5 +11,6 @@
         dspace:isSubcommunityOf  <http://localhost:8080/rdf/resource/123456789/158298> ;
         dcterms:hasPart          <http://localhost:8080/rdf/resource/123456789/158302> ;
         dcterms:isPartOf         <http://localhost:8080/rdf/resource/123456789/158298> ;
+        dcterms:title              "Fast Cars" ;
         void:sparqlEndpoint      <http://localhost:8983/dspace/sparql> ;
         foaf:homepage            <http://localhost:8080/xmlui> .

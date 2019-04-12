@@ -303,18 +303,15 @@ public abstract class AbstractManifestService implements ManifestService {
         return redisResourceRepo.getOrCreate(url).getId();
     }
 
-    protected PropertyValueSimpleImpl getDescription(RdfResource rdfResource) {
+    protected Optional<PropertyValueSimpleImpl> getDescription(RdfResource rdfResource) {
         Optional<String> description = Optional.empty();
         for (String descriptionPredicate : getDescriptionPrecedence()) {
             description = getObject(rdfResource, descriptionPredicate);
             if (description.isPresent()) {
-                break;
+                return Optional.of(new PropertyValueSimpleImpl(description.get()));
             }
         }
-        if (!description.isPresent()) {
-            description = Optional.of("");
-        }
-        return new PropertyValueSimpleImpl(description.get());
+        return Optional.empty();
     }
 
     protected PropertyValueSimpleImpl getLabel(RdfResource rdfResource) {
@@ -322,14 +319,11 @@ public abstract class AbstractManifestService implements ManifestService {
         for (String labelPredicate : getLabelPrecedence()) {
             title = getObject(rdfResource, labelPredicate);
             if (title.isPresent()) {
-                break;
+                return new PropertyValueSimpleImpl(title.get());
             }
         }
-        if (!title.isPresent()) {
-            String id = rdfResource.getResource().getURI();
-            title = Optional.of(getRepositoryContextIdentifier(id));
-        }
-        return new PropertyValueSimpleImpl(title.get());
+        String id = rdfResource.getResource().getURI();
+        return new PropertyValueSimpleImpl(getRepositoryContextIdentifier(id));
     }
 
     protected List<Metadata> getMetadata(RdfResource rdfResource) {

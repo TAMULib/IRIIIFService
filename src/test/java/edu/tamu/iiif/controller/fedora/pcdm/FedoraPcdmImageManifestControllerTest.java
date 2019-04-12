@@ -25,7 +25,7 @@ public class FedoraPcdmImageManifestControllerTest extends AbstractManifestContr
     @MockBean
     private FedoraPcdmImageManifestService fedoraPcdmImageManifestService;
 
-    @Value("classpath:mock/fedora/json/image0.json")
+    @Value("classpath:mock/fedora/json/image.json")
     private Resource image0;
 
     @Test

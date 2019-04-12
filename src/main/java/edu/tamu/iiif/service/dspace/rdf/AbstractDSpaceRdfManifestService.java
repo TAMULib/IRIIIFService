@@ -10,7 +10,7 @@ import static edu.tamu.iiif.constants.Constants.DSPACE_IS_SUB_COMMUNITY_OF_PREDI
 import static edu.tamu.iiif.constants.Constants.DSPACE_RDF_CONDITION;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
-import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
+import static edu.tamu.iiif.utility.RdfModelUtility.getObject;
 import static edu.tamu.iiif.utility.StringUtility.encodeSpaces;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
@@ -63,30 +63,26 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         String uri = rdfResource.getResource().getURI();
         PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getBitstreamPath(uri));
         String parameterizedUri = RdfModelUtility.getParameterizedId(uri, request);
-
         RdfCanvas rdfCanvas = getDSpaceRdfCanvas(request, rdfResource);
-
         Canvas canvas = new CanvasImpl(getDSpaceIiifCanvasUri(getHandlePath(parameterizedUri)), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
-
         canvas.setImages(rdfCanvas.getImages());
-
         return canvas;
     }
 
     protected boolean isTopLevelCommunity(Model model) {
-        return getIdByPredicate(model, DSPACE_IS_PART_OF_REPOSITORY_PREDICATE).isPresent();
+        return getObject(model, DSPACE_IS_PART_OF_REPOSITORY_PREDICATE).isPresent();
     }
 
     protected boolean isSubcommunity(Model model) {
-        return getIdByPredicate(model, DSPACE_IS_SUB_COMMUNITY_OF_PREDICATE).isPresent();
+        return getObject(model, DSPACE_IS_SUB_COMMUNITY_OF_PREDICATE).isPresent();
     }
 
     protected boolean isCollection(Model model) {
-        return getIdByPredicate(model, DSPACE_IS_PART_OF_COMMUNITY_PREDICATE).isPresent();
+        return getObject(model, DSPACE_IS_PART_OF_COMMUNITY_PREDICATE).isPresent();
     }
 
     protected boolean isItem(Model model) {
-        return getIdByPredicate(model, DSPACE_IS_PART_OF_COLLECTION_PREDICATE).isPresent();
+        return getObject(model, DSPACE_IS_PART_OF_COLLECTION_PREDICATE).isPresent();
     }
 
     protected URI getDSpaceIiifCollectionUri(String handle) throws URISyntaxException {

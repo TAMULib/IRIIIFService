@@ -7,9 +7,10 @@
 
 <http://localhost:8080/rdf/resource/123456789/158299>
         a                         bibo:Collection ;
-        dspace:hasItem            <http://localhost:8080/rdf/resource/123456789/158308> , <http://localhost:8080/rdf/resource/123456789/158316> , <http://localhost:8080/rdf/resource/123456789/158317> , <http://localhost:8080/rdf/resource/123456789/158310> , <http://localhost:8080/rdf/resource/123456789/158307> , <http://localhost:8080/rdf/resource/123456789/158313> , <http://localhost:8080/rdf/resource/123456789/158312> ;
+        dspace:hasItem            <http://localhost:8080/rdf/resource/123456789/158308> ;
         dspace:isPartOfCommunity  <http://localhost:8080/rdf/resource/123456789/158298> ;
-        dcterms:hasPart           <http://localhost:8080/rdf/resource/123456789/158317> , <http://localhost:8080/rdf/resource/123456789/158310> , <http://localhost:8080/rdf/resource/123456789/158313> , <http://localhost:8080/rdf/resource/123456789/158316> , <http://localhost:8080/rdf/resource/123456789/158312> , <http://localhost:8080/rdf/resource/123456789/158307> , <http://localhost:8080/rdf/resource/123456789/158308> ;
+        dcterms:hasPart           <http://localhost:8080/rdf/resource/123456789/158308> ;
         dcterms:isPartOf          <http://localhost:8080/rdf/resource/123456789/158298> ;
+        dcterms:title              "Cool Cars" ;
         void:sparqlEndpoint       <http://localhost:8983/dspace/sparql> ;
         foaf:homepage             <http://localhost:8080/xmlui> .

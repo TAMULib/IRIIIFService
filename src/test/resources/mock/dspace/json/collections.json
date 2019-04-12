@@ -6,23 +6,22 @@
     {
       "@id": "http://localhost:9000/dspace-rdf/collection/123456789/158301",
       "@type": "sc:Collection",
-      "label": "123456789/158301"
+      "label": "Fast Cars"
     },
     {
       "@id": "http://localhost:9000/dspace-rdf/collection/123456789/158299",
       "@type": "sc:Collection",
-      "label": "123456789/158299"
-    },
-    {
-      "@id": "http://localhost:9000/dspace-rdf/collection/123456789/158300",
-      "@type": "sc:Collection",
-      "label": "123456789/158300"
+      "label": "Cool Cars"
     }
   ],
-  "description": "",
-  "label": "dspace-rdf:rdf/handle/123456789/158298",
+  "label": "Cars",
   "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "manifests": [],
-  "metadata": [],
+  "metadata": [
+    {
+      "label": "title",
+      "value": "Cars"
+    }
+  ],
   "viewingHint": "multi-part"
 }

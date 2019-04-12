@@ -23,8 +23,8 @@ public class FedoraPcdmImageManifestServiceTest extends AbstractFedoraPcdmManife
     @InjectMocks
     private FedoraPcdmImageManifestService fedoraPcdmImageManifestService;
 
-    @Value("classpath:mock/fedora/json/image0.json")
-    private Resource image0;
+    @Value("classpath:mock/fedora/json/image.json")
+    private Resource image;
 
     @Before
     public void setup() {
@@ -33,9 +33,9 @@ public class FedoraPcdmImageManifestServiceTest extends AbstractFedoraPcdmManife
 
     @Test
     public void testGetManifest() throws IOException, URISyntaxException {
-        when(httpService.get(any(String.class))).thenReturn(readFileToString(image0.getFile(), "UTF-8"));
+        when(httpService.get(any(String.class))).thenReturn(readFileToString(image.getFile(), "UTF-8"));
         String manifest = fedoraPcdmImageManifestService.getManifest(ManifestRequest.of("mwbObjects/TGWCatalog/Pages/ExCat0084/files/ExCat0084.jpg", false));
-        assertEquals(objectMapper.readValue(image0.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
+        assertEquals(objectMapper.readValue(image.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
 }

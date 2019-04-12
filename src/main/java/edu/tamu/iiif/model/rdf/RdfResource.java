@@ -65,10 +65,6 @@ public class RdfResource {
         return resource.getProperty(getProperty(id));
     }
 
-    public StmtIterator getStatementsOfPropertyWithId(String id) {
-        return resource.listProperties(getProperty(id));
-    }
-
     public NodeIterator getAllNodesOfPropertyWithId(String id) {
         return model.listObjectsOfProperty(getProperty(id));
     }
@@ -81,8 +77,8 @@ public class RdfResource {
         return model.listResourcesWithProperty(getProperty(id));
     }
 
-    public boolean containsStatement(String propertyId, String value) {
-        StmtIterator stmtItr = getStatementsOfPropertyWithId(propertyId);
+    public boolean containsStatement(String uri, String value) {
+        StmtIterator stmtItr = resource.listProperties(getProperty(uri));
         while (stmtItr.hasNext()) {
             Statement stmnt = stmtItr.next();
             if (stmnt.getResource().toString().equals(value)) {

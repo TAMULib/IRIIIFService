@@ -2,8 +2,7 @@
   "@context": "http://iiif.io/api/presentation/2/context.json",
   "@id": "http://localhost:9000/dspace-rdf/presentation/123456789/158308",
   "@type": "sc:Manifest",
-  "description": "",
-  "label": "dspace-rdf:rdf/handle/123456789/158308",
+  "label": "Corvette",
   "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "metadata": [
     {
@@ -53,7 +52,7 @@
           "width": 960
         }
       ],
-      "label": "dspace-rdf:rdf/handle/123456789/158308"
+      "label": "Corvette"
     }
   ],
   "thumbnail": {

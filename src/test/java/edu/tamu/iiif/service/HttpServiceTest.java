@@ -49,7 +49,7 @@ public class HttpServiceTest {
     @InjectMocks
     private HttpService httpService;
 
-    @Value("classpath:mock/fedora/json/image0.json")
+    @Value("classpath:mock/fedora/json/image.json")
     private Resource image0;
 
     @Value("classpath:mock/fedora/rdf/pcdm_collection_container.rdf")
