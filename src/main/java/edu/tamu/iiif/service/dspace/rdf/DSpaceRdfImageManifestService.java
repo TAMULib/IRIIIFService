@@ -17,7 +17,7 @@ public class DSpaceRdfImageManifestService extends AbstractDSpaceRdfManifestServ
 
     public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
         String context = request.getContext();
-        String dspacePath = dspaceWebapp != null && dspaceWebapp.length() > 0 ? joinPath(dspaceUrl, dspaceWebapp, "bitstream", context) : joinPath(dspaceUrl, "bitstream", context);
+        String dspacePath = config.getWebapp() != null && config.getWebapp().length() > 0 ? joinPath(config.getUrl(), config.getWebapp(), "bitstream", context) : joinPath(config.getUrl(), "bitstream", context);
         URI uri = getImageUri(dspacePath);
         return fetchImageInfo(uri.toString());
     }

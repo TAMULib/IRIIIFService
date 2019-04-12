@@ -2,9 +2,6 @@ package edu.tamu.iiif.service.fedora.pcdm;
 
 import static edu.tamu.iiif.constants.Constants.CANVAS_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.COLLECTION_IDENTIFIER;
-import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_DESCRIPTION_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_IDENTIFIER_PREDICATE;
-import static edu.tamu.iiif.constants.Constants.DUBLIN_CORE_TITLE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.FEDORA_FCR_METADATA;
 import static edu.tamu.iiif.constants.Constants.FEDORA_PCDM_CONDITION;
 import static edu.tamu.iiif.constants.Constants.IANA_FIRST_PREDICATE;
@@ -18,10 +15,8 @@ import static edu.tamu.iiif.constants.Constants.PCDM_FILE;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_FILE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_MEMBER_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
-import static edu.tamu.iiif.constants.Constants.RDFS_LABEL_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.RDF_TYPE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
-import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
 import static edu.tamu.iiif.utility.RdfModelUtility.getObject;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
@@ -39,7 +34,7 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -47,10 +42,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import de.digitalcollections.iiif.presentation.model.api.v2.Image;
 import de.digitalcollections.iiif.presentation.model.api.v2.ImageResource;
+import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
 import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
 import de.digitalcollections.iiif.presentation.model.impl.v2.CanvasImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
+import edu.tamu.iiif.config.FedoraPcdmIiifConfig;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
@@ -62,11 +59,8 @@ import edu.tamu.iiif.utility.RdfModelUtility;
 @ConditionalOnExpression(FEDORA_PCDM_CONDITION)
 public abstract class AbstractFedoraPcdmManifestService extends AbstractManifestService {
 
-    @Value("${iiif.fedora.url}")
-    protected String fedoraUrl;
-
-    @Value("${iiif.fedora.identifier.fedora-pcdm}")
-    protected String fedoraPcdmIdentifier;
+    @Autowired
+    protected FedoraPcdmIiifConfig config;
 
     protected Sequence generateSequence(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         String parameterizedId = RdfModelUtility.getParameterizedId(rdfResource.getResource().getURI(), request);
@@ -86,32 +80,13 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
         canvas.setImages(rdfCanvas.getImages());
 
-        canvas.setMetadata(getMetadata(rdfResource));
+        List<Metadata> metadata = getMetadata(rdfResource);
+
+        if (!metadata.isEmpty()) {
+            canvas.setMetadata(metadata);
+        }
 
         return canvas;
-    }
-
-    protected PropertyValueSimpleImpl getLabel(RdfResource rdfResource) {
-        Optional<String> title = getObject(rdfResource, RDFS_LABEL_PREDICATE);
-        if (!title.isPresent()) {
-            title = getObject(rdfResource, DUBLIN_CORE_TITLE_PREDICATE);
-        }
-        if (!title.isPresent()) {
-            title = getObject(rdfResource, DUBLIN_CORE_IDENTIFIER_PREDICATE);
-        }
-        if (!title.isPresent()) {
-            String id = rdfResource.getResource().getURI();
-            title = Optional.of(getRepositoryContextIdentifier(id));
-        }
-        return new PropertyValueSimpleImpl(title.get());
-    }
-
-    protected PropertyValueSimpleImpl getDescription(RdfResource rdfResource) {
-        Optional<String> description = getObject(rdfResource, DUBLIN_CORE_DESCRIPTION_PREDICATE);
-        if (!description.isPresent()) {
-            description = Optional.of("No description available!");
-        }
-        return new PropertyValueSimpleImpl(description.get());
     }
 
     protected URI getFedoraIiifCollectionUri(String url) throws URISyntaxException {
@@ -180,41 +155,56 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
     @Override
     protected String getIiifServiceUrl() {
-        return iiifServiceUrl + "/" + fedoraPcdmIdentifier;
+        return iiifServiceUrl + "/" + config.getIdentifier();
     }
 
     @Override
     protected String getRepositoryContextIdentifier(String url) {
-        return fedoraPcdmIdentifier + ":" + getRepositoryPath(url);
+        return config.getIdentifier() + ":" + getRepositoryPath(url);
     }
 
     @Override
     protected String getRepositoryPath(String url) {
-        return url.substring(fedoraUrl.length() + 1);
+        return url.substring(config.getUrl().length() + 1);
     }
 
     @Override
     protected String getRepositoryType() {
-        return fedoraPcdmIdentifier;
+        return config.getIdentifier();
     }
 
     @Override
     protected String getRdfUrl(String path) {
-        return joinPath(fedoraUrl, path);
+        return joinPath(config.getUrl(), path);
+    }
+
+    @Override
+    protected List<String> getLabelPrecedence() {
+        return config.getLabelPrecedence();
+    }
+
+    @Override
+    protected List<String> getDescriptionPrecedence() {
+        return config.getDescriptionPrecedence();
+    }
+
+    @Override
+    protected List<String> getMetadataPrefixes() {
+        return config.getMetadataPrefixes();
     }
 
     // TODO: update to match getDSpaceIiifUrl
     private URI getFedoraIiifUri(String url, String type) throws URISyntaxException {
-        return URI.create(url.replace(fedoraUrl + "/", getIiifServiceUrl() + "/" + type + "/"));
+        return URI.create(url.replace(config.getUrl() + "/", getIiifServiceUrl() + "/" + type + "/"));
     }
 
     private List<Canvas> getCanvases(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         List<Canvas> canvases = new ArrayList<Canvas>();
 
-        Optional<String> firstId = getIdByPredicate(rdfResource.getModel(), IANA_FIRST_PREDICATE);
+        Optional<String> firstId = getObject(rdfResource.getModel(), IANA_FIRST_PREDICATE);
 
         if (firstId.isPresent()) {
-            Optional<String> lastId = getIdByPredicate(rdfResource.getModel(), IANA_LAST_PREDICATE);
+            Optional<String> lastId = getObject(rdfResource.getModel(), IANA_LAST_PREDICATE);
 
             if (lastId.isPresent()) {
                 Resource firstResource = rdfResource.getModel().getResource(firstId.get());
@@ -244,10 +234,10 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
 
         Model model = getFedoraRdfModel(rdfOrderedSequence.getResource().getURI());
 
-        Optional<String> id = getIdByPredicate(model, ORE_PROXY_FOR_PREDICATE);
+        Optional<String> id = getObject(model, ORE_PROXY_FOR_PREDICATE);
 
         if (!id.isPresent()) {
-            id = getIdByPredicate(model, ORE_PROXY_FOR_PREDICATE.replace("#", "/"));
+            id = getObject(model, ORE_PROXY_FOR_PREDICATE.replace("#", "/"));
         }
 
         if (id.isPresent()) {
@@ -259,7 +249,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
                 canvases.add(canvas);
             }
 
-            Optional<String> nextId = getIdByPredicate(model, IANA_NEXT_PREDICATE);
+            Optional<String> nextId = getObject(model, IANA_NEXT_PREDICATE);
 
             if (nextId.isPresent()) {
                 Resource resource = rdfOrderedSequence.getModel().getResource(nextId.get());

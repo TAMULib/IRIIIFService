@@ -7,7 +7,7 @@ import static edu.tamu.iiif.constants.Constants.ORE_PROXY_FOR_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_FILE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_MEMBER_PREDICATE;
 import static edu.tamu.iiif.model.ManifestType.COLLECTION;
-import static edu.tamu.iiif.utility.RdfModelUtility.getIdByPredicate;
+import static edu.tamu.iiif.utility.RdfModelUtility.getObject;
 
 import java.io.IOException;
 import java.net.URI;
@@ -55,7 +55,9 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
 
         URI id = buildId(parameterizedContext);
 
-        PropertyValueSimpleImpl label = getLabel(rdfResource);
+        List<Metadata> metadata = getMetadata(rdfResource);
+
+        Collection collection = new CollectionImpl(id, getLabel(rdfResource), metadata);
 
         boolean isCollection = isCollection(rdfResource);
 
@@ -72,23 +74,93 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             rdfResource = new RdfResource(collectionObjectMemberModel, collectionObjectMemberId);
         }
 
-        List<Metadata> metadata = getMetadata(rdfResource);
-
-        Collection collection = new CollectionImpl(id, label, metadata);
+        collection.setManifests(getResourceManifests(request, rdfResource, isCollection));
 
         if (!collections.isEmpty()) {
             collection.setSubCollections(collections);
         }
 
-        collection.setManifests(getResourceManifests(request, rdfResource, isCollection));
-
-        collection.setDescription(getDescription(rdfResource));
+        Optional<PropertyValueSimpleImpl> description = getDescription(rdfResource);
+        if (description.isPresent()) {
+            collection.setDescription(description.get());
+        }
 
         collection.setLogo(getLogo(rdfResource));
 
         collection.setViewingHint("multi-part");
 
         return collection;
+    }
+
+    private List<ManifestReference> getResourceManifests(ManifestRequest request, RdfResource rdfResource, boolean isCollection) throws URISyntaxException, IOException {
+        List<ManifestReference> manifests = new ArrayList<ManifestReference>();
+        if (isCollection) {
+            manifests.addAll(gatherResourceManifests(request, rdfResource));
+        } else {
+            NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(PCDM_HAS_MEMBER_PREDICATE);
+            while (nodes.hasNext()) {
+                RDFNode node = nodes.next();
+                String parameterizedId = RdfModelUtility.getParameterizedId(node.toString(), request);
+                PropertyValueSimpleImpl label = getLabel(new RdfResource(rdfResource, node.toString()));
+                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedId), label));
+            }
+        }
+        if (manifests.isEmpty()) {
+            ResIterator resources = rdfResource.listResourcesWithPropertyWithId(PCDM_HAS_FILE_PREDICATE);
+            while (resources.hasNext()) {
+                Resource resource = resources.next();
+                String parameterizedId = RdfModelUtility.getParameterizedId(resource.getURI(), request);
+                PropertyValueSimpleImpl label = getLabel(new RdfResource(resource.getModel(), resource));
+                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedId), label));
+            }
+        }
+        return manifests;
+    }
+
+    private List<ManifestReference> gatherResourceManifests(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException, IOException {
+        List<ManifestReference> manifests = new ArrayList<ManifestReference>();
+
+        Optional<String> firstId = getObject(rdfResource.getModel(), IANA_FIRST_PREDICATE);
+
+        if (firstId.isPresent()) {
+            Optional<String> lastId = getObject(rdfResource.getModel(), IANA_LAST_PREDICATE);
+
+            if (lastId.isPresent()) {
+                Resource firstResource = rdfResource.getModel().getResource(firstId.get());
+                gatherResourceManifests(request, new RdfOrderedResource(rdfResource.getModel(), firstResource, firstId.get(), lastId.get()), manifests);
+            }
+        }
+
+        return manifests;
+    }
+
+    private void gatherResourceManifests(ManifestRequest request, RdfOrderedResource rdfOrderedResource, List<ManifestReference> manifests) throws IOException, URISyntaxException {
+
+        Model model = getFedoraRdfModel(rdfOrderedResource.getResource().getURI());
+
+        Optional<String> id = getObject(model, ORE_PROXY_FOR_PREDICATE);
+
+        if (!id.isPresent()) {
+            id = getObject(model, ORE_PROXY_FOR_PREDICATE.replace("#", "/"));
+        }
+
+        if (id.isPresent()) {
+
+            String parameterizedActualId = RdfModelUtility.getParameterizedId(id.get(), request);
+
+            PropertyValueSimpleImpl label = getLabel(rdfOrderedResource);
+            manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedActualId), label));
+
+            Optional<String> nextId = getObject(model, IANA_NEXT_PREDICATE);
+
+            if (nextId.isPresent()) {
+                Resource resource = rdfOrderedResource.getModel().getResource(nextId.get());
+                rdfOrderedResource.setResource(resource);
+                rdfOrderedResource.setCurrentId(nextId.get());
+                gatherResourceManifests(request, rdfOrderedResource, manifests);
+            }
+        }
+
     }
 
     private List<CollectionReference> getSubcollections(RdfResource rdfResource) throws URISyntaxException, NotFoundException {
@@ -105,80 +177,6 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             }
         }
         return subcollections;
-    }
-
-    private List<ManifestReference> getResourceManifests(ManifestRequest request, RdfResource rdfResource, boolean isCollection) throws URISyntaxException, IOException {
-        List<ManifestReference> manifests = new ArrayList<ManifestReference>();
-
-        if (isCollection) {
-            manifests.addAll(gatherResourceManifests(request, rdfResource));
-        } else {
-            NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(PCDM_HAS_MEMBER_PREDICATE);
-            while (nodes.hasNext()) {
-                RDFNode node = nodes.next();
-                String parameterizedId = RdfModelUtility.getParameterizedId(node.toString(), request);
-                PropertyValueSimpleImpl label = getLabel(new RdfResource(rdfResource, node.toString()));
-                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedId), label));
-            }
-        }
-
-        if (manifests.isEmpty()) {
-            ResIterator resources = rdfResource.listResourcesWithPropertyWithId(PCDM_HAS_FILE_PREDICATE);
-            while (resources.hasNext()) {
-                Resource resource = resources.next();
-                String parameterizedId = RdfModelUtility.getParameterizedId(resource.getURI(), request);
-                PropertyValueSimpleImpl label = getLabel(new RdfResource(resource.getModel(), resource));
-                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedId), label));
-            }
-        }
-
-        return manifests;
-    }
-
-    private List<ManifestReference> gatherResourceManifests(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException, IOException {
-        List<ManifestReference> manifests = new ArrayList<ManifestReference>();
-
-        Optional<String> firstId = getIdByPredicate(rdfResource.getModel(), IANA_FIRST_PREDICATE);
-
-        if (firstId.isPresent()) {
-            Optional<String> lastId = getIdByPredicate(rdfResource.getModel(), IANA_LAST_PREDICATE);
-
-            if (lastId.isPresent()) {
-                Resource firstResource = rdfResource.getModel().getResource(firstId.get());
-                gatherResourceManifests(request, new RdfOrderedResource(rdfResource.getModel(), firstResource, firstId.get(), lastId.get()), manifests);
-            }
-        }
-
-        return manifests;
-    }
-
-    private void gatherResourceManifests(ManifestRequest request, RdfOrderedResource rdfOrderedResource, List<ManifestReference> manifests) throws IOException, URISyntaxException {
-
-        Model model = getFedoraRdfModel(rdfOrderedResource.getResource().getURI());
-
-        Optional<String> id = getIdByPredicate(model, ORE_PROXY_FOR_PREDICATE);
-
-        if (!id.isPresent()) {
-            id = getIdByPredicate(model, ORE_PROXY_FOR_PREDICATE.replace("#", "/"));
-        }
-
-        if (id.isPresent()) {
-
-            String parameterizedActualId = RdfModelUtility.getParameterizedId(id.get(), request);
-
-            PropertyValueSimpleImpl label = getLabel(rdfOrderedResource);
-            manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedActualId), label));
-
-            Optional<String> nextId = getIdByPredicate(model, IANA_NEXT_PREDICATE);
-
-            if (nextId.isPresent()) {
-                Resource resource = rdfOrderedResource.getModel().getResource(nextId.get());
-                rdfOrderedResource.setResource(resource);
-                rdfOrderedResource.setCurrentId(nextId.get());
-                gatherResourceManifests(request, rdfOrderedResource, manifests);
-            }
-        }
-
     }
 
     @Override

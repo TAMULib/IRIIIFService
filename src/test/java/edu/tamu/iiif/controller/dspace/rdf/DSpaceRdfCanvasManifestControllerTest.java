@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.RequestBuilder;
 
 import edu.tamu.iiif.controller.AbstractManifestControllerTest;
 import edu.tamu.iiif.controller.ManifestRequest;
-import edu.tamu.iiif.controller.dspace.rdf.DSpaceRdfCanvasManifestController;
 import edu.tamu.iiif.service.dspace.rdf.DSpaceRdfCanvasManifestService;
 
 @WebMvcTest(value = DSpaceRdfCanvasManifestController.class, secure = false)
@@ -33,7 +32,7 @@ public class DSpaceRdfCanvasManifestControllerTest extends AbstractManifestContr
     public void testGetManifest() throws Exception {
         String expected = readFileToString(json.getFile(), "UTF-8");
         when(dspaceRdfCanvasManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
-        RequestBuilder requestBuilder = get("/" + dspaceRdfIdentifier + "/canvas/123456789/158308/1/sports-car-146873_960_720.png").accept(APPLICATION_JSON);
+        RequestBuilder requestBuilder = get("/dspace/canvas/123456789/158308/1/sports-car-146873_960_720.png").accept(APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         assertEquals(expected, result.getResponse().getContentAsString());
     }

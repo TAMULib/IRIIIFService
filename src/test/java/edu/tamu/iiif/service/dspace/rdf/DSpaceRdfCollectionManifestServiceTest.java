@@ -35,6 +35,9 @@ public class DSpaceRdfCollectionManifestServiceTest extends AbstractDSpaceRdfMan
     @Value("classpath:mock/dspace/json/collection.json")
     private Resource collection;
 
+    @Value("classpath:mock/dspace/rdf/item.rdf")
+    private Resource itemRdf;
+
     @Value("classpath:mock/dspace/json/collections.json")
     private Resource collections;
 
@@ -47,7 +50,10 @@ public class DSpaceRdfCollectionManifestServiceTest extends AbstractDSpaceRdfMan
     public void testGetManifest() throws IOException, URISyntaxException {
         when(httpService.get(eq(DSPACE_URL + "/rdf/handle/123456789/158299"))).thenReturn(readFileToString(collectionRdf.getFile(), "UTF-8"));
         when(httpService.get(eq(DSPACE_URL + "/rdf/handle/123456789/158301"))).thenReturn(readFileToString(subcommunityRdf.getFile(), "UTF-8"));
+        when(httpService.get(eq(DSPACE_URL + "/rdf/handle/123456789/158302"))).thenReturn(readFileToString(communityRdf.getFile(), "UTF-8"));
         when(httpService.get(eq(DSPACE_URL + "/rdf/handle/123456789/158298"))).thenReturn(readFileToString(communityRdf.getFile(), "UTF-8"));
+        when(httpService.get(eq(DSPACE_URL + "/rdf/handle/123456789/158308"))).thenReturn(readFileToString(itemRdf.getFile(), "UTF-8"));
+
         String collectionManifest = dspaceRdfCollectionManifestService.getManifest(ManifestRequest.of("123456789/158299", false));
 
         assertEquals(objectMapper.readValue(collection.getFile(), JsonNode.class), objectMapper.readValue(collectionManifest, JsonNode.class));

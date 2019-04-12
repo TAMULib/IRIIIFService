@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.RequestBuilder;
 
 import edu.tamu.iiif.controller.AbstractManifestControllerTest;
 import edu.tamu.iiif.controller.ManifestRequest;
-import edu.tamu.iiif.controller.dspace.rdf.DSpaceRdfSequenceManifestController;
 import edu.tamu.iiif.service.dspace.rdf.DSpaceRdfSequenceManifestService;
 
 @WebMvcTest(value = DSpaceRdfSequenceManifestController.class, secure = false)
@@ -33,7 +32,7 @@ public class DSpaceRdfSequenceManifestControllerTest extends AbstractManifestCon
     public void testGetManifest() throws Exception {
         String expected = readFileToString(json.getFile(), "UTF-8");
         when(dspaceRdfSequenceManifestService.getManifest(any(ManifestRequest.class))).thenReturn(expected);
-        RequestBuilder requestBuilder = get("/" + dspaceRdfIdentifier + "/sequence/123456789/158308").accept(APPLICATION_JSON);
+        RequestBuilder requestBuilder = get("/dspace/sequence/123456789/158308").accept(APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         assertEquals(expected, result.getResponse().getContentAsString());
     }

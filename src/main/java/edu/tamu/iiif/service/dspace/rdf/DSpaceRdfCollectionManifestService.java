@@ -11,6 +11,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.jena.rdf.model.NodeIterator;
 import org.springframework.stereotype.Service;
@@ -46,20 +47,21 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
 
         URI id = buildId(parameterizedContext);
 
-        PropertyValueSimpleImpl label = getTitle(rdfResource);
-
         List<Metadata> metadata = getMetadata(rdfResource);
 
-        Collection collection = new CollectionImpl(id, label, metadata);
+        Collection collection = new CollectionImpl(id, getLabel(rdfResource), metadata);
+
+        collection.setManifests(getResourceManifests(request, rdfResource));
 
         List<CollectionReference> collections = getSubcollections(request, rdfResource);
         if (!collections.isEmpty()) {
             collection.setSubCollections(collections);
         }
 
-        collection.setManifests(getResourceManifests(request, rdfResource));
-
-        collection.setDescription(getDescription(rdfResource));
+        Optional<PropertyValueSimpleImpl> description = getDescription(rdfResource);
+        if (description.isPresent()) {
+            collection.setDescription(description.get());
+        }
 
         collection.setLogo(getLogo(rdfResource));
 
@@ -68,13 +70,32 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
         return collection;
     }
 
+    private List<ManifestReference> getResourceManifests(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException, NotFoundException {
+        List<ManifestReference> manifests = new ArrayList<ManifestReference>();
+        if (isItem(rdfResource.getModel())) {
+            NodeIterator hasBitstreamIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_BITSTREAM_PREDICATE);
+            while (hasBitstreamIterator.hasNext()) {
+                String hasBitstreamHandlePath = getHandlePath(hasBitstreamIterator.next().toString());
+                String parameterizedHasBitstreamHandlePath = RdfModelUtility.getParameterizedId(hasBitstreamHandlePath, request);
+                RdfResource hasBitstreamRdfResource = getRdfResource(hasBitstreamHandlePath);
+                manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(parameterizedHasBitstreamHandlePath), getLabel(hasBitstreamRdfResource)));
+            }
+        } else {
+            NodeIterator hasItemIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_ITEM_PREDICATE);
+            while (hasItemIterator.hasNext()) {
+                String hasItemHandle = getHandle(hasItemIterator.next().toString());
+                String parameterizedHasItemHandle = RdfModelUtility.getParameterizedId(hasItemHandle, request);
+                RdfResource hasItemRdfResource = getRdfResource(hasItemHandle);
+                manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(parameterizedHasItemHandle), getLabel(hasItemRdfResource)));
+            }
+        }
+        return manifests;
+    }
+
     private List<CollectionReference> getSubcollections(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException, NotFoundException {
-        List<CollectionReference> subcollections = getSubcommunities(rdfResource);
-
+        List<CollectionReference> collectionsToElide = new ArrayList<CollectionReference>();
+        List<CollectionReference> subcollections = getSubcommunities(rdfResource, collectionsToElide);
         List<CollectionReference> collections = getCollections(rdfResource);
-
-        List<CollectionReference> collectionsToElide = getCollectionsToElide(rdfResource);
-
         collections.forEach(c -> {
             boolean include = true;
             for (CollectionReference ce : collectionsToElide) {
@@ -87,63 +108,30 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
                 subcollections.add(c);
             }
         });
-
         return subcollections;
     }
 
-    private List<CollectionReference> getSubcommunities(RdfResource rdfResource) throws URISyntaxException {
+    private List<CollectionReference> getSubcommunities(RdfResource rdfResource, List<CollectionReference> collectionsToElide) throws URISyntaxException, NotFoundException {
         List<CollectionReference> subcommunities = new ArrayList<CollectionReference>();
         NodeIterator subcommunityIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_SUB_COMMUNITY_PREDICATE);
         while (subcommunityIterator.hasNext()) {
-            String uri = subcommunityIterator.next().toString();
-            String handle = getHandle(uri);
-            subcommunities.add(new CollectionReferenceImpl(getDSpaceIiifCollectionUri(handle), new PropertyValueSimpleImpl(handle)));
+            String subcommunityHandle = getHandle(subcommunityIterator.next().toString());
+            RdfResource subcommunityRdfResource = getRdfResource(subcommunityHandle);
+            collectionsToElide.addAll(getCollections(subcommunityRdfResource));
+            subcommunities.add(new CollectionReferenceImpl(getDSpaceIiifCollectionUri(subcommunityHandle), getLabel(subcommunityRdfResource)));
         }
         return subcommunities;
     }
 
-    private List<CollectionReference> getCollections(RdfResource rdfResource) throws URISyntaxException {
+    private List<CollectionReference> getCollections(RdfResource rdfResource) throws URISyntaxException, NotFoundException {
         List<CollectionReference> collections = new ArrayList<CollectionReference>();
         NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_COLLECTION_PREDICATE);
         while (collectionIterator.hasNext()) {
-            String uri = collectionIterator.next().toString();
-            String handle = getHandle(uri);
-            collections.add(new CollectionReferenceImpl(getDSpaceIiifCollectionUri(handle), new PropertyValueSimpleImpl(handle)));
+            String collectionHandle = getHandle(collectionIterator.next().toString());
+            RdfResource collectionRdfResource = getRdfResource(collectionHandle);
+            collections.add(new CollectionReferenceImpl(getDSpaceIiifCollectionUri(collectionHandle), getLabel(collectionRdfResource)));
         }
         return collections;
-    }
-
-    private List<CollectionReference> getCollectionsToElide(RdfResource rdfResource) throws URISyntaxException, NotFoundException {
-        List<CollectionReference> collectionsToElide = new ArrayList<CollectionReference>();
-        for (CollectionReference subcommunity : getSubcommunities(rdfResource)) {
-            String handle = subcommunity.getLabel().getFirstValue();
-            RdfResource subcommunityRdfResource = getRdfResource(handle);
-            collectionsToElide.addAll(getCollections(subcommunityRdfResource));
-        }
-        return collectionsToElide;
-    }
-
-    private List<ManifestReference> getResourceManifests(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException {
-        List<ManifestReference> manifests = new ArrayList<ManifestReference>();
-        if (isItem(rdfResource.getModel())) {
-            String uri = rdfResource.getResource().getURI();
-            String handle = getHandle(uri);
-            NodeIterator bitstreamIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_BITSTREAM_PREDICATE);
-            while (bitstreamIterator.hasNext()) {
-                String bitstreamHandlePath = getHandlePath(bitstreamIterator.next().toString());
-                String parameterizedBitstreamHandlePath = RdfModelUtility.getParameterizedId(bitstreamHandlePath, request);
-                manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(parameterizedBitstreamHandlePath), new PropertyValueSimpleImpl(handle)));
-            }
-        } else {
-            NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_ITEM_PREDICATE);
-            while (collectionIterator.hasNext()) {
-                String uri = collectionIterator.next().toString();
-                String handle = getHandle(uri);
-                String parameterizedHandle = RdfModelUtility.getParameterizedId(handle, request);
-                manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(parameterizedHandle), new PropertyValueSimpleImpl(handle)));
-            }
-        }
-        return manifests;
     }
 
     @Override

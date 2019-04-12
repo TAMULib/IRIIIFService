@@ -13,6 +13,7 @@ import org.apache.jena.rdf.model.Model;
 import org.springframework.stereotype.Service;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Manifest;
+import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
 import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
 import de.digitalcollections.iiif.presentation.model.api.v2.Thumbnail;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ManifestImpl;
@@ -34,8 +35,6 @@ public class FedoraPcdmPresentationManifestService extends AbstractFedoraPcdmMan
 
         URI id = buildId(parameterizedContext);
 
-        PropertyValueSimpleImpl label = getLabel(rdfResource);
-
         boolean isCollection = isCollection(rdfResource);
 
         if (isCollection) {
@@ -46,17 +45,24 @@ public class FedoraPcdmPresentationManifestService extends AbstractFedoraPcdmMan
             rdfResource = new RdfResource(collectionObjectMemberModel, collectionObjectMemberId);
         }
 
-        Manifest manifest = new ManifestImpl(id, label);
+        Manifest manifest = new ManifestImpl(id, getLabel(rdfResource));
 
-        manifest.setDescription(getDescription(rdfResource));
+        List<Metadata> metadata = getMetadata(rdfResource);
 
-        manifest.setMetadata(getMetadata(rdfResource));
+        if (!metadata.isEmpty()) {
+            manifest.setMetadata(metadata);
+        }
 
         List<Sequence> sequences = getSequences(request, rdfResource);
 
         manifest.setSequences(sequences);
 
         manifest.setLogo(getLogo(rdfResource));
+
+        Optional<PropertyValueSimpleImpl> description = getDescription(rdfResource);
+        if (description.isPresent()) {
+            manifest.setDescription(description.get());
+        }
 
         Optional<Thumbnail> thumbnail = getThumbnail(sequences);
         if (thumbnail.isPresent()) {

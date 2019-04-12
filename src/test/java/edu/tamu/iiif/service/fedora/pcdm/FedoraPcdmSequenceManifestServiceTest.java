@@ -33,8 +33,8 @@ public class FedoraPcdmSequenceManifestServiceTest extends AbstractFedoraPcdmMan
     @Value("classpath:mock/fedora/rdf/item_container_files_entry.rdf")
     private Resource itemFilesEntryRdf;
 
-    @Value("classpath:mock/fedora/json/image0.json")
-    private Resource image0;
+    @Value("classpath:mock/fedora/json/image.json")
+    private Resource image;
 
     @Value("classpath:mock/fedora/json/sequence.json")
     private Resource sequence;
@@ -48,7 +48,7 @@ public class FedoraPcdmSequenceManifestServiceTest extends AbstractFedoraPcdmMan
     public void testGetManifest() throws IOException, URISyntaxException {
 
         when(httpService.contentType(any(String.class))).thenReturn("image/png; charset=utf-8");
-        when(httpService.get(any(String.class))).thenReturn(readFileToString(image0.getFile(), "UTF-8"));
+        when(httpService.get(any(String.class))).thenReturn(readFileToString(image.getFile(), "UTF-8"));
 
         when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084"))).thenReturn(readFileToString(itemRdf.getFile(), "UTF-8"));
         when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084/files/fcr:metadata"))).thenReturn(readFileToString(itemFilesRdf.getFile(), "UTF-8"));
