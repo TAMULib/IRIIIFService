@@ -229,6 +229,15 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
             }
         }
 
+        if (canvases.isEmpty()) {
+            if (rdfResource.getResourceById(PCDM_HAS_FILE_PREDICATE) != null) {
+                Canvas canvas = generateCanvas(request, rdfResource);
+                if (canvas.getImages().size() > 0) {
+                    canvases.add(canvas);
+                }
+            }
+        }
+
         return canvases;
     }
 
