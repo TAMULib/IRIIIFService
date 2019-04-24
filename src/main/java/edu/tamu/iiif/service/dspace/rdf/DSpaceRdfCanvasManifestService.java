@@ -30,7 +30,7 @@ public class DSpaceRdfCanvasManifestService extends AbstractDSpaceRdfManifestSer
     }
 
     @Override
-    protected ManifestType getManifestType() {
+    public ManifestType getManifestType() {
         return CANVAS;
     }
 

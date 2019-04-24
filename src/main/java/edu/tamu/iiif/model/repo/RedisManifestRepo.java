@@ -14,4 +14,6 @@ public interface RedisManifestRepo extends CrudRepository<RedisManifest, String>
     
     public List<RedisManifest> findByPathAndRepository(String path, String repository);
 
+    public List<RedisManifest> findByPath(String contextPath);
+
 }

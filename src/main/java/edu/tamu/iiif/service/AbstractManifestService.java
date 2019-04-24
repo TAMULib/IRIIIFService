@@ -348,7 +348,7 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected abstract String getRepositoryType();
 
-    protected abstract ManifestType getManifestType();
+    public abstract ManifestType getManifestType();
 
     protected abstract String getRepositoryContextIdentifier(String url);
 

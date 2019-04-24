@@ -180,7 +180,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
     }
 
     @Override
-    protected ManifestType getManifestType() {
+    public ManifestType getManifestType() {
         return COLLECTION;
     }
 

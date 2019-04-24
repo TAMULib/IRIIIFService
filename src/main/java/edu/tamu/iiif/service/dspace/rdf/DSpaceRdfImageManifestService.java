@@ -23,7 +23,7 @@ public class DSpaceRdfImageManifestService extends AbstractDSpaceRdfManifestServ
     }
 
     @Override
-    protected ManifestType getManifestType() {
+    public ManifestType getManifestType() {
         return IMAGE;
     }
 

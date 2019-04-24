@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * Entry point to the IR IIIF service initializer.
@@ -11,6 +12,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
  * @author wwelling
  */
 @SpringBootApplication
+@ComponentScan(basePackages = { "edu.tamu" })
 public class IrIiifServiceInitializer extends SpringBootServletInitializer {
 
     /**

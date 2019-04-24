@@ -23,7 +23,7 @@ public class FedoraPcdmSequenceManifestService extends AbstractFedoraPcdmManifes
     }
 
     @Override
-    protected ManifestType getManifestType() {
+    public ManifestType getManifestType() {
         return SEQUENCE;
     }
 
