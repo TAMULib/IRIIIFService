@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.tamu.iiif.controller.ManifestRequest;
-import edu.tamu.iiif.exception.InvalidUrlException;
-import edu.tamu.iiif.exception.UnknownActionException;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
 import edu.tamu.weaver.messaging.annotation.WeaverMessageListener;
@@ -31,7 +29,7 @@ public class MessageListenerService {
     private List<ManifestService> manifestServices;
 
     @WeaverMessageListener(destination = "${iiif.messaging.channel}", containerFactory = "topicContainerFactory")
-    private void update(Map<String, String> message) throws UnknownActionException, InvalidUrlException {
+    private void update(Map<String, String> message) {
         switch (message.get("action")) {
         case "METADATA_CREATE":
         case "METADATA_UPDATE":
@@ -43,7 +41,7 @@ public class MessageListenerService {
             updateManifest(message.get("parentContextPath"), message.get("repositoryType"));
             break;
         default:
-            throw new UnknownActionException("The action " + message.get("action") + "is not defined for this service");
+            logger.info(String.format("Received message with unused action %s", message.get("action")));
         }
     }
 
