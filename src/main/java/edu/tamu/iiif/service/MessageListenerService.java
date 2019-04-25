@@ -30,24 +30,8 @@ public class MessageListenerService {
 
     @WeaverMessageListener(destination = "${iiif.messaging.channel}", containerFactory = "topicContainerFactory")
     private void update(Map<String, String> message) {
-        switch (message.get("action")) {
-        case "METADATA_CREATE":
-        case "METADATA_UPDATE":
-        case "METADATA_DELETE":
-            updateManifest(message.get("contextPath"), message.get("repositoryType"));
-            break;
-        case "RESOURCE_CREATE":
-        case "RESOURCE_DELETE":
-            updateManifest(message.get("parentContextPath"), message.get("repositoryType"));
-            break;
-        default:
-            logger.info(String.format("Received message with unused action %s", message.get("action")));
-        }
-    }
-
-    private void updateManifest(String contextPath, String repositoryType) {
-        List<RedisManifest> manifests = manifestRepo.findByPathAndRepository(encode(contextPath), repositoryType);
-        manifests.parallelStream().forEach(manifest -> {
+        List<RedisManifest> manifests = manifestRepo.findByPath(encode(message.get("id")));
+        manifests.stream().forEach(manifest -> {
             manifestServices.stream().filter(manifestService -> manifestService.getManifestType().equals(manifest.getType())).forEach(manifestService -> {
                 try {
                     manifestService.getManifest(ManifestRequest.of(manifest));
