@@ -17,7 +17,7 @@ public class FedoraPcdmSequenceManifestService extends AbstractFedoraPcdmManifes
 
     public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
         String context = request.getContext();
-        RdfResource rdfResource = getRdfResource(context);
+        RdfResource rdfResource = getRdfResourceByContextPath(context);
         Sequence sequence = generateSequence(request, rdfResource);
         return mapper.writeValueAsString(sequence);
     }

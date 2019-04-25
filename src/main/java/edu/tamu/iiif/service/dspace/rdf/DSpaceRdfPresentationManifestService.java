@@ -35,7 +35,7 @@ public class DSpaceRdfPresentationManifestService extends AbstractDSpaceRdfManif
 
         String parameterizedContext = RdfModelUtility.getParameterizedId(request);
 
-        RdfResource rdfResource = getRdfResource(context);
+        RdfResource rdfResource = getRdfResourceByContextPath(context);
 
         URI id = buildId(parameterizedContext);
 
@@ -116,7 +116,7 @@ public class DSpaceRdfPresentationManifestService extends AbstractDSpaceRdfManif
         while (nodeIterator.hasNext()) {
             String uri = nodeIterator.next().toString();
             String handle = getHandle(uri);
-            sequences.addAll(aggregateSequences(request, getRdfResource(handle)));
+            sequences.addAll(aggregateSequences(request, getRdfResourceByContextPath(handle)));
         }
         return sequences;
     }

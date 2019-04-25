@@ -133,9 +133,18 @@ public abstract class AbstractManifestService implements ManifestService {
         return manifest;
     }
 
-    protected RdfResource getRdfResource(String handle) throws NotFoundException {
-        String rdfUrl = getRdfUrl(handle);
+    protected RdfResource getRdfResourceByContextPath(String contextPath) throws NotFoundException {
+        String rdfUrl = getRdfUrl(contextPath);
         Model model = getRdfModel(rdfUrl);
+        return getRdfResource(model, rdfUrl);
+    }
+
+    protected RdfResource getRdfResourceByUrl(String rdfUrl) throws NotFoundException {
+        Model model = getRdfModel(rdfUrl);
+        return getRdfResource(model, rdfUrl);
+    }
+
+    private RdfResource getRdfResource(Model model, String rdfUrl) {
         // model.write(System.out, "JSON-LD");
         // model.write(System.out, "RDF/XML");
         return new RdfResource(model, model.getResource(rdfUrl));
@@ -148,7 +157,6 @@ public abstract class AbstractManifestService implements ManifestService {
     protected String getRdf(String url) throws NotFoundException {
         Optional<String> rdf = Optional.ofNullable(httpService.get(url));
         if (rdf.isPresent()) {
-            // System.out.println("\n\n\n\n" + url + "\n\n" + rdf.get() + "\n\n\n\n");
             return rdf.get();
         }
         throw new NotFoundException("RDF not found! " + url);

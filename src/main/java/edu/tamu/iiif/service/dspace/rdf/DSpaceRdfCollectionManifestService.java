@@ -43,7 +43,7 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
 
         String parameterizedContext = RdfModelUtility.getParameterizedId(request);
 
-        RdfResource rdfResource = getRdfResource(context);
+        RdfResource rdfResource = getRdfResourceByContextPath(context);
 
         URI id = buildId(parameterizedContext);
 
@@ -77,7 +77,7 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
             while (hasBitstreamIterator.hasNext()) {
                 String hasBitstreamHandlePath = getHandlePath(hasBitstreamIterator.next().toString());
                 String parameterizedHasBitstreamHandlePath = RdfModelUtility.getParameterizedId(hasBitstreamHandlePath, request);
-                RdfResource hasBitstreamRdfResource = getRdfResource(hasBitstreamHandlePath);
+                RdfResource hasBitstreamRdfResource = getRdfResourceByContextPath(hasBitstreamHandlePath);
                 manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(parameterizedHasBitstreamHandlePath), getLabel(hasBitstreamRdfResource)));
             }
         } else {
@@ -85,7 +85,7 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
             while (hasItemIterator.hasNext()) {
                 String hasItemHandle = getHandle(hasItemIterator.next().toString());
                 String parameterizedHasItemHandle = RdfModelUtility.getParameterizedId(hasItemHandle, request);
-                RdfResource hasItemRdfResource = getRdfResource(hasItemHandle);
+                RdfResource hasItemRdfResource = getRdfResourceByContextPath(hasItemHandle);
                 manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(parameterizedHasItemHandle), getLabel(hasItemRdfResource)));
             }
         }
@@ -116,7 +116,7 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
         NodeIterator subcommunityIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_SUB_COMMUNITY_PREDICATE);
         while (subcommunityIterator.hasNext()) {
             String subcommunityHandle = getHandle(subcommunityIterator.next().toString());
-            RdfResource subcommunityRdfResource = getRdfResource(subcommunityHandle);
+            RdfResource subcommunityRdfResource = getRdfResourceByContextPath(subcommunityHandle);
             collectionsToElide.addAll(getCollections(subcommunityRdfResource));
             subcommunities.add(new CollectionReferenceImpl(getDSpaceIiifCollectionUri(subcommunityHandle), getLabel(subcommunityRdfResource)));
         }
@@ -128,7 +128,7 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
         NodeIterator collectionIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_COLLECTION_PREDICATE);
         while (collectionIterator.hasNext()) {
             String collectionHandle = getHandle(collectionIterator.next().toString());
-            RdfResource collectionRdfResource = getRdfResource(collectionHandle);
+            RdfResource collectionRdfResource = getRdfResourceByContextPath(collectionHandle);
             collections.add(new CollectionReferenceImpl(getDSpaceIiifCollectionUri(collectionHandle), getLabel(collectionRdfResource)));
         }
         return collections;

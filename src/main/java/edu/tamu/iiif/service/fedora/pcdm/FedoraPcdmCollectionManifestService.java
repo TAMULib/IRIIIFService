@@ -51,7 +51,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
 
         String parameterizedContext = RdfModelUtility.getParameterizedId(request);
 
-        RdfResource rdfResource = getRdfResource(context);
+        RdfResource rdfResource = getRdfResourceByContextPath(context);
 
         URI id = buildId(parameterizedContext);
 
@@ -101,8 +101,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             while (nodes.hasNext()) {
                 RDFNode node = nodes.next();
                 String parameterizedId = RdfModelUtility.getParameterizedId(node.toString(), request);
-                PropertyValueSimpleImpl label = getLabel(new RdfResource(rdfResource, node.toString()));
-                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedId), label));
+                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedId), getLabel(getRdfResourceByUrl(node.toString()))));
             }
         }
         if (manifests.isEmpty()) {
@@ -110,8 +109,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             while (resources.hasNext()) {
                 Resource resource = resources.next();
                 String parameterizedId = RdfModelUtility.getParameterizedId(resource.getURI(), request);
-                PropertyValueSimpleImpl label = getLabel(new RdfResource(resource.getModel(), resource));
-                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedId), label));
+                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedId), getLabel(getRdfResourceByUrl(resource.getURI()))));
             }
         }
         return manifests;
@@ -148,8 +146,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
 
             String parameterizedActualId = RdfModelUtility.getParameterizedId(id.get(), request);
 
-            PropertyValueSimpleImpl label = getLabel(rdfOrderedResource);
-            manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedActualId), label));
+            manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedActualId), getLabel(getRdfResourceByUrl(id.get()))));
 
             Optional<String> nextId = getObject(model, IANA_NEXT_PREDICATE);
 
