@@ -31,7 +31,6 @@ import java.util.Optional;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -213,18 +212,30 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
         }
 
         if (canvases.isEmpty()) {
+            NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(PCDM_HAS_MEMBER_PREDICATE);
+            while (nodes.hasNext()) {
+                RDFNode node = nodes.next();
 
-            ResIterator resItr = rdfResource.listResourcesWithPropertyWithId(LDP_CONTAINS_PREDICATE);
-            while (resItr.hasNext()) {
-                Resource resource = resItr.next();
-                if (resource.getProperty(rdfResource.getProperty(PCDM_HAS_FILE_PREDICATE)) != null) {
-                    Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, resource));
+                Model fileModel = getFedoraRdfModel(node.toString());
+
+                RdfResource fileRdfResource = new RdfResource(fileModel, node.toString());
+
+                if (fileRdfResource.getResourceById(PCDM_HAS_FILE_PREDICATE) != null) {
+                    Canvas canvas = generateCanvas(request, fileRdfResource);
                     if (canvas.getImages().size() > 0) {
                         canvases.add(canvas);
                     }
                 }
             }
+        }
 
+        if (canvases.isEmpty()) {
+            if (rdfResource.getResourceById(PCDM_HAS_FILE_PREDICATE) != null) {
+                Canvas canvas = generateCanvas(request, rdfResource);
+                if (canvas.getImages().size() > 0) {
+                    canvases.add(canvas);
+                }
+            }
         }
 
         return canvases;
