@@ -156,7 +156,7 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
     }
 
     @Override
-    protected String getRepositoryType() {
+    public String getRepository() {
         return config.getIdentifier();
     }
 

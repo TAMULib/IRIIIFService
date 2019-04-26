@@ -50,7 +50,6 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.ThumbnailImpl;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.InvalidUrlException;
 import edu.tamu.iiif.exception.NotFoundException;
-import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
@@ -116,7 +115,7 @@ public abstract class AbstractManifestService implements ManifestService {
         } else {
             logger.info("Generating new manifest.");
             manifest = generateManifest(request);
-            redisManifestRepo.save(new RedisManifest(encode(path), getManifestType(), getRepositoryType(), request.getAllowed(), request.getDisallowed(), manifest));
+            redisManifestRepo.save(new RedisManifest(encode(path), getManifestType(), getRepository(), request.getAllowed(), request.getDisallowed(), manifest));
             update = false;
         }
 
@@ -346,10 +345,6 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected abstract String getIiifImageServiceName();
 
-    protected abstract String getRepositoryType();
-
-    public abstract ManifestType getManifestType();
-
     protected abstract String getRepositoryContextIdentifier(String url);
 
     protected abstract String getRepositoryPath(String url);
@@ -369,7 +364,7 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     private Optional<RedisManifest> getRedisManifest(ManifestRequest request) {
-        return redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(encode(request.getContext()), getManifestType(), getRepositoryType(), request.getAllowed(), request.getDisallowed());
+        return redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(encode(request.getContext()), getManifestType(), getRepository(), request.getAllowed(), request.getDisallowed());
     }
 
     private List<Metadata> getMetadata(RdfResource rdfResource, String prefix) {

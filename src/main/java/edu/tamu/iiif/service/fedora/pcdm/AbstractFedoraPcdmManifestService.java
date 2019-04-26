@@ -169,7 +169,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     }
 
     @Override
-    protected String getRepositoryType() {
+    public String getRepository() {
         return config.getIdentifier();
     }
 

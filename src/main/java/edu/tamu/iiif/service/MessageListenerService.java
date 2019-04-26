@@ -28,11 +28,11 @@ public class MessageListenerService {
     @Autowired
     private List<ManifestService> manifestServices;
 
-    @WeaverMessageListener(destination = "${iiif.messaging.channel}", containerFactory = "topicContainerFactory")
+    @WeaverMessageListener(destination = "${iiif.messaging.channel:cap}", containerFactory = "topicContainerFactory")
     private void update(Map<String, String> message) {
         List<RedisManifest> manifests = manifestRepo.findByPath(encode(message.get("id")));
         manifests.stream().forEach(manifest -> {
-            manifestServices.stream().filter(manifestService -> manifestService.getManifestType().equals(manifest.getType())).forEach(manifestService -> {
+            manifestServices.stream().filter(manifestService -> manifestService.getManifestType().equals(manifest.getType()) && manifestService.getRepository().equals(manifest.getRepository())).forEach(manifestService -> {
                 try {
                     manifestService.getManifest(ManifestRequest.of(manifest));
                 } catch (IOException | URISyntaxException e) {

@@ -16,7 +16,7 @@
   <parent>
     <groupId>edu.tamu.weaver</groupId>
     <artifactId>webservice-parent</artifactId>
-    <version>2.0.0-MESSAGING-MODULE-SNAPSHOT</version>
+    <version>2.x-MESSAGING-MODULE-SNAPSHOT</version>
   </parent>
 
   <properties>
@@ -33,7 +33,7 @@
     <dependency>
       <groupId>edu.tamu.weaver</groupId>
       <artifactId>messaging</artifactId>
-      <version>2.0.0-MESSAGING-MODULE-SNAPSHOT</version>
+      <version>2.x-MESSAGING-MODULE-SNAPSHOT</version>
     </dependency>
 
     <dependency>
@@ -131,6 +131,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version>
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
@@ -143,6 +144,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
+        <version>3.2.2</version>
         <configuration>
           <failOnMissingWebXml>false</failOnMissingWebXml>
         </configuration>
@@ -150,7 +152,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
-        <version>2.7</version>
         <configuration>
           <quiet>true</quiet>
           <instrumentation>
@@ -169,7 +170,6 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.8</version>
         <executions>
           <execution>
             <id>prepare-agent</id>
@@ -182,7 +182,6 @@
       <plugin>
         <groupId>org.eluder.coveralls</groupId>
         <artifactId>coveralls-maven-plugin</artifactId>
-        <version>4.3.0</version>
         <configuration>
           <repoToken></repoToken>
         </configuration>
