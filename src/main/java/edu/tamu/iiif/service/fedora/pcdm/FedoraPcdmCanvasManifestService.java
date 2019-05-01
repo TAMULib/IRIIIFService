@@ -23,7 +23,7 @@ public class FedoraPcdmCanvasManifestService extends AbstractFedoraPcdmManifestS
     }
 
     @Override
-    protected ManifestType getManifestType() {
+    public ManifestType getManifestType() {
         return CANVAS;
     }
 

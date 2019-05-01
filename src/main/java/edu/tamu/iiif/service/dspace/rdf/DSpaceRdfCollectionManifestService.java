@@ -135,7 +135,7 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
     }
 
     @Override
-    protected ManifestType getManifestType() {
+    public ManifestType getManifestType() {
         return COLLECTION;
     }
 

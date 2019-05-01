@@ -86,7 +86,7 @@ public class FedoraPcdmPresentationManifestService extends AbstractFedoraPcdmMan
     }
 
     @Override
-    protected ManifestType getManifestType() {
+    public ManifestType getManifestType() {
         return PRESENTATION;
     }
 

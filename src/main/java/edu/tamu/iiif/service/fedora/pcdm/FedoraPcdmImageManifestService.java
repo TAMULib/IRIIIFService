@@ -23,7 +23,7 @@ public class FedoraPcdmImageManifestService extends AbstractFedoraPcdmManifestSe
     }
 
     @Override
-    protected ManifestType getManifestType() {
+    public ManifestType getManifestType() {
         return IMAGE;
     }
 

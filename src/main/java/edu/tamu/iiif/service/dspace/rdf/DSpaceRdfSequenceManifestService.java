@@ -23,7 +23,7 @@ public class DSpaceRdfSequenceManifestService extends AbstractDSpaceRdfManifestS
     }
 
     @Override
-    protected ManifestType getManifestType() {
+    public ManifestType getManifestType() {
         return SEQUENCE;
     }
 

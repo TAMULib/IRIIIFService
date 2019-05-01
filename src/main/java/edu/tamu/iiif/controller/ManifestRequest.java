@@ -1,7 +1,12 @@
 package edu.tamu.iiif.controller;
 
+import static edu.tamu.iiif.utility.StringUtility.decode;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import edu.tamu.iiif.model.RedisManifest;
 
 public class ManifestRequest {
 
@@ -42,6 +47,12 @@ public class ManifestRequest {
 
     public static ManifestRequest of(String path, boolean update) {
         return new ManifestRequest(path, update, new ArrayList<String>(), new ArrayList<String>());
+    }
+
+    public static ManifestRequest of(RedisManifest manifest) {
+        List<String> allowedList = Arrays.asList(manifest.getAllowed().split(","));
+        List<String> disallowedList = Arrays.asList(manifest.getDisallowed().split(","));
+        return new ManifestRequest(decode(manifest.getPath()), true, allowedList, disallowedList);
     }
 
 }

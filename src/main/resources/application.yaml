@@ -9,13 +9,23 @@ logging:
     org.springframework: INFO
   path: /var/logs/iiif
 
+# to enable messaging, include profile weaver-messaging and update activemq broker-url, username and password
+
 spring:
+  activemq:
+    broker-url: tcp://localhost:61616
+    user: username
+    password: password
   redis:
     host: localhost
     port: 6379
   profiles:
     active: production
     include: dspace, fedora
+
+messaging:
+  channels:
+    cap: cap
 
 iiif:
   admins:
