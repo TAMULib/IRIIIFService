@@ -10,10 +10,6 @@ logging:
   path: /var/logs/iiif
 
 spring:
-  activemq:
-    broker-url: tcp://srv-message-broker-dev.library.tamu.edu:61616
-    user: admin
-    password: admin
   redis:
     host: localhost
     port: 6380
@@ -26,8 +22,6 @@ iiif:
     -
       username: admin
       password: abc123
-  messaging:
-    channel: cap
   service:
     url: http://localhost:${server.port}${server.contextPath}
     connection:

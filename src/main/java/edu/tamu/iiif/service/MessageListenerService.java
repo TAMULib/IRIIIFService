@@ -22,7 +22,7 @@ import edu.tamu.weaver.messaging.config.MessagingConfig;
 import edu.tamu.weaver.messaging.model.MessageAction;
 
 @Service
-@Profile("!test")
+@Profile("weaver-messaging")
 @Import(MessagingConfig.class)
 public class MessageListenerService {
 
@@ -34,7 +34,7 @@ public class MessageListenerService {
     @Autowired
     private List<ManifestService> manifestServices;
 
-    @WeaverMessageListener(destination = "${iiif.messaging.channel:cap}", containerFactory = "topicContainerFactory")
+    @WeaverMessageListener(destination = "${messaging.channels.cap:cap}", containerFactory = "topicContainerFactory")
     private void update(Map<String, String> message) {
         MessageAction action = MessageAction.valueOf(message.get("action"));
         switch (action) {
