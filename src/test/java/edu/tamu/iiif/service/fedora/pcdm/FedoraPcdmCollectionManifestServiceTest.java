@@ -46,6 +46,7 @@ public class FedoraPcdmCollectionManifestServiceTest extends AbstractFedoraPcdmM
     @Test
     public void testGetManifest() throws IOException, URISyntaxException {
         when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog"))).thenReturn(readFileToString(collectionRdf.getFile(), "UTF-8"));
+        when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084"))).thenReturn(readFileToString(itemRdf.getFile(), "UTF-8"));
         when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084/fcr:metadata"))).thenReturn(readFileToString(itemRdf.getFile(), "UTF-8"));
         when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084/files/fcr:metadata"))).thenReturn(readFileToString(itemFilesRdf.getFile(), "UTF-8"));
         when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084/files/ExCat0084.jpg/fcr:metadata"))).thenReturn(readFileToString(itemFilesEntryRdf.getFile(), "UTF-8"));

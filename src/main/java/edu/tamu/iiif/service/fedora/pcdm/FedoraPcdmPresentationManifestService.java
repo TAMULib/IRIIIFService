@@ -31,7 +31,7 @@ public class FedoraPcdmPresentationManifestService extends AbstractFedoraPcdmMan
 
         String parameterizedContext = RdfModelUtility.getParameterizedId(request);
 
-        RdfResource rdfResource = getRdfResource(context);
+        RdfResource rdfResource = getRdfResourceByContextPath(context);
 
         URI id = buildId(parameterizedContext);
 

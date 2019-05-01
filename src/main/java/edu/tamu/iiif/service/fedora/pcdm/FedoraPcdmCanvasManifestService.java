@@ -17,7 +17,7 @@ public class FedoraPcdmCanvasManifestService extends AbstractFedoraPcdmManifestS
 
     public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
         String context = request.getContext();
-        RdfResource rdfResource = getRdfResource(context);
+        RdfResource rdfResource = getRdfResourceByContextPath(context);
         Canvas canvas = generateCanvas(request, rdfResource);
         return mapper.writeValueAsString(canvas);
     }
