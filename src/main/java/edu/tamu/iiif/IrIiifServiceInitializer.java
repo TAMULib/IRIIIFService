@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @author wwelling
  */
 @SpringBootApplication
-@ComponentScan(basePackages = { "edu.tamu.*" })
+@ComponentScan(basePackages = { "edu.tamu" })
 public class IrIiifServiceInitializer extends SpringBootServletInitializer {
 
     /**
