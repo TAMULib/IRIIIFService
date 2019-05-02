@@ -10,7 +10,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +17,10 @@ import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
 import edu.tamu.weaver.messaging.annotation.WeaverMessageListener;
-import edu.tamu.weaver.messaging.config.MessagingConfig;
 import edu.tamu.weaver.messaging.model.MessageAction;
 
 @Service
 @Profile("weaver-messaging")
-@Import(MessagingConfig.class)
 public class MessageListenerService {
 
     private static final Logger logger = LoggerFactory.getLogger(MessageListenerService.class);
