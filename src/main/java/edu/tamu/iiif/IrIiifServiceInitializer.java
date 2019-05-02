@@ -4,17 +4,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Import;
-
-import edu.tamu.weaver.messaging.config.MessagingConfig;
 
 /**
  * Entry point to the IR IIIF service initializer.
  * 
  * @author wwelling
  */
-@SpringBootApplication
-@Import(MessagingConfig.class)
+@SpringBootApplication(scanBasePackages = { "edu.tamu" })
 public class IrIiifServiceInitializer extends SpringBootServletInitializer {
 
     /**
