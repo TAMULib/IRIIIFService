@@ -1,13 +1,15 @@
 ## Packaging
 
-IRIIIFService build is done with [Maven](https://maven.apache.org/). The build is configured with [pom.xml](https://github.com/TAMULib/IRIIIFService/blob/master/pom.xml).
+IR IIIF Service build is done with [Maven](https://maven.apache.org/). The build is configured with [pom.xml](https://github.com/TAMULib/IRIIIFService/blob/master/pom.xml).
+
+### Maven build arguments
 
 * ```-DskipTests``` will skip tests.
 * ```-Dspring.config.location=file:/var/ir-iiif-service/config/``` will configure the external configuration directory for development using `spring-boot:run`.
 
 **Ending trailing slash is required for spring.config.location**
 
-The external configuration directory is where an application.yml file can be added to override default properties. When packaging the application define `config.uri`, which will template context.xml file with the `spring.config.location` system variable for container deployment. 
+The external configuration directory is where an application.yml file can be added to override default properties. When packaging the application, define `config.uri`. This will template context.xml file with the `spring.config.location` system variable for container deployment. 
 
 When running for development define `spring.config.location` to externalize the configuration.
 
@@ -22,7 +24,7 @@ $ mvn clean spring-boot:run
 or run for development with external configuration
 
 ```bash
-$ mvn clean spring-boot:run -Dspring.config.location=file:/var/vireo/config/
+$ mvn clean spring-boot:run -Dspring.config.location=file:/var/ir-iiif-service/config/
 ```
 
 ### Production
@@ -40,7 +42,8 @@ $ mvn clean test
 ```
 
 ## Configuration
-> Configuration for this service is done in [application.yaml](https://github.com/TAMULib/IRIIIFService/blob/master/src/main/resources/application.yaml) file located in src/main/resrouces directory.
+
+> Configuration for this service is done in [application.yml](https://github.com/TAMULib/IRIIIFService/blob/master/src/main/resources/application.yml) file located in src/main/resources directory.
 
 <details>
 <summary>View Properties</summary>
@@ -84,9 +87,9 @@ $ mvn clean test
 
 </details>
 
-Currently, in order to have Tomcat know where the external configuration directory is, `webapp/META-INF/context.xml` will have to be updated. Skip step 1 if package built defining `config.uri`.
+Currently, in order to have Tomcat know where the external configuration directory is, `[Tomcat webapps directory]/ir-iiif-service/classes/META-INF/context.xml` will have to be updated. Skip step 1 if package built defining `config.uri`.
 
-1) Update [context.xml](https://github.com/TAMULib/IRIIIFService/blob/master/src/main/META-INF/context.xml) to set external configuration directory
+1) Update [context.xml](https://github.com/TAMULib/IRIIIFService/blob/master/src/main/resources/META-INF/context.xml) to set external configuration directory
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
