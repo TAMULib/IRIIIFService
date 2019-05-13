@@ -1,0 +1,87 @@
+== DSpace IIIF Manifest Generation API
+
+A Collection of API endpoints used for generating various IIIF manifests from DSpace RDF.
+
+=== Collection Manifest
+
+A `GET` to the `/dspace/collection/{context}` endpoint which will return the collection manifest for the provided context.
+
+==== Sample Request
+include::../../../target/generated-snippets/dspace/collection/http-request.adoc[]
+
+==== Path Parameters
+include::../../../target/generated-snippets/dspace/collection/path-parameters.adoc[]
+
+==== Sample Response
+include::../../../target/generated-snippets/dspace/collection/http-response.adoc[]
+
+==== Example Curl Request
+include::../../../target/generated-snippets/dspace/collection/curl-request.adoc[]
+
+
+=== Presentation Manifest
+
+A `GET` to the `/dspace/presentation/{context}` endpoint which will return the presentation manifest for the provided context.
+
+==== Sample Request
+include::../../../target/generated-snippets/dspace/presentation/http-request.adoc[]
+
+==== Path Parameters
+include::../../../target/generated-snippets/dspace/presentation/path-parameters.adoc[]
+
+==== Sample Response
+include::../../../target/generated-snippets/dspace/presentation/http-response.adoc[]
+
+==== Example Curl Request
+include::../../../target/generated-snippets/dspace/presentation/curl-request.adoc[]
+
+
+=== Sequence Manifest
+
+A `GET` to the `/dspace/sequence/{context}` endpoint which will return the sequence manifest for the provided context.
+
+==== Sample Request
+include::../../../target/generated-snippets/dspace/sequence/http-request.adoc[]
+
+==== Path Parameters
+include::../../../target/generated-snippets/dspace/sequence/path-parameters.adoc[]
+
+==== Sample Response
+include::../../../target/generated-snippets/dspace/sequence/http-response.adoc[]
+
+==== Example Curl Request
+include::../../../target/generated-snippets/dspace/sequence/curl-request.adoc[]
+
+
+=== Canvas Manifest
+
+A `GET` to the `/dspace/canvas/{context}` endpoint which will return the canvas manifest for the provided context.
+
+==== Sample Request
+include::../../../target/generated-snippets/dspace/canvas/http-request.adoc[]
+
+==== Path Parameters
+include::../../../target/generated-snippets/dspace/canvas/path-parameters.adoc[]
+
+==== Sample Response
+include::../../../target/generated-snippets/dspace/canvas/http-response.adoc[]
+
+==== Example Curl Request
+include::../../../target/generated-snippets/dspace/canvas/curl-request.adoc[]
+
+
+=== Image Manifest
+
+A `GET` to the `/dspace/image/{context}` endpoint which will return the image manifest for the provided context.
+
+==== Sample Request
+include::../../../target/generated-snippets/dspace/image/http-request.adoc[]
+
+==== Path Parameters
+include::../../../target/generated-snippets/dspace/image/path-parameters.adoc[]
+
+==== Sample Response
+include::../../../target/generated-snippets/dspace/image/http-response.adoc[]
+
+==== Example Curl Request
+include::../../../target/generated-snippets/dspace/image/curl-request.adoc[]

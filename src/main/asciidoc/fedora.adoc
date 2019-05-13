@@ -1,0 +1,87 @@
+== Fedora IIIF Manifest Generation API
+
+A Collection of API endpoints used for generating various IIIF manifests from Fedora PCDM.
+
+=== Collection Manifest
+
+A `GET` to the `/fedora/collection/{context}` endpoint which will return the collection manifest for the provided context.
+
+==== Sample Request
+include::../../../target/generated-snippets/fedora/collection/http-request.adoc[]
+
+==== Path Parameters
+include::../../../target/generated-snippets/fedora/collection/path-parameters.adoc[]
+
+==== Sample Response
+include::../../../target/generated-snippets/fedora/collection/http-response.adoc[]
+
+==== Example Curl Request
+include::../../../target/generated-snippets/fedora/collection/curl-request.adoc[]
+
+
+=== Presentation Manifest
+
+A `GET` to the `/fedora/presentation/{context}` endpoint which will return the presentation manifest for the provided context.
+
+==== Sample Request
+include::../../../target/generated-snippets/fedora/presentation/http-request.adoc[]
+
+==== Path Parameters
+include::../../../target/generated-snippets/fedora/presentation/path-parameters.adoc[]
+
+==== Sample Response
+include::../../../target/generated-snippets/fedora/presentation/http-response.adoc[]
+
+==== Example Curl Request
+include::../../../target/generated-snippets/fedora/presentation/curl-request.adoc[]
+
+
+=== Sequence Manifest
+
+A `GET` to the `/fedora/sequence/{context}` endpoint which will return the sequence manifest for the provided context.
+
+==== Sample Request
+include::../../../target/generated-snippets/fedora/sequence/http-request.adoc[]
+
+==== Path Parameters
+include::../../../target/generated-snippets/fedora/sequence/path-parameters.adoc[]
+
+==== Sample Response
+include::../../../target/generated-snippets/fedora/sequence/http-response.adoc[]
+
+==== Example Curl Request
+include::../../../target/generated-snippets/fedora/sequence/curl-request.adoc[]
+
+
+=== Canvas Manifest
+
+A `GET` to the `/fedora/canvas/{context}` endpoint which will return the canvas manifest for the provided context.
+
+==== Sample Request
+include::../../../target/generated-snippets/fedora/canvas/http-request.adoc[]
+
+==== Path Parameters
+include::../../../target/generated-snippets/fedora/canvas/path-parameters.adoc[]
+
+==== Sample Response
+include::../../../target/generated-snippets/fedora/canvas/http-response.adoc[]
+
+==== Example Curl Request
+include::../../../target/generated-snippets/fedora/canvas/curl-request.adoc[]
+
+
+=== Image Manifest
+
+A `GET` to the `/fedora/image/{context}` endpoint which will return the image manifest for the provided context.
+
+==== Sample Request
+include::../../../target/generated-snippets/fedora/image/http-request.adoc[]
+
+==== Path Parameters
+include::../../../target/generated-snippets/fedora/image/path-parameters.adoc[]
+
+==== Sample Response
+include::../../../target/generated-snippets/fedora/image/http-response.adoc[]
+
+==== Example Curl Request
+include::../../../target/generated-snippets/fedora/image/curl-request.adoc[]

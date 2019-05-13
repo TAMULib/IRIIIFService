@@ -1,4 +1,4 @@
-= IR IIIF Service REST API Documentation
+= IR IIIF Service REST API
 :doctype: book
 :compat-mode:
 :toc: left
