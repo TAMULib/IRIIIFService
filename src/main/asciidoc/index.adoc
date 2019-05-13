@@ -13,14 +13,6 @@
 
 [%hardbreaks]
 
-== Resource Resolver
-
 include::resolver.adoc[]
-
-== Fedora IIIF Manifests
-
 include::fedora.adoc[]
-
-== DSpace IIIF Manifests
-
 include::dspace.adoc[]
