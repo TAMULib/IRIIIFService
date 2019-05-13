@@ -9,7 +9,7 @@
   - manifest cache
   - resource URL cache
 
-### External Requirements
+## External Requirements
 - IIIF Image Server
   - must support API v2
   - script delegate to resolve identifier
@@ -21,7 +21,7 @@
 - Fedora
   - structured with [PCDM](https://pcdm.org/)
 
-## [IIIF](http://iiif.io/) Image Server
+### [IIIF](http://iiif.io/) Image Server
 - Image resolution by identifier
   - ```http://[iiif image server]/iiif/2/[UUID redis key]/full/full/0/default.jpg```
   - UUID resource location resolution via resources interface
@@ -81,9 +81,17 @@
 
 </details>
 
-## [DSpace](http://www.dspace.org/)
+### [DSpace](http://www.dspace.org/)
 - [Installation](https://wiki.duraspace.org/display/DSDOC6x/Installing+DSpace#space-menu-link-content)
 - [RDF](https://wiki.duraspace.org/display/DSDOC6x/Linked+%28Open%29+Data)
 
-## [Fedora](https://fedorarepository.org/)
+### [Fedora](https://fedorarepository.org/)
 - [Installation](https://wiki.duraspace.org/display/FEDORA4x/Quick+Start)
+
+## Developer Documentation
+
+- [Contributors Documentation](https://github.com/TAMULib/IRIIIFService/blob/master/CONTRIBUTING.md)
+- [Deployment Documentation](https://github.com/TAMULib/IRIIIFService/blob/master/DEPLOYING.md)
+- [API Documentation](https://tamulib.github.io/IRIIIFService)
+
+Please feel free to file any issues concerning IRIIIFService to the issues section of the repository. Any questions concerning cap can be directed to [helpdesk@library.tamu.edu]()
