@@ -1,0 +1,26 @@
+= IR IIIF Service REST API Documentation
+:doctype: book
+:compat-mode:
+:toc: left
+:toclevels: 3
+:sectanchors:
+:sectlinks:
+:sectnums:
+:linkattrs:
+:source-highlighter: highlightjs
+
+= Introduction
+
+[%hardbreaks]
+
+== Resource Resolver
+
+include::resolver.adoc[]
+
+== Fedora IIIF Manifests
+
+include::fedora.adoc[]
+
+== DSpace IIIF Manifests
+
+include::dspace.adoc[]
