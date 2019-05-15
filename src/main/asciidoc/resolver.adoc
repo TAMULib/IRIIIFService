@@ -1,0 +1,105 @@
+== Resource Resolver API
+
+A Collection of API endpoints used for interacting with IR IIIF Service's cached resource URLs.
+
+
+=== Get Resource URL 
+
+A `GET` to the `/resources/{id}` endpoint which will return the resource URL.
+
+==== Sample Request
+include::../../../target/generated-snippets/resources/getResourceUrl/http-request.adoc[]
+
+==== Path Parameters
+include::../../../target/generated-snippets/resources/getResourceUrl/path-parameters.adoc[]
+
+==== Sample Response
+include::../../../target/generated-snippets/resources/getResourceUrl/http-response.adoc[]
+
+==== Example Curl Request
+include::../../../target/generated-snippets/resources/getResourceUrl/curl-request.adoc[]
+
+
+=== Redirect to Resource
+
+A `GET` to the `/resources/{id}/redirect` endpoint which will redirect to the resource.
+
+==== Sample Request
+include::../../../target/generated-snippets/resources/redirectToResource/http-request.adoc[]
+
+==== Path Parameters
+include::../../../target/generated-snippets/resources/redirectToResource/path-parameters.adoc[]
+
+==== Sample Response
+include::../../../target/generated-snippets/resources/redirectToResource/http-response.adoc[]
+
+==== Example Curl Request
+include::../../../target/generated-snippets/resources/redirectToResource/curl-request.adoc[]
+
+
+=== Get Resource Id
+
+A `GET` request with query parameter `uri` to the `/resources` endpoint which will return the resource id.
+
+==== Sample Request
+include::../../../target/generated-snippets/resources/getResourceId/http-request.adoc[]
+
+==== Request Parameters
+include::../../../target/generated-snippets/resources/getResourceId/request-parameters.adoc[]
+
+==== Sample Response
+include::../../../target/generated-snippets/resources/getResourceId/http-response.adoc[]
+
+==== Example Curl Request
+include::../../../target/generated-snippets/resources/getResourceId/curl-request.adoc[]
+
+
+=== Post Resource
+
+A `POST` request with query parameter `uri` to the `/resources` endpoint which will cache resource URL and return the resource id.
+
+==== Sample Request
+include::../../../target/generated-snippets/resources/postResource/http-request.adoc[]
+
+==== Request Parameters
+include::../../../target/generated-snippets/resources/postResource/request-parameters.adoc[]
+
+==== Sample Response
+include::../../../target/generated-snippets/resources/postResource/http-response.adoc[]
+
+==== Example Curl Request
+include::../../../target/generated-snippets/resources/postResource/curl-request.adoc[]
+
+
+=== Put Resource
+
+A `PUT` request with query parameter `uri` to the `/resources` endpoint which will update cached resource URL and return the resource id.
+
+==== Sample Request
+include::../../../target/generated-snippets/resources/putResource/http-request.adoc[]
+
+==== Request Parameters
+include::../../../target/generated-snippets/resources/putResource/request-parameters.adoc[]
+
+==== Sample Response
+include::../../../target/generated-snippets/resources/putResource/http-response.adoc[]
+
+==== Example Curl Request
+include::../../../target/generated-snippets/resources/putResource/curl-request.adoc[]
+
+
+=== Remove Resource
+
+A `DELETE` to the `/resources/{id}` endpoint which will remove the cached resource URL.
+
+==== Sample Request
+include::../../../target/generated-snippets/resources/removeResource/http-request.adoc[]
+
+==== Path Parameters
+include::../../../target/generated-snippets/resources/removeResource/path-parameters.adoc[]
+
+==== Sample Response
+include::../../../target/generated-snippets/resources/removeResource/http-response.adoc[]
+
+==== Example Curl Request
+include::../../../target/generated-snippets/resources/removeResource/curl-request.adoc[]

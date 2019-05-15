@@ -8,3 +8,13 @@ install:
 
 after_success:
   - mvn clean test cobertura:cobertura jacoco:report coveralls:report
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  keep-history: false
+  target-branch: gh-pages
+  github_token: "$GITHUB_TOKEN"
+  local_dir: "./target/generated-docs"
+  on:
+    branch: master

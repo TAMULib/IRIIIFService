@@ -17,6 +17,10 @@ spring:
     active: test
     include: dspace, fedora
 
+messaging:
+  channels:
+    cap: cap
+
 iiif:
   admins:
     -
