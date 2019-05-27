@@ -2,17 +2,17 @@
 
 Though IR IIIF Service is developed and maintained by Texas A&M University Libraries, we welcome community contributions. Involvement in IR IIIF Service can take many forms:
 
-#### Using IR IIIF Service: 
+#### Using IR IIIF Service
 
 Deploying IR IIIF Service and trying it out at your own institution is itself a way of contributing to the development process. For more information on deployment strategies please see the [relevant documentation](https://github.com/TAMULib/IRIIIFService/blob/master/README.md).
   
-#### Filing Issues: 
+#### Filing Issues
 
 Once you are using IR IIIF Service the creation of new issues through Github is a major method of contribution towards IR IIIF Service development. Issues can be motivated by the discovery of a bug in the software, or by the desire to see either new features added to cap or existing features behaving differently.
 
 These three categories of issue can be submitted using the following template:
 
-``` 
+```
 [*] Bug Report
 [] Feature Enhancement
 [] Feature Request
@@ -31,11 +31,11 @@ Relevant Information:
 
 [This section can include relevant error messages, or links to information that pertains to the issue]
 
-````
+```
 
 Once an issue has been filed it will be curated by a IR IIIF Service developer and receive the appropriate labeling.
 
-#### Creating Pull Requests:
+#### Creating Pull Requests
 
 Community code and documentation contributions are welcome, and should take the form of a Github Pull Request (PR). Each PR will need to be reviewed by a IR IIIF Service developer. A review will result in the PR being accepted and merged, a descriptive request for changes, or the PR being closed along with a detailed explanation.
 

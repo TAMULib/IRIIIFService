@@ -12,7 +12,6 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Optional;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -94,6 +93,7 @@ public class FedoraPcdmPresentationManifestServiceTest extends AbstractFedoraPcd
         assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
+    // TODO: write this test
     @Test
     public void testGetManifestWithoutOrder() throws IOException, URISyntaxException {
 
@@ -104,7 +104,7 @@ public class FedoraPcdmPresentationManifestServiceTest extends AbstractFedoraPcd
         when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084"))).thenReturn(readFileToString(itemRdf.getFile(), "UTF-8"));
         when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084/files/fcr:metadata"))).thenReturn(readFileToString(itemFilesRdf.getFile(), "UTF-8"));
         when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084/files/ExCat0084.jpg/fcr:metadata"))).thenReturn(readFileToString(itemFilesEntryRdf.getFile(), "UTF-8"));
-        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn/info.json"))).thenReturn(FileUtils.readFileToString(image.getFile(), "UTF-8"));
+        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn/info.json"))).thenReturn(readFileToString(image.getFile(), "UTF-8"));
     }
 
 }

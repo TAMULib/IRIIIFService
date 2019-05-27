@@ -31,10 +31,10 @@ public class CustomRedirectStrategy extends DefaultRedirectStrategy {
                         return new URI(origUri.getScheme(), null, origUri.getHost(), origUri.getPort(), location, null, null);
                     }
                 } catch (URISyntaxException e) {
-                    throw new RuntimeException("Unable to reconstruct original URI!");
+                    throw new ProtocolException("Unable to reconstruct original URI!");
                 }
             } else {
-                throw new RuntimeException("No location header provided with redirect!");
+                throw new ProtocolException("No location header provided with redirect!");
             }
         }
         return super.getLocationURI(request, response, context);

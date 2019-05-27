@@ -35,7 +35,7 @@ public class MessageListenerService {
     private List<ManifestService> manifestServices;
 
     @WeaverMessageListener(destination = "${messaging.channels.cap:cap}", containerFactory = "topicContainerFactory")
-    private void update(Map<String, String> message) {
+    void update(Map<String, String> message) {
         MessageAction action = MessageAction.valueOf(message.get("action"));
         switch (action) {
         case CREATE:

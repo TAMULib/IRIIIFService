@@ -98,7 +98,7 @@ public abstract class AbstractManifestService implements ManifestService {
     private RedisResourceRepo redisResourceRepo;
 
     @PostConstruct
-    private void init() {
+    void init() {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         mapper.enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
     }

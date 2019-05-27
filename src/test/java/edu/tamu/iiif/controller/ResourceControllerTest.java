@@ -45,11 +45,9 @@ public class ResourceControllerTest {
     @MockBean
     private RedisResourceRepo redisResourceRepo;
 
-    private List<RedisResource> mockResources;
-
     @Before
     public void setup() {
-        mockResources = new ArrayList<RedisResource>();
+        List<RedisResource> mockResources = new ArrayList<RedisResource>();
 
         mockResources.add(new RedisResource("26f9b338-f744-11e8-8eb2-f2801f1b9fd1", "http://localhost:9000/fcrepo/rest/image01"));
 

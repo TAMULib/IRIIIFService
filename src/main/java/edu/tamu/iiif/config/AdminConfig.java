@@ -26,10 +26,6 @@ public class AdminConfig {
 
         private String password;
 
-        public Credentials() {
-
-        }
-
         public String getUsername() {
             return username;
         }

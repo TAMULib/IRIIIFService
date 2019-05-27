@@ -42,7 +42,7 @@ public class CustomRedirectStrategyTest {
         assertEquals("http://localhost:9000/relocated/test", uri.toString());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = ProtocolException.class)
     public void testGetLocationURIWithBadLocation() throws ProtocolException {
         CustomRedirectStrategy customRedirectStrategy = new CustomRedirectStrategy();
         HttpRequest request = new BasicHttpRequest("GET", "http://localhost:9000/test");
@@ -52,7 +52,7 @@ public class CustomRedirectStrategyTest {
         customRedirectStrategy.getLocationURI(request, response, context);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = ProtocolException.class)
     public void testGetLocationURIWithoutLocation() throws ProtocolException {
         CustomRedirectStrategy customRedirectStrategy = new CustomRedirectStrategy();
         HttpRequest request = new BasicHttpRequest("GET", "http://localhost:9000/test");

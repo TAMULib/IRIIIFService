@@ -38,8 +38,6 @@ public class HttpServiceTest {
 
     private ObjectMapper objectMapper;
 
-    private HttpClient httpClient;
-
     private CloseableHttpResponse response;
 
     private HttpEntity entity;
@@ -52,16 +50,13 @@ public class HttpServiceTest {
     @Value("classpath:mock/fedora/json/image.json")
     private Resource image0;
 
-    @Value("classpath:mock/fedora/rdf/pcdm_collection_container.rdf")
-    private Resource rdf;
-
     @Before
     public void setup() throws ClientProtocolException, IOException {
         initMocks(this);
 
         objectMapper = new ObjectMapper();
 
-        httpClient = mock(CloseableHttpClient.class);
+        HttpClient httpClient = mock(CloseableHttpClient.class);
 
         response = mock(CloseableHttpResponse.class);
 

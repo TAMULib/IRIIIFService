@@ -9,10 +9,8 @@ import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import edu.tamu.iiif.config.EmbededRedisTestConfiguration;
@@ -22,9 +20,6 @@ import edu.tamu.iiif.model.RedisResource;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { EmbededRedisTestConfiguration.class })
 public class RedisResourceRepoTest {
-
-    @Spy
-    private JedisConnectionFactory jedisConnectionFactory;
 
     @Autowired
     private RedisResourceRepo redisResourceRepo;

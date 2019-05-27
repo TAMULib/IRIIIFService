@@ -15,10 +15,6 @@ public abstract class AbstractIiifConfig {
 
     private String identifier;
 
-    public AbstractIiifConfig() {
-
-    }
-
     public List<String> getLabelPrecedence() {
         return labelPrecedence;
     }

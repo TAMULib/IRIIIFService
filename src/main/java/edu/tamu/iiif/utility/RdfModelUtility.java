@@ -34,13 +34,13 @@ public class RdfModelUtility {
         return getObject(rdfResource.getModel(), uri);
     }
 
-    public static String getParameterizedId(String id, ManifestRequest request) {
+    public static String getParameterizedId(String uri, ManifestRequest request) {
         if (!request.getAllowed().isEmpty()) {
-            id += "?allow=" + request.getAllowed();
+            uri += "?allow=" + request.getAllowed();
         } else if (!request.getDisallowed().isEmpty()) {
-            id += "?disallow=" + request.getDisallowed();
+            uri += "?disallow=" + request.getDisallowed();
         }
-        return id;
+        return uri;
     }
 
     public static String getParameterizedId(ManifestRequest request) {

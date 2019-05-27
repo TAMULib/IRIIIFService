@@ -53,7 +53,7 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
 
         collection.setManifests(getResourceManifests(request, rdfResource));
 
-        List<CollectionReference> collections = getSubcollections(request, rdfResource);
+        List<CollectionReference> collections = getSubcollections(rdfResource);
         if (!collections.isEmpty()) {
             collection.setSubCollections(collections);
         }
@@ -92,7 +92,7 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
         return manifests;
     }
 
-    private List<CollectionReference> getSubcollections(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException, NotFoundException {
+    private List<CollectionReference> getSubcollections(RdfResource rdfResource) throws URISyntaxException, NotFoundException {
         List<CollectionReference> collectionsToElide = new ArrayList<CollectionReference>();
         List<CollectionReference> subcollections = getSubcommunities(rdfResource, collectionsToElide);
         List<CollectionReference> collections = getCollections(rdfResource);
