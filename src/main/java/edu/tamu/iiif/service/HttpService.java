@@ -57,14 +57,14 @@ public class HttpService {
     private static CloseableHttpClient httpClient;
 
     @PostConstruct
-    void init() throws URISyntaxException {
+    protected void init() throws URISyntaxException {
         RequestConfig config = RequestConfig.custom().setConnectTimeout(connectionTimeout).setConnectionRequestTimeout(connectionRequestTimeout).setSocketTimeout(socketTimeout).build();
         connectionManager = new PoolingHttpClientConnectionManager();
         httpClient = HttpClients.custom().setRedirectStrategy(new CustomRedirectStrategy()).setConnectionManager(connectionManager).setConnectionTimeToLive(connectionTimeToLive, TimeUnit.MILLISECONDS).setDefaultRequestConfig(config).build();
     }
 
     @PreDestroy
-    void cleanUp() throws IOException {
+    protected void cleanUp() throws IOException {
         httpClient.close();
         connectionManager.close();
     }

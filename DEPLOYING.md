@@ -4,8 +4,8 @@ IR IIIF Service build is done with [Maven](https://maven.apache.org/). The build
 
 ### Maven build arguments
 
-* ```-DskipTests``` will skip tests.
-* ```-Dspring.config.location=file:/var/ir-iiif-service/config/``` will configure the external configuration directory for development using `spring-boot:run`.
+-   `-DskipTests` will skip tests.
+-   `-Dspring.config.location=file:/var/ir-iiif-service/config/` will configure the external configuration directory for development using `spring-boot:run`.
 
 **Ending trailing slash is required for spring.config.location**
 
@@ -50,40 +50,40 @@ $ mvn clean test
 
 <br/>
 
-| **Property** | **Type** | **Description** | **Example** |
-| :----------- | :------- | :-------------- | :---------- |
-| server.contextPath | string | Path in which service is hosted. | /iiif-service |
-| server.port | number | Port in which service is hosted. | 9000 |
-| logging.file | string | Log file. | iiif-service.log |
-| logging.level.edu.tamu.iiif | LOG_LEVEL | Log level for iiif service. | INFO |
-| logging.level.org.springframework | LOG_LEVEL | Log level for spring framework. | INFO |
-| logging.path | string | Path for log file. | /var/logs/iiif |
-| spring.activemq.broker-url | url | ActiveMQ broker URL. | tcp://localhost:61616 |
-| spring.activemq.username | string | ActiveMQ broker username. | username |
-| spring.activemq.password | string | ActiveMQ broker password. | password |
-| spring.redis.host | string | Host for redis server. | localhost |
-| spring.redis.port | number | Port for redis server. | 6379 |
-| spring.profiles.active | string | Build environment profile. | production |
-| spring.profiles.include | string | Additional build environment profiles. | dspace, fedora, weaver-messaging |
-| messaging.channels.cap | string | Channel to listen for Weaver messages in order to update chached manifests. | cap |
-| iiif.admins | object array | Array of admin credentials. | [ { username: admin, password: password } ] |
-| iiif.service.url | url | IIIF service URL. | http://localhost:${server.port}${server.contextPath} |
-| iiif.service.connection.timeout | number | HTTP connection request timeout in milliseconds. | 300000  |
-| iiif.service.connection.request.timeout | number | HTTP connection timeout in milliseconds. | 300000  |
-| iiif.service.socket.timeout | number | HTTP socket timeout in milliseconds. | 300000  |
-| iiif.image.server.url | url | IIIF image server URL. | http://localhost:8182/iiif/2 |
-| iiif.logo.url | url | URL for a default logo. | https://localhost/assets/downloads/logos/Logo.png |
-| iiif.dspace.identifier | string | DSpace Identifier. | dspace |
-| iiif.dspace.label-precedence | array | Array of valid RDF schema fields to determine title. | [ "http://purl.org/dc/elements/1.1/title", "http://purl.org/dc/terms/title" ] |
-| iiif.dspace.description-precedence | array | Array of valid RDF schema fields to determine description. | [ "http://purl.org/dc/terms/abstract", "http://purl.org/dc/terms/description" ] |
-| iiif.dspace.metadata-prefixes | array | Array of valid RDF schema URL to determine what metadate to include. | [ "http://purl.org/dc/elements/1.1/", "http://purl.org/dc/terms/" ] |
-| iiif.dspace.url | url | DSpace base URL. | http://localhost:8080 |
-| iiif.dspace.webapp | string | DSpace UI webapp. | xmlui |
-| iiif.fedora.identifier | string | Fedora PCDM identifier. | fedora |
-| iiif.fedora.url | url | Fedora REST URL. | http://localhost:9000/fcrepo/rest |
-| iiif.dspace.label-precedence | array | Array of valid RDF schema fields to determine title. | [ "http://purl.org/dc/elements/1.1/title", "http://purl.org/dc/terms/title" ] |
-| iiif.fedora.description-precedence | array | Array of valid RDF schema fields to determine description. | [ "http://purl.org/dc/terms/abstract", "http://purl.org/dc/terms/description" ] |
-| iiif.fedora.metadata-prefixes | array | Array of valid RDF schema URL to determine what metadate to include. | [ "http://purl.org/dc/elements/1.1/", "http://purl.org/dc/terms/" ] |
+| **Property**                            | **Type**     | **Description**                                                             | **Example**                                                                     |
+| :-------------------------------------- | :----------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------------------------ |
+| server.contextPath                      | string       | Path in which service is hosted.                                            | /iiif-service                                                                   |
+| server.port                             | number       | Port in which service is hosted.                                            | 9000                                                                            |
+| logging.file                            | string       | Log file.                                                                   | iiif-service.log                                                                |
+| logging.level.edu.tamu.iiif             | LOG_LEVEL    | Log level for iiif service.                                                 | INFO                                                                            |
+| logging.level.org.springframework       | LOG_LEVEL    | Log level for spring framework.                                             | INFO                                                                            |
+| logging.path                            | string       | Path for log file.                                                          | /var/logs/iiif                                                                  |
+| spring.activemq.broker-url              | url          | ActiveMQ broker URL.                                                        | tcp://localhost:61616                                                           |
+| spring.activemq.username                | string       | ActiveMQ broker username.                                                   | username                                                                        |
+| spring.activemq.password                | string       | ActiveMQ broker password.                                                   | password                                                                        |
+| spring.redis.host                       | string       | Host for redis server.                                                      | localhost                                                                       |
+| spring.redis.port                       | number       | Port for redis server.                                                      | 6379                                                                            |
+| spring.profiles.active                  | string       | Build environment profile.                                                  | production                                                                      |
+| spring.profiles.include                 | string       | Additional build environment profiles.                                      | dspace, fedora, weaver-messaging                                                |
+| messaging.channels.cap                  | string       | Channel to listen for Weaver messages in order to update chached manifests. | cap                                                                             |
+| iiif.admins                             | object array | Array of admin credentials.                                                 | [ { username: admin, password: password } ]                                     |
+| iiif.service.url                        | url          | IIIF service URL.                                                           | <http://localhost:${server.port}${server.contextPath}>                          |
+| iiif.service.connection.timeout         | number       | HTTP connection request timeout in milliseconds.                            | 300000                                                                          |
+| iiif.service.connection.request.timeout | number       | HTTP connection timeout in milliseconds.                                    | 300000                                                                          |
+| iiif.service.socket.timeout             | number       | HTTP socket timeout in milliseconds.                                        | 300000                                                                          |
+| iiif.image.server.url                   | url          | IIIF image server URL.                                                      | <http://localhost:8182/iiif/2>                                                  |
+| iiif.logo.url                           | url          | URL for a default logo.                                                     | <https://localhost/assets/downloads/logos/Logo.png>                             |
+| iiif.dspace.identifier                  | string       | DSpace Identifier.                                                          | dspace                                                                          |
+| iiif.dspace.label-precedence            | array        | Array of valid RDF schema fields to determine title.                        | [ "http://purl.org/dc/elements/1.1/title", "http://purl.org/dc/terms/title" ]   |
+| iiif.dspace.description-precedence      | array        | Array of valid RDF schema fields to determine description.                  | [ "http://purl.org/dc/terms/abstract", "http://purl.org/dc/terms/description" ] |
+| iiif.dspace.metadata-prefixes           | array        | Array of valid RDF schema URL to determine what metadate to include.        | [ "http://purl.org/dc/elements/1.1/", "http://purl.org/dc/terms/" ]             |
+| iiif.dspace.url                         | url          | DSpace base URL.                                                            | <http://localhost:8080>                                                         |
+| iiif.dspace.webapp                      | string       | DSpace UI webapp.                                                           | xmlui                                                                           |
+| iiif.fedora.identifier                  | string       | Fedora PCDM identifier.                                                     | fedora                                                                          |
+| iiif.fedora.url                         | url          | Fedora REST URL.                                                            | <http://localhost:9000/fcrepo/rest>                                             |
+| iiif.dspace.label-precedence            | array        | Array of valid RDF schema fields to determine title.                        | [ "http://purl.org/dc/elements/1.1/title", "http://purl.org/dc/terms/title" ]   |
+| iiif.fedora.description-precedence      | array        | Array of valid RDF schema fields to determine description.                  | [ "http://purl.org/dc/terms/abstract", "http://purl.org/dc/terms/description" ] |
+| iiif.fedora.metadata-prefixes           | array        | Array of valid RDF schema URL to determine what metadate to include.        | [ "http://purl.org/dc/elements/1.1/", "http://purl.org/dc/terms/" ]             |
 
 </details>
 
@@ -100,7 +100,6 @@ Currently, in order to have Tomcat know where the external configuration directo
 
 2) Update [application.yml](https://github.com/TAMULib/IRIIIFService/blob/master/src/main/resources/application.yml)
 
-
 ### Deploy to Tomcat
 
 Copy war file into Tomcat webapps directory (your location may vary -- this is an example):
@@ -111,7 +110,7 @@ $ cp ~/ROOT.war /opt/tomcat/webapps/ir-iiif-service.war
 
 **if not specifying config.uri during build the application.yml will be under the IR IIIF Service webapp's classpath, /opt/tomcat/webapps/ir-iiif-service/WEB-INF/classes/application.yml**
 
-**if deployed from default WAR package and would like to externalize the config, you will have to edit /opt/tomcat/webapps/ir-iiif-service/META-INF/context.xml***
+**if deployed from default WAR package and would like to externalize the config, you will have to edit /opt/tomcat/webapps/ir-iiif-service/META-INF/context.xml\***
 
 ### Running WAR as a stand-alone Spring Boot application
 

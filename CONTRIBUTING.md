@@ -5,33 +5,30 @@ Though IR IIIF Service is developed and maintained by Texas A&M University Libra
 #### Using IR IIIF Service
 
 Deploying IR IIIF Service and trying it out at your own institution is itself a way of contributing to the development process. For more information on deployment strategies please see the [relevant documentation](https://github.com/TAMULib/IRIIIFService/blob/master/README.md).
-  
+
 #### Filing Issues
 
 Once you are using IR IIIF Service the creation of new issues through Github is a major method of contribution towards IR IIIF Service development. Issues can be motivated by the discovery of a bug in the software, or by the desire to see either new features added to cap or existing features behaving differently.
 
 These three categories of issue can be submitted using the following template:
 
-```
-[*] Bug Report
-[] Feature Enhancement
-[] Feature Request
+    [*] Bug Report
+    [] Feature Enhancement
+    [] Feature Request
 
-Current Behavior:
+    Current Behavior:
 
-[A description of the current behavior. This could include a list of steps to reproduce in the instance of a 
-Bug Report, and can be 'N/A' for Feature Requests]
+    [A description of the current behavior. This could include a list of steps to reproduce in the instance of a 
+    Bug Report, and can be 'N/A' for Feature Requests]
 
-Desired Behavior:
+    Desired Behavior:
 
-[A description of the expected/desired behavior of the application]
+    [A description of the expected/desired behavior of the application]
 
 
-Relevant Information:
+    Relevant Information:
 
-[This section can include relevant error messages, or links to information that pertains to the issue]
-
-```
+    [This section can include relevant error messages, or links to information that pertains to the issue]
 
 Once an issue has been filed it will be curated by a IR IIIF Service developer and receive the appropriate labeling.
 
@@ -45,32 +42,28 @@ A PR description should include a list of the specific issues resolved, the pred
 
 For more information about semantic versioning please see [this reference](https://semver.org/). In general keep in mind:
 
-- A Major Change is a breaking change that is not backwards compatible.
-- A Minor Change is a non breaking change that is backwards compatible to the last major change.
-- A Patch is a trivial change or bug fix that should not impact compatibility
+-   A Major Change is a breaking change that is not backwards compatible.
+-   A Minor Change is a non breaking change that is backwards compatible to the last major change.
+-   A Patch is a trivial change or bug fix that should not impact compatibility
 
 Please confirm you PR description to the following template:
 
-```
-Resolves:
+    Resolves:
 
-- [List of # references to specific issues addressed by this PR]
+    - [List of # references to specific issues addressed by this PR]
 
-Changes:
+    Changes:
 
-[*] Major
-[] Minor
-[] Patch
+    [*] Major
+    [] Minor
+    [] Patch
 
-[A description of the approach taken to resolving those issues]
-
-```
+    [A description of the approach taken to resolving those issues]
 
 In addition to a well formatted PR we would also appreciate granular commits with descriptive messages. For instance a good commit message may be `Moved /foo endpoint logic into a FooService`, whereas `Everything I did Friday` is less granular or descriptive.
 
 If your commits do not conform to these recommendations you might consider rebasing your PR. Instructions for how this might work can be found [here](https://help.github.com/articles/about-git-rebase/).
 
-
 #### Good Luck!
 
-We look forward to seeing your contributions. If you have any additional questions please contact the IR IIIF Service developers at [helpdesk@library.tamu.edu]().
+We look forward to seeing your contributions. If you have any additional questions please contact the IR IIIF Service developers at [helpdesk@library.tamu.edu](<>).

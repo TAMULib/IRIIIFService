@@ -93,12 +93,6 @@ public class FedoraPcdmPresentationManifestServiceTest extends AbstractFedoraPcd
         assertEquals(objectMapper.readValue(presentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
     }
 
-    // TODO: write this test
-    @Test
-    public void testGetManifestWithoutOrder() throws IOException, URISyntaxException {
-
-    }
-
     private void setupMocks() throws IOException {
         when(httpService.contentType(any(String.class))).thenReturn("image/png; charset=utf-8");
         when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084"))).thenReturn(readFileToString(itemRdf.getFile(), "UTF-8"));

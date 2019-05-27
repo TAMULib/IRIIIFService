@@ -134,13 +134,13 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
         return false;
     }
 
-    protected String getCollectionObjectsMember(RdfResource rdfResource) {
+    protected String getCollectionObjectsMember(RdfResource rdfResource) throws NotFoundException {
         NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(PCDM_HAS_MEMBER_PREDICATE);
         if (nodes.hasNext()) {
             RDFNode node = nodes.next();
             return node.toString();
         }
-        throw new RuntimeException("Collection does not contain its expected member!");
+        throw new NotFoundException("Collection does not contain its expected member!");
     }
 
     protected String getIiifImageServiceName() {
