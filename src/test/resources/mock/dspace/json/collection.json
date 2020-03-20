@@ -13,6 +13,14 @@
   ],
   "metadata": [
     {
+      "label": "creator",
+      "value": "Chevy"
+    },
+    {
+      "label": "license",
+      "value": "Test license"
+    },
+    {
       "label": "title",
       "value": "Cool Cars"
     }

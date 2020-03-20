@@ -57,6 +57,8 @@
         dc:identifier          "TGW_Catalog"^^<http://www.w3.org/2001/XMLSchema#string> ;
         iana:first             <http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/orderProxies/ExCat0001Proxy> ;
         dc:description         "A page level collection of The Great War exhibit catalog.  The assets are JPEGs created from TIFFs created when the catalog was digitized."^^<http://www.w3.org/2001/XMLSchema#string> ;
+        dcterms:license        "Test license"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        dcterms:contributor    "Bob Boring"^^<http://www.w3.org/2001/XMLSchema#string> ;
         rdf:type               ldp:RDFSource ;
         rdf:type               ldp:Container ;
         fedora:writable        "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
