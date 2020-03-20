@@ -47,6 +47,7 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.MetadataImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ServiceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ThumbnailImpl;
+import edu.tamu.iiif.config.AbstractIiifConfig;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.InvalidUrlException;
 import edu.tamu.iiif.exception.NotFoundException;
@@ -167,10 +168,6 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected String getLogo(RdfResource rdfResource) {
         return logoUrl;
-    }
-
-    protected Optional<String> getLicense(RdfResource rdfResource) {
-        return Optional.empty();
     }
 
     protected Optional<Image> generateImage(ManifestRequest request, RdfResource rdfResource, String canvasId) throws InvalidUrlException, URISyntaxException {
@@ -310,20 +307,9 @@ public abstract class AbstractManifestService implements ManifestService {
         return redisResourceRepo.getOrCreate(url).getId();
     }
 
-    protected Optional<PropertyValueSimpleImpl> getDescription(RdfResource rdfResource) {
-        Optional<String> description = Optional.empty();
-        for (String descriptionPredicate : getDescriptionPrecedence()) {
-            description = getObject(rdfResource, descriptionPredicate);
-            if (description.isPresent()) {
-                return Optional.of(new PropertyValueSimpleImpl(description.get()));
-            }
-        }
-        return Optional.empty();
-    }
-
     protected PropertyValueSimpleImpl getLabel(RdfResource rdfResource) {
         Optional<String> title = Optional.empty();
-        for (String labelPredicate : getLabelPrecedence()) {
+        for (String labelPredicate : getConfig().getLabelPrecedence()) {
             title = getObject(rdfResource, labelPredicate);
             if (title.isPresent()) {
                 return new PropertyValueSimpleImpl(title.get());
@@ -333,9 +319,42 @@ public abstract class AbstractManifestService implements ManifestService {
         return new PropertyValueSimpleImpl(getRepositoryContextIdentifier(id));
     }
 
+    protected Optional<PropertyValueSimpleImpl> getDescription(RdfResource rdfResource) {
+        Optional<String> description = Optional.empty();
+        for (String descriptionPredicate : getConfig().getDescriptionPrecedence()) {
+            description = getObject(rdfResource, descriptionPredicate);
+            if (description.isPresent()) {
+                return Optional.of(new PropertyValueSimpleImpl(description.get()));
+            }
+        }
+        return Optional.empty();
+    }
+
+    protected Optional<PropertyValueSimpleImpl> getAttribution(RdfResource rdfResource) {
+        Optional<String> attribution = Optional.empty();
+        for (String attributionPredicate : getConfig().getAttributionPrecedence()) {
+            attribution = getObject(rdfResource, attributionPredicate);
+            if (attribution.isPresent()) {
+                return Optional.of(new PropertyValueSimpleImpl(attribution.get()));
+            }
+        }
+        return Optional.empty();
+    }
+
+    protected Optional<String> getLicense(RdfResource rdfResource) {
+        Optional<String> license = Optional.empty();
+        for (String licensePredicate : getConfig().getLicensePrecedence()) {
+            license = getObject(rdfResource, licensePredicate);
+            if (license.isPresent()) {
+                return Optional.of(license.get());
+            }
+        }
+        return Optional.empty();
+    }
+
     protected List<Metadata> getMetadata(RdfResource rdfResource) {
         List<Metadata> metadata = new ArrayList<Metadata>();
-        for (String metadataPrefix : getMetadataPrefixes()) {
+        for (String metadataPrefix : getConfig().getMetadataPrefixes()) {
             metadata.addAll(getMetadata(rdfResource, metadataPrefix));
         }
         return metadata;
@@ -357,11 +376,7 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected abstract String getRepositoryPath(String url);
 
-    protected abstract List<String> getLabelPrecedence();
-
-    protected abstract List<String> getDescriptionPrecedence();
-
-    protected abstract List<String> getMetadataPrefixes();
+    protected abstract AbstractIiifConfig getConfig();
 
     private Service getService(RdfResource rdfResource, String name) throws InvalidUrlException {
         Service service = new ServiceImpl(getImageUri(rdfResource.getResource().getURI()));
