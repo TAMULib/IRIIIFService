@@ -9,6 +9,10 @@ public abstract class AbstractIiifConfig {
 
     private List<String> descriptionPrecedence = new ArrayList<String>();
 
+    private List<String> attributionPrecedence = new ArrayList<String>();
+
+    private List<String> licensePrecedence = new ArrayList<String>();
+
     private List<String> metadataPrefixes = new ArrayList<String>();
 
     private String url;
@@ -29,6 +33,22 @@ public abstract class AbstractIiifConfig {
 
     public void setDescriptionPrecedence(List<String> descriptionPrecedence) {
         this.descriptionPrecedence = descriptionPrecedence;
+    }
+
+    public List<String> getAttributionPrecedence() {
+        return attributionPrecedence;
+    }
+
+    public void setAttributionPrecedence(List<String> attributionPrecedence) {
+        this.attributionPrecedence = attributionPrecedence;
+    }
+
+    public List<String> getLicensePrecedence() {
+        return licensePrecedence;
+    }
+
+    public void setLicensePrecedence(List<String> licensePrecedence) {
+        this.licensePrecedence = licensePrecedence;
     }
 
     public List<String> getMetadataPrefixes() {

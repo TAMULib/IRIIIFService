@@ -35,6 +35,7 @@ import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
 import de.digitalcollections.iiif.presentation.model.impl.v2.CanvasImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
+import edu.tamu.iiif.config.AbstractIiifConfig;
 import edu.tamu.iiif.config.DSpaceRdfIiifConfig;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.InvalidUrlException;
@@ -166,18 +167,8 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
     }
 
     @Override
-    protected List<String> getLabelPrecedence() {
-        return config.getLabelPrecedence();
-    }
-
-    @Override
-    protected List<String> getDescriptionPrecedence() {
-        return config.getDescriptionPrecedence();
-    }
-
-    @Override
-    protected List<String> getMetadataPrefixes() {
-        return config.getMetadataPrefixes();
+    protected AbstractIiifConfig getConfig() {
+        return config;
     }
 
     private URI getDSpaceIiifUri(String handle, String type) throws URISyntaxException {

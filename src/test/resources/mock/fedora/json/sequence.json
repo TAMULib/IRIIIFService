@@ -48,6 +48,14 @@
         {
           "label": "date",
           "value": "1/5/2018"
+        },
+        {
+          "label": "license",
+          "value": "Test license"
+        },
+        {
+          "label": "contributor",
+          "value": "Bob Boring"
         }
       ],
       "width": 2400
