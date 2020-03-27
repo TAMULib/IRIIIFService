@@ -4,11 +4,7 @@ import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.http.HttpServletResponse;
-
+import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +25,8 @@ import edu.tamu.iiif.service.ResourceResolver;
 @RequestMapping("/resources")
 public class ResourceController {
 
+    private final static UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" }, UrlValidator.ALLOW_LOCAL_URLS);
+
     @Autowired
     private ResourceResolver resourceResolver;
 
@@ -47,11 +45,17 @@ public class ResourceController {
 
     @GetMapping(value = "/lookup", produces = "text/plain")
     public ResponseEntity<String> getResourceId(@RequestParam(value = "uri", required = true) String uri) throws InvalidUrlException, NotFoundException {
+        if (!urlValidator.isValid(uri)) {
+            throw new InvalidUrlException(String.format("%s is not a valid URL!", uri));
+        }
         return ResponseEntity.ok(resourceResolver.lookup(uri));
     }
 
     @RequestMapping(method = { POST, PUT }, produces = "text/plain")
     public ResponseEntity<String> addResource(@RequestParam(value = "uri", required = true) String uri) throws InvalidUrlException {
+        if (!urlValidator.isValid(uri)) {
+            throw new InvalidUrlException(String.format("%s is not a valid URL!", uri));
+        }
         try {
             return new ResponseEntity<>(resourceResolver.lookup(uri), HttpStatus.OK);
         } catch (NotFoundException e) {
