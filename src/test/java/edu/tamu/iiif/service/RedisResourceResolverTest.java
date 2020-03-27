@@ -27,9 +27,7 @@ public class RedisResourceResolverTest {
 
     private final RedisResource mockResource = new RedisResource("26f9b338-f744-11e8-8eb2-f2801f1b9fd1", "http://localhost:9000/fcrepo/rest/image01");
 
-    private final String urlNotExist = "http://localhost:9000/xmlui/bitstream/handle/123456789/158308/image05.jpg";
-
-    private final String idNotExist = "26f9b338-f744-11e8-8eb2-f2801f1b9fd9";
+    private final RedisResource mockResourceNotExist = new RedisResource("26f9b338-f744-11e8-8eb2-f2801f1b9fd9", "http://localhost:9000/fcrepo/rest/image02");
 
     @Before
     public void setup() {
@@ -41,9 +39,9 @@ public class RedisResourceResolverTest {
         
         doNothing().when(redisResourceRepo).delete(mockResource.getId());
 
-        when(redisResourceRepo.existsByUrl(urlNotExist)).thenReturn(false);
+        when(redisResourceRepo.existsByUrl(mockResourceNotExist.getUrl())).thenReturn(false);
 
-        when(redisResourceRepo.exists(idNotExist)).thenReturn(false);
+        when(redisResourceRepo.exists(mockResourceNotExist.getId())).thenReturn(false);
 
         setField(redisResourceResolver, "redisResourceRepo", redisResourceRepo);
     }
@@ -56,7 +54,7 @@ public class RedisResourceResolverTest {
 
     @Test(expected = NotFoundException.class)
     public void testLookupNotFound() throws NotFoundException {
-        redisResourceResolver.lookup(urlNotExist);
+        redisResourceResolver.lookup(mockResourceNotExist.getUrl());
     }
 
     @Test
@@ -73,7 +71,7 @@ public class RedisResourceResolverTest {
 
     @Test(expected = NotFoundException.class)
     public void testResolveNotFound() throws NotFoundException {
-        redisResourceResolver.resolve(idNotExist);
+        redisResourceResolver.resolve(mockResourceNotExist.getId());
     }
 
     @Test
@@ -83,7 +81,7 @@ public class RedisResourceResolverTest {
 
     @Test(expected = NotFoundException.class)
     public void testRemoveNotFound() throws NotFoundException {
-        redisResourceResolver.remove(idNotExist);
+        redisResourceResolver.remove(mockResourceNotExist.getId());
     }
 
 }

@@ -1,5 +1,6 @@
 package edu.tamu.iiif.controller.advice;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.tamu.iiif.exception.InvalidUrlException;
 import edu.tamu.iiif.exception.NotFoundException;
 
 @RestController
@@ -59,6 +61,13 @@ public class GlobalExceptionHandler {
     public @ResponseBody ResponseEntity<String> handleNotFoundException(NotFoundException exception) {
         logger.debug(exception.getMessage(), exception);
         return new ResponseEntity<String>(exception.getMessage(), NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidUrlException.class)
+    @ResponseStatus(value = BAD_REQUEST)
+    public @ResponseBody ResponseEntity<String> handleInvalidUrlException(InvalidUrlException exception) {
+        logger.debug(exception.getMessage(), exception);
+        return new ResponseEntity<String>(exception.getMessage(), BAD_REQUEST);
     }
 
 }
