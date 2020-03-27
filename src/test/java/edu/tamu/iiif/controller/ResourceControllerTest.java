@@ -1,6 +1,7 @@
 package edu.tamu.iiif.controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.TEXT_PLAIN;
@@ -15,7 +16,6 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,8 +31,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 import edu.tamu.iiif.exception.InvalidUrlException;
+import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.RedisResource;
-import edu.tamu.iiif.model.repo.RedisResourceRepo;
+import edu.tamu.iiif.service.ResourceResolver;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = ResourceController.class, secure = false)
@@ -43,10 +44,10 @@ public class ResourceControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private RedisResourceRepo redisResourceRepo;
+    private ResourceResolver resourceResolver;
 
     @Before
-    public void setup() {
+    public void setup() throws InvalidUrlException, NotFoundException {
         List<RedisResource> mockResources = new ArrayList<RedisResource>();
 
         mockResources.add(new RedisResource("26f9b338-f744-11e8-8eb2-f2801f1b9fd1", "http://localhost:9000/fcrepo/rest/image01"));
@@ -59,16 +60,19 @@ public class ResourceControllerTest {
 
         mockResources.forEach(mockResource -> {
             try {
-                when(redisResourceRepo.getOrCreate(mockResource.getUrl())).thenReturn(mockResource);
-                when(redisResourceRepo.findOne(mockResource.getId())).thenReturn(mockResource);
-                when(redisResourceRepo.findByUrl(mockResource.getUrl())).thenReturn(Optional.ofNullable(mockResource));
+                when(resourceResolver.resolve(mockResource.getId())).thenReturn(mockResource.getUrl());
+                when(resourceResolver.lookup(mockResource.getUrl())).thenReturn(mockResource.getId());
+                when(resourceResolver.create(mockResource.getUrl())).thenReturn(mockResource.getId());
             } catch (InvalidUrlException e) {
+                e.printStackTrace();
+            } catch (NotFoundException e) {
                 e.printStackTrace();
             }
         });
 
-        when(redisResourceRepo.findAll()).thenReturn(mockResources);
-        when(redisResourceRepo.findByUrl("http://localhost:9000/fcrepo/rest/image09")).thenReturn(Optional.empty());
+        when(resourceResolver.lookup("http://localhost:9000/fcrepo/rest/image09")).thenThrow(new NotFoundException("Resource with url http://localhost:9000/fcrepo/rest/image09 not found!"));
+        when(resourceResolver.resolve("26f9b338-f744-11e8-8eb2-f2801f1b9fd9")).thenThrow(new NotFoundException("Resource with id 26f9b338-f744-11e8-8eb2-f2801f1b9fd9 not found!"));
+        doThrow(new NotFoundException("Resource with id 26f9b338-f744-11e8-8eb2-f2801f1b9fd9 not found!")).when(resourceResolver).remove("26f9b338-f744-11e8-8eb2-f2801f1b9fd9");
     }
 
     @Test
@@ -82,10 +86,10 @@ public class ResourceControllerTest {
 
     @Test
     public void testGetResourceUrlNotFound() throws Exception {
-        RequestBuilder requestBuilder = get("/resources/{id}", "26f9b338-f744-11e8-8eb2-f2801f1b9fd8").accept(TEXT_PLAIN);
+        RequestBuilder requestBuilder = get("/resources/{id}", "26f9b338-f744-11e8-8eb2-f2801f1b9fd9").accept(TEXT_PLAIN);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         assertEquals(404, result.getResponse().getStatus());
-        assertEquals("Unable to resolve resource with id 26f9b338-f744-11e8-8eb2-f2801f1b9fd8", result.getResponse().getContentAsString());
+        assertEquals("Resource with id 26f9b338-f744-11e8-8eb2-f2801f1b9fd9 not found!", result.getResponse().getContentAsString());
     }
 
     @Test
@@ -102,7 +106,7 @@ public class ResourceControllerTest {
         RequestBuilder requestBuilder = get("/resources/{id}/redirect", "26f9b338-f744-11e8-8eb2-f2801f1b9fd9").accept(APPLICATION_JSON);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         assertEquals(404, result.getResponse().getStatus());
-        assertEquals("Unable to resolve resource with id 26f9b338-f744-11e8-8eb2-f2801f1b9fd9", result.getResponse().getContentAsString());
+        assertEquals("Resource with id 26f9b338-f744-11e8-8eb2-f2801f1b9fd9 not found!", result.getResponse().getContentAsString());
     }
 
     @Test
@@ -119,7 +123,7 @@ public class ResourceControllerTest {
         RequestBuilder requestBuilder = get("/resources/lookup").param("uri", "http://localhost:9000/fcrepo/rest/image09").accept(TEXT_PLAIN);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         assertEquals(404, result.getResponse().getStatus());
-        assertEquals("No resourse found with uri http://localhost:9000/fcrepo/rest/image09", result.getResponse().getContentAsString());
+        assertEquals("Resource with url http://localhost:9000/fcrepo/rest/image09 not found!", result.getResponse().getContentAsString());
     }
 
     @Test
@@ -151,7 +155,7 @@ public class ResourceControllerTest {
 
     @Test
     public void testRemoveResourceNotFound() throws Exception {
-        RequestBuilder requestBuilder = delete("/resources/{id}", "26f9b338-f744-11e8-8eb2-f2801f1b9fd7").accept(TEXT_PLAIN);
+        RequestBuilder requestBuilder = delete("/resources/{id}", "26f9b338-f744-11e8-8eb2-f2801f1b9fd9").accept(TEXT_PLAIN);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         assertEquals(404, result.getResponse().getStatus());
     }

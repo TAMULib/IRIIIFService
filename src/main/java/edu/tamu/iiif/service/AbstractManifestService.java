@@ -17,6 +17,11 @@ import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
@@ -27,11 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import de.digitalcollections.iiif.presentation.model.api.v2.Image;
@@ -54,7 +54,6 @@ import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
-import edu.tamu.iiif.model.repo.RedisResourceRepo;
 
 public abstract class AbstractManifestService implements ManifestService {
 
@@ -96,7 +95,7 @@ public abstract class AbstractManifestService implements ManifestService {
     private RedisManifestRepo redisManifestRepo;
 
     @Autowired
-    private RedisResourceRepo redisResourceRepo;
+    private ResourceResolver resourceResolver;
 
     @PostConstruct
     protected void init() {
@@ -304,7 +303,11 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     private String getResourceId(String url) throws InvalidUrlException {
-        return redisResourceRepo.getOrCreate(url).getId();
+        try {
+            return resourceResolver.lookup(url);
+        } catch(NotFoundException e) {
+            return resourceResolver.create(url);
+        }
     }
 
     protected PropertyValueSimpleImpl getLabel(RdfResource rdfResource) {
