@@ -70,8 +70,13 @@ public class ResourceControllerTest {
             }
         });
 
+        when(resourceResolver.lookup("http://localhost:9000/xmlui/bitstream/handle/123456789/158308/image05.jpg")).thenThrow(new NotFoundException("Resource with url http://localhost:9000/xmlui/bitstream/handle/123456789/158308/image05.jpg not found!"));
+        when(resourceResolver.create("http://localhost:9000/xmlui/bitstream/handle/123456789/158308/image05.jpg")).thenReturn("26f9ef82-f744-11e8-8eb2-f2801f1b9fd1");
+
         when(resourceResolver.lookup("http://localhost:9000/fcrepo/rest/image09")).thenThrow(new NotFoundException("Resource with url http://localhost:9000/fcrepo/rest/image09 not found!"));
+
         when(resourceResolver.resolve("26f9b338-f744-11e8-8eb2-f2801f1b9fd9")).thenThrow(new NotFoundException("Resource with id 26f9b338-f744-11e8-8eb2-f2801f1b9fd9 not found!"));
+
         doThrow(new NotFoundException("Resource with id 26f9b338-f744-11e8-8eb2-f2801f1b9fd9 not found!")).when(resourceResolver).remove("26f9b338-f744-11e8-8eb2-f2801f1b9fd9");
     }
 
@@ -127,21 +132,39 @@ public class ResourceControllerTest {
     }
 
     @Test
-    public void testPutResource() throws Exception {
+    public void testPutExistingResource() throws Exception {
         RequestBuilder requestBuilder = put("/resources").param("uri", "http://localhost:9000/xmlui/bitstream/handle/123456789/158308/image03.jpg").accept(TEXT_PLAIN);
         RestDocumentationResultHandler restDocHandler = document("resources/putResource", requestParameters(parameterWithName("uri").description("The resource URI.")));
         MvcResult result = mockMvc.perform(requestBuilder).andDo(restDocHandler).andReturn();
-        assertEquals(201, result.getResponse().getStatus());
+        assertEquals(200, result.getResponse().getStatus());
         assertEquals("26f9b900-f744-11e8-8eb2-f2801f1b9fd1", result.getResponse().getContentAsString());
     }
 
     @Test
-    public void testPostResource() throws Exception {
+    public void testPostExistingResource() throws Exception {
         RequestBuilder requestBuilder = post("/resources").param("uri", "http://localhost:9000/xmlui/bitstream/handle/123456789/158308/image03.jpg").accept(TEXT_PLAIN);
         RestDocumentationResultHandler restDocHandler = document("resources/postResource", requestParameters(parameterWithName("uri").description("The resource URI.")));
         MvcResult result = mockMvc.perform(requestBuilder).andDo(restDocHandler).andReturn();
-        assertEquals(201, result.getResponse().getStatus());
+        assertEquals(200, result.getResponse().getStatus());
         assertEquals("26f9b900-f744-11e8-8eb2-f2801f1b9fd1", result.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void testPutNewResource() throws Exception {
+        RequestBuilder requestBuilder = put("/resources").param("uri", "http://localhost:9000/xmlui/bitstream/handle/123456789/158308/image05.jpg").accept(TEXT_PLAIN);
+        RestDocumentationResultHandler restDocHandler = document("resources/putResource", requestParameters(parameterWithName("uri").description("The resource URI.")));
+        MvcResult result = mockMvc.perform(requestBuilder).andDo(restDocHandler).andReturn();
+        assertEquals(201, result.getResponse().getStatus());
+        assertEquals("26f9ef82-f744-11e8-8eb2-f2801f1b9fd1", result.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void testPostNewResource() throws Exception {
+        RequestBuilder requestBuilder = post("/resources").param("uri", "http://localhost:9000/xmlui/bitstream/handle/123456789/158308/image05.jpg").accept(TEXT_PLAIN);
+        RestDocumentationResultHandler restDocHandler = document("resources/postResource", requestParameters(parameterWithName("uri").description("The resource URI.")));
+        MvcResult result = mockMvc.perform(requestBuilder).andDo(restDocHandler).andReturn();
+        assertEquals(201, result.getResponse().getStatus());
+        assertEquals("26f9ef82-f744-11e8-8eb2-f2801f1b9fd1", result.getResponse().getContentAsString());
     }
 
     @Test
@@ -149,8 +172,7 @@ public class ResourceControllerTest {
         RequestBuilder requestBuilder = delete("/resources/{id}", "26f9b338-f744-11e8-8eb2-f2801f1b9fd1").accept(TEXT_PLAIN);
         RestDocumentationResultHandler restDocHandler = document("resources/removeResource", pathParameters(parameterWithName("id").description("The resource id.")));
         MvcResult result = mockMvc.perform(requestBuilder).andDo(restDocHandler).andReturn();
-        assertEquals(200, result.getResponse().getStatus());
-        assertEquals("Success", result.getResponse().getContentAsString());
+        assertEquals(204, result.getResponse().getStatus());
     }
 
     @Test

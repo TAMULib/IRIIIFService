@@ -4,8 +4,14 @@ import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,8 +33,8 @@ public class ResourceController {
     private ResourceResolver resourceResolver;
 
     @GetMapping(value = "/{id}", produces = "text/plain")
-    public String getResourceUrl(@PathVariable String id) throws NotFoundException {
-        return resourceResolver.resolve(id);
+    public ResponseEntity<String> getResourceUrl(@PathVariable String id) throws NotFoundException {
+        return ResponseEntity.ok(resourceResolver.resolve(id));
     }
 
     @GetMapping(value = "/{id}/redirect")
@@ -40,24 +46,23 @@ public class ResourceController {
     }
 
     @GetMapping(value = "/lookup", produces = "text/plain")
-    public String getResourceId(@RequestParam(value = "uri", required = true) String uri) throws InvalidUrlException, NotFoundException {
-        return resourceResolver.lookup(uri);
+    public ResponseEntity<String> getResourceId(@RequestParam(value = "uri", required = true) String uri) throws InvalidUrlException, NotFoundException {
+        return ResponseEntity.ok(resourceResolver.lookup(uri));
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = { POST, PUT }, produces = "text/plain")
-    public String addResource(@RequestParam(value = "uri", required = true) String uri) throws InvalidUrlException {
+    public ResponseEntity<String> addResource(@RequestParam(value = "uri", required = true) String uri) throws InvalidUrlException {
         try {
-            return resourceResolver.lookup(uri);
+            return new ResponseEntity<>(resourceResolver.lookup(uri), HttpStatus.OK);
         } catch (NotFoundException e) {
-            return resourceResolver.create(uri);
+            return new ResponseEntity<>(resourceResolver.create(uri), HttpStatus.CREATED);
         }
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{id}", produces = "text/plain")
-    public String removeResource(@PathVariable String id) throws NotFoundException {
+    public void removeResource(@PathVariable String id) throws NotFoundException {
         resourceResolver.remove(id);
-        return "Success";
     }
 
 }
