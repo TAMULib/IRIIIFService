@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
+import org.springframework.http.RequestEntity.BodyBuilder;
+import org.springframework.http.RequestEntity.HeadersBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -28,9 +30,9 @@ public class RemoteResourceResolver implements ResourceResolver {
     private RestTemplate restTemplate;
 
     public String lookup(String url) throws URISyntaxException, NotFoundException {
-        URIBuilder builder = new URIBuilder(resolver.getUrl());
-        builder.addParameter("url", url);
-        URI uri = builder.build();
+        URIBuilder uriBuilder = new URIBuilder(resolver.getUrl());
+        uriBuilder.addParameter("url", url);
+        URI uri = uriBuilder.build();
         RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.TEXT_PLAIN).build();
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
         if (response.getStatusCode().equals(HttpStatus.OK)) {
@@ -40,10 +42,14 @@ public class RemoteResourceResolver implements ResourceResolver {
     }
 
     public String create(String url) throws URISyntaxException {
-        URIBuilder builder = new URIBuilder(resolver.getUrl());
-        builder.addParameter("url", url);
-        URI uri = builder.build();
-        RequestEntity<String> request = RequestEntity.post(uri).accept(MediaType.TEXT_PLAIN).body(url);
+        URIBuilder uriBuilder = new URIBuilder(resolver.getUrl());
+        uriBuilder.addParameter("url", url);
+        URI uri = uriBuilder.build();
+        BodyBuilder bodyBuilder = RequestEntity.post(uri).accept(MediaType.TEXT_PLAIN);
+        if (resolver.hasCredentials()) {
+            bodyBuilder.header("Authorization", String.format("Basic %s", resolver.getBase64Credentials()));
+        }
+        RequestEntity<Void> request = bodyBuilder.build();
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
         if (response.getStatusCode().equals(HttpStatus.CREATED) || response.getStatusCode().equals(HttpStatus.OK)) {
             return response.getBody();
@@ -53,8 +59,8 @@ public class RemoteResourceResolver implements ResourceResolver {
 
     public String resolve(String id) throws NotFoundException {
         try {
-            URIBuilder builder = new URIBuilder(StringUtils.removeEnd(resolver.getUrl(), "/") + "/" + id);
-            URI uri = builder.build();
+            URIBuilder uriBuilder = new URIBuilder(StringUtils.removeEnd(resolver.getUrl(), "/") + "/" + id);
+            URI uri = uriBuilder.build();
             RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.TEXT_PLAIN).build();
             ResponseEntity<String> response = restTemplate.exchange(request, String.class);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
@@ -68,9 +74,13 @@ public class RemoteResourceResolver implements ResourceResolver {
 
     public void remove(String id) throws NotFoundException {
         try {
-            URIBuilder builder = new URIBuilder(StringUtils.removeEnd(resolver.getUrl(), "/") + "/" + id);
-            URI uri = builder.build();
-            RequestEntity<Void> request = RequestEntity.delete(uri).build();
+            URIBuilder uriBuilder = new URIBuilder(StringUtils.removeEnd(resolver.getUrl(), "/") + "/" + id);
+            URI uri = uriBuilder.build();
+            HeadersBuilder<?> headerBuilder = RequestEntity.delete(uri);
+            if (resolver.hasCredentials()) {
+                headerBuilder.header("Authorization", String.format("Basic %s", resolver.getBase64Credentials()));
+            }
+            RequestEntity<Void> request = headerBuilder.build();
             ResponseEntity<String> response = restTemplate.exchange(request, String.class);
             if (response.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
                 throw new NotFoundException(String.format("Resource with id %s not found!", id));
