@@ -1,6 +1,7 @@
 package edu.tamu.iiif.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import edu.tamu.iiif.exception.NotFoundException;
@@ -8,6 +9,7 @@ import edu.tamu.iiif.model.RedisResource;
 import edu.tamu.iiif.model.repo.RedisResourceRepo;
 
 @Service
+@ConditionalOnProperty(value = "iiif.resolver", havingValue = "redis", matchIfMissing = true)
 public class RedisResourceResolver implements ResourceResolver {
 
     @Autowired
@@ -15,7 +17,7 @@ public class RedisResourceResolver implements ResourceResolver {
 
     public String lookup(String url) throws NotFoundException {
         if (redisResourceRepo.existsByUrl(url)) {
-            return redisResourceRepo.findByUrl(url).getId();    
+            return redisResourceRepo.findByUrl(url).getId();
         }
         throw new NotFoundException(String.format("Resource with url %s not found!", url));
     }

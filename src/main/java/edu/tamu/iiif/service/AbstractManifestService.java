@@ -47,7 +47,7 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.MetadataImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ServiceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ThumbnailImpl;
-import edu.tamu.iiif.config.AbstractIiifConfig;
+import edu.tamu.iiif.config.model.AbstractIiifConfig;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.InvalidUrlException;
 import edu.tamu.iiif.exception.NotFoundException;

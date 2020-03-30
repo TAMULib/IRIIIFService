@@ -8,16 +8,15 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import edu.tamu.iiif.controller.ManifestRequest;
-import edu.tamu.iiif.service.dspace.rdf.DSpaceRdfImageManifestService;
 
 public class DSpaceRdfImageManifestServiceTest extends AbstractDSpaceRdfManifestServiceTest {
 

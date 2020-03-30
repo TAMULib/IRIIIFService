@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import edu.tamu.iiif.config.DSpaceRdfIiifConfig;
+import edu.tamu.iiif.config.model.DSpaceRdfIiifConfig;
 import edu.tamu.iiif.service.AbstractManifestServiceTest;
 
 public abstract class AbstractDSpaceRdfManifestServiceTest extends AbstractManifestServiceTest {
