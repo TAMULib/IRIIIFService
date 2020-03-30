@@ -1,4 +1,4 @@
-package edu.tamu.iiif.config;
+package edu.tamu.iiif.config.model;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,7 +8,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import edu.tamu.iiif.config.model.AdminConfig.Credentials;
 import edu.tamu.iiif.config.model.ResolverConfig.ResolverType;
-import edu.tamu.iiif.config.model.ResolverConfig;
 
 @RunWith(SpringRunner.class)
 public class ResolverConfigTest {

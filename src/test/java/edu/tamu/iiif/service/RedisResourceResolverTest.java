@@ -7,6 +7,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.net.URISyntaxException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,9 +36,9 @@ public class RedisResourceResolverTest {
         when(redisResourceRepo.exists(mockResource.getId())).thenReturn(true);
         when(redisResourceRepo.findOne(mockResource.getId())).thenReturn(mockResource);
         when(redisResourceRepo.existsByUrl(mockResource.getUrl())).thenReturn(true);
-        when(redisResourceRepo.findByUrl(mockResource.getUrl())).thenReturn(mockResource);        
+        when(redisResourceRepo.findByUrl(mockResource.getUrl())).thenReturn(mockResource);
         when(redisResourceRepo.save(any(RedisResource.class))).thenReturn(mockResource);
-        
+
         doNothing().when(redisResourceRepo).delete(mockResource.getId());
 
         when(redisResourceRepo.existsByUrl(mockResourceNotExist.getUrl())).thenReturn(false);
@@ -47,18 +49,18 @@ public class RedisResourceResolverTest {
     }
 
     @Test
-    public void testLookup() throws NotFoundException {
+    public void testLookup() throws NotFoundException, URISyntaxException {
         String id = redisResourceResolver.lookup(mockResource.getUrl());
         assertEquals(mockResource.getId(), id);
     }
 
     @Test(expected = NotFoundException.class)
-    public void testLookupNotFound() throws NotFoundException {
+    public void testLookupNotFound() throws NotFoundException, URISyntaxException {
         redisResourceResolver.lookup(mockResourceNotExist.getUrl());
     }
 
     @Test
-    public void testCreate() {
+    public void testCreate() throws URISyntaxException {
         String id = redisResourceResolver.create(mockResource.getUrl());
         assertNotNull(id);
     }

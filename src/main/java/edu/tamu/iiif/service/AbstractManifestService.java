@@ -32,6 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.client.RestTemplate;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import de.digitalcollections.iiif.presentation.model.api.v2.Image;
@@ -49,7 +51,6 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.ServiceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ThumbnailImpl;
 import edu.tamu.iiif.config.model.AbstractIiifConfig;
 import edu.tamu.iiif.controller.ManifestRequest;
-import edu.tamu.iiif.exception.InvalidUrlException;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.rdf.RdfResource;
@@ -86,7 +87,7 @@ public abstract class AbstractManifestService implements ManifestService {
     protected String logoUrl;
 
     @Autowired
-    protected HttpService httpService;
+    protected RestTemplate restTemplate;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -154,7 +155,7 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected String getRdf(String url) throws NotFoundException {
-        Optional<String> rdf = Optional.ofNullable(httpService.get(url));
+        Optional<String> rdf = Optional.ofNullable(restTemplate.getForObject(url, String.class));
         if (rdf.isPresent()) {
             return rdf.get();
         }
@@ -169,7 +170,7 @@ public abstract class AbstractManifestService implements ManifestService {
         return logoUrl;
     }
 
-    protected Optional<Image> generateImage(ManifestRequest request, RdfResource rdfResource, String canvasId) throws InvalidUrlException, URISyntaxException {
+    protected Optional<Image> generateImage(ManifestRequest request, RdfResource rdfResource, String canvasId) throws URISyntaxException, URISyntaxException {
         String url = rdfResource.getResource().getURI();
         Optional<Image> optionalImage = Optional.empty();
         Optional<ImageResource> imageResource = generateImageResource(request, rdfResource);
@@ -182,7 +183,7 @@ public abstract class AbstractManifestService implements ManifestService {
         return optionalImage;
     }
 
-    protected Optional<ImageResource> generateImageResource(ManifestRequest request, RdfResource rdfResource) throws InvalidUrlException {
+    protected Optional<ImageResource> generateImageResource(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException {
         String url = rdfResource.getResource().getURI();
 
         Optional<ImageResource> optionalImageResource = Optional.empty();
@@ -249,26 +250,26 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected String fetchImageInfo(String url) throws NotFoundException {
-        Optional<String> imageInfo = Optional.ofNullable(httpService.get(url));
+        Optional<String> imageInfo = Optional.ofNullable(restTemplate.getForObject(url, String.class));
         if (imageInfo.isPresent()) {
             return imageInfo.get();
         }
         throw new NotFoundException("Image information not found!");
     }
 
-    protected URI getImageUri(String url) throws InvalidUrlException {
+    protected URI getImageUri(String url) throws URISyntaxException {
         return URI.create(joinPath(imageServerUrl, getResourceId(url)));
     }
 
-    protected URI getImageFullUrl(String url) throws InvalidUrlException {
+    protected URI getImageFullUrl(String url) throws URISyntaxException {
         return URI.create(joinPath(imageServerUrl, getResourceId(url), IIIF_FULL_PATH));
     }
 
-    protected URI getImageThumbnailUrl(String url) throws InvalidUrlException {
+    protected URI getImageThumbnailUrl(String url) throws URISyntaxException {
         return URI.create(joinPath(imageServerUrl, getResourceId(url), IIIF_THUMBNAIL_PATH));
     }
 
-    protected URI getImageInfoUri(String url) throws InvalidUrlException {
+    protected URI getImageInfoUri(String url) throws URISyntaxException {
         return URI.create(joinPath(imageServerUrl, getResourceId(url), IMAGE_JSON));
     }
 
@@ -276,7 +277,7 @@ public abstract class AbstractManifestService implements ManifestService {
         return URI.create(joinPath(serviceUrl.toString(), IIIF_THUMBNAIL_PATH));
     }
 
-    protected List<Service> getServices(RdfResource rdfResource, String... names) throws InvalidUrlException {
+    protected List<Service> getServices(RdfResource rdfResource, String... names) throws URISyntaxException {
         List<Service> services = new ArrayList<Service>();
         for (String name : names) {
             services.add(getService(rdfResource, name));
@@ -302,10 +303,10 @@ public abstract class AbstractManifestService implements ManifestService {
         return optionalThumbnail;
     }
 
-    private String getResourceId(String url) throws InvalidUrlException {
+    private String getResourceId(String url) throws URISyntaxException {
         try {
             return resourceResolver.lookup(url);
-        } catch(NotFoundException e) {
+        } catch (NotFoundException e) {
             return resourceResolver.create(url);
         }
     }
@@ -381,7 +382,7 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected abstract AbstractIiifConfig getConfig();
 
-    private Service getService(RdfResource rdfResource, String name) throws InvalidUrlException {
+    private Service getService(RdfResource rdfResource, String name) throws URISyntaxException {
         Service service = new ServiceImpl(getImageUri(rdfResource.getResource().getURI()));
         service.setLabel(new PropertyValueSimpleImpl(name));
         service.setContext(IIIF_IMAGE_API_CONTEXT);
@@ -440,7 +441,8 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     private Optional<String> getMimeType(String url) {
-        return Optional.ofNullable(httpService.contentType(url));
+        HttpHeaders headers = restTemplate.headForHeaders(url);
+        return Optional.ofNullable(headers.getFirst(HttpHeaders.CONTENT_TYPE));
     }
 
 }

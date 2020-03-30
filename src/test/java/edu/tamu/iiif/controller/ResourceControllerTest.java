@@ -14,8 +14,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URISyntaxException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +29,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 
-import edu.tamu.iiif.exception.InvalidUrlException;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.RedisResource;
 import edu.tamu.iiif.service.ResourceResolver;
@@ -58,14 +56,16 @@ public class ResourceControllerTest {
 
     private final String resourceWithUrlNotFoundYet = String.format("Resource with url %s not found!", mockResourceNotExistYet.getUrl());
 
+    private final String invalidUrl = "fubar";
+
     @Before
-    public void setup() throws InvalidUrlException, NotFoundException {
+    public void setup() throws URISyntaxException, NotFoundException {
         try {
             when(resourceResolver.resolve(mockResource.getId())).thenReturn(mockResource.getUrl());
             when(resourceResolver.lookup(mockResource.getUrl())).thenReturn(mockResource.getId());
             when(resourceResolver.create(mockResource.getUrl())).thenReturn(mockResource.getId());
             when(resourceResolver.create(mockResourceNotExistYet.getUrl())).thenReturn(mockResourceNotExistYet.getId());
-        } catch (InvalidUrlException e) {
+        } catch (URISyntaxException e) {
             e.printStackTrace();
         } catch (NotFoundException e) {
             e.printStackTrace();
@@ -76,7 +76,9 @@ public class ResourceControllerTest {
         when(resourceResolver.lookup(mockResourceNotExist.getUrl())).thenThrow(new NotFoundException(resourceWithUrlNotFound));
 
         when(resourceResolver.lookup(mockResourceNotExistYet.getUrl())).thenThrow(new NotFoundException(resourceWithUrlNotFoundYet));
-        
+
+        when(resourceResolver.lookup(invalidUrl)).thenThrow(new URISyntaxException(invalidUrl, "Not a valid URL"));
+
         doThrow(new NotFoundException(resourceWithIdNotFound)).when(resourceResolver).remove(mockResourceNotExist.getId());
     }
 
@@ -125,11 +127,11 @@ public class ResourceControllerTest {
 
     @Test
     public void testGetResourceIdInvalidUrl() throws Exception {
-        RequestBuilder requestBuilder = get("/resources/lookup").param("uri", "fubar").accept(TEXT_PLAIN);
+        RequestBuilder requestBuilder = get("/resources/lookup").param("uri", invalidUrl).accept(TEXT_PLAIN);
         RestDocumentationResultHandler restDocHandler = document("resources/getResourceId", requestParameters(parameterWithName("uri").description("The resource URI.")));
         MvcResult result = mockMvc.perform(requestBuilder).andDo(restDocHandler).andReturn();
         assertEquals(400, result.getResponse().getStatus());
-        assertEquals("fubar is not a valid URL!", result.getResponse().getContentAsString());
+        assertEquals("Not a valid URL: " + invalidUrl, result.getResponse().getContentAsString());
     }
 
     @Test
@@ -178,11 +180,11 @@ public class ResourceControllerTest {
 
     @Test
     public void testPostResourceInvalidUrl() throws Exception {
-        RequestBuilder requestBuilder = post("/resources").param("uri", "fubar").accept(TEXT_PLAIN);
+        RequestBuilder requestBuilder = post("/resources").param("uri", invalidUrl).accept(TEXT_PLAIN);
         RestDocumentationResultHandler restDocHandler = document("resources/postResource", requestParameters(parameterWithName("uri").description("The resource URI.")));
         MvcResult result = mockMvc.perform(requestBuilder).andDo(restDocHandler).andReturn();
         assertEquals(400, result.getResponse().getStatus());
-        assertEquals("fubar is not a valid URL!", result.getResponse().getContentAsString());
+        assertEquals("Not a valid URL: " + invalidUrl, result.getResponse().getContentAsString());
     }
 
     @Test

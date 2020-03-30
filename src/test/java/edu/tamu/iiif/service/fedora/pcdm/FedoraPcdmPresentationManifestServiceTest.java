@@ -12,13 +12,14 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-
-import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.http.HttpHeaders;
 
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.model.ManifestType;
@@ -94,11 +95,13 @@ public class FedoraPcdmPresentationManifestServiceTest extends AbstractFedoraPcd
     }
 
     private void setupMocks() throws IOException {
-        when(httpService.contentType(any(String.class))).thenReturn("image/png; charset=utf-8");
-        when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084"))).thenReturn(readFileToString(itemRdf.getFile(), "UTF-8"));
-        when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084/files/fcr:metadata"))).thenReturn(readFileToString(itemFilesRdf.getFile(), "UTF-8"));
-        when(httpService.get(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084/files/ExCat0084.jpg/fcr:metadata"))).thenReturn(readFileToString(itemFilesEntryRdf.getFile(), "UTF-8"));
-        when(httpService.get(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn/info.json"))).thenReturn(readFileToString(image.getFile(), "UTF-8"));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "image/png; charset=utf-8");
+        when(restTemplate.headForHeaders(any(String.class))).thenReturn(headers);
+        when(restTemplate.getForObject(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084"), eq(String.class))).thenReturn(readFileToString(itemRdf.getFile(), "UTF-8"));
+        when(restTemplate.getForObject(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084/files/fcr:metadata"), eq(String.class))).thenReturn(readFileToString(itemFilesRdf.getFile(), "UTF-8"));
+        when(restTemplate.getForObject(eq(FEDORA_URL + "/mwbObjects/TGWCatalog/Pages/ExCat0084/files/ExCat0084.jpg/fcr:metadata"), eq(String.class))).thenReturn(readFileToString(itemFilesEntryRdf.getFile(), "UTF-8"));
+        when(restTemplate.getForObject(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn/info.json"), eq(String.class))).thenReturn(readFileToString(image.getFile(), "UTF-8"));
     }
 
 }

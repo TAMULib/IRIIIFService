@@ -38,7 +38,6 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
 import edu.tamu.iiif.config.model.AbstractIiifConfig;
 import edu.tamu.iiif.config.model.DSpaceRdfIiifConfig;
 import edu.tamu.iiif.controller.ManifestRequest;
-import edu.tamu.iiif.exception.InvalidUrlException;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
@@ -192,7 +191,7 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         return canvases;
     }
 
-    private RdfCanvas getDSpaceRdfCanvas(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException, InvalidUrlException {
+    private RdfCanvas getDSpaceRdfCanvas(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException, URISyntaxException {
         String uri = rdfResource.getResource().getURI();
         RdfCanvas rdfCanvas = new RdfCanvas();
         String parameterizedCanvasId = RdfModelUtility.getParameterizedId(getHandlePath(uri), request);

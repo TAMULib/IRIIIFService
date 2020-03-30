@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.net.URISyntaxException;
 import java.util.Base64;
 import java.util.Optional;
 
@@ -17,8 +18,8 @@ import org.mockito.Spy;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.RestTemplate;
 
-import edu.tamu.iiif.exception.InvalidUrlException;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
@@ -36,7 +37,7 @@ public abstract class AbstractManifestServiceTest implements ManifestServiceTest
     protected ObjectMapper objectMapper;
 
     @Mock
-    protected HttpService httpService;
+    protected RestTemplate restTemplate;
 
     @Mock
     protected RedisManifestRepo redisManifestRepo;
@@ -45,7 +46,7 @@ public abstract class AbstractManifestServiceTest implements ManifestServiceTest
     protected ResourceResolver resourceResolver;
 
     @Before
-    public void init() throws InvalidUrlException, NotFoundException {
+    public void init() throws URISyntaxException, NotFoundException {
         initMocks(this);
         when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(String.class), any(String.class), any(String.class))).thenReturn(Optional.empty());
 

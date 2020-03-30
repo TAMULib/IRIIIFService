@@ -4,7 +4,8 @@ import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
-import org.apache.commons.validator.routines.UrlValidator;
+import java.net.URISyntaxException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,15 +18,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
-import edu.tamu.iiif.exception.InvalidUrlException;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.service.ResourceResolver;
 
 @RestController
 @RequestMapping("/resources")
 public class ResourceController {
-
-    private final static UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" }, UrlValidator.ALLOW_LOCAL_URLS);
 
     @Autowired
     private ResourceResolver resourceResolver;
@@ -44,18 +42,12 @@ public class ResourceController {
     }
 
     @GetMapping(value = "/lookup", produces = "text/plain")
-    public ResponseEntity<String> getResourceId(@RequestParam(value = "uri", required = true) String uri) throws InvalidUrlException, NotFoundException {
-        if (!urlValidator.isValid(uri)) {
-            throw new InvalidUrlException(String.format("%s is not a valid URL!", uri));
-        }
+    public ResponseEntity<String> getResourceId(@RequestParam(value = "uri", required = true) String uri) throws URISyntaxException, NotFoundException {
         return ResponseEntity.ok(resourceResolver.lookup(uri));
     }
 
     @RequestMapping(method = { POST, PUT }, produces = "text/plain")
-    public ResponseEntity<String> addResource(@RequestParam(value = "uri", required = true) String uri) throws InvalidUrlException {
-        if (!urlValidator.isValid(uri)) {
-            throw new InvalidUrlException(String.format("%s is not a valid URL!", uri));
-        }
+    public ResponseEntity<String> addResource(@RequestParam(value = "uri", required = true) String uri) throws URISyntaxException {
         try {
             return new ResponseEntity<>(resourceResolver.lookup(uri), HttpStatus.OK);
         } catch (NotFoundException e) {
