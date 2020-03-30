@@ -45,7 +45,7 @@ public class RemoteResourceResolver implements ResourceResolver {
         URI uri = builder.build();
         RequestEntity<String> request = RequestEntity.post(uri).accept(MediaType.TEXT_PLAIN).body(url);
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
-        if (response.getStatusCode().equals(HttpStatus.CREATED)) {
+        if (response.getStatusCode().equals(HttpStatus.CREATED) || response.getStatusCode().equals(HttpStatus.OK)) {
             return response.getBody();
         }
         throw new RuntimeException(String.format("Failed to create resource with url %s!", url));
