@@ -32,6 +32,13 @@ iiif:
     -
       username: admin
       password: abc123
+  resolver:
+    # redis or remote
+    type: remote
+    url: http://localhost:9000/entity
+    credentials:
+      username: admin
+      password: admin
   service:
     url: http://localhost:${server.port}${server.contextPath}
     connection:

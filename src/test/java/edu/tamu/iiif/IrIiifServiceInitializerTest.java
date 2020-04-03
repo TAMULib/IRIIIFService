@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import edu.tamu.iiif.config.AdminConfig;
+import edu.tamu.iiif.config.model.AdminConfig;
 import edu.tamu.iiif.constants.Constants;
 
 @RunWith(SpringRunner.class)

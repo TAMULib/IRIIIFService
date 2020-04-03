@@ -1,9 +1,11 @@
 package edu.tamu.iiif.controller.advice;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -59,6 +61,13 @@ public class GlobalExceptionHandler {
     public @ResponseBody ResponseEntity<String> handleNotFoundException(NotFoundException exception) {
         logger.debug(exception.getMessage(), exception);
         return new ResponseEntity<String>(exception.getMessage(), NOT_FOUND);
+    }
+
+    @ExceptionHandler(URISyntaxException.class)
+    @ResponseStatus(value = BAD_REQUEST)
+    public @ResponseBody ResponseEntity<String> handleURISyntaxException(URISyntaxException exception) {
+        logger.debug(exception.getMessage(), exception);
+        return new ResponseEntity<String>(exception.getMessage(), BAD_REQUEST);
     }
 
 }

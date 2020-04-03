@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import edu.tamu.iiif.config.FedoraPcdmIiifConfig;
+import edu.tamu.iiif.config.model.FedoraPcdmIiifConfig;
 import edu.tamu.iiif.service.AbstractManifestServiceTest;
 
 public abstract class AbstractFedoraPcdmManifestServiceTest extends AbstractManifestServiceTest {

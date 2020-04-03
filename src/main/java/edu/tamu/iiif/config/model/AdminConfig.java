@@ -1,4 +1,4 @@
-package edu.tamu.iiif.config;
+package edu.tamu.iiif.config.model;
 
 import java.util.ArrayList;
 import java.util.List;
