@@ -35,6 +35,7 @@ public class DSpaceRdfIiiifConfigTest {
         config.setUrl("http://localhost:8080");
         config.setIdentifier("dspace-rdf");
         config.setWebapp("xmlui");
+        config.setContextAsMetadata(true);
 
         assertEquals(4, config.getLabelPrecedence().size());
         assertEquals("http://purl.org/dc/elements/1.1/title", config.getLabelPrecedence().get(0));
@@ -52,6 +53,7 @@ public class DSpaceRdfIiiifConfigTest {
         assertEquals("http://localhost:8080", config.getUrl());
         assertEquals("dspace-rdf", config.getIdentifier());
         assertEquals("xmlui", config.getWebapp());
+        assertEquals(true, config.getContextAsMetadata());
     }
 
 }

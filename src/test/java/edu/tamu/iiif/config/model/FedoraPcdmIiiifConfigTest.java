@@ -34,6 +34,7 @@ public class FedoraPcdmIiiifConfigTest {
         config.setMetadataPrefixes(metadataPrefixes);
         config.setUrl("http://localhost:9000/fcrepo/rest");
         config.setIdentifier("fedora-pcdm");
+        config.setContextAsMetadata(true);
 
         assertEquals(4, config.getLabelPrecedence().size());
         assertEquals("http://purl.org/dc/elements/1.1/title", config.getLabelPrecedence().get(0));
@@ -50,6 +51,7 @@ public class FedoraPcdmIiiifConfigTest {
 
         assertEquals("http://localhost:9000/fcrepo/rest", config.getUrl());
         assertEquals("fedora-pcdm", config.getIdentifier());
+        assertEquals(true, config.getContextAsMetadata());
     }
 
 }

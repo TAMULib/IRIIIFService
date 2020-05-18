@@ -19,6 +19,12 @@ public abstract class AbstractIiifConfig {
 
     private String identifier;
 
+    private Boolean contextAsMetadata;
+
+    public AbstractIiifConfig() {
+        contextAsMetadata = true;
+    }
+
     public List<String> getLabelPrecedence() {
         return labelPrecedence;
     }
@@ -73,6 +79,14 @@ public abstract class AbstractIiifConfig {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    public Boolean getContextAsMetadata() {
+        return contextAsMetadata;
+    }
+
+    public void setContextAsMetadata(Boolean contextAsMetadata) {
+        this.contextAsMetadata = contextAsMetadata;
     }
 
 }

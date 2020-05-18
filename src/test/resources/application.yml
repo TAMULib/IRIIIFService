@@ -48,12 +48,24 @@ iiif:
     - "http://purl.org/dc/terms/abstract"
     - "http://purl.org/dc/terms/description"
     - "http://purl.org/dc/elements/1.1/description"
+    attribution-precedence:
+    - "http://purl.org/dc/elements/1.1/creator"
+    - "http://purl.org/dc/terms/creator"
+    - "http://purl.org/dc/elements/1.1/contributor"
+    - "http://purl.org/dc/terms/contributor"
+    - "http://purl.org/dc/elements/1.1/publisher"
+    - "http://purl.org/dc/terms/publisher"
+    - "http://purl.org/dc/elements/1.1/rights"
+    - "http://purl.org/dc/terms/rightsHolder"
+    license-precedence:
+    - "http://purl.org/dc/terms/license"
     metadata-prefixes:
     - "http://purl.org/dc/elements/1.1/"
     - "http://purl.org/dc/terms/"
     url: http://localhost:8080
-    webapp: xmlui
     identifier: dspace
+    webapp: xmlui
+    context-as-metadata: true
   fedora:
     label-precedence:
     - "http://purl.org/dc/elements/1.1/title"
@@ -64,8 +76,20 @@ iiif:
     - "http://purl.org/dc/terms/abstract"
     - "http://purl.org/dc/terms/description"
     - "http://purl.org/dc/elements/1.1/description"
+    attribution-precedence:
+    - "http://purl.org/dc/elements/1.1/creator"
+    - "http://purl.org/dc/terms/creator"
+    - "http://purl.org/dc/elements/1.1/contributor"
+    - "http://purl.org/dc/terms/contributor"
+    - "http://purl.org/dc/elements/1.1/publisher"
+    - "http://purl.org/dc/terms/publisher"
+    - "http://purl.org/dc/elements/1.1/rights"
+    - "http://purl.org/dc/terms/rightsHolder"
+    license-precedence:
+    - "http://purl.org/dc/terms/license"
     metadata-prefixes:
     - "http://purl.org/dc/elements/1.1/"
     - "http://purl.org/dc/terms/"
     url: http://localhost:9000/fcrepo/rest
     identifier: fedora
+    context-as-metadata: true
