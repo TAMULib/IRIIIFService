@@ -2,29 +2,32 @@
   "@context": "http://iiif.io/api/presentation/2/context.json",
   "@id": "http://localhost:9000/fedora-pcdm/presentation/mwbObjects/TGWCatalog/Pages/ExCat0084",
   "@type": "sc:Manifest",
-  "description": "Back Cover",
+  "description": "There is a smudge",
   "label": "ExCat0084",
   "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "metadata": [
     {
-      "label": "format",
-      "value": "jpeg"
-    },
-    {
-      "label": "description",
-      "value": "Back Cover"
+      "label": "date",
+      "value": "1/5/2018"
     },
     {
       "label": "identifier",
       "value": "ExCat0084"
     },
     {
-      "label": "isPartOf",
-      "value": " The Great War Catalog, page  Back Cover"
+      "label": "format",
+      "value": "jpeg"
     },
     {
-      "label": "date",
-      "value": "1/5/2018"
+      "label": "description",
+      "value": [
+        "Back Cover",
+        "There is a smudge"
+      ]
+    },
+    {
+      "label": "isPartOf",
+      "value": " The Great War Catalog, page  Back Cover"
     },
     {
       "label": "license",
@@ -68,24 +71,27 @@
           "label": "ExCat0084",
           "metadata": [
             {
-              "label": "format",
-              "value": "jpeg"
-            },
-            {
-              "label": "description",
-              "value": "Back Cover"
+              "label": "date",
+              "value": "1/5/2018"
             },
             {
               "label": "identifier",
               "value": "ExCat0084"
             },
             {
-              "label": "isPartOf",
-              "value": " The Great War Catalog, page  Back Cover"
+              "label": "format",
+              "value": "jpeg"
             },
             {
-              "label": "date",
-              "value": "1/5/2018"
+              "label": "description",
+              "value": [
+                "Back Cover",
+                "There is a smudge"
+              ]
+            },
+            {
+              "label": "isPartOf",
+              "value": " The Great War Catalog, page  Back Cover"
             },
             {
               "label": "license",

@@ -51,6 +51,7 @@
         dc:isPartOf            " The Great War Catalog, page  Back Cover"^^<http://www.w3.org/2001/XMLSchema#string> ;
         dc:identifier          "ExCat0084"^^<http://www.w3.org/2001/XMLSchema#string> ;
         dc:description         "Back Cover"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        dc:description         "There is a smudge"^^<http://www.w3.org/2001/XMLSchema#string> ;
         dcterms:license        "Test license"^^<http://www.w3.org/2001/XMLSchema#string> ;
         dcterms:contributor    "Bob Boring"^^<http://www.w3.org/2001/XMLSchema#string> ;
         rdf:type               ldp:RDFSource ;

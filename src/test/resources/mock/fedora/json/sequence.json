@@ -1,53 +1,52 @@
 {
-  "@id": "http://localhost:9000/fedora-pcdm/sequence/mwbObjects/TGWCatalog/Pages/ExCat0084",
-  "@type": "sc:Sequence",
   "canvases": [
     {
-      "@id": "http://localhost:9000/fedora-pcdm/canvas/mwbObjects/TGWCatalog/Pages/ExCat0084",
-      "@type": "sc:Canvas",
       "height": 3000,
       "images": [
         {
-          "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn/info.json",
-          "@type": "oa:Annotation",
           "motivation": "sc:painting",
           "on": "http://localhost:9000/fedora-pcdm/canvas/mwbObjects/TGWCatalog/Pages/ExCat0084",
           "resource": {
-            "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn/full/full/0/default.jpg",
-            "@type": "dctypes:Image",
             "format": "image/png; charset=utf-8",
             "height": 3000,
+            "width": 2400,
             "service": {
               "label": "Fedora IIIF Image Resource Service",
               "profile": "http://iiif.io/api/image/2/level0.json",
               "@context": "http://iiif.io/api/image/2/context.json",
               "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn"
             },
-            "width": 2400
-          }
+            "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn/full/full/0/default.jpg",
+            "@type": "dctypes:Image"
+          },
+          "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn/info.json",
+          "@type": "oa:Annotation"
         }
       ],
       "label": "ExCat0084",
       "metadata": [
         {
-          "label": "format",
-          "value": "jpeg"
-        },
-        {
-          "label": "description",
-          "value": "Back Cover"
+          "label": "date",
+          "value": "1/5/2018"
         },
         {
           "label": "identifier",
           "value": "ExCat0084"
         },
         {
-          "label": "isPartOf",
-          "value": " The Great War Catalog, page  Back Cover"
+          "label": "format",
+          "value": "jpeg"
         },
         {
-          "label": "date",
-          "value": "1/5/2018"
+          "label": "description",
+          "value": [
+            "Back Cover",
+            "There is a smudge"
+          ]
+        },
+        {
+          "label": "isPartOf",
+          "value": " The Great War Catalog, page  Back Cover"
         },
         {
           "label": "license",
@@ -58,8 +57,12 @@
           "value": "Bob Boring"
         }
       ],
-      "width": 2400
+      "width": 2400,
+      "@type": "sc:Canvas",
+      "@id": "http://localhost:9000/fedora-pcdm/canvas/mwbObjects/TGWCatalog/Pages/ExCat0084"
     }
   ],
-  "label": "ExCat0084"
+  "label": "ExCat0084",
+  "@type": "sc:Sequence",
+  "@id": "http://localhost:9000/fedora-pcdm/sequence/mwbObjects/TGWCatalog/Pages/ExCat0084"
 }
