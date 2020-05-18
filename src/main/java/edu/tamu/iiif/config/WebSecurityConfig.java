@@ -12,7 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
-import edu.tamu.iiif.config.AdminConfig.Credentials;
+import edu.tamu.iiif.config.model.AdminConfig;
+import edu.tamu.iiif.config.model.AdminConfig.Credentials;
 
 @Configuration
 @EnableWebSecurity

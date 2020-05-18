@@ -48,11 +48,11 @@ public class DSpaceRdfCollectionManifestServiceTest extends AbstractDSpaceRdfMan
 
     @Test
     public void testGetManifest() throws IOException, URISyntaxException {
-        when(httpService.get(eq(DSPACE_URL + "/rdf/handle/123456789/158299"))).thenReturn(readFileToString(collectionRdf.getFile(), "UTF-8"));
-        when(httpService.get(eq(DSPACE_URL + "/rdf/handle/123456789/158301"))).thenReturn(readFileToString(subcommunityRdf.getFile(), "UTF-8"));
-        when(httpService.get(eq(DSPACE_URL + "/rdf/handle/123456789/158302"))).thenReturn(readFileToString(communityRdf.getFile(), "UTF-8"));
-        when(httpService.get(eq(DSPACE_URL + "/rdf/handle/123456789/158298"))).thenReturn(readFileToString(communityRdf.getFile(), "UTF-8"));
-        when(httpService.get(eq(DSPACE_URL + "/rdf/handle/123456789/158308"))).thenReturn(readFileToString(itemRdf.getFile(), "UTF-8"));
+        when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158299"), eq(String.class))).thenReturn(readFileToString(collectionRdf.getFile(), "UTF-8"));
+        when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158301"), eq(String.class))).thenReturn(readFileToString(subcommunityRdf.getFile(), "UTF-8"));
+        when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158302"), eq(String.class))).thenReturn(readFileToString(communityRdf.getFile(), "UTF-8"));
+        when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158298"), eq(String.class))).thenReturn(readFileToString(communityRdf.getFile(), "UTF-8"));
+        when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158308"), eq(String.class))).thenReturn(readFileToString(itemRdf.getFile(), "UTF-8"));
 
         String collectionManifest = dspaceRdfCollectionManifestService.getManifest(ManifestRequest.of("123456789/158299", false));
 

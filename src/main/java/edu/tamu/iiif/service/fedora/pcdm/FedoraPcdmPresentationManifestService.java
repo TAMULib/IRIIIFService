@@ -64,6 +64,11 @@ public class FedoraPcdmPresentationManifestService extends AbstractFedoraPcdmMan
             manifest.setDescription(description.get());
         }
 
+        Optional<PropertyValueSimpleImpl> attribution = getAttribution(rdfResource);
+        if (attribution.isPresent()) {
+            manifest.setAttribution(attribution.get());
+        }
+
         Optional<Thumbnail> thumbnail = getThumbnail(sequences);
         if (thumbnail.isPresent()) {
             manifest.setThumbnail(thumbnail.get());

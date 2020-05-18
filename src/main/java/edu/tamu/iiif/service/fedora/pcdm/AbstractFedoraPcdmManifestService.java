@@ -46,7 +46,8 @@ import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
 import de.digitalcollections.iiif.presentation.model.impl.v2.CanvasImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
-import edu.tamu.iiif.config.FedoraPcdmIiifConfig;
+import edu.tamu.iiif.config.model.AbstractIiifConfig;
+import edu.tamu.iiif.config.model.FedoraPcdmIiifConfig;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
@@ -178,18 +179,8 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     }
 
     @Override
-    protected List<String> getLabelPrecedence() {
-        return config.getLabelPrecedence();
-    }
-
-    @Override
-    protected List<String> getDescriptionPrecedence() {
-        return config.getDescriptionPrecedence();
-    }
-
-    @Override
-    protected List<String> getMetadataPrefixes() {
-        return config.getMetadataPrefixes();
+    protected AbstractIiifConfig getConfig() {
+        return config;
     }
 
     // TODO: update to match getDSpaceIiifUrl

@@ -85,6 +85,11 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             collection.setDescription(description.get());
         }
 
+        Optional<PropertyValueSimpleImpl> attribution = getAttribution(rdfResource);
+        if (attribution.isPresent()) {
+            collection.setAttribution(attribution.get());
+        }
+
         collection.setLogo(getLogo(rdfResource));
 
         collection.setViewingHint("multi-part");

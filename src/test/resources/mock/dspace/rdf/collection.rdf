@@ -1,6 +1,7 @@
 @prefix void:  <http://rdfs.org/ns/void#> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dc:  <http://purl.org/dc/elements/1.1/> .
 @prefix bibo:  <http://purl.org/ontology/bibo/> .
 @prefix foaf:  <http://xmlns.com/foaf/0.1/> .
 @prefix dspace: <http://digital-repositories.org/ontologies/dspace/0.1.0#> .
@@ -12,5 +13,7 @@
         dcterms:hasPart           <http://localhost:8080/rdf/resource/123456789/158308> ;
         dcterms:isPartOf          <http://localhost:8080/rdf/resource/123456789/158298> ;
         dcterms:title              "Cool Cars" ;
+        dcterms:license            "Test license";
+        dc:creator                 "Chevy";
         void:sparqlEndpoint       <http://localhost:8983/dspace/sparql> ;
         foaf:homepage             <http://localhost:8080/xmlui> .
