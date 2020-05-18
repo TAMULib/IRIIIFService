@@ -1,6 +1,7 @@
 package edu.tamu.iiif.service;
 
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,9 @@ public class RedisResourceResolver implements ResourceResolver {
         if (!URL_VALIDATOR.isValid(url)) {
             throw new URISyntaxException(url, "Not a valid URL");
         }
-        if (redisResourceRepo.existsByUrl(url)) {
-            return redisResourceRepo.findByUrl(url).getId();
+        Optional<RedisResource> resource = redisResourceRepo.findByUrl(url);
+        if (resource.isPresent()) {
+            return resource.get().getId();
         }
         throw new NotFoundException(String.format("Resource with url %s not found!", url));
     }

@@ -34,7 +34,7 @@ iiif:
       password: abc123
   resolver:
     # redis or remote
-    type: remote
+    type: redis
     url: http://localhost:9000/entity
     credentials:
       username: admin
