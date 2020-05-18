@@ -26,24 +26,27 @@
   "label": "ExCat0084",
   "metadata": [
     {
-      "label": "format",
-      "value": "jpeg"
-    },
-    {
-      "label": "description",
-      "value": "Back Cover"
+      "label": "date",
+      "value": "1/5/2018"
     },
     {
       "label": "identifier",
       "value": "ExCat0084"
     },
     {
-      "label": "isPartOf",
-      "value": " The Great War Catalog, page  Back Cover"
+      "label": "format",
+      "value": "jpeg"
     },
     {
-      "label": "date",
-      "value": "1/5/2018"
+      "label": "description",
+      "value": [
+        "Back Cover",
+        "There is a smudge"
+      ]
+    },
+    {
+      "label": "isPartOf",
+      "value": " The Great War Catalog, page  Back Cover"
     },
     {
       "label": "license",
@@ -55,4 +58,4 @@
     }
   ],
   "width": 2400
-}
+}>

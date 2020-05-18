@@ -12,7 +12,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -394,8 +397,8 @@ public abstract class AbstractManifestService implements ManifestService {
         return redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(encode(request.getContext()), getManifestType(), getRepository(), request.getAllowed(), request.getDisallowed());
     }
 
-    private List<Metadata> getMetadata(RdfResource rdfResource, String prefix) {
-        List<Metadata> metadata = new ArrayList<Metadata>();
+    private Collection<Metadata> getMetadata(RdfResource rdfResource, String prefix) {
+        Map<String, Metadata> metadata = new HashMap<>();
         StmtIterator statements = rdfResource.getModel().listStatements();
         while (statements.hasNext()) {
             Statement statement = statements.nextStatement();
@@ -404,18 +407,28 @@ public abstract class AbstractManifestService implements ManifestService {
             String statementUrl = statement.getSubject().getURI();
             boolean match = getMatcherHandle(resourceUrl).equals(getMatcherHandle(statementUrl));
             if (match && predicate.getNameSpace().equals(prefix)) {
-                Optional<Metadata> metadatum = Optional.empty();
                 try {
-                    metadatum = Optional.of(generateMetadatum(statement));
+                    Metadata metadatum = generateMetadatum(statement);
+                    String label = metadatum.getLabel().getFirstValue();
+                    if (metadata.containsKey(label)) {
+                        Metadata repeatedMedatum = metadata.get(label);
+                        metadata.put(label, merge(repeatedMedatum, metadatum));
+                    } else {
+                        metadata.put(label, metadatum);
+                    }
                 } catch (IOException e) {
-
-                }
-                if (metadatum.isPresent()) {
-                    metadata.add(metadatum.get());
+                    logger.warn("Unable to generate metadatum for {}", statement);
                 }
             }
         }
-        return metadata;
+        return metadata.values();
+    }
+
+    private Metadata merge(Metadata m1, Metadata m2) {
+        List<String> values = new ArrayList<>();
+        values.addAll(m1.getValue().getValues());
+        values.addAll(m2.getValue().getValues());
+        return new MetadataImpl(m1.getLabel(), new PropertyValueSimpleImpl(values));
     }
 
     private Metadata generateMetadatum(Statement statement) throws IOException {
