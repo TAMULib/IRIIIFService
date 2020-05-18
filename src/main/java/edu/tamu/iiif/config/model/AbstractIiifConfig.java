@@ -21,6 +21,10 @@ public abstract class AbstractIiifConfig {
 
     private Boolean contextAsMetadata;
 
+    public AbstractIiifConfig() {
+        contextAsMetadata = true;
+    }
+
     public List<String> getLabelPrecedence() {
         return labelPrecedence;
     }
