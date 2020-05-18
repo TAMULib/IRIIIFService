@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,14 +36,12 @@ public class RedisResourceResolverTest {
     public void setup() {
         when(redisResourceRepo.exists(mockResource.getId())).thenReturn(true);
         when(redisResourceRepo.findOne(mockResource.getId())).thenReturn(mockResource);
-        when(redisResourceRepo.existsByUrl(mockResource.getUrl())).thenReturn(true);
-        when(redisResourceRepo.findByUrl(mockResource.getUrl())).thenReturn(mockResource);
+        when(redisResourceRepo.findByUrl(mockResource.getUrl())).thenReturn(Optional.of(mockResource));
         when(redisResourceRepo.save(any(RedisResource.class))).thenReturn(mockResource);
 
         doNothing().when(redisResourceRepo).delete(mockResource.getId());
 
-        when(redisResourceRepo.existsByUrl(mockResourceNotExist.getUrl())).thenReturn(false);
-
+        when(redisResourceRepo.findByUrl(mockResourceNotExist.getUrl())).thenReturn(Optional.empty());
         when(redisResourceRepo.exists(mockResourceNotExist.getId())).thenReturn(false);
 
         setField(redisResourceResolver, "redisResourceRepo", redisResourceRepo);

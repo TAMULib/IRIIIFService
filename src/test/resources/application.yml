@@ -26,6 +26,9 @@ iiif:
     -
       username: admin
       password: abc123
+  resolver:
+    # redis or remote
+    type: redis
   service:
     url: http://localhost:${server.port}${server.contextPath}
     connection:
