@@ -75,6 +75,8 @@ public abstract class AbstractManifestService implements ManifestService {
     private final static String HEIGHT = "height";
     private final static String WIDTH = "width";
 
+    private final static String CONTEXT_LABEL = "context";
+
     protected final static ObjectMapper mapper = new IiifPresentationApiObjectMapper();
 
     @Value("${iiif.service.url}")
@@ -361,6 +363,9 @@ public abstract class AbstractManifestService implements ManifestService {
         for (String metadataPrefix : getConfig().getMetadataPrefixes()) {
             metadata.addAll(getMetadata(rdfResource, metadataPrefix));
         }
+        if (getConfig().getContextAsMetadata()) {
+            metadata.add(buildMetadata(CONTEXT_LABEL, getRepositoryPath(rdfResource.getId())));
+        }
         return metadata;
     }
 
@@ -424,9 +429,7 @@ public abstract class AbstractManifestService implements ManifestService {
         if (object instanceof Resource) {
             throw new IOException("RDF statement object is a resource, not a literal value!");
         }
-        PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(predicate.getLocalName());
-        PropertyValueSimpleImpl value = new PropertyValueSimpleImpl(object.toString());
-        return new MetadataImpl(label, value);
+        return buildMetadata(predicate.getLocalName(), object.toString());
     }
 
     private Optional<JsonNode> getImageInfo(String url) {
@@ -443,6 +446,10 @@ public abstract class AbstractManifestService implements ManifestService {
     private Optional<String> getMimeType(String url) {
         HttpHeaders headers = restTemplate.headForHeaders(url);
         return Optional.ofNullable(headers.getFirst(HttpHeaders.CONTENT_TYPE));
+    }
+
+    private Metadata buildMetadata(String label, String value) {
+        return new MetadataImpl(new PropertyValueSimpleImpl(label), new PropertyValueSimpleImpl(value));
     }
 
 }
