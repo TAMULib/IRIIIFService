@@ -10,7 +10,7 @@ import static edu.tamu.iiif.constants.Constants.DSPACE_IS_SUB_COMMUNITY_OF_PREDI
 import static edu.tamu.iiif.constants.Constants.DSPACE_RDF_CONDITION;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
-import static edu.tamu.iiif.utility.RdfModelUtility.getObject;
+import static edu.tamu.iiif.utility.RdfModelUtility.hasObject;
 import static edu.tamu.iiif.utility.StringUtility.encodeSpaces;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
@@ -70,19 +70,19 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
     }
 
     protected boolean isTopLevelCommunity(Model model) {
-        return getObject(model, DSPACE_IS_PART_OF_REPOSITORY_PREDICATE).isPresent();
+        return hasObject(model, DSPACE_IS_PART_OF_REPOSITORY_PREDICATE);
     }
 
     protected boolean isSubcommunity(Model model) {
-        return getObject(model, DSPACE_IS_SUB_COMMUNITY_OF_PREDICATE).isPresent();
+        return hasObject(model, DSPACE_IS_SUB_COMMUNITY_OF_PREDICATE);
     }
 
     protected boolean isCollection(Model model) {
-        return getObject(model, DSPACE_IS_PART_OF_COMMUNITY_PREDICATE).isPresent();
+        return hasObject(model, DSPACE_IS_PART_OF_COMMUNITY_PREDICATE);
     }
 
     protected boolean isItem(Model model) {
-        return getObject(model, DSPACE_IS_PART_OF_COLLECTION_PREDICATE).isPresent();
+        return hasObject(model, DSPACE_IS_PART_OF_COLLECTION_PREDICATE);
     }
 
     protected URI getDSpaceIiifCollectionUri(String handle) throws URISyntaxException {

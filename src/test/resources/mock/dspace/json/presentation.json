@@ -2,7 +2,10 @@
   "@context": "http://iiif.io/api/presentation/2/context.json",
   "@id": "http://localhost:9000/dspace-rdf/presentation/123456789/158308",
   "@type": "sc:Manifest",
+  "attribution": "Chevy",
+  "description": "A fast car",
   "label": "Corvette",
+  "license": "Test license",
   "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "metadata": [
     {
@@ -24,6 +27,10 @@
     {
       "label": "title",
       "value": "Corvette"
+    },
+    {
+      "label": "context",
+      "value": "rdf/handle/123456789/158308"
     }
   ],
   "sequences": [
@@ -65,13 +72,11 @@
   ],
   "thumbnail": {
     "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/full/!100,100/0/default.jpg",
-    "services": [
-      {
-        "@context": "http://iiif.io/api/image/2/context.json",
-        "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n",
-        "label": "DSpace IIIF Image Resource Service",
-        "profile": "http://iiif.io/api/image/2/level0.json"
-      }
-    ]
+    "service": {
+      "label": "DSpace IIIF Image Resource Service",
+      "profile": "http://iiif.io/api/image/2/level0.json",
+      "@context": "http://iiif.io/api/image/2/context.json",
+      "@id": "http://localhost:8182/iiif/2/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n"
+    }
   }
 }

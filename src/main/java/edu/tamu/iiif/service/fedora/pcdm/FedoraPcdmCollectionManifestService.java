@@ -7,7 +7,7 @@ import static edu.tamu.iiif.constants.Constants.ORE_PROXY_FOR_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_FILE_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.PCDM_HAS_MEMBER_PREDICATE;
 import static edu.tamu.iiif.model.ManifestType.COLLECTION;
-import static edu.tamu.iiif.utility.RdfModelUtility.getObject;
+import static edu.tamu.iiif.utility.RdfModelUtility.findObject;
 
 import java.io.IOException;
 import java.net.URI;
@@ -123,10 +123,10 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
     private List<ManifestReference> gatherResourceManifests(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException, IOException {
         List<ManifestReference> manifests = new ArrayList<ManifestReference>();
 
-        Optional<String> firstId = getObject(rdfResource.getModel(), IANA_FIRST_PREDICATE);
+        Optional<String> firstId = findObject(rdfResource.getModel(), IANA_FIRST_PREDICATE);
 
         if (firstId.isPresent()) {
-            Optional<String> lastId = getObject(rdfResource.getModel(), IANA_LAST_PREDICATE);
+            Optional<String> lastId = findObject(rdfResource.getModel(), IANA_LAST_PREDICATE);
 
             if (lastId.isPresent()) {
                 Resource firstResource = rdfResource.getModel().getResource(firstId.get());
@@ -141,10 +141,10 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
 
         Model model = getFedoraRdfModel(rdfOrderedResource.getResource().getURI());
 
-        Optional<String> id = getObject(model, ORE_PROXY_FOR_PREDICATE);
+        Optional<String> id = findObject(model, ORE_PROXY_FOR_PREDICATE);
 
         if (!id.isPresent()) {
-            id = getObject(model, ORE_PROXY_FOR_PREDICATE.replace("#", "/"));
+            id = findObject(model, ORE_PROXY_FOR_PREDICATE.replace("#", "/"));
         }
 
         if (id.isPresent()) {
@@ -153,7 +153,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
 
             manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedActualId), getLabel(getRdfResourceByUrl(id.get()))));
 
-            Optional<String> nextId = getObject(model, IANA_NEXT_PREDICATE);
+            Optional<String> nextId = findObject(model, IANA_NEXT_PREDICATE);
 
             if (nextId.isPresent()) {
                 Resource resource = rdfOrderedResource.getModel().getResource(nextId.get());

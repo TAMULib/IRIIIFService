@@ -3,7 +3,7 @@ package edu.tamu.iiif.service;
 import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_CONTEXT;
 import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_LEVEL_ZERO_PROFILE;
 import static edu.tamu.iiif.utility.RdfModelUtility.createRdfModel;
-import static edu.tamu.iiif.utility.RdfModelUtility.getObject;
+import static edu.tamu.iiif.utility.RdfModelUtility.getObjects;
 import static edu.tamu.iiif.utility.StringUtility.encode;
 import static edu.tamu.iiif.utility.StringUtility.encodeSpaces;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
@@ -317,46 +317,31 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected PropertyValueSimpleImpl getLabel(RdfResource rdfResource) {
-        Optional<String> title = Optional.empty();
-        for (String labelPredicate : getConfig().getLabelPrecedence()) {
-            title = getObject(rdfResource, labelPredicate);
-            if (title.isPresent()) {
-                return new PropertyValueSimpleImpl(title.get());
-            }
+        List<String> labels = getObjects(rdfResource, getConfig().getLabelPredicates());
+        if (labels.isEmpty()) {
+            String id = rdfResource.getResource().getURI();
+            return new PropertyValueSimpleImpl(getRepositoryContextIdentifier(id));
         }
-        String id = rdfResource.getResource().getURI();
-        return new PropertyValueSimpleImpl(getRepositoryContextIdentifier(id));
+        return new PropertyValueSimpleImpl(labels);
     }
 
     protected Optional<PropertyValueSimpleImpl> getDescription(RdfResource rdfResource) {
-        Optional<String> description = Optional.empty();
-        for (String descriptionPredicate : getConfig().getDescriptionPrecedence()) {
-            description = getObject(rdfResource, descriptionPredicate);
-            if (description.isPresent()) {
-                return Optional.of(new PropertyValueSimpleImpl(description.get()));
-            }
-        }
-        return Optional.empty();
+        List<String> descriptions = getObjects(rdfResource, getConfig().getDescriptionPredicates());
+        return descriptions.isEmpty() ? Optional.empty() : Optional.of(new PropertyValueSimpleImpl(descriptions));
     }
 
     protected Optional<PropertyValueSimpleImpl> getAttribution(RdfResource rdfResource) {
-        Optional<String> attribution = Optional.empty();
-        for (String attributionPredicate : getConfig().getAttributionPrecedence()) {
-            attribution = getObject(rdfResource, attributionPredicate);
-            if (attribution.isPresent()) {
-                return Optional.of(new PropertyValueSimpleImpl(attribution.get()));
-            }
-        }
-        return Optional.empty();
+        List<String> attributions = getObjects(rdfResource, getConfig().getAttributionPredicates());
+        return attributions.isEmpty() ? Optional.empty() : Optional.of(new PropertyValueSimpleImpl(attributions));
     }
 
     protected Optional<String> getLicense(RdfResource rdfResource) {
-        Optional<String> license = Optional.empty();
         for (String licensePredicate : getConfig().getLicensePrecedence()) {
-            license = getObject(rdfResource, licensePredicate);
-            if (license.isPresent()) {
-                return Optional.of(license.get());
+            List<String> licenses = getObjects(rdfResource, licensePredicate);
+            if (licenses.isEmpty()) {
+                continue;
             }
+            return Optional.of(licenses.get(0));
         }
         return Optional.empty();
     }
@@ -408,6 +393,9 @@ public abstract class AbstractManifestService implements ManifestService {
         while (statements.hasNext()) {
             Statement statement = statements.nextStatement();
             Property predicate = statement.getPredicate();
+            if (getConfig().getMetadataExclusion().contains(predicate.toString())) {
+                continue;
+            }
             String resourceUrl = rdfResource.getResource().getURI();
             String statementUrl = statement.getSubject().getURI();
             boolean match = getMatcherHandle(resourceUrl).equals(getMatcherHandle(statementUrl));

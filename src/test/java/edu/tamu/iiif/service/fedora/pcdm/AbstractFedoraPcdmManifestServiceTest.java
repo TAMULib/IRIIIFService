@@ -21,23 +21,48 @@ public abstract class AbstractFedoraPcdmManifestServiceTest extends AbstractMani
 
     protected void setup(AbstractFedoraPcdmManifestService fedoraPcdmManifestService) {
         super.setup(fedoraPcdmManifestService);
-        List<String> labelPrecedence = new ArrayList<String>();
-        labelPrecedence.add("http://purl.org/dc/elements/1.1/title");
-        labelPrecedence.add("http://purl.org/dc/terms/title");
-        labelPrecedence.add("http://www.w3.org/2000/01/rdf-schema#label");
-        labelPrecedence.add("http://purl.org/dc/elements/1.1/identifier");
-        List<String> descriptionPrecedence = new ArrayList<String>();
-        descriptionPrecedence.add("http://purl.org/dc/terms/abstract");
-        descriptionPrecedence.add("http://purl.org/dc/terms/description");
-        descriptionPrecedence.add("http://purl.org/dc/elements/1.1/description");
+        List<String> labelPredicates = new ArrayList<String>();
+        labelPredicates.add("http://purl.org/dc/elements/1.1/title");
+        labelPredicates.add("http://purl.org/dc/terms/title");
+        labelPredicates.add("http://www.w3.org/2000/01/rdf-schema#label");
+        labelPredicates.add("http://purl.org/dc/elements/1.1/identifier");
+
+        List<String> descriptionPredicates = new ArrayList<String>();
+        descriptionPredicates.add("http://purl.org/dc/terms/abstract");
+        descriptionPredicates.add("http://purl.org/dc/terms/description");
+        descriptionPredicates.add("http://purl.org/dc/elements/1.1/description");
+
+        List<String> attributionPredicates = new ArrayList<String>();
+        attributionPredicates.add("http://purl.org/dc/elements/1.1/creator");
+        attributionPredicates.add("http://purl.org/dc/terms/creator");
+        attributionPredicates.add("http://purl.org/dc/elements/1.1/contributor");
+        attributionPredicates.add("http://purl.org/dc/terms/contributor");
+        attributionPredicates.add("http://purl.org/dc/elements/1.1/publisher");
+        attributionPredicates.add("http://purl.org/dc/terms/publisher");
+        attributionPredicates.add("http://purl.org/dc/elements/1.1/rights");
+        attributionPredicates.add("http://purl.org/dc/terms/rightsHolder");
+
+        List<String> licensePrecedence = new ArrayList<String>();
+        licensePrecedence.add("http://purl.org/dc/terms/license");
+
         List<String> metadataPrefixes = new ArrayList<String>();
         metadataPrefixes.add("http://purl.org/dc/elements/1.1/");
         metadataPrefixes.add("http://purl.org/dc/terms/");
-        when(config.getLabelPrecedence()).thenReturn(labelPrecedence);
-        when(config.getDescriptionPrecedence()).thenReturn(descriptionPrecedence);
+
+        List<String> metadataExclusion = new ArrayList<String>();
+        metadataExclusion.add("http://purl.org/dc/terms/description");
+        metadataExclusion.add("http://purl.org/dc/elements/1.1/description");
+
+        when(config.getLabelPredicates()).thenReturn(labelPredicates);
+        when(config.getDescriptionPredicates()).thenReturn(descriptionPredicates);
+        when(config.getAttributionPredicates()).thenReturn(attributionPredicates);
+        when(config.getLicensePrecedence()).thenReturn(licensePrecedence);
         when(config.getMetadataPrefixes()).thenReturn(metadataPrefixes);
+        when(config.getMetadataExclusion()).thenReturn(metadataExclusion);
+
         when(config.getUrl()).thenReturn(FEDORA_URL);
         when(config.getIdentifier()).thenReturn(FEDORA_PCDM_IDENTIFIER);
+        when(config.getContextAsMetadata()).thenReturn(true);
     }
 
     @Override

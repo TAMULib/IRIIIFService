@@ -21,6 +21,10 @@
     {
       "label": "title",
       "value": "Cars"
+    },
+    {
+      "label": "context",
+      "value": "rdf/handle/123456789/158298"
     }
   ],
   "viewingHint": "multi-part"

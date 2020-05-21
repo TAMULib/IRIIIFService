@@ -49,16 +49,16 @@ iiif:
   image.server.url: http://localhost:8182/iiif/2
   logo.url: https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png
   dspace:
-    label-precedence:
+    label-predicates:
     - "http://purl.org/dc/elements/1.1/title"
     - "http://purl.org/dc/terms/title"
     - "http://www.w3.org/2000/01/rdf-schema#label"
     - "http://purl.org/dc/elements/1.1/identifier"
-    description-precedence:
+    description-predicates:
     - "http://purl.org/dc/terms/abstract"
     - "http://purl.org/dc/terms/description"
     - "http://purl.org/dc/elements/1.1/description"
-    attribution-precedence:
+    attribution-predicates:
     - "http://purl.org/dc/elements/1.1/creator"
     - "http://purl.org/dc/terms/creator"
     - "http://purl.org/dc/elements/1.1/contributor"
@@ -72,21 +72,24 @@ iiif:
     metadata-prefixes:
     - "http://purl.org/dc/elements/1.1/"
     - "http://purl.org/dc/terms/"
+    metadata-exclusion:
+    - "http://purl.org/dc/terms/description"
+    - "http://purl.org/dc/elements/1.1/description"
     url: http://localhost:8080
     identifier: dspace
     webapp: xmlui
     context-as-metadata: true
   fedora:
-    label-precedence:
+    label-predicates:
     - "http://purl.org/dc/elements/1.1/title"
     - "http://purl.org/dc/terms/title"
     - "http://www.w3.org/2000/01/rdf-schema#label"
     - "http://purl.org/dc/elements/1.1/identifier"
-    description-precedence:
+    description-predicates:
     - "http://purl.org/dc/terms/abstract"
     - "http://purl.org/dc/terms/description"
     - "http://purl.org/dc/elements/1.1/description"
-    attribution-precedence:
+    attribution-predicates:
     - "http://purl.org/dc/elements/1.1/creator"
     - "http://purl.org/dc/terms/creator"
     - "http://purl.org/dc/elements/1.1/contributor"
@@ -100,6 +103,9 @@ iiif:
     metadata-prefixes:
     - "http://purl.org/dc/elements/1.1/"
     - "http://purl.org/dc/terms/"
+    metadata-exclusion:
+    - "http://purl.org/dc/terms/description"
+    - "http://purl.org/dc/elements/1.1/description"
     url: http://localhost:9000/fcrepo/rest
     identifier: fedora
     context-as-metadata: true

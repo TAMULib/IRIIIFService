@@ -26,8 +26,8 @@ public class RdfOrderedSequenceTest {
         System.out.println(model);
         Resource resource = model.getResource("http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog");
         RdfResource rdfResource = new RdfResource(model, resource);
-        Optional<String> firstId = RdfModelUtility.getObject(rdfResource.getModel(), IANA_FIRST_PREDICATE);
-        Optional<String> lastId = RdfModelUtility.getObject(rdfResource.getModel(), IANA_LAST_PREDICATE);
+        Optional<String> firstId = RdfModelUtility.findObject(rdfResource.getModel(), IANA_FIRST_PREDICATE);
+        Optional<String> lastId = RdfModelUtility.findObject(rdfResource.getModel(), IANA_LAST_PREDICATE);
 
         System.out.println(firstId.get());
         System.out.println(lastId.get());
