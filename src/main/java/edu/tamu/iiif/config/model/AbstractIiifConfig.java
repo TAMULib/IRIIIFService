@@ -5,15 +5,17 @@ import java.util.List;
 
 public abstract class AbstractIiifConfig {
 
-    private List<String> labelPrecedence = new ArrayList<String>();
+    private List<String> labelPredicates = new ArrayList<String>();
 
-    private List<String> descriptionPrecedence = new ArrayList<String>();
+    private List<String> descriptionPredicates = new ArrayList<String>();
 
-    private List<String> attributionPrecedence = new ArrayList<String>();
+    private List<String> attributionPredicates = new ArrayList<String>();
 
     private List<String> licensePrecedence = new ArrayList<String>();
 
     private List<String> metadataPrefixes = new ArrayList<String>();
+
+    private List<String> metadataExclusion = new ArrayList<String>();
 
     private String url;
 
@@ -25,28 +27,28 @@ public abstract class AbstractIiifConfig {
         contextAsMetadata = true;
     }
 
-    public List<String> getLabelPrecedence() {
-        return labelPrecedence;
+    public List<String> getLabelPredicates() {
+        return labelPredicates;
     }
 
-    public void setLabelPrecedence(List<String> labelPrecedence) {
-        this.labelPrecedence = labelPrecedence;
+    public void setLabelPredicates(List<String> labelPredicates) {
+        this.labelPredicates = labelPredicates;
     }
 
-    public List<String> getDescriptionPrecedence() {
-        return descriptionPrecedence;
+    public List<String> getDescriptionPredicates() {
+        return descriptionPredicates;
     }
 
-    public void setDescriptionPrecedence(List<String> descriptionPrecedence) {
-        this.descriptionPrecedence = descriptionPrecedence;
+    public void setDescriptionPredicates(List<String> descriptionPredicates) {
+        this.descriptionPredicates = descriptionPredicates;
     }
 
-    public List<String> getAttributionPrecedence() {
-        return attributionPrecedence;
+    public List<String> getAttributionPredicates() {
+        return attributionPredicates;
     }
 
-    public void setAttributionPrecedence(List<String> attributionPrecedence) {
-        this.attributionPrecedence = attributionPrecedence;
+    public void setAttributionPredicates(List<String> attributionPredicates) {
+        this.attributionPredicates = attributionPredicates;
     }
 
     public List<String> getLicensePrecedence() {
@@ -63,6 +65,14 @@ public abstract class AbstractIiifConfig {
 
     public void setMetadataPrefixes(List<String> metadataPrefixes) {
         this.metadataPrefixes = metadataPrefixes;
+    }
+
+    public List<String> getMetadataExclusion() {
+        return metadataExclusion;
+    }
+
+    public void setMetadataExclusion(List<String> metadataExclusion) {
+        this.metadataExclusion = metadataExclusion;
     }
 
     public String getUrl() {

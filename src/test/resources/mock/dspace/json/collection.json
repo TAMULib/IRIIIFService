@@ -2,6 +2,7 @@
   "@context": "http://iiif.io/api/presentation/2/context.json",
   "@id": "http://localhost:9000/dspace-rdf/collection/123456789/158299",
   "@type": "sc:Collection",
+  "attribution": "Chevy",
   "label": "Cool Cars",
   "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "manifests": [
@@ -23,6 +24,10 @@
     {
       "label": "title",
       "value": "Cool Cars"
+    },
+    {
+      "label": "context",
+      "value": "rdf/handle/123456789/158299"
     }
   ],
   "viewingHint": "multi-part"

@@ -2,8 +2,13 @@
   "@context": "http://iiif.io/api/presentation/2/context.json",
   "@id": "http://localhost:9000/fedora-pcdm/presentation/mwbObjects/TGWCatalog/Pages/ExCat0084",
   "@type": "sc:Manifest",
-  "description": "There is a smudge",
+  "attribution": "Bob Boring",
+  "description": [
+    "There is a smudge",
+    "Back Cover"
+  ],
   "label": "ExCat0084",
+  "license": "Test license",
   "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
   "metadata": [
     {
@@ -19,13 +24,6 @@
       "value": "jpeg"
     },
     {
-      "label": "description",
-      "value": [
-        "Back Cover",
-        "There is a smudge"
-      ]
-    },
-    {
       "label": "isPartOf",
       "value": " The Great War Catalog, page  Back Cover"
     },
@@ -36,6 +34,10 @@
     {
       "label": "contributor",
       "value": "Bob Boring"
+    },
+    {
+      "label": "context",
+      "value": "mwbObjects/TGWCatalog/Pages/ExCat0084"
     }
   ],
   "sequences": [
@@ -83,13 +85,6 @@
               "value": "jpeg"
             },
             {
-              "label": "description",
-              "value": [
-                "Back Cover",
-                "There is a smudge"
-              ]
-            },
-            {
               "label": "isPartOf",
               "value": " The Great War Catalog, page  Back Cover"
             },
@@ -100,6 +95,10 @@
             {
               "label": "contributor",
               "value": "Bob Boring"
+            },
+            {
+              "label": "context",
+              "value": "mwbObjects/TGWCatalog/Pages/ExCat0084"
             }
           ],
           "width": 2400
@@ -110,13 +109,11 @@
   ],
   "thumbnail": {
     "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn/full/!100,100/0/default.jpg",
-    "services": [
-      {
-        "@context": "http://iiif.io/api/image/2/context.json",
-        "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn",
-        "label": "Fedora IIIF Image Resource Service",
-        "profile": "http://iiif.io/api/image/2/level0.json"
-      }
-    ]
+    "service": {
+      "label": "Fedora IIIF Image Resource Service",
+      "profile": "http://iiif.io/api/image/2/level0.json",
+      "@context": "http://iiif.io/api/image/2/context.json",
+      "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn"
+    }
   }
 }

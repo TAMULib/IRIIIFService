@@ -25,7 +25,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <jena-libs.version>3.2.0</jena-libs.version>
-    <iiif-presentation.version>3.2.5</iiif-presentation.version>
+    <iiif-presentation.version>3.2.6</iiif-presentation.version>
     <!-- must be valid uri with scheme file or classpath -->
     <!-- e.g. file:/var/ir-iiif-service/config, classpath:/config -->
     <config.uri>classpath:/config/</config.uri>
