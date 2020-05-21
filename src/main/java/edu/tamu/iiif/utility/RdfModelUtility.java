@@ -62,6 +62,7 @@ public class RdfModelUtility {
         return uris.stream()
             .map(uri -> getObjects(rdfResource, uri))
             .flatMap(Collection::stream)
+            .distinct()
             .collect(Collectors.toList());
     }
 
