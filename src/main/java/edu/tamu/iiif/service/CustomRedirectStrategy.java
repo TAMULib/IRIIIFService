@@ -1,7 +1,9 @@
 package edu.tamu.iiif.service;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.util.Optional;
 
 import org.apache.commons.validator.routines.UrlValidator;
@@ -24,13 +26,13 @@ public class CustomRedirectStrategy extends DefaultRedirectStrategy {
             if (locationHeader.isPresent()) {
                 try {
                     URI origUri = new URI(request.getRequestLine().getUri());
-                    String location = locationHeader.get().getValue().split("\\?")[0];
+                    String location = URLDecoder.decode(locationHeader.get().getValue().split("\\?")[0], "UTF-8");
                     if (urlValidator.isValid(location)) {
                         return new URI(location);
                     } else {
                         return new URI(origUri.getScheme(), null, origUri.getHost(), origUri.getPort(), location, null, null);
                     }
-                } catch (URISyntaxException e) {
+                } catch (URISyntaxException | UnsupportedEncodingException e) {
                     throw new ProtocolException("Unable to reconstruct original URI!");
                 }
             } else {
