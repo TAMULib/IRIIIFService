@@ -36,8 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
-import org.springframework.util.MimeType;
-import org.springframework.util.MimeTypeUtils;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
@@ -459,8 +458,12 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     private Optional<String> getMimeType(String url) {
-        HttpHeaders headers = restTemplate.headForHeaders(url);
-        return Optional.ofNullable(headers.getFirst(HttpHeaders.CONTENT_TYPE));
+        try {
+            HttpHeaders headers = restTemplate.headForHeaders(url);
+            return Optional.ofNullable(headers.getFirst(HttpHeaders.CONTENT_TYPE));
+        } catch (RestClientException e) {
+            return Optional.empty();
+        }
     }
 
     private Metadata buildMetadata(String label, String value) {
