@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
@@ -189,41 +190,13 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected Optional<ImageResource> generateImageResource(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException {
-        String url = rdfResource.getResource().getURI();
-
         Optional<ImageResource> optionalImageResource = Optional.empty();
+
+        String url = rdfResource.getResource().getURI();
 
         Optional<String> optionalMimeType = getMimeType(url);
 
-        boolean include = false;
-
-        if (optionalMimeType.isPresent()) {
-
-            String mimeType = optionalMimeType.get();
-
-            logger.debug("Mime type: " + mimeType);
-
-            if (mimeType.contains(SEMI_COLON)) {
-                mimeType = mimeType.split(SEMI_COLON)[0];
-            }
-
-            include = mimeType.startsWith(IMAGE) || mimeType.equals(APPLICATION_PDF);
-            if (include) {
-                String allowed = request.getAllowed();
-                if (allowed.length() > 0) {
-                    logger.debug("Allowed: " + allowed);
-                    include = allowed.contains(mimeType);
-                } else {
-                    String disallowed = request.getDisallowed();
-                    if (disallowed.length() > 0) {
-                        logger.debug("Disallowed: " + disallowed);
-                        include = !disallowed.contains(mimeType);
-                    }
-                }
-            }
-        } else {
-            logger.warn("Unable to get mime type: " + url);
-        }
+        boolean include = optionalMimeType.isPresent() ? includeResource(request, optionalMimeType.get()) : false;
 
         if (include) {
             logger.info("Including: " + url);
@@ -232,7 +205,6 @@ public abstract class AbstractManifestService implements ManifestService {
             Optional<JsonNode> imageInfoNode = getImageInfo(infoUri.toString());
 
             if (imageInfoNode.isPresent()) {
-
                 ImageResource imageResource = new ImageResourceImpl(getImageFullUrl(url));
 
                 imageResource.setFormat(optionalMimeType.get());
@@ -252,6 +224,47 @@ public abstract class AbstractManifestService implements ManifestService {
         }
 
         return optionalImageResource;
+    }
+
+    protected boolean includeResourceWithUrl(ManifestRequest request, String url) {
+        boolean include = false;
+
+        Optional<String> optionalMimeType = getMimeType(url);
+
+        if (optionalMimeType.isPresent()) {
+            include = includeResource(request, optionalMimeType.get());
+        } else {
+            logger.warn("Unable to get mime type: " + url);
+        }
+
+        return include;
+    }
+
+    private boolean includeResource(ManifestRequest request, String mimeType) {
+        boolean include = false;
+
+        logger.debug("Mime type: " + mimeType);
+
+        if (mimeType.contains(SEMI_COLON)) {
+            mimeType = mimeType.split(SEMI_COLON)[0];
+        }
+
+        include = mimeType.startsWith(IMAGE) || mimeType.equals(APPLICATION_PDF);
+        if (include) {
+            String allowed = request.getAllowed();
+            if (allowed.length() > 0) {
+                logger.debug("Allowed: " + allowed);
+                include = allowed.contains(mimeType);
+            } else {
+                String disallowed = request.getDisallowed();
+                if (disallowed.length() > 0) {
+                    logger.debug("Disallowed: " + disallowed);
+                    include = !disallowed.contains(mimeType);
+                }
+            }
+        }
+
+        return include;
     }
 
     protected String fetchImageInfo(String url) throws NotFoundException {
@@ -445,8 +458,12 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     private Optional<String> getMimeType(String url) {
-        HttpHeaders headers = restTemplate.headForHeaders(url);
-        return Optional.ofNullable(headers.getFirst(HttpHeaders.CONTENT_TYPE));
+        try {
+            HttpHeaders headers = restTemplate.headForHeaders(url);
+            return Optional.ofNullable(headers.getFirst(HttpHeaders.CONTENT_TYPE));
+        } catch (RestClientException e) {
+            return Optional.empty();
+        }
     }
 
     private Metadata buildMetadata(String label, String value) {
