@@ -80,9 +80,10 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
         if (isItem(rdfResource.getModel())) {
             NodeIterator hasBitstreamIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_BITSTREAM_PREDICATE);
             while (hasBitstreamIterator.hasNext()) {
-                String hasBitstreamHandlePath = getHandlePath(hasBitstreamIterator.next().toString());
-                RdfResource hasBitstreamRdfResource = getRdfResourceByContextPath(hasBitstreamHandlePath);
-                if (includeResource(request, hasBitstreamRdfResource)) {
+                String resourceUrl = hasBitstreamIterator.next().toString();
+                if (includeResourceWithUrl(request, resourceUrl)) {
+                    String hasBitstreamHandlePath = getHandlePath(resourceUrl);
+                    RdfResource hasBitstreamRdfResource = getRdfResourceByContextPath(hasBitstreamHandlePath);
                     String parameterizedHasBitstreamHandlePath = RdfModelUtility.getParameterizedId(hasBitstreamHandlePath, request);
                     manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(parameterizedHasBitstreamHandlePath), getLabel(hasBitstreamRdfResource)));
                 }

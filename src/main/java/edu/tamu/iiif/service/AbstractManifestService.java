@@ -227,10 +227,8 @@ public abstract class AbstractManifestService implements ManifestService {
         return optionalImageResource;
     }
 
-    protected boolean includeResource(ManifestRequest request, RdfResource rdfResource) {
+    protected boolean includeResourceWithUrl(ManifestRequest request, String url) {
         boolean include = false;
-
-        String url = rdfResource.getResource().getURI();
 
         Optional<String> optionalMimeType = getMimeType(url);
 

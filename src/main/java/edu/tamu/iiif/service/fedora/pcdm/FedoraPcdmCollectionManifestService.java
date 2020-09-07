@@ -114,9 +114,10 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             ResIterator resources = rdfResource.listResourcesWithPropertyWithId(PCDM_HAS_FILE_PREDICATE);
             while (resources.hasNext()) {
                 Resource resource = resources.next();
-                RdfResource hasFileRdfResource = getRdfResourceByUrl(resource.getURI());
-                if (includeResource(request, hasFileRdfResource)) {
-                    String parameterizedId = RdfModelUtility.getParameterizedId(resource.getURI(), request);
+                String resourceUrl = resource.getURI();
+                if (includeResourceWithUrl(request, resourceUrl)) {
+                    RdfResource hasFileRdfResource = getRdfResourceByUrl(resourceUrl);
+                    String parameterizedId = RdfModelUtility.getParameterizedId(resourceUrl, request);
                     manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedId), getLabel(hasFileRdfResource)));
                 }
             }
