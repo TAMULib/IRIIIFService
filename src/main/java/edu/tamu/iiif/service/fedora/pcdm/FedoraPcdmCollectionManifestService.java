@@ -106,15 +106,19 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
             while (nodes.hasNext()) {
                 RDFNode node = nodes.next();
                 String parameterizedId = RdfModelUtility.getParameterizedId(node.toString(), request);
-                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedId), getLabel(getRdfResourceByUrl(node.toString()))));
+                RdfResource hasMemberRdfResource = getRdfResourceByUrl(node.toString());
+                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedId), getLabel(hasMemberRdfResource)));
             }
         }
         if (manifests.isEmpty()) {
             ResIterator resources = rdfResource.listResourcesWithPropertyWithId(PCDM_HAS_FILE_PREDICATE);
             while (resources.hasNext()) {
                 Resource resource = resources.next();
-                String parameterizedId = RdfModelUtility.getParameterizedId(resource.getURI(), request);
-                manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedId), getLabel(getRdfResourceByUrl(resource.getURI()))));
+                RdfResource hasFileRdfResource = getRdfResourceByUrl(resource.getURI());
+                if (includeResource(request, hasFileRdfResource)) {
+                    String parameterizedId = RdfModelUtility.getParameterizedId(resource.getURI(), request);
+                    manifests.add(new ManifestReferenceImpl(getFedoraIiifPresentationUri(parameterizedId), getLabel(hasFileRdfResource)));
+                }
             }
         }
         return manifests;

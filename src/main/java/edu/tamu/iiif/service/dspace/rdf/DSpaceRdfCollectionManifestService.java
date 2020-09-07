@@ -81,9 +81,11 @@ public class DSpaceRdfCollectionManifestService extends AbstractDSpaceRdfManifes
             NodeIterator hasBitstreamIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_BITSTREAM_PREDICATE);
             while (hasBitstreamIterator.hasNext()) {
                 String hasBitstreamHandlePath = getHandlePath(hasBitstreamIterator.next().toString());
-                String parameterizedHasBitstreamHandlePath = RdfModelUtility.getParameterizedId(hasBitstreamHandlePath, request);
                 RdfResource hasBitstreamRdfResource = getRdfResourceByContextPath(hasBitstreamHandlePath);
-                manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(parameterizedHasBitstreamHandlePath), getLabel(hasBitstreamRdfResource)));
+                if (includeResource(request, hasBitstreamRdfResource)) {
+                    String parameterizedHasBitstreamHandlePath = RdfModelUtility.getParameterizedId(hasBitstreamHandlePath, request);
+                    manifests.add(new ManifestReferenceImpl(getDSpaceIiifPresentationUri(parameterizedHasBitstreamHandlePath), getLabel(hasBitstreamRdfResource)));
+                }
             }
         } else {
             NodeIterator hasItemIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_ITEM_PREDICATE);
