@@ -2,7 +2,6 @@ package edu.tamu.iiif.service;
 
 import java.net.URISyntaxException;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ public class RedisResourceResolver implements ResourceResolver {
         if (!URL_VALIDATOR.isValid(url)) {
             throw new URISyntaxException(url, "Not a valid URL");
         }
-        return redisResourceRepo.save(new RedisResource(UUID.nameUUIDFromBytes(url.getBytes()).toString(), url)).getId();
+        return redisResourceRepo.save(new RedisResource(url)).getId();
     }
 
     public String resolve(String id) throws NotFoundException {

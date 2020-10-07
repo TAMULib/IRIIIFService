@@ -13,10 +13,9 @@ public class RedisResourceTest {
     @Test
     public void testCreate() {
         String url = "http://localhost:900/fcrepo/rest/image02";
-        String id = UUID.nameUUIDFromBytes(url.getBytes()).toString();
-        RedisResource redisResource = new RedisResource(id, url);
+        RedisResource redisResource = new RedisResource(url);
         Assert.assertNotNull(redisResource);
-        Assert.assertEquals(id, redisResource.getId());
+        Assert.assertEquals(UUID.nameUUIDFromBytes(redisResource.getUrl().getBytes()).toString(), redisResource.getId());
         Assert.assertEquals(url, redisResource.getUrl());
     }
 
