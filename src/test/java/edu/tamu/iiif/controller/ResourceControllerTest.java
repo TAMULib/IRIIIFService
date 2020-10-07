@@ -44,11 +44,11 @@ public class ResourceControllerTest {
     @MockBean
     private ResourceResolver resourceResolver;
 
-    private final RedisResource mockResource = new RedisResource("26f9b338-f744-11e8-8eb2-f2801f1b9fd1", "http://localhost:9000/fcrepo/rest/image01");
+    private final RedisResource mockResource = new RedisResource("http://localhost:9000/fcrepo/rest/image01");
 
-    private final RedisResource mockResourceNotExist = new RedisResource("26f9b338-f744-11e8-8eb2-f2801f1b9fd9", "http://localhost:9000/fcrepo/rest/image02");
+    private final RedisResource mockResourceNotExist = new RedisResource("http://localhost:9000/fcrepo/rest/image02");
 
-    private final RedisResource mockResourceNotExistYet = new RedisResource("26f9b338-f744-11e8-8eb2-f2801f1b9fe3", "http://localhost:9000/fcrepo/rest/image03");
+    private final RedisResource mockResourceNotExistYet = new RedisResource("http://localhost:9000/fcrepo/rest/image03");
 
     private final String resourceWithIdNotFound = String.format("Resource with id %s not found!", mockResourceNotExist.getId());
 

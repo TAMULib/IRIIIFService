@@ -1,5 +1,7 @@
 package edu.tamu.iiif.model;
 
+import java.util.UUID;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
@@ -8,39 +10,22 @@ import org.springframework.data.redis.core.index.Indexed;
 public class RedisResource {
 
     @Id
-    private String id;
+    private final String id;
 
     @Indexed
-    private String url;
-
-    public RedisResource() {
-        super();
-    }
+    private final String url;
 
     public RedisResource(String url) {
-        this();
+        this.id = UUID.nameUUIDFromBytes(url.getBytes()).toString();
         this.url = url;
-    }
-
-    public RedisResource(String id, String url) {
-        this(url);
-        this.id = id;
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getUrl() {
         return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
 }
