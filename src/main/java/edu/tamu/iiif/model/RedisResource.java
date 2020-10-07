@@ -8,39 +8,22 @@ import org.springframework.data.redis.core.index.Indexed;
 public class RedisResource {
 
     @Id
-    private String id;
+    private final String id;
 
     @Indexed
-    private String url;
-
-    public RedisResource() {
-        super();
-    }
-
-    public RedisResource(String url) {
-        this();
-        this.url = url;
-    }
+    private final String url;
 
     public RedisResource(String id, String url) {
-        this(url);
         this.id = id;
+        this.url = url;
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getUrl() {
         return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
 }
