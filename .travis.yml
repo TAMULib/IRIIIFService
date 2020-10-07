@@ -17,4 +17,4 @@ deploy:
   github_token: "$GITHUB_TOKEN"
   local_dir: "./target/generated-docs"
   on:
-    branch: master
+    branch: main
