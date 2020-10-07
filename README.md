@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/TAMULib/IRIIIFService.svg?branch=master)](https://travis-ci.org/TAMULib/IRIIIFService)
-[![Coverage Status](https://coveralls.io/repos/github/TAMULib/IRIIIFService/badge.svg?branch=master)](https://coveralls.io/github/TAMULib/IRIIIFService?branch=master)
+[![Build Status](https://travis-ci.org/TAMULib/IRIIIFService.svg?branch=main)](https://travis-ci.org/TAMULib/IRIIIFService)
+[![Coverage Status](https://coveralls.io/repos/github/TAMULib/IRIIIFService/badge.svg?branch=main)](https://coveralls.io/github/TAMULib/IRIIIFService?branch=main)
 
 # IR IIIF Service
 
