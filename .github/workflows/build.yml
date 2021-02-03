@@ -18,7 +18,7 @@ jobs:
       - name: "Setup Java"
         uses: actions/setup-java@v1
         with:
-          java-version: 11.0.2
+          java-version: 1.8
 
       - name: "Maven Tests"
         run: mvn clean test cobertura:cobertura jacoco:report coveralls:report -DdryRun=true
