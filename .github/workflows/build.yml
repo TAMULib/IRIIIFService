@@ -1,0 +1,41 @@
+name: Build
+
+on: [ push, pull_request, workflow_dispatch ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: "Maven Cache"
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+
+      - name: "Setup Java"
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: "Maven Tests"
+        run: mvn clean test cobertura:cobertura jacoco:report coveralls:report -DdryRun=true
+
+      - name: "Coverage Report"
+        uses: MikeEdgar/github-action@raw_coverage_file
+        with:
+          github-token: ${{ secrets.github_token }}
+          path-to-file: 'target/coveralls.json'
+          coverage-format: raw
+
+      - name: "Deploy GH-Pages"
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          github_token: ${{ secrets.github_token }}
+          branch: gh-pages
+          folder: target/generated-docs
+          clean: true
+          single_commit: true

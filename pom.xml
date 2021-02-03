@@ -30,20 +30,6 @@
     <!-- e.g. file:/var/ir-iiif-service/config, classpath:/config -->
     <config.uri>classpath:/config/</config.uri>
   </properties>
-  
-  <repositories>
-
-    <repository>
-      <id>tamu-releases</id>
-      <url>https://artifacts.library.tamu.edu/repository/maven-releases/</url>
-    </repository>
-
-    <repository>
-      <id>tamu-snapshots</id>
-      <url>https://artifacts.library.tamu.edu/repository/maven-snapshots/</url>
-    </repository>
-
-  </repositories>
 
   <dependencies>
   
@@ -289,5 +275,20 @@
       </plugin>
     </plugins>
   </reporting>
+
+  <repositories>
+    <repository>
+      <id>tamu-releases</id>
+      <url>https://artifacts.library.tamu.edu/repository/maven-releases</url>
+      <releases><enabled>true</enabled></releases>
+      <snapshots><enabled>false</enabled></snapshots>
+    </repository>
+    <repository>
+      <id>tamu-snapshots</id>
+      <url>https://artifacts.library.tamu.edu/repository/maven-snapshots</url>
+      <releases><enabled>false</enabled></releases>
+      <snapshots><enabled>true</enabled></snapshots>
+    </repository>
+  </repositories>
 
 </project>

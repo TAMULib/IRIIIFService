@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/TAMULib/IRIIIFService.svg?branch=main)](https://travis-ci.org/TAMULib/IRIIIFService)
+[![Build Status](https://github.com/TAMULib/IRIIIFService/workflows/Build/badge.svg)](https://github.com/TAMULib/IRIIIFService/actions?query=workflow%3ABuild)
 [![Coverage Status](https://coveralls.io/repos/github/TAMULib/IRIIIFService/badge.svg?branch=main)](https://coveralls.io/github/TAMULib/IRIIIFService?branch=main)
 
 # IR IIIF Service
