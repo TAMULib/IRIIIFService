@@ -19,8 +19,11 @@ public class DSpaceRdfCanvasManifestService extends AbstractDSpaceRdfManifestSer
         String context = request.getContext();
         String handle = extractHandle(context);
         RdfResource rdfResource = getRdfResourceByContextPath(handle);
-        String url = rdfResource.getResource().getURI();
-        Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, url.replace("rdf/handle", config.getWebapp() != null && config.getWebapp().length() > 0 ? config.getWebapp() + "/bitstream" : "bitstream").replaceAll(handle, context)));
+        String uri = rdfResource.getResource().getURI()
+            .replace("rdf/handle", config.getWebapp() != null && config.getWebapp().length() > 0 ? config.getWebapp() + "/bitstream" : "bitstream")
+            .replaceAll(handle, context);
+
+        Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, uri));
         return mapper.writeValueAsString(canvas);
     }
 

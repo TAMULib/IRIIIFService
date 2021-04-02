@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -182,9 +184,26 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         while (bitstreamIterator.hasNext()) {
             String uri = bitstreamIterator.next().toString();
             if (uri.contains(contextHandlePath)) {
-                Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, uri));
-                if (canvas.getImages().size() > 0) {
-                    canvases.add(canvas);
+                Optional<String> optionalMimeType = getMimeType(uri);
+                if (optionalMimeType.get().startsWith("application/pdf")) {
+                    URI infoUri = getImageInfoUri(uri);
+
+                    Optional<JsonNode> pdfInfoNode = getImageInfo(infoUri.toString());
+                    JsonNode pageCountNode = pdfInfoNode.isPresent() ? pdfInfoNode.get().at("/page_count") : mapper.createObjectNode();
+                    int pageCount = pageCountNode.isValueNode() ? pageCountNode.intValue() : 1;
+
+                    for (int i = 0; i < pageCount; i++) {
+                        Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, uri + "?page=" + i));
+                        if (canvas.getImages().size() > 0) {
+                            canvases.add(canvas);
+                        }
+                    }
+
+                } else {
+                    Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, uri));
+                    if (canvas.getImages().size() > 0) {
+                        canvases.add(canvas);
+                    }
                 }
             }
         }

@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
@@ -190,9 +191,9 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected Optional<ImageResource> generateImageResource(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException {
-        Optional<ImageResource> optionalImageResource = Optional.empty();
-
         String url = rdfResource.getResource().getURI();
+
+        Optional<ImageResource> optionalImageResource = Optional.empty();
 
         Optional<String> optionalMimeType = getMimeType(url);
 
@@ -205,7 +206,7 @@ public abstract class AbstractManifestService implements ManifestService {
             Optional<JsonNode> imageInfoNode = getImageInfo(infoUri.toString());
 
             if (imageInfoNode.isPresent()) {
-                ImageResource imageResource = new ImageResourceImpl(getImageFullUrl(url));
+                ImageResource imageResource = new ImageResourceImpl(getImageFullUri(url));
 
                 imageResource.setFormat(optionalMimeType.get());
 
@@ -240,7 +241,7 @@ public abstract class AbstractManifestService implements ManifestService {
         return include;
     }
 
-    private boolean includeResource(ManifestRequest request, String mimeType) {
+    protected boolean includeResource(ManifestRequest request, String mimeType) {
         boolean include = false;
 
         logger.debug("Mime type: " + mimeType);
@@ -279,8 +280,10 @@ public abstract class AbstractManifestService implements ManifestService {
         return URI.create(joinPath(imageServerUrl, getResourceId(url)));
     }
 
-    protected URI getImageFullUrl(String url) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, getResourceId(url), IIIF_FULL_PATH));
+    protected URI getImageFullUri(String url) throws URISyntaxException {
+        URI tempUri = URI.create(url);
+        String query = tempUri.getQuery();
+        return URI.create(joinPath(imageServerUrl, getResourceId(url), IIIF_FULL_PATH) + (StringUtils.isNotEmpty(query) ? "?" + query : ""));
     }
 
     protected URI getImageThumbnailUrl(String url) throws URISyntaxException {
@@ -446,7 +449,7 @@ public abstract class AbstractManifestService implements ManifestService {
         return buildMetadata(predicate.getLocalName(), object.toString());
     }
 
-    private Optional<JsonNode> getImageInfo(String url) {
+    protected Optional<JsonNode> getImageInfo(String url) {
         Optional<JsonNode> imageInfoNode = Optional.empty();
         try {
             imageInfoNode = Optional.of(objectMapper.readTree(fetchImageInfo(url)));
@@ -457,7 +460,7 @@ public abstract class AbstractManifestService implements ManifestService {
         return imageInfoNode;
     }
 
-    private Optional<String> getMimeType(String url) {
+    protected Optional<String> getMimeType(String url) {
         try {
             HttpHeaders headers = restTemplate.headForHeaders(url);
             return Optional.ofNullable(headers.getFirst(HttpHeaders.CONTENT_TYPE));
