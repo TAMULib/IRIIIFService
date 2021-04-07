@@ -30,7 +30,7 @@ iiif:
     # redis or remote
     type: redis
   service:
-    url: http://localhost:${server.port}${server.contextPath}
+    url: http://localhost:${server.port}${server.context-path}
     connection:
       timeout: 30000
       timeToLive: 30000
