@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
@@ -177,12 +176,12 @@ public abstract class AbstractManifestService implements ManifestService {
         return logoUrl;
     }
 
-    protected Optional<Image> generateImage(ManifestRequest request, RdfResource rdfResource, String canvasId) throws URISyntaxException, URISyntaxException {
+    protected Optional<Image> generateImage(ManifestRequest request, RdfResource rdfResource, String canvasId, int page) throws URISyntaxException, URISyntaxException {
         String url = rdfResource.getResource().getURI();
         Optional<Image> optionalImage = Optional.empty();
-        Optional<ImageResource> imageResource = generateImageResource(request, rdfResource);
+        Optional<ImageResource> imageResource = generateImageResource(request, rdfResource, page);
         if (imageResource.isPresent()) {
-            Image image = new ImageImpl(getImageInfoUri(url));
+            Image image = new ImageImpl(getImageInfoUri(url, page));
             image.setResource(imageResource.get());
             image.setOn(getCanvasUri(canvasId));
             optionalImage = Optional.of(image);
@@ -190,7 +189,7 @@ public abstract class AbstractManifestService implements ManifestService {
         return optionalImage;
     }
 
-    protected Optional<ImageResource> generateImageResource(ManifestRequest request, RdfResource rdfResource) throws URISyntaxException {
+    protected Optional<ImageResource> generateImageResource(ManifestRequest request, RdfResource rdfResource, int page) throws URISyntaxException {
         String url = rdfResource.getResource().getURI();
 
         Optional<ImageResource> optionalImageResource = Optional.empty();
@@ -201,12 +200,12 @@ public abstract class AbstractManifestService implements ManifestService {
 
         if (include) {
             logger.info("Including: " + url);
-            URI infoUri = getImageInfoUri(url);
+            URI infoUri = getImageInfoUri(url, 0);
 
             Optional<JsonNode> imageInfoNode = getImageInfo(infoUri.toString());
 
             if (imageInfoNode.isPresent()) {
-                ImageResource imageResource = new ImageResourceImpl(getImageFullUri(url));
+                ImageResource imageResource = new ImageResourceImpl(getImageFullUri(url, page));
 
                 imageResource.setFormat(optionalMimeType.get());
 
@@ -214,7 +213,7 @@ public abstract class AbstractManifestService implements ManifestService {
 
                 imageResource.setWidth(imageInfoNode.get().get(WIDTH).asInt());
 
-                imageResource.setServices(getServices(rdfResource, getIiifImageServiceName()));
+                imageResource.setServices(getServices(rdfResource, page, getIiifImageServiceName()));
 
                 optionalImageResource = Optional.of(imageResource);
             } else {
@@ -276,32 +275,30 @@ public abstract class AbstractManifestService implements ManifestService {
         throw new NotFoundException("Image information not found!");
     }
 
-    protected URI getImageUri(String url) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, getResourceId(url)));
+    protected URI getImageUri(String url, int page) throws URISyntaxException {
+        return URI.create(joinPath(imageServerUrl, getResourceId(url, page)));
     }
 
-    protected URI getImageFullUri(String url) throws URISyntaxException {
-        URI tempUri = URI.create(url);
-        String query = tempUri.getQuery();
-        return URI.create(joinPath(imageServerUrl, getResourceId(url), IIIF_FULL_PATH) + (StringUtils.isNotEmpty(query) ? "?" + query : ""));
+    protected URI getImageFullUri(String url, int page) throws URISyntaxException {
+        return URI.create(joinPath(imageServerUrl, getResourceId(url, page), IIIF_FULL_PATH));
     }
 
-    protected URI getImageThumbnailUrl(String url) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, getResourceId(url), IIIF_THUMBNAIL_PATH));
+    protected URI getImageThumbnailUrl(String url, int page) throws URISyntaxException {
+        return URI.create(joinPath(imageServerUrl, getResourceId(url, page), IIIF_THUMBNAIL_PATH));
     }
 
-    protected URI getImageInfoUri(String url) throws URISyntaxException {
-        return URI.create(joinPath(imageServerUrl, getResourceId(url), IMAGE_JSON));
+    protected URI getImageInfoUri(String url, int page) throws URISyntaxException {
+        return URI.create(joinPath(imageServerUrl, getResourceId(url, page), IMAGE_JSON));
     }
 
     protected URI serviceUrlToThumbnailUri(URI serviceUrl) throws URISyntaxException {
         return URI.create(joinPath(serviceUrl.toString(), IIIF_THUMBNAIL_PATH));
     }
 
-    protected List<Service> getServices(RdfResource rdfResource, String... names) throws URISyntaxException {
+    protected List<Service> getServices(RdfResource rdfResource, int page, String... names) throws URISyntaxException {
         List<Service> services = new ArrayList<Service>();
         for (String name : names) {
-            services.add(getService(rdfResource, name));
+            services.add(getService(rdfResource, name, page));
         }
         return services;
     }
@@ -324,12 +321,17 @@ public abstract class AbstractManifestService implements ManifestService {
         return optionalThumbnail;
     }
 
-    private String getResourceId(String url) throws URISyntaxException {
+    private String getResourceId(String url, int page) throws URISyntaxException {
+        String id;
         try {
-            return resourceResolver.lookup(url);
+            id = resourceResolver.lookup(url);
         } catch (NotFoundException e) {
-            return resourceResolver.create(url);
+            id = resourceResolver.create(url);
         }
+        if (page > 0) {
+            id += ";" + page;
+        }
+        return id;
     }
 
     protected PropertyValueSimpleImpl getLabel(RdfResource rdfResource) {
@@ -391,8 +393,8 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected abstract AbstractIiifConfig getConfig();
 
-    private Service getService(RdfResource rdfResource, String name) throws URISyntaxException {
-        Service service = new ServiceImpl(getImageUri(rdfResource.getResource().getURI()));
+    private Service getService(RdfResource rdfResource, String name, int page) throws URISyntaxException {
+        Service service = new ServiceImpl(getImageUri(rdfResource.getResource().getURI(), page));
         service.setLabel(new PropertyValueSimpleImpl(name));
         service.setContext(IIIF_IMAGE_API_CONTEXT);
         service.setProfile(IIIF_IMAGE_API_LEVEL_ZERO_PROFILE);

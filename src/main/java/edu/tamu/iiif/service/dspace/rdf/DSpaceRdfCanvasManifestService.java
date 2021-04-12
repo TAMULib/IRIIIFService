@@ -23,7 +23,7 @@ public class DSpaceRdfCanvasManifestService extends AbstractDSpaceRdfManifestSer
             .replace("rdf/handle", config.getWebapp() != null && config.getWebapp().length() > 0 ? config.getWebapp() + "/bitstream" : "bitstream")
             .replaceAll(handle, context);
 
-        Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, uri));
+        Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, uri), 0);
         return mapper.writeValueAsString(canvas);
     }
 
