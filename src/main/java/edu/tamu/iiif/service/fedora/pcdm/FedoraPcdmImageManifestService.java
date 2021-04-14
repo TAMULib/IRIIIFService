@@ -18,7 +18,7 @@ public class FedoraPcdmImageManifestService extends AbstractFedoraPcdmManifestSe
     public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
         String context = request.getContext();
         String fedoraPath = joinPath(config.getUrl(), context);
-        URI uri = getImageUri(fedoraPath);
+        URI uri = getImageUri(fedoraPath, 0);
         return fetchImageInfo(uri.toString());
     }
 

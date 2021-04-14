@@ -1,5 +1,5 @@
 server:
-  contextPath:
+  context-path:
   port: 9000
 
 logging:
@@ -40,7 +40,7 @@ iiif:
       username: admin
       password: admin
   service:
-    url: http://localhost:${server.port}${server.contextPath}
+    url: http://localhost:${server.port}${server.context-path}
     connection:
       timeout: 1200000
       timeToLive: 1200000
