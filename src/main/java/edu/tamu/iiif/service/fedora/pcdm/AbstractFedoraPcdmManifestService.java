@@ -192,14 +192,10 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
         List<Canvas> canvases = new ArrayList<Canvas>();
 
         Optional<String> firstId = findObject(rdfResource.getModel(), IANA_FIRST_PREDICATE);
-
-        if (firstId.isPresent()) {
-            Optional<String> lastId = findObject(rdfResource.getModel(), IANA_LAST_PREDICATE);
-
-            if (lastId.isPresent()) {
-                Resource firstResource = rdfResource.getModel().getResource(firstId.get());
-                generateOrderedCanvases(request, new RdfOrderedResource(rdfResource.getModel(), firstResource, firstId.get(), lastId.get()), canvases);
-            }
+        Optional<String> lastId = findObject(rdfResource.getModel(), IANA_LAST_PREDICATE);
+        if (firstId.isPresent() && lastId.isPresent()) {
+            Resource firstResource = rdfResource.getModel().getResource(firstId.get());
+            generateOrderedCanvases(request, new RdfOrderedResource(rdfResource.getModel(), firstResource, firstId.get(), lastId.get()), canvases);
         }
 
         if (canvases.isEmpty()) {
@@ -262,9 +258,10 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     }
 
     private RdfCanvas getFedoraRdfCanvas(ManifestRequest request, RdfResource rdfResource, int page) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
+        String uri = rdfResource.getResource().getURI();
         RdfCanvas rdfCanvas = new RdfCanvas();
 
-        String parameterizedCanvasId = RdfModelUtility.getParameterizedId(rdfResource.getResource().getURI(), request);
+        String parameterizedCanvasId = RdfModelUtility.getParameterizedId(uri, request);
 
         Statement canvasStatement = rdfResource.getStatementOfPropertyWithId(LDP_CONTAINS_PREDICATE);
 
