@@ -216,9 +216,9 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         RdfCanvas rdfCanvas = new RdfCanvas();
         String parameterizedCanvasId = RdfModelUtility.getParameterizedId(getHandlePath(uri), request);
 
-        RdfResource fileFedoraRdfResource = new RdfResource(rdfResource, uri);
+        RdfResource fileRdfResource = new RdfResource(rdfResource, uri);
 
-        Optional<Image> image = generateImage(request, fileFedoraRdfResource, parameterizedCanvasId, page);
+        Optional<Image> image = generateImage(request, fileRdfResource, parameterizedCanvasId, page);
         if (image.isPresent()) {
 
             rdfCanvas.addImage(image.get());
