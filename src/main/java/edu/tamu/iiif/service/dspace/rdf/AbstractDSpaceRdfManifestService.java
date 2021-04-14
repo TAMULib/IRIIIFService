@@ -220,7 +220,6 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
 
         Optional<Image> image = generateImage(request, fileRdfResource, parameterizedCanvasId, page);
         if (image.isPresent()) {
-
             rdfCanvas.addImage(image.get());
 
             Optional<ImageResource> imageResource = Optional.ofNullable(image.get().getResource());

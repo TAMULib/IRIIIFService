@@ -260,7 +260,6 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     private RdfCanvas getFedoraRdfCanvas(ManifestRequest request, RdfResource rdfResource, int page) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
         String uri = rdfResource.getResource().getURI();
         RdfCanvas rdfCanvas = new RdfCanvas();
-
         String parameterizedCanvasId = RdfModelUtility.getParameterizedId(uri, request);
 
         Statement canvasStatement = rdfResource.getStatementOfPropertyWithId(LDP_CONTAINS_PREDICATE);
@@ -300,9 +299,9 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
                         }
                     }
                 }
-
             }
         }
+
         return rdfCanvas;
     }
 
