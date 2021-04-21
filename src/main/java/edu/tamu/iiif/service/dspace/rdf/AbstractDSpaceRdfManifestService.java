@@ -204,7 +204,7 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
 
     private Canvas getCanvasPage(Canvas canvas, int page) {
         String id = canvas.getId().toString() + "?page=" + page;
-        PropertyValue label = new PropertyValueSimpleImpl(canvas.getLabel().getFirstValue());
+        PropertyValue label = new PropertyValueSimpleImpl(canvas.getLabel().getFirstValue() + "?page=" + page);
         Canvas canvasPage = new CanvasImpl(id, label, canvas.getHeight(), canvas.getWidth());
         canvasPage.setImages(canvas.getImages().stream().map(i -> {
             Image image = new ImageImpl(i.getId().toString().replace("/info.json", ";" + page + "/info.json"));
