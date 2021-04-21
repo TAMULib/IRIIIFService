@@ -2,8 +2,13 @@ package edu.tamu.iiif.model.rdf;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Image;
+import edu.tamu.iiif.model.ImageWithInfo;
 
 public class RdfCanvas {
 
@@ -11,12 +16,12 @@ public class RdfCanvas {
 
     private int width;
 
-    private final List<Image> images;
+    private final List<ImageWithInfo> images;
 
     public RdfCanvas() {
         this.height = 0;
         this.width = 0;
-        this.images = new ArrayList<Image>();
+        this.images = new ArrayList<ImageWithInfo>();
     }
 
     public int getHeight() {
@@ -36,10 +41,18 @@ public class RdfCanvas {
     }
 
     public List<Image> getImages() {
-        return images;
+        return images.stream()
+            .map(imageWithInfo -> imageWithInfo.getImage())
+            .collect(Collectors.toList());
     }
 
-    public void addImage(Image image) {
+    public List<Optional<JsonNode>> getImagesInfo() {
+        return images.stream()
+            .map(imageWithInfo -> imageWithInfo.getImageInfo())
+            .collect(Collectors.toList());
+    }
+
+    public void addImage(ImageWithInfo image) {
         images.add(image);
     }
 

@@ -13,7 +13,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.tamu.iiif.service.ManifestService;
-import edu.tamu.iiif.utility.StringUtility;
 
 public abstract class AbstractManifestController<S extends ManifestService> {
 
@@ -23,17 +22,12 @@ public abstract class AbstractManifestController<S extends ManifestService> {
     public abstract void manifest(HttpServletResponse response, ManifestRequest request) throws IOException, URISyntaxException;
 
     protected void sendManifest(ManifestBuilder builder) throws IOException, URISyntaxException {
-        setResponseFile(builder.getResponse(), getFileName(builder.getRequest().getContext()));
+        setResponseFile(builder.getResponse());
         sendJsonFile(builder.getResponse(), manifestService.getManifest(builder.getRequest()));
     }
 
-    private void setResponseFile(HttpServletResponse response, String filename) {
+    private void setResponseFile(HttpServletResponse response) {
         response.setContentType("application/json");
-        response.setHeader("Content-Disposition", "attachment; filename=" + filename);
-    }
-
-    private String getFileName(String path) {
-        return StringUtility.encode(path) + ".json";
     }
 
     private void sendJsonFile(HttpServletResponse response, String json) throws IOException {

@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import de.digitalcollections.iiif.presentation.model.impl.v2.ImageImpl;
+import edu.tamu.iiif.model.ImageWithInfo;
 
 @RunWith(SpringRunner.class)
 public class RdfCanvasTest {
@@ -25,7 +26,7 @@ public class RdfCanvasTest {
         RdfCanvas rdfCanvas = new RdfCanvas();
         rdfCanvas.setHeight(100);
         rdfCanvas.setWidth(100);
-        rdfCanvas.addImage(new ImageImpl());
+        rdfCanvas.addImage(ImageWithInfo.of(new ImageImpl()));
         Assert.assertEquals(100, rdfCanvas.getHeight());
         Assert.assertEquals(100, rdfCanvas.getWidth());
         Assert.assertEquals(1, rdfCanvas.getImages().size());

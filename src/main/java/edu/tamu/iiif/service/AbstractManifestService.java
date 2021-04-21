@@ -56,6 +56,8 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.ThumbnailImpl;
 import edu.tamu.iiif.config.model.AbstractIiifConfig;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
+import edu.tamu.iiif.model.OptionalImageResourceWithInfo;
+import edu.tamu.iiif.model.OptionalImageWithInfo;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
@@ -176,23 +178,20 @@ public abstract class AbstractManifestService implements ManifestService {
         return logoUrl;
     }
 
-    protected Optional<Image> generateImage(ManifestRequest request, RdfResource rdfResource, String canvasId, int page) throws URISyntaxException, URISyntaxException {
+    protected OptionalImageWithInfo generateImage(ManifestRequest request, RdfResource rdfResource, String canvasId, int page) throws URISyntaxException, URISyntaxException {
         String url = rdfResource.getResource().getURI();
-        Optional<Image> optionalImage = Optional.empty();
-        Optional<ImageResource> imageResource = generateImageResource(request, rdfResource, page);
+        OptionalImageResourceWithInfo imageResource = generateImageResource(request, rdfResource, page);
         if (imageResource.isPresent()) {
             Image image = new ImageImpl(getImageInfoUri(url, page));
             image.setResource(imageResource.get());
             image.setOn(getCanvasUri(canvasId));
-            optionalImage = Optional.of(image);
+            return OptionalImageWithInfo.of(Optional.of(image), imageResource.getImageResourceInfo());
         }
-        return optionalImage;
+        return OptionalImageWithInfo.of(Optional.empty());
     }
 
-    protected Optional<ImageResource> generateImageResource(ManifestRequest request, RdfResource rdfResource, int page) throws URISyntaxException {
+    protected OptionalImageResourceWithInfo generateImageResource(ManifestRequest request, RdfResource rdfResource, int page) throws URISyntaxException {
         String url = rdfResource.getResource().getURI();
-
-        Optional<ImageResource> optionalImageResource = Optional.empty();
 
         Optional<String> optionalMimeType = getMimeType(url);
 
@@ -215,7 +214,7 @@ public abstract class AbstractManifestService implements ManifestService {
 
                 imageResource.setServices(getServices(rdfResource, page, getIiifImageServiceName()));
 
-                optionalImageResource = Optional.of(imageResource);
+                return OptionalImageResourceWithInfo.of(Optional.of(imageResource), imageInfoNode);
             } else {
                 logger.info("Unable to get image info: " + infoUri.toString());
             }
@@ -223,7 +222,7 @@ public abstract class AbstractManifestService implements ManifestService {
             logger.info("Excluding: " + url);
         }
 
-        return optionalImageResource;
+        return OptionalImageResourceWithInfo.of(Optional.empty());
     }
 
     protected boolean includeResourceWithUrl(ManifestRequest request, String url) {

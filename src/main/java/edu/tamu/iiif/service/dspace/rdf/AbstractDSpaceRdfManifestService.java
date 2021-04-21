@@ -22,8 +22,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import com.fasterxml.jackson.databind.JsonNode;
+import java.util.stream.Collectors;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
@@ -33,13 +32,18 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import de.digitalcollections.iiif.presentation.model.api.v2.Image;
 import de.digitalcollections.iiif.presentation.model.api.v2.ImageResource;
+import de.digitalcollections.iiif.presentation.model.api.v2.PropertyValue;
 import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
 import de.digitalcollections.iiif.presentation.model.impl.v2.CanvasImpl;
+import de.digitalcollections.iiif.presentation.model.impl.v2.ImageImpl;
+import de.digitalcollections.iiif.presentation.model.impl.v2.ImageResourceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
 import edu.tamu.iiif.config.model.AbstractIiifConfig;
 import edu.tamu.iiif.config.model.DSpaceRdfIiifConfig;
 import edu.tamu.iiif.controller.ManifestRequest;
+import edu.tamu.iiif.model.CanvasWithInfo;
+import edu.tamu.iiif.model.OptionalImageWithInfo;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
@@ -61,14 +65,14 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         return sequence;
     }
 
-    protected Canvas generateCanvas(ManifestRequest request, RdfResource rdfResource, int page) throws IOException, URISyntaxException {
+    protected CanvasWithInfo generateCanvas(ManifestRequest request, RdfResource rdfResource, int page) throws IOException, URISyntaxException {
         String uri = rdfResource.getResource().getURI();
         PropertyValueSimpleImpl label = new PropertyValueSimpleImpl(getBitstreamPath(uri));
         String parameterizedUri = RdfModelUtility.getParameterizedId(uri, request);
         RdfCanvas rdfCanvas = getDSpaceRdfCanvas(request, rdfResource, page);
         Canvas canvas = new CanvasImpl(getDSpaceIiifCanvasUri(getHandlePath(parameterizedUri)), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
         canvas.setImages(rdfCanvas.getImages());
-        return canvas;
+        return CanvasWithInfo.of(canvas, rdfCanvas.getImagesInfo().get(0));
     }
 
     protected boolean isTopLevelCommunity(Model model) {
@@ -184,45 +188,54 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         while (bitstreamIterator.hasNext()) {
             String uri = bitstreamIterator.next().toString();
             if (uri.contains(contextHandlePath)) {
-                Optional<String> optionalMimeType = getMimeType(uri);
-                if (optionalMimeType.get().startsWith("application/pdf")) {
-                    URI infoUri = getImageInfoUri(uri, 0);
-
-                    Optional<JsonNode> pdfInfoNode = getImageInfo(infoUri.toString());
-                    JsonNode pageCountNode = pdfInfoNode.isPresent() ? pdfInfoNode.get().at("/page_count") : mapper.createObjectNode();
-                    int pageCount = pageCountNode.isValueNode() ? pageCountNode.intValue() : 1;
-
-                    for (int i = 0; i < pageCount; i++) {
-                        int page = i + 1;
-                        Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, uri + "?page=" + page), page);
-                        if (canvas.getImages().size() > 0) {
-                            canvases.add(canvas);
-                        }
+                CanvasWithInfo canvasWithInfo = generateCanvas(request, new RdfResource(rdfResource, uri), 0);
+                if (canvasWithInfo.getCanvasInfo().isPresent() && canvasWithInfo.getCanvasInfo().get().has("page_count")) {
+                    int pageCount = canvasWithInfo.getCanvasInfo().get().at("/page_count").asInt();
+                    for (int page = 1; page <= pageCount; ++page) {
+                        canvases.add(getCanvasPage(canvasWithInfo.getCanvas(), page));
                     }
-
-                } else {
-                    Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, uri), 0);
-                    if (canvas.getImages().size() > 0) {
-                        canvases.add(canvas);
-                    }
+                } else if (canvasWithInfo.getCanvas().getImages().size() > 0) {
+                    canvases.add(canvasWithInfo.getCanvas());
                 }
             }
         }
         return canvases;
     }
 
+    private Canvas getCanvasPage(Canvas canvas, int page) {
+        String id = canvas.getId().toString() + "?page=" + page;
+        PropertyValue label = new PropertyValueSimpleImpl(canvas.getLabel().getFirstValue());
+        Canvas canvasPage = new CanvasImpl(id, label, canvas.getHeight(), canvas.getWidth());
+        canvasPage.setImages(canvas.getImages().stream().map(i -> {
+            Image image = new ImageImpl(i.getId().toString().replace("/info.json", ";" + page + "/info.json"));
+            ImageResource ir = i.getResource();
+            ImageResource imageResource = new ImageResourceImpl(ir.getId().toString().replace("/full/full/0/default.jpg", ";" + page + "/full/full/0/default.jpg"));
+            imageResource.setFormat(ir.getFormat());
+            imageResource.setHeight(ir.getHeight());
+            imageResource.setWidth(ir.getWidth());
+            imageResource.setServices(ir.getServices());
+            image.setResource(imageResource);
+            image.setOn(i.getOn());
+            return image;
+        }).collect(Collectors.toList()));
+        return canvasPage;
+    }
+
     private RdfCanvas getDSpaceRdfCanvas(ManifestRequest request, RdfResource rdfResource, int page) throws URISyntaxException, URISyntaxException {
         String uri = rdfResource.getResource().getURI();
-        RdfCanvas rdfCanvas = new RdfCanvas();
+
         String parameterizedCanvasId = RdfModelUtility.getParameterizedId(getHandlePath(uri), request);
 
         RdfResource fileRdfResource = new RdfResource(rdfResource, uri);
 
-        Optional<Image> image = generateImage(request, fileRdfResource, parameterizedCanvasId, page);
+        OptionalImageWithInfo image = generateImage(request, fileRdfResource, parameterizedCanvasId, page);
+
+        RdfCanvas rdfCanvas = new RdfCanvas();
+
         if (image.isPresent()) {
             rdfCanvas.addImage(image.get());
 
-            Optional<ImageResource> imageResource = Optional.ofNullable(image.get().getResource());
+            Optional<ImageResource> imageResource = Optional.ofNullable(image.get().getImage().getResource());
 
             if (imageResource.isPresent()) {
                 int height = imageResource.get().getHeight();
