@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.RDFNode;
@@ -36,10 +38,7 @@ import org.apache.jena.rdf.model.Statement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
-import de.digitalcollections.iiif.presentation.model.api.v2.Image;
 import de.digitalcollections.iiif.presentation.model.api.v2.ImageResource;
 import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
 import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
@@ -50,6 +49,7 @@ import edu.tamu.iiif.config.model.AbstractIiifConfig;
 import edu.tamu.iiif.config.model.FedoraPcdmIiifConfig;
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.exception.NotFoundException;
+import edu.tamu.iiif.model.OptionalImageWithInfo;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfOrderedResource;
 import edu.tamu.iiif.model.rdf.RdfResource;
@@ -192,14 +192,10 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
         List<Canvas> canvases = new ArrayList<Canvas>();
 
         Optional<String> firstId = findObject(rdfResource.getModel(), IANA_FIRST_PREDICATE);
-
-        if (firstId.isPresent()) {
-            Optional<String> lastId = findObject(rdfResource.getModel(), IANA_LAST_PREDICATE);
-
-            if (lastId.isPresent()) {
-                Resource firstResource = rdfResource.getModel().getResource(firstId.get());
-                generateOrderedCanvases(request, new RdfOrderedResource(rdfResource.getModel(), firstResource, firstId.get(), lastId.get()), canvases);
-            }
+        Optional<String> lastId = findObject(rdfResource.getModel(), IANA_LAST_PREDICATE);
+        if (firstId.isPresent() && lastId.isPresent()) {
+            Resource firstResource = rdfResource.getModel().getResource(firstId.get());
+            generateOrderedCanvases(request, new RdfOrderedResource(rdfResource.getModel(), firstResource, firstId.get(), lastId.get()), canvases);
         }
 
         if (canvases.isEmpty()) {
@@ -262,9 +258,9 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
     }
 
     private RdfCanvas getFedoraRdfCanvas(ManifestRequest request, RdfResource rdfResource, int page) throws URISyntaxException, JsonProcessingException, MalformedURLException, IOException {
+        String uri = rdfResource.getResource().getURI();
         RdfCanvas rdfCanvas = new RdfCanvas();
-
-        String parameterizedCanvasId = RdfModelUtility.getParameterizedId(rdfResource.getResource().getURI(), request);
+        String parameterizedCanvasId = RdfModelUtility.getParameterizedId(uri, request);
 
         Statement canvasStatement = rdfResource.getStatementOfPropertyWithId(LDP_CONTAINS_PREDICATE);
 
@@ -284,11 +280,11 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
                 RdfResource fileRdfResource = new RdfResource(fileModel, node.toString());
 
                 if (fileRdfResource.containsStatement(RDF_TYPE_PREDICATE, PCDM_FILE)) {
-                    Optional<Image> image = generateImage(request, fileRdfResource, parameterizedCanvasId, page);
-                    if (image.isPresent()) {
-                        rdfCanvas.addImage(image.get());
+                    OptionalImageWithInfo imageWithInfo = generateImage(request, fileRdfResource, parameterizedCanvasId, page);
+                    if (imageWithInfo.isPresent()) {
+                        rdfCanvas.addImage(imageWithInfo.get());
 
-                        Optional<ImageResource> imageResource = Optional.ofNullable(image.get().getResource());
+                        Optional<ImageResource> imageResource = Optional.ofNullable(imageWithInfo.get().getImage().getResource());
 
                         if (imageResource.isPresent()) {
                             int height = imageResource.get().getHeight();
@@ -303,9 +299,9 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
                         }
                     }
                 }
-
             }
         }
+
         return rdfCanvas;
     }
 

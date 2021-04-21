@@ -7,8 +7,8 @@ import java.net.URISyntaxException;
 
 import org.springframework.stereotype.Service;
 
-import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import edu.tamu.iiif.controller.ManifestRequest;
+import edu.tamu.iiif.model.CanvasWithInfo;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.rdf.RdfResource;
 
@@ -23,8 +23,8 @@ public class DSpaceRdfCanvasManifestService extends AbstractDSpaceRdfManifestSer
             .replace("rdf/handle", config.getWebapp() != null && config.getWebapp().length() > 0 ? config.getWebapp() + "/bitstream" : "bitstream")
             .replaceAll(handle, context);
 
-        Canvas canvas = generateCanvas(request, new RdfResource(rdfResource, uri), 0);
-        return mapper.writeValueAsString(canvas);
+        CanvasWithInfo canvasWithInfo = generateCanvas(request, new RdfResource(rdfResource, uri), 0);
+        return mapper.writeValueAsString(canvasWithInfo.getCanvas());
     }
 
     private String extractHandle(String context) {
