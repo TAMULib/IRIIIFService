@@ -216,12 +216,10 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
             imageResource.setHeight(ir.getHeight());
             imageResource.setWidth(ir.getWidth());
             List<Service> services = ir.getServices().stream().map(s -> {
-
                 Service service = new ServiceImpl(s.getId().toString() + ";" + page);
                 service.setLabel(s.getLabel());
                 service.setContext(s.getContext());
                 service.setProfile(s.getProfile());
-
                 return service;
             }).collect(Collectors.toList());
             imageResource.setServices(services);
