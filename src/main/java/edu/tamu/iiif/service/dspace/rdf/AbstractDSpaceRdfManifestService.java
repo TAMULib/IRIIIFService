@@ -34,11 +34,13 @@ import de.digitalcollections.iiif.presentation.model.api.v2.Image;
 import de.digitalcollections.iiif.presentation.model.api.v2.ImageResource;
 import de.digitalcollections.iiif.presentation.model.api.v2.PropertyValue;
 import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
+import de.digitalcollections.iiif.presentation.model.api.v2.Service;
 import de.digitalcollections.iiif.presentation.model.impl.v2.CanvasImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ImageImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.ImageResourceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
+import de.digitalcollections.iiif.presentation.model.impl.v2.ServiceImpl;
 import edu.tamu.iiif.config.model.AbstractIiifConfig;
 import edu.tamu.iiif.config.model.DSpaceRdfIiifConfig;
 import edu.tamu.iiif.controller.ManifestRequest;
@@ -213,7 +215,16 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
             imageResource.setFormat(ir.getFormat());
             imageResource.setHeight(ir.getHeight());
             imageResource.setWidth(ir.getWidth());
-            imageResource.setServices(ir.getServices());
+            List<Service> services = ir.getServices().stream().map(s -> {
+
+                Service service = new ServiceImpl(s.getId().toString() + ";" + page);
+                service.setLabel(s.getLabel());
+                service.setContext(s.getContext());
+                service.setProfile(s.getProfile());
+
+                return service;
+            }).collect(Collectors.toList());
+            imageResource.setServices(services);
             image.setResource(imageResource);
             image.setOn(i.getOn());
             return image;
