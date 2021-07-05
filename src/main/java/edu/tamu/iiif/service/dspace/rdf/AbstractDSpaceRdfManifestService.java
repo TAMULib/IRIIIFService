@@ -74,6 +74,9 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         RdfCanvas rdfCanvas = getDSpaceRdfCanvas(request, rdfResource, page);
         Canvas canvas = new CanvasImpl(getDSpaceIiifCanvasUri(getHandlePath(parameterizedUri)), label, rdfCanvas.getHeight(), rdfCanvas.getWidth());
         canvas.setImages(rdfCanvas.getImages());
+        if (rdfCanvas.getImagesInfo().isEmpty()) {
+            return CanvasWithInfo.of(canvas, Optional.empty());
+        }
         return CanvasWithInfo.of(canvas, rdfCanvas.getImagesInfo().get(0));
     }
 
