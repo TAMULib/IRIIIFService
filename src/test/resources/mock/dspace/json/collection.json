@@ -4,7 +4,7 @@
   "@type": "sc:Collection",
   "attribution": "Chevy",
   "label": "Cool Cars",
-  "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
+  "logo": "https://library.tamu.edu/assets/images/tamu-logos/TAM-PrimaryMarkB.png",
   "manifests": [
     {
       "@id": "http://localhost:9000/dspace-rdf/presentation/123456789/158308",

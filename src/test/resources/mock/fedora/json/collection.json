@@ -11,7 +11,7 @@
     "The Great War Exhibit Catalog",
     "TGW_Catalog"
   ],
-  "logo": "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png",
+  "logo": "https://library.tamu.edu/assets/images/tamu-logos/TAM-PrimaryMarkB.png",
   "manifests": [
     {
       "@id": "http://localhost:9000/fedora-pcdm/presentation/mwbObjects/TGWCatalog/Pages/ExCat0084",

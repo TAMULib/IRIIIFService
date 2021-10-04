@@ -47,7 +47,7 @@ iiif:
       request.timeout: 600000
     socket.timeout: 1800000
   image.server.url: http://localhost:8182/iiif/2
-  logo.url: https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png
+  logo.url: https://library.tamu.edu/assets/images/tamu-logos/TAM-PrimaryMarkB.png
   dspace:
     label-predicates:
     - "http://purl.org/dc/elements/1.1/title"

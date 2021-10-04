@@ -31,7 +31,7 @@ public abstract class AbstractManifestServiceTest implements ManifestServiceTest
 
     protected static final String IMAGE_SERVICE_URL = "http://localhost:8182/iiif/2";
 
-    protected static final String LOGO_URL = "https://brandguide.tamu.edu/assets/downloads/logos/TAM-Logo.png";
+    protected static final String LOGO_URL = "https://library.tamu.edu/assets/images/tamu-logos/TAM-PrimaryMarkB.png";
 
     @Spy
     protected ObjectMapper objectMapper;
