@@ -2,6 +2,10 @@ package edu.tamu.iiif.model.rdf;
 
 import static edu.tamu.iiif.constants.Constants.IANA_FIRST_PREDICATE;
 import static edu.tamu.iiif.constants.Constants.IANA_LAST_PREDICATE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.Optional;
@@ -9,14 +13,13 @@ import java.util.Optional;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.assertj.core.util.Files;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import edu.tamu.iiif.utility.RdfModelUtility;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class RdfOrderedSequenceTest {
 
     @Test
@@ -33,21 +36,21 @@ public class RdfOrderedSequenceTest {
         System.out.println(lastId.get());
 
         RdfOrderedResource rdfOrderedSequence = new RdfOrderedResource(model, resource, firstId.get(), lastId.get());
-        Assert.assertNotNull(rdfOrderedSequence);
-        Assert.assertEquals(model, rdfOrderedSequence.getModel());
+        assertNotNull(rdfOrderedSequence);
+        assertEquals(model, rdfOrderedSequence.getModel());
 
-        Assert.assertEquals(firstId.get(), rdfOrderedSequence.getFirstId());
-        Assert.assertEquals(lastId.get(), rdfOrderedSequence.getLastId());
+        assertEquals(firstId.get(), rdfOrderedSequence.getFirstId());
+        assertEquals(lastId.get(), rdfOrderedSequence.getLastId());
 
-        Assert.assertTrue(rdfOrderedSequence.isFirst());
-        Assert.assertFalse(rdfOrderedSequence.isLast());
+        assertTrue(rdfOrderedSequence.isFirst());
+        assertFalse(rdfOrderedSequence.isLast());
 
         rdfOrderedSequence.setCurrentId(rdfOrderedSequence.getLastId());
 
-        Assert.assertTrue(rdfOrderedSequence.isLast());
-        Assert.assertFalse(rdfOrderedSequence.isFirst());
+        assertTrue(rdfOrderedSequence.isLast());
+        assertFalse(rdfOrderedSequence.isFirst());
 
-        Assert.assertEquals(lastId.get(), rdfOrderedSequence.getCurrentId());
+        assertEquals(lastId.get(), rdfOrderedSequence.getCurrentId());
     }
 
 }

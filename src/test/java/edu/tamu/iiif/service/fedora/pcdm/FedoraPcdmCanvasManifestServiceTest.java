@@ -1,17 +1,19 @@
 package edu.tamu.iiif.service.fedora.pcdm;
 
 import static org.apache.commons.io.FileUtils.readFileToString;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +22,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import edu.tamu.iiif.controller.ManifestRequest;
 
+@ExtendWith(MockitoExtension.class)
 public class FedoraPcdmCanvasManifestServiceTest extends AbstractFedoraPcdmManifestServiceTest {
 
     @InjectMocks
@@ -40,7 +43,7 @@ public class FedoraPcdmCanvasManifestServiceTest extends AbstractFedoraPcdmManif
     @Value("classpath:mock/fedora/json/canvas.json")
     private Resource canvas;
 
-    @Before
+    @BeforeEach
     public void setup() {
         setup(fedoraPcdmCanvasManifestService);
     }

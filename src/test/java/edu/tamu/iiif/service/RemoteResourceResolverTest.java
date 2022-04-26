@@ -1,8 +1,8 @@
 package edu.tamu.iiif.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.eq;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
@@ -11,9 +11,10 @@ import java.net.URISyntaxException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +22,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.RequestEntity.BodyBuilder;
 import org.springframework.http.RequestEntity.HeadersBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
 import edu.tamu.iiif.config.model.AdminConfig.Credentials;
@@ -30,7 +31,7 @@ import edu.tamu.iiif.config.model.ResolverConfig.ResolverType;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.RedisResource;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class RemoteResourceResolverTest {
 
     @MockBean
@@ -44,7 +45,7 @@ public class RemoteResourceResolverTest {
 
     private final ResolverConfig resolver = new ResolverConfig();
 
-    @Before
+    @BeforeEach
     public void setup() throws URISyntaxException {
         resolver.setType(ResolverType.REMOTE);
         resolver.setUrl("http://localhost:9001/entity");
@@ -69,16 +70,18 @@ public class RemoteResourceResolverTest {
         assertEquals(mockResource.getId(), id);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void testLookupNotFound() throws NotFoundException, URISyntaxException {
-        URIBuilder builder = new URIBuilder(resolver.getUrl());
-        builder.addParameter("url", mockResourceNotExist.getUrl());
-        URI uri = builder.build();
-        RequestEntity<Void> requestNotFound = RequestEntity.get(uri).accept(MediaType.TEXT_PLAIN).build();
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            URIBuilder builder = new URIBuilder(resolver.getUrl());
+            builder.addParameter("url", mockResourceNotExist.getUrl());
+            URI uri = builder.build();
+            RequestEntity<Void> requestNotFound = RequestEntity.get(uri).accept(MediaType.TEXT_PLAIN).build();
 
-        when(restTemplate.exchange(eq(requestNotFound), eq(String.class))).thenReturn(new ResponseEntity<String>(String.format("Resource with url %s not found!", requestNotFound.getUrl()), HttpStatus.NOT_FOUND));
+            when(restTemplate.exchange(eq(requestNotFound), eq(String.class))).thenReturn(new ResponseEntity<String>(String.format("Resource with url %s not found!", requestNotFound.getUrl()), HttpStatus.NOT_FOUND));
 
-        remoteResourceResolver.lookup(mockResourceNotExist.getUrl());
+            remoteResourceResolver.lookup(mockResourceNotExist.getUrl());
+        });
     }
 
     @Test
@@ -110,15 +113,17 @@ public class RemoteResourceResolverTest {
         assertEquals(mockResource.getUrl(), url);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void testResolveNotFound() throws NotFoundException, URISyntaxException {
-        URIBuilder builder = new URIBuilder(StringUtils.removeEnd(resolver.getUrl(), "/") + "/" + mockResourceNotExist.getId());
-        URI uri = builder.build();
-        RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.TEXT_PLAIN).build();
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            URIBuilder builder = new URIBuilder(StringUtils.removeEnd(resolver.getUrl(), "/") + "/" + mockResourceNotExist.getId());
+            URI uri = builder.build();
+            RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.TEXT_PLAIN).build();
 
-        when(restTemplate.exchange(eq(request), eq(String.class))).thenReturn(new ResponseEntity<String>(String.format("Resource with id %s not found!", mockResourceNotExist.getId()), HttpStatus.FOUND));
+            when(restTemplate.exchange(eq(request), eq(String.class))).thenReturn(new ResponseEntity<String>(String.format("Resource with id %s not found!", mockResourceNotExist.getId()), HttpStatus.FOUND));
 
-        remoteResourceResolver.resolve(mockResourceNotExist.getId());
+            remoteResourceResolver.resolve(mockResourceNotExist.getId());
+        });
     }
 
     @Test
@@ -136,19 +141,21 @@ public class RemoteResourceResolverTest {
         remoteResourceResolver.remove(mockResource.getId());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void testRemoveNotFound() throws NotFoundException, URISyntaxException {
-        URIBuilder builder = new URIBuilder(StringUtils.removeEnd(resolver.getUrl(), "/") + "/" + mockResourceNotExist.getId());
-        URI uri = builder.build();
-        HeadersBuilder<?> headerBuilder = RequestEntity.delete(uri);
-        if (resolver.hasCredentials()) {
-            headerBuilder.header("Authorization", String.format("Basic %s", resolver.getBase64Credentials()));
-        }
-        RequestEntity<Void> request = headerBuilder.build();
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            URIBuilder builder = new URIBuilder(StringUtils.removeEnd(resolver.getUrl(), "/") + "/" + mockResourceNotExist.getId());
+            URI uri = builder.build();
+            HeadersBuilder<?> headerBuilder = RequestEntity.delete(uri);
+            if (resolver.hasCredentials()) {
+                headerBuilder.header("Authorization", String.format("Basic %s", resolver.getBase64Credentials()));
+            }
+            RequestEntity<Void> request = headerBuilder.build();
 
-        when(restTemplate.exchange(eq(request), eq(String.class))).thenReturn(new ResponseEntity<String>(String.format("Resource with id %s not found!", mockResourceNotExist.getId()), HttpStatus.NOT_FOUND));
+            when(restTemplate.exchange(eq(request), eq(String.class))).thenReturn(new ResponseEntity<String>(String.format("Resource with id %s not found!", mockResourceNotExist.getId()), HttpStatus.NOT_FOUND));
 
-        remoteResourceResolver.remove(mockResourceNotExist.getId());
+            remoteResourceResolver.remove(mockResourceNotExist.getId());
+        });
     }
 
 }

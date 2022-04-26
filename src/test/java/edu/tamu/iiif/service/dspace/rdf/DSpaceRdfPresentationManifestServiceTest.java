@@ -2,29 +2,33 @@ package edu.tamu.iiif.service.dspace.rdf;
 
 import static edu.tamu.iiif.model.ManifestType.PRESENTATION;
 import static org.apache.commons.io.FileUtils.readFileToString;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Optional;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.RedisManifest;
 
+@ExtendWith(MockitoExtension.class)
 public class DSpaceRdfPresentationManifestServiceTest extends AbstractDSpaceRdfManifestServiceTest {
 
     @InjectMocks
@@ -57,7 +61,7 @@ public class DSpaceRdfPresentationManifestServiceTest extends AbstractDSpaceRdfM
     @Value("classpath:mock/dspace/json/collection-presentation.json")
     private Resource collectionPresentation;
 
-    @Before
+    @BeforeEach
     public void setup() {
         setup(dspaceRdfPresentationManifestService);
     }
@@ -73,31 +77,9 @@ public class DSpaceRdfPresentationManifestServiceTest extends AbstractDSpaceRdfM
     public void testGetCollectionManifest() throws IOException, URISyntaxException {
         setupMocks();
         when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158299"), eq(String.class))).thenReturn(readFileToString(collectionRdf.getFile(), "UTF-8"));
-        when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158301"), eq(String.class))).thenReturn(readFileToString(subcommunityRdf.getFile(), "UTF-8"));
-        when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158298"), eq(String.class))).thenReturn(readFileToString(communityRdf.getFile(), "UTF-8"));
-
-        when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158316"), eq(String.class))).thenReturn(readFileToString(rdf.getFile(), "UTF-8").replace("123456789/158308", "123456789/158316"));
-        when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158317"), eq(String.class))).thenReturn(readFileToString(rdf.getFile(), "UTF-8").replace("123456789/158308", "123456789/158317"));
-        when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158310"), eq(String.class))).thenReturn(readFileToString(rdf.getFile(), "UTF-8").replace("123456789/158308", "123456789/158310"));
-        when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158307"), eq(String.class))).thenReturn(readFileToString(rdf.getFile(), "UTF-8").replace("123456789/158308", "123456789/158307"));
-        when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158313"), eq(String.class))).thenReturn(readFileToString(rdf.getFile(), "UTF-8").replace("123456789/158308", "123456789/158313"));
-        when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158312"), eq(String.class))).thenReturn(readFileToString(rdf.getFile(), "UTF-8").replace("123456789/158308", "123456789/158312"));
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "image/png; charset=utf-8");
-        when(restTemplate.headForHeaders(eq(DSPACE_URL + "/xmlui/bitstream/123456789/158307/1/sports-car-146873_960_720.png"))).thenReturn(headers);
-        when(restTemplate.headForHeaders(eq(DSPACE_URL + "/xmlui/bitstream/123456789/158310/1/sports-car-146873_960_720.png"))).thenReturn(headers);
-        when(restTemplate.headForHeaders(eq(DSPACE_URL + "/xmlui/bitstream/123456789/158312/1/sports-car-146873_960_720.png"))).thenReturn(headers);
-        when(restTemplate.headForHeaders(eq(DSPACE_URL + "/xmlui/bitstream/123456789/158313/1/sports-car-146873_960_720.png"))).thenReturn(headers);
-        when(restTemplate.headForHeaders(eq(DSPACE_URL + "/xmlui/bitstream/123456789/158316/1/sports-car-146873_960_720.png"))).thenReturn(headers);
-        when(restTemplate.headForHeaders(eq(DSPACE_URL + "/xmlui/bitstream/123456789/158317/1/sports-car-146873_960_720.png"))).thenReturn(headers);
-
-        when(restTemplate.getForObject(eq(IMAGE_SERVICE_URL + "/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxMC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json"), eq(String.class))).thenReturn(readFileToString(image.getFile(), "UTF-8"));
-        when(restTemplate.getForObject(eq(IMAGE_SERVICE_URL + "/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxMy8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json"), eq(String.class))).thenReturn(readFileToString(image.getFile(), "UTF-8"));
-        when(restTemplate.getForObject(eq(IMAGE_SERVICE_URL + "/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxMi8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json"), eq(String.class))).thenReturn(readFileToString(image.getFile(), "UTF-8"));
-        when(restTemplate.getForObject(eq(IMAGE_SERVICE_URL + "/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxNy8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json"), eq(String.class))).thenReturn(readFileToString(image.getFile(), "UTF-8"));
-        when(restTemplate.getForObject(eq(IMAGE_SERVICE_URL + "/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwNy8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json"), eq(String.class))).thenReturn(readFileToString(image.getFile(), "UTF-8"));
-        when(restTemplate.getForObject(eq(IMAGE_SERVICE_URL + "/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMxNi8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json"), eq(String.class))).thenReturn(readFileToString(image.getFile(), "UTF-8"));
 
         String manifest = dspaceRdfPresentationManifestService.getManifest(ManifestRequest.of("123456789/158299", false));
         assertEquals(objectMapper.readValue(collectionPresentation.getFile(), JsonNode.class), objectMapper.readValue(manifest, JsonNode.class));
@@ -136,7 +118,7 @@ public class DSpaceRdfPresentationManifestServiceTest extends AbstractDSpaceRdfM
 
     private void setupMocks() throws IOException {
         when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158308"), eq(String.class))).thenReturn(readFileToString(rdf.getFile(), "UTF-8"));
-        when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158308/1/sports-car-146873_960_720.png"), eq(String.class))).thenReturn(readFileToString(rdf.getFile(), "UTF-8"));
+        lenient().when(restTemplate.getForObject(eq(DSPACE_URL + "/rdf/handle/123456789/158308/1/sports-car-146873_960_720.png"), eq(String.class))).thenReturn(readFileToString(rdf.getFile(), "UTF-8"));
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "image/png; charset=utf-8");
         when(restTemplate.headForHeaders(eq(DSPACE_URL + "/xmlui/bitstream/123456789/158308/1/sports-car-146873_960_720.png"))).thenReturn(headers);

@@ -1,29 +1,30 @@
 package edu.tamu.iiif.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Arrays;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class ManifestRequestTest {
 
     @Test
     public void testManifestRequest() {
         ManifestRequest request = ManifestRequest.of("test", false);
-        Assert.assertEquals("test", request.getContext());
-        Assert.assertEquals(false, request.isUpdate());
+        assertEquals("test", request.getContext());
+        assertEquals(false, request.isUpdate());
     }
 
     @Test
     public void testManifestRequestAdvanced() {
         ManifestRequest request = ManifestRequest.of("test", false, Arrays.asList(new String[] { "allow" }), Arrays.asList(new String[] { "disallow" }));
-        Assert.assertEquals("test", request.getContext());
-        Assert.assertEquals(false, request.isUpdate());
-        Assert.assertEquals("allow", request.getAllowed());
-        Assert.assertEquals("disallow", request.getDisallowed());
+        assertEquals("test", request.getContext());
+        assertEquals(false, request.isUpdate());
+        assertEquals("allow", request.getAllowed());
+        assertEquals("disallow", request.getDisallowed());
     }
 
 }

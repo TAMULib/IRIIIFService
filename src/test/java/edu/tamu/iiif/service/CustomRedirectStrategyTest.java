@@ -1,6 +1,6 @@
 package edu.tamu.iiif.service;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -13,11 +13,12 @@ import org.apache.http.message.BasicHttpRequest;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class CustomRedirectStrategyTest {
 
     @Test
@@ -42,23 +43,27 @@ public class CustomRedirectStrategyTest {
         assertEquals("http://localhost:9000/relocated/test", uri.toString());
     }
 
-    @Test(expected = ProtocolException.class)
+    @Test
     public void testGetLocationURIWithBadLocation() throws ProtocolException {
-        CustomRedirectStrategy customRedirectStrategy = new CustomRedirectStrategy();
-        HttpRequest request = new BasicHttpRequest("GET", "http://localhost:9000/test");
-        HttpResponse response = new BasicHttpResponse(HttpVersion.HTTP_1_1, 301, "Gone fishing!");
-        response.setHeader("location", "this$won't&work");
-        HttpContext context = new BasicHttpContext();
-        customRedirectStrategy.getLocationURI(request, response, context);
+        Assertions.assertThrows(ProtocolException.class, () -> {
+            CustomRedirectStrategy customRedirectStrategy = new CustomRedirectStrategy();
+            HttpRequest request = new BasicHttpRequest("GET", "http://localhost:9000/test");
+            HttpResponse response = new BasicHttpResponse(HttpVersion.HTTP_1_1, 301, "Gone fishing!");
+            response.setHeader("location", "this$won't&work");
+            HttpContext context = new BasicHttpContext();
+            customRedirectStrategy.getLocationURI(request, response, context);
+        });
     }
 
-    @Test(expected = ProtocolException.class)
+    @Test
     public void testGetLocationURIWithoutLocation() throws ProtocolException {
-        CustomRedirectStrategy customRedirectStrategy = new CustomRedirectStrategy();
-        HttpRequest request = new BasicHttpRequest("GET", "http://localhost:9000/test");
-        HttpResponse response = new BasicHttpResponse(HttpVersion.HTTP_1_1, 301, "Gone fishing!");
-        HttpContext context = new BasicHttpContext();
-        customRedirectStrategy.getLocationURI(request, response, context);
+        Assertions.assertThrows(ProtocolException.class, () -> {
+            CustomRedirectStrategy customRedirectStrategy = new CustomRedirectStrategy();
+            HttpRequest request = new BasicHttpRequest("GET", "http://localhost:9000/test");
+            HttpResponse response = new BasicHttpResponse(HttpVersion.HTTP_1_1, 301, "Gone fishing!");
+            HttpContext context = new BasicHttpContext();
+            customRedirectStrategy.getLocationURI(request, response, context);
+        });
     }
 
 }

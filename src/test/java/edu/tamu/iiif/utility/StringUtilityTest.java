@@ -1,31 +1,33 @@
 package edu.tamu.iiif.utility;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@RunWith(SpringRunner.class)
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+@ExtendWith(SpringExtension.class)
 public class StringUtilityTest {
 
     @Test
     public void testCreate() {
-        Assert.assertNotNull(new StringUtility());
+        assertNotNull(new StringUtility());
     }
 
     @Test
     public void testJoinPath() {
-        Assert.assertEquals("src/main/resources", StringUtility.joinPath("src", "main", "resources"));
+        assertEquals("src/main/resources", StringUtility.joinPath("src", "main", "resources"));
     }
 
     @Test
     public void testEncode() {
-        Assert.assertEquals("SGVsbG8sIFdvcmxkIQ==", StringUtility.encode("Hello, World!"));
+        assertEquals("SGVsbG8sIFdvcmxkIQ==", StringUtility.encode("Hello, World!"));
     }
 
     @Test
     public void testDecode() {
-        Assert.assertEquals("Hello, World!", StringUtility.decode("SGVsbG8sIFdvcmxkIQ=="));
+        assertEquals("Hello, World!", StringUtility.decode("SGVsbG8sIFdvcmxkIQ=="));
     }
 
 }

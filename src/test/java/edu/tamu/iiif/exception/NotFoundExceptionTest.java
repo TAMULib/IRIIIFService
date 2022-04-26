@@ -1,15 +1,18 @@
 package edu.tamu.iiif.exception;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class NotFoundExceptionTest {
 
-    @Test(expected = NotFoundException.class)
-    public void testThrowNotFoundException() throws NotFoundException {
-        throw new NotFoundException("This is only a test!");
+    @Test
+    public void testThrowNotFoundException() {
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            throw new NotFoundException("This is only a test!");
+        });
     }
 
 }

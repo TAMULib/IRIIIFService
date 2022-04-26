@@ -1,15 +1,18 @@
 package edu.tamu.iiif.exception;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class RedisManifestNotFoundExceptionTest {
 
-    @Test(expected = RedisManifestNotFoundException.class)
-    public void testThrowRedisManifestNotFoundException() throws RedisManifestNotFoundException {
-        throw new RedisManifestNotFoundException("This is only a test!");
+    @Test
+    public void testThrowRedisManifestNotFoundException() {
+        Assertions.assertThrows(RedisManifestNotFoundException.class, () -> {
+            throw new RedisManifestNotFoundException("This is only a test!");
+        });
     }
 
 }
