@@ -190,7 +190,6 @@
       <artifactId>mockito-junit-jupiter</artifactId>
       <scope>test</scope>
     </dependency>
-
   </dependencies>
 
   <build>
@@ -234,25 +233,6 @@
       </plugin>
 
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>cobertura-maven-plugin</artifactId>
-        <configuration>
-          <quiet>true</quiet>
-          <instrumentation>
-            <ignoreTrivial>true</ignoreTrivial>
-            <ignores>
-              <ignore>java.util.logging.*</ignore>
-            </ignores>
-          </instrumentation>
-          <formats>
-            <format>html</format>
-            <format>xml</format>
-          </formats>
-          <aggregate>true</aggregate>
-        </configuration>
-      </plugin>
-
-      <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
         <executions>
@@ -271,6 +251,13 @@
         <configuration>
           <repoToken></repoToken>
         </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+          </dependency>
+        </dependencies>
       </plugin>
 
       <plugin>
