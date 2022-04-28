@@ -1,35 +1,53 @@
+# Settings.
+ARG USER_NAME=iriifservice
+ARG HOME_DIR=/$USER_NAME
+ARG SOURCE_DIR=/$HOME_DIR/source
+
+# Maven stage.
 FROM maven:3-openjdk-11-slim as maven
+ARG USER_NAME
+ARG HOME_DIR
+ARG SOURCE_DIR
 
-# Copy pom.xml.
-COPY pom.xml pom.xml
+# Create the group (use a high ID to attempt to avoid conflits).
+RUN groupadd -g 3001 $USER_NAME
 
-# Copy src files.
-COPY src src
+# Create the user (use a high ID to attempt to avoid conflits).
+RUN useradd -d $HOME_DIR -m -u 3001 -g 3001 $USER_NAME
 
-# Build.
-RUN mvn -DskipTests=true -Pdocker clean package
-
-# Final base image.
-FROM openjdk:11-jre-slim
+# Update the system.
+RUN apt update && apt upgrade -y
 
 # Set deployment directory.
-WORKDIR /IRIIIFService
+WORKDIR $SOURCE_DIR
+
+# Setup work directory sticky bit.
+RUN chown 3001:3001 -R $HOME_DIR
+
+# Login as user.
+USER $USER_NAME
+
+# Copy files over.
+COPY --chown=3001:3001 ./pom.xml ./pom.xml
+COPY --chown=3001:3001 ./src ./src
+
+# Build.
+RUN ["mvn", "package", "-Pjar", "-DskipTests=true"]
+
+# Switch to Normal JRE Stage.
+FROM openjdk:11-jre-slim as runtime
+ARG USER_NAME
+ARG HOME_DIR
+ARG SOURCE_DIR
+
+# Login as user.
+USER $USER_NAME
+
+# Set deployment directory.
+WORKDIR $HOME_DIR
 
 # Copy over the built artifact from the maven image.
-COPY --from=maven /target/ROOT.jar /IRIIIFService/ROOT.jar
-
-# Settings.
-ENV SERVER_PORT='9000'
-ENV SPRING_SQL_INIT_PLATFORM='h2'
-ENV SPRING_DATASOURCE_DRIVERCLASSNAME='org.h2.Driver'
-ENV SPRING_DATASOURCE_URL='jdbc:h2:mem:AZ;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE'
-ENV SPRING_JPA_DATABASEPLATFORM='org.hibernate.dialect.H2Dialect'
-ENV SPRING_JPA_HIBERNATE_DDLAUTO='create-drop'
-ENV SPRING_DATASOURCE_USERNAME='spring'
-ENV SPRING_DATASOURCE_PASSWORD='spring'
-
-# Expose port.
-EXPOSE ${SERVER_PORT}
+COPY --chown=3001:3001 --from=maven $SOURCE_DIR/target/ROOT.jar ./iriif.jar
 
 # Run java command.
-CMD java -jar /IRIIIFService/ROOT.jar
+CMD ["java", "-jar", "./iriif.jar"]
