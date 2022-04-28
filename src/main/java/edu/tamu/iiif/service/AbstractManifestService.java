@@ -109,6 +109,8 @@ public abstract class AbstractManifestService implements ManifestService {
     @PostConstruct
     protected void init() {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+        // This deprecated use cannot be removed until IiifPresentationApiObjectMapper() exposes builder().
         mapper.enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
     }
 
