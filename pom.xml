@@ -7,7 +7,6 @@
   <groupId>edu.tamu</groupId>
   <artifactId>ir-iiif-service</artifactId>
   <version>0.5.5</version>
-  <packaging>war</packaging>
 
   <name>IR IIIF Service</name>
 
@@ -32,10 +31,21 @@
     <!-- must be valid uri with scheme file or classpath -->
     <!-- e.g. file:/var/ir-iiif-service/config, classpath:/config -->
     <config.uri>classpath:/config/</config.uri>
+    <maven.packaging>war</maven.packaging>
   </properties>
 
+  <packaging>${maven.packaging}</packaging>
+
+  <profiles>
+    <profile>
+      <id>docker</id>
+      <properties>
+        <maven.packaging>jar</maven.packaging>
+      </properties>
+    </profile>
+  </profiles>
+
   <dependencies>
-  
     <dependency>
       <groupId>edu.tamu.weaver</groupId>
       <artifactId>messaging</artifactId>
@@ -229,6 +239,7 @@
         <version>3.2.2</version>
         <configuration>
           <failOnMissingWebXml>false</failOnMissingWebXml>
+          <release>${java.version}</release>
         </configuration>
       </plugin>
 
