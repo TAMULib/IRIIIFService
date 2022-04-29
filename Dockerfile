@@ -62,4 +62,4 @@ WORKDIR $HOME_DIR
 COPY --from=maven $SOURCE_DIR/target/ROOT.jar ./iriif.jar
 
 # Run java command.
-RUN ["java", "-jar", "./iriif.jar"]
+CMD ["java", "-jar", "./iriif.jar"]
