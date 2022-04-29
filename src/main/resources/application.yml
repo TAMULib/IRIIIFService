@@ -22,10 +22,6 @@ spring:
   profiles:
     active: production
     include: dspace, fedora
-  main:
-
-    # Circular bean dependency between appWebMvcConfig and userRepoImpl.
-    allow-circular-references: true
 
 messaging:
   channels:
