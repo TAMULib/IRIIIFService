@@ -4,14 +4,14 @@ server:
 
 # (is overwritten by logback-test.xml)
 logging:
+  file:
+    name: logs/ir-iiif-service-test.log
   level:
     com.zaxxer: ERROR
-    edu.tamu.iiif: ERROR
+    edu.tamu.iiif: WARN
     org:
       hibernate: OFF
       springframework: ERROR
-  file:
-    name: logs/ir-iiif-service-test.log
 
 spring:
   redis:

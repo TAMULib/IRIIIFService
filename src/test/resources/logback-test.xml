@@ -4,7 +4,7 @@
   <logger name="com.zaxxer" level="ERROR"/>
   <logger name="org.hibernate" level="OFF"/>
   <logger name="org.springframework" level="ERROR"/>
-  <logger name="edu.tamu.iiif" level="ERROR"/>
+  <logger name="edu.tamu.iiif" level="WARN"/>
   <property name="root.level.console" value="OFF" />
 </configuration>
 
