@@ -2,7 +2,7 @@
 ARG USER_ID=3001
 ARG USER_NAME=iriifservice
 ARG HOME_DIR=/$USER_NAME
-ARG SOURCE_DIR=/$HOME_DIR/source
+ARG SOURCE_DIR=$HOME_DIR/source
 
 # Maven stage.
 FROM maven:3-openjdk-11-slim as maven
@@ -35,9 +35,6 @@ USER $USER_NAME
 
 # Build.
 RUN ["mvn", "package", "-Pjar", "-DskipTests=true"]
-
-# Copy over the built artifact.
-COPY ./target/ROOT.jar $HOME_DIR/iriif.jar
 
 # Switch to Normal JRE Stage.
 FROM openjdk:11-jre-slim
