@@ -40,7 +40,7 @@ RUN ["mvn", "package", "-Pjar", "-DskipTests=true"]
 COPY ./target/ROOT.jar $HOME_DIR/iriif.jar
 
 # Switch to Normal JRE Stage.
-FROM openjdk:11-jre-slim as runtime
+FROM openjdk:11-jre-slim
 ARG USER_ID
 ARG USER_NAME
 ARG HOME_DIR
