@@ -1,24 +1,26 @@
 package edu.tamu.iiif.model.rdf;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import de.digitalcollections.iiif.presentation.model.impl.v2.ImageImpl;
 import edu.tamu.iiif.model.ImageWithInfo;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class RdfCanvasTest {
 
     @Test
     public void testCreateDefault() {
         RdfCanvas rdfCanvas = new RdfCanvas();
-        Assert.assertNotNull(rdfCanvas);
-        Assert.assertNotNull(rdfCanvas.getHeight());
-        Assert.assertNotNull(rdfCanvas.getWidth());
-        Assert.assertNotNull(rdfCanvas.getImages());
-        Assert.assertEquals(0, rdfCanvas.getImages().size());
+        assertNotNull(rdfCanvas);
+        assertNotNull(rdfCanvas.getHeight());
+        assertNotNull(rdfCanvas.getWidth());
+        assertNotNull(rdfCanvas.getImages());
+        assertEquals(0, rdfCanvas.getImages().size());
     }
 
     @Test
@@ -27,9 +29,9 @@ public class RdfCanvasTest {
         rdfCanvas.setHeight(100);
         rdfCanvas.setWidth(100);
         rdfCanvas.addImage(ImageWithInfo.of(new ImageImpl()));
-        Assert.assertEquals(100, rdfCanvas.getHeight());
-        Assert.assertEquals(100, rdfCanvas.getWidth());
-        Assert.assertEquals(1, rdfCanvas.getImages().size());
+        assertEquals(100, rdfCanvas.getHeight());
+        assertEquals(100, rdfCanvas.getWidth());
+        assertEquals(1, rdfCanvas.getImages().size());
     }
 
 }

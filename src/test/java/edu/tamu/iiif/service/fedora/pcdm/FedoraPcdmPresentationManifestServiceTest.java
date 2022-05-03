@@ -2,9 +2,9 @@ package edu.tamu.iiif.service.fedora.pcdm;
 
 import static edu.tamu.iiif.model.ManifestType.PRESENTATION;
 import static org.apache.commons.io.FileUtils.readFileToString;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -12,19 +12,22 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Optional;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.RedisManifest;
 
+@ExtendWith(MockitoExtension.class)
 public class FedoraPcdmPresentationManifestServiceTest extends AbstractFedoraPcdmManifestServiceTest {
 
     @InjectMocks
@@ -51,7 +54,7 @@ public class FedoraPcdmPresentationManifestServiceTest extends AbstractFedoraPcd
     @Value("classpath:mock/fedora/json/presentation-disallow.json")
     private Resource presentationDisallow;
 
-    @Before
+    @BeforeEach
     public void setup() {
         setup(fedoraPcdmPresentationManifestService);
     }

@@ -2,12 +2,16 @@ server:
   context-path:
   port: 9001
 
+# (is overwritten by logback-test.xml)
 logging:
-  file: ir-iiif-service.log
+  file:
+    name: logs/ir-iiif-service-test.log
   level:
-    edu.tamu.iiif: INFO
-    org.springframework: INFO
-  path: /var/logs/iiif
+    com.zaxxer: ERROR
+    edu.tamu.iiif: WARN
+    org:
+      hibernate: OFF
+      springframework: ERROR
 
 spring:
   redis:

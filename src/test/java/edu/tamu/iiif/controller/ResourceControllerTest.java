@@ -1,6 +1,6 @@
 package edu.tamu.iiif.controller;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -16,25 +16,29 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 
 import java.net.URISyntaxException;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 
+import edu.tamu.iiif.config.model.AdminConfig;
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.RedisResource;
 import edu.tamu.iiif.service.ResourceResolver;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest(value = ResourceController.class, secure = false)
+@Import({ AdminConfig.class })
+@ExtendWith(MockitoExtension.class)
+@WebMvcTest(value = ResourceController.class)
 @AutoConfigureRestDocs(outputDir = "target/generated-snippets")
 public class ResourceControllerTest {
 
@@ -58,25 +62,16 @@ public class ResourceControllerTest {
 
     private final String invalidUrl = "fubar";
 
-    @Before
+    @BeforeEach
     public void setup() throws URISyntaxException, NotFoundException {
-        try {
-            when(resourceResolver.resolve(mockResource.getId())).thenReturn(mockResource.getUrl());
-            when(resourceResolver.lookup(mockResource.getUrl())).thenReturn(mockResource.getId());
-            when(resourceResolver.create(mockResource.getUrl())).thenReturn(mockResource.getId());
-            when(resourceResolver.create(mockResourceNotExistYet.getUrl())).thenReturn(mockResourceNotExistYet.getId());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-        }
+        when(resourceResolver.resolve(mockResource.getId())).thenReturn(mockResource.getUrl());
+        when(resourceResolver.lookup(mockResource.getUrl())).thenReturn(mockResource.getId());
+        when(resourceResolver.create(mockResource.getUrl())).thenReturn(mockResource.getId());
+        when(resourceResolver.create(mockResourceNotExistYet.getUrl())).thenReturn(mockResourceNotExistYet.getId());
 
         when(resourceResolver.resolve(mockResourceNotExist.getId())).thenThrow(new NotFoundException(resourceWithIdNotFound));
-
         when(resourceResolver.lookup(mockResourceNotExist.getUrl())).thenThrow(new NotFoundException(resourceWithUrlNotFound));
-
         when(resourceResolver.lookup(mockResourceNotExistYet.getUrl())).thenThrow(new NotFoundException(resourceWithUrlNotFoundYet));
-
         when(resourceResolver.lookup(invalidUrl)).thenThrow(new URISyntaxException(invalidUrl, "Not a valid URL"));
 
         doThrow(new NotFoundException(resourceWithIdNotFound)).when(resourceResolver).remove(mockResourceNotExist.getId());
@@ -143,6 +138,7 @@ public class ResourceControllerTest {
     }
 
     @Test
+    @WithMockUser(roles={ "ADMIN" })
     public void testPutResource() throws Exception {
         RequestBuilder requestBuilder = put("/resources").param("uri", mockResourceNotExistYet.getUrl()).accept(TEXT_PLAIN);
         RestDocumentationResultHandler restDocHandler = document("resources/putResource", requestParameters(parameterWithName("uri").description("The resource URI.")));
@@ -152,6 +148,7 @@ public class ResourceControllerTest {
     }
 
     @Test
+    @WithMockUser(roles={ "ADMIN" })
     public void testPutExistingResource() throws Exception {
         RequestBuilder requestBuilder = put("/resources").param("uri", mockResource.getUrl()).accept(TEXT_PLAIN);
         RestDocumentationResultHandler restDocHandler = document("resources/putResource", requestParameters(parameterWithName("uri").description("The resource URI.")));
@@ -161,6 +158,7 @@ public class ResourceControllerTest {
     }
 
     @Test
+    @WithMockUser(roles={ "ADMIN" })
     public void testPostResource() throws Exception {
         RequestBuilder requestBuilder = post("/resources").param("uri", mockResourceNotExistYet.getUrl()).accept(TEXT_PLAIN);
         RestDocumentationResultHandler restDocHandler = document("resources/postResource", requestParameters(parameterWithName("uri").description("The resource URI.")));
@@ -170,6 +168,7 @@ public class ResourceControllerTest {
     }
 
     @Test
+    @WithMockUser(roles={ "ADMIN" })
     public void testPostExistingResource() throws Exception {
         RequestBuilder requestBuilder = post("/resources").param("uri", mockResource.getUrl()).accept(TEXT_PLAIN);
         RestDocumentationResultHandler restDocHandler = document("resources/postResource", requestParameters(parameterWithName("uri").description("The resource URI.")));
@@ -179,6 +178,7 @@ public class ResourceControllerTest {
     }
 
     @Test
+    @WithMockUser(roles={ "ADMIN" })
     public void testPostResourceInvalidUrl() throws Exception {
         RequestBuilder requestBuilder = post("/resources").param("uri", invalidUrl).accept(TEXT_PLAIN);
         RestDocumentationResultHandler restDocHandler = document("resources/postResource", requestParameters(parameterWithName("uri").description("The resource URI.")));
@@ -188,6 +188,7 @@ public class ResourceControllerTest {
     }
 
     @Test
+    @WithMockUser(roles={ "ADMIN" })
     public void testRemoveResource() throws Exception {
         RequestBuilder requestBuilder = delete("/resources/{id}", mockResource.getId()).accept(TEXT_PLAIN);
         RestDocumentationResultHandler restDocHandler = document("resources/removeResource", pathParameters(parameterWithName("id").description("The resource id.")));
@@ -196,6 +197,7 @@ public class ResourceControllerTest {
     }
 
     @Test
+    @WithMockUser(roles={ "ADMIN" })
     public void testRemoveResourceNotFound() throws Exception {
         RequestBuilder requestBuilder = delete("/resources/{id}", mockResourceNotExist.getId()).accept(TEXT_PLAIN);
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();

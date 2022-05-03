@@ -18,10 +18,10 @@ jobs:
       - name: "Setup Java"
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 11
 
       - name: "Maven Tests"
-        run: mvn clean test cobertura:cobertura jacoco:report coveralls:report -DdryRun=true
+        run: mvn clean test jacoco:report coveralls:report -DdryRun=true
 
       - name: "Coverage Report"
         uses: MikeEdgar/github-action@raw_coverage_file

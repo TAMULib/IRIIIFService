@@ -18,11 +18,11 @@ public class Constants {
     public final static String IMAGE_IDENTIFIER = "image";
 
     // Manifest Controller Mappings
-    public final static String COLLECTION_MAPPING = "/" + COLLECTION_IDENTIFIER + "/**/*";
-    public final static String PRESENTATION_MAPPING = "/" + PRESENTATION_IDENTIFIER + "/**/*";
-    public final static String SEQUENCE_MAPPING = "/" + SEQUENCE_IDENTIFIER + "/**/*";
-    public final static String CANVAS_MAPPING = "/" + CANVAS_IDENTIFIER + "/**/*";
-    public final static String IMAGE_MAPPING = "/" + IMAGE_IDENTIFIER + "/**/*";
+    public final static String COLLECTION_MAPPING = "/" + COLLECTION_IDENTIFIER + "/**";
+    public final static String PRESENTATION_MAPPING = "/" + PRESENTATION_IDENTIFIER + "/**";
+    public final static String SEQUENCE_MAPPING = "/" + SEQUENCE_IDENTIFIER + "/**";
+    public final static String CANVAS_MAPPING = "/" + CANVAS_IDENTIFIER + "/**";
+    public final static String IMAGE_MAPPING = "/" + IMAGE_IDENTIFIER + "/**";
 
     // Fedora
     public final static String FEDORA_FCR_METADATA = "/fcr:metadata";

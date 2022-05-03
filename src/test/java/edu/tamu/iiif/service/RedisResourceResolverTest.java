@@ -1,8 +1,8 @@
 package edu.tamu.iiif.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.any;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
@@ -10,17 +10,20 @@ import static org.springframework.test.util.ReflectionTestUtils.setField;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.RedisResource;
 import edu.tamu.iiif.model.repo.RedisResourceRepo;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class RedisResourceResolverTest {
 
     @MockBean
@@ -32,17 +35,17 @@ public class RedisResourceResolverTest {
 
     private final RedisResource mockResourceNotExist = new RedisResource("http://localhost:9000/fcrepo/rest/image02");
 
-    @Before
+    @BeforeEach
     public void setup() {
-        when(redisResourceRepo.exists(mockResource.getId())).thenReturn(true);
-        when(redisResourceRepo.findOne(mockResource.getId())).thenReturn(mockResource);
+        when(redisResourceRepo.existsById(mockResource.getId())).thenReturn(true);
+        when(redisResourceRepo.findById(mockResource.getId())).thenReturn(Optional.of(mockResource));
         when(redisResourceRepo.findByUrl(mockResource.getUrl())).thenReturn(Optional.of(mockResource));
         when(redisResourceRepo.save(any(RedisResource.class))).thenReturn(mockResource);
 
-        doNothing().when(redisResourceRepo).delete(mockResource.getId());
+        doNothing().when(redisResourceRepo).deleteById(mockResource.getId());
 
         when(redisResourceRepo.findByUrl(mockResourceNotExist.getUrl())).thenReturn(Optional.empty());
-        when(redisResourceRepo.exists(mockResourceNotExist.getId())).thenReturn(false);
+        when(redisResourceRepo.existsById(mockResourceNotExist.getId())).thenReturn(false);
 
         setField(redisResourceResolver, "redisResourceRepo", redisResourceRepo);
     }
@@ -53,9 +56,11 @@ public class RedisResourceResolverTest {
         assertEquals(mockResource.getId(), id);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void testLookupNotFound() throws NotFoundException, URISyntaxException {
-        redisResourceResolver.lookup(mockResourceNotExist.getUrl());
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            redisResourceResolver.lookup(mockResourceNotExist.getUrl());
+        });
     }
 
     @Test
@@ -70,9 +75,11 @@ public class RedisResourceResolverTest {
         assertEquals(mockResource.getUrl(), url);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void testResolveNotFound() throws NotFoundException {
-        redisResourceResolver.resolve(mockResourceNotExist.getId());
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            redisResourceResolver.resolve(mockResourceNotExist.getId());
+        });
     }
 
     @Test
@@ -80,9 +87,11 @@ public class RedisResourceResolverTest {
         redisResourceResolver.remove(mockResource.getId());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void testRemoveNotFound() throws NotFoundException {
-        redisResourceResolver.remove(mockResourceNotExist.getId());
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            redisResourceResolver.remove(mockResourceNotExist.getId());
+        });
     }
 
 }

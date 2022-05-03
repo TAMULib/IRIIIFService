@@ -40,15 +40,15 @@ public class RedisResourceResolver implements ResourceResolver {
     }
 
     public String resolve(String id) throws NotFoundException {
-        if (redisResourceRepo.exists(id)) {
-            return redisResourceRepo.findOne(id).getUrl();
+        if (redisResourceRepo.existsById(id)) {
+            return redisResourceRepo.findById(id).get().getUrl();
         }
         throw new NotFoundException(String.format("Resource with id %s not found!", id));
     }
 
     public void remove(String id) throws NotFoundException {
-        if (redisResourceRepo.exists(id)) {
-            redisResourceRepo.delete(id);
+        if (redisResourceRepo.existsById(id)) {
+            redisResourceRepo.deleteById(id);
         } else {
             throw new NotFoundException(String.format("Resource with id %s not found!", id));
         }

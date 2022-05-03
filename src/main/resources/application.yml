@@ -3,11 +3,11 @@ server:
   port: 9000
 
 logging:
-  file: ir-iiif-service.log
   level:
     edu.tamu.iiif: INFO
     org.springframework: INFO
-  path: /var/logs/iiif
+  file:
+    name: /var/logs/iiif/ir-iiif-service.log
 
 # to enable messaging, include profile weaver-messaging and update activemq broker-url, username and password
 

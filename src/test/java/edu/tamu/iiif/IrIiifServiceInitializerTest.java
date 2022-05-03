@@ -1,18 +1,15 @@
 package edu.tamu.iiif;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import edu.tamu.iiif.config.model.AdminConfig;
 import edu.tamu.iiif.constants.Constants;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = IrIiifServiceInitializer.class)
 public class IrIiifServiceInitializerTest {
 

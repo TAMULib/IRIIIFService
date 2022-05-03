@@ -1,6 +1,6 @@
 package edu.tamu.iiif.service.fedora.pcdm;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,16 +53,16 @@ public abstract class AbstractFedoraPcdmManifestServiceTest extends AbstractMani
         metadataExclusion.add("http://purl.org/dc/terms/description");
         metadataExclusion.add("http://purl.org/dc/elements/1.1/description");
 
-        when(config.getLabelPredicates()).thenReturn(labelPredicates);
-        when(config.getDescriptionPredicates()).thenReturn(descriptionPredicates);
-        when(config.getAttributionPredicates()).thenReturn(attributionPredicates);
-        when(config.getLicensePrecedence()).thenReturn(licensePrecedence);
-        when(config.getMetadataPrefixes()).thenReturn(metadataPrefixes);
-        when(config.getMetadataExclusion()).thenReturn(metadataExclusion);
+        lenient().when(config.getLabelPredicates()).thenReturn(labelPredicates);
+        lenient().when(config.getDescriptionPredicates()).thenReturn(descriptionPredicates);
+        lenient().when(config.getAttributionPredicates()).thenReturn(attributionPredicates);
+        lenient().when(config.getLicensePrecedence()).thenReturn(licensePrecedence);
+        lenient().when(config.getMetadataPrefixes()).thenReturn(metadataPrefixes);
+        lenient().when(config.getMetadataExclusion()).thenReturn(metadataExclusion);
 
-        when(config.getUrl()).thenReturn(FEDORA_URL);
-        when(config.getIdentifier()).thenReturn(FEDORA_PCDM_IDENTIFIER);
-        when(config.getContextAsMetadata()).thenReturn(true);
+        lenient().when(config.getUrl()).thenReturn(FEDORA_URL);
+        lenient().when(config.getIdentifier()).thenReturn(FEDORA_PCDM_IDENTIFIER);
+        lenient().when(config.getContextAsMetadata()).thenReturn(true);
     }
 
     @Override
