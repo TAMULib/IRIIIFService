@@ -6,7 +6,7 @@
 
   <groupId>edu.tamu</groupId>
   <artifactId>ir-iiif-service</artifactId>
-  <version>0.5.5</version>
+  <version>0.6.0-RC1</version>
 
   <name>IR IIIF Service</name>
 
