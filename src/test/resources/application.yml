@@ -1,6 +1,7 @@
 server:
-  context-path:
-  port: 9001
+  port: 9101
+  servlet:
+    context-path:
 
 # (is overwritten by logback-test.xml)
 logging:
