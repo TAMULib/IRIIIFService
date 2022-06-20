@@ -8,7 +8,7 @@ logging:
     edu.tamu.iiif: INFO
     org.springframework: INFO
   file:
-    name: /var/logs/iiif/ir-iiif-service.log
+    name: logs/ir-iiif-service.log
 
 # to enable messaging, include profile weaver-messaging and update activemq broker-url, username and password
 
