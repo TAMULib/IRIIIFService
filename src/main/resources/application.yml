@@ -41,7 +41,7 @@ iiif:
       username: admin
       password: admin
   service:
-    url: http://localhost:${server.port}${server.context-path}
+    url: http://localhost:${server.port}${server.servlet.context-path}
     connection:
       timeout: 1200000
       timeToLive: 1200000
