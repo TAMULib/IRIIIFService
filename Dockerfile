@@ -1,6 +1,6 @@
 # Settings.
 ARG USER_ID=3001
-ARG USER_NAME=iriifservice
+ARG USER_NAME=iriif
 ARG HOME_DIR=/$USER_NAME
 ARG SOURCE_DIR=$HOME_DIR/source
 

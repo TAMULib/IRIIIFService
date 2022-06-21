@@ -1,13 +1,14 @@
 server:
-  context-path:
   port: 9000
+  servlet:
+    context-path:
 
 logging:
   level:
     edu.tamu.iiif: INFO
     org.springframework: INFO
   file:
-    name: /var/logs/iiif/ir-iiif-service.log
+    name: logs/ir-iiif-service.log
 
 # to enable messaging, include profile weaver-messaging and update activemq broker-url, username and password
 
@@ -40,7 +41,7 @@ iiif:
       username: admin
       password: admin
   service:
-    url: http://localhost:${server.port}${server.context-path}
+    url: http://localhost:${server.port}${server.servlet.context-path}
     connection:
       timeout: 1200000
       timeToLive: 1200000
