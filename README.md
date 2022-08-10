@@ -1,36 +1,55 @@
-[![Build Status](https://github.com/TAMULib/IRIIIFService/workflows/Build/badge.svg)](https://github.com/TAMULib/IRIIIFService/actions?query=workflow%3ABuild)
-[![Coverage Status](https://coveralls.io/repos/github/TAMULib/IRIIIFService/badge.svg?branch=main)](https://coveralls.io/github/TAMULib/IRIIIFService?branch=main)
+[![Build Status][build-badge]][build-status]
+[![Coverage Status][coverage-badge]][coverage-status]
 
-# IR IIIF Service
+# Institutional Repository (IR) International Image Interoperability Framework (IIIF) Service
 
-> This service provides IIIF manifest generation from DSpace RDF and/or Fedora PCDM.
+<a name="readme-top"></a>
 
-## Requirements
+This service provides IIIF manifest generation from DSpace RDF and/or Fedora PCDM.
 
--   [Redis](https://redis.io/)
-    -   manifest cache
-    -   resource URL cache
+<details>
+<summary>Table of contents</summary>
 
-## External Requirements
+  - [Requirements:](#requirements)
+  - [External Requirements:](#external-requirements)
+    - [IIIF Image Server](#iiif-image-server)
+    - [DSpace](#dspace)
+    - [Fedora](#fedora)
+  - [Developer Documentation](#developer-documentation)
+  - [Additional Resources](#additional-resources)
 
--   IIIF Image Server
-    -   must support API v2
-    -   script delegate to resolve identifier
-    -   tested with [Cantaloupe](https://medusa-project.github.io/cantaloupe/)
--   DSpace
-    -   RDF webapp deployed and indexed
-    -   Triplestore
-        -   tested with [Fuseki](https://jena.apache.org/documentation/fuseki2/)
--   Fedora
-    -   structured with [PCDM](https://pcdm.org/)
+</details>
 
-### [IIIF](http://iiif.io/) Image Server
+## Requirements:
 
--   Image resolution by identifier
-    -   `http://[iiif image server]/iiif/2/[UUID redis key]/full/full/0/default.jpg`
-    -   UUID resource location resolution via resources interface
--   [Presentation API v2](http://iiif.io/api/presentation/2.1/)
--   [Image API v2](http://iiif.io/api/image/2.1/)
+- [Redis](redis)
+  - manifest cache
+  - resource URL cache
+
+<div align="right">(<a href="#readme-top">back to top</a>)</div>
+
+### External Requirements:
+
+- IIIF Image Server
+  - must support API v2
+  - script delegate to resolve identifier
+  - tested with [Cantaloupe](cantaloupe)
+- DSpace
+  - RDF webapp deployed and indexed
+  - Triplestore
+    - tested with [Fuseki](fuseki)
+- Fedora
+  - structured with [PCDM](pcdm)
+
+<div align="right">(<a href="#readme-top">back to top</a>)</div>
+
+### [IIIF](iiif) Image Server
+
+- Image resolution by identifier
+    - `http://[iiif image server]/iiif/2/[UUID redis key]/full/full/0/default.jpg`
+    - UUID resource location resolution via resources interface
+- [Presentation API v2](iiif-presentation-api-v2)
+- [Image API v2](iiif-image-api-v2)
 
 <details>
 <summary>Example Cantaloupe custom delegate</summary>
@@ -83,19 +102,65 @@
 
 </details>
 
-### [DSpace](http://www.dspace.org/)
+<div align="right">(<a href="#readme-top">back to top</a>)</div>
 
--   [Installation](https://wiki.duraspace.org/display/DSDOC6x/Installing+DSpace#space-menu-link-content)
--   [RDF](https://wiki.duraspace.org/display/DSDOC6x/Linked+%28Open%29+Data)
+### [DSpace](dspace)
 
-### [Fedora](https://fedorarepository.org/)
+-   [Installation](dspace-install)
+-   [RDF](dspace-rdf)
 
--   [Installation](https://wiki.duraspace.org/display/FEDORA4x/Quick+Start)
+<div align="right">(<a href="#readme-top">back to top</a>)</div>
+
+#### [Fedora](refora)
+
+  - [Installation](fedora-install)
+
+<div align="right">(<a href="#readme-top">back to top</a>)</div>
 
 ## Developer Documentation
 
--   [Contributors Documentation](https://github.com/TAMULib/IRIIIFService/blob/master/CONTRIBUTING.md)
--   [Deployment Documentation](https://github.com/TAMULib/IRIIIFService/blob/master/DEPLOYING.md)
--   [API Documentation](https://tamulib.github.io/IRIIIFService)
+- [Contributors Documentation][contribute-guide]
+- [Deployment Documentation][deployment-guide]
+- [API Documentation](api-guide)
 
-Please feel free to file any issues concerning IRIIIFService to the issues section of the repository. Any questions concerning cap can be directed to [helpdesk@library.tamu.edu](<>)
+<div align="right">(<a href="#readme-top">back to top</a>)</div>
+
+## Additional Resources
+
+Please feel free to file any issues concerning Ecosystem Identifier Service to the issues section of the repository.
+
+Any questions concerning Ecosystem Identifier Service can be directed to helpdesk@library.tamu.edu.
+
+<div align="right">(<a href="#readme-top">back to top</a>)</div>
+
+Copyright © 2022 Texas A&M University Libraries under the [The MIT License][license].
+
+<!-- LINKS -->
+[build-badge]: https://github.com/TAMULib/IRIIIFService/workflows/Build/badge.svg
+[build-status]: https://github.com/TAMULib/IRIIIFService/actions?query=workflow%3ABuild
+[coverage-badge]: https://coveralls.io/repos/github/TAMULib/IRIIIFService/badge.svg
+[coverage-status]: https://coveralls.io/github/TAMULib/IRIIIFService
+
+[api-guide]: https://tamulib.github.io/IRIIIFService
+[tamu-library]: http://library.tamu.edu
+[deployment-guide]: DEPLOYING.md
+[contribute-guide]: CONTRIBUTING.md
+[license]: LICENSE
+
+[redis]: https://redis.io/
+
+[cantaloupe]: https://medusa-project.github.io/cantaloupe/
+[fuseki]: https://jena.apache.org/documentation/fuseki2/
+
+[pcdm]: https://pcdm.org/
+
+[iiif]: http://iiif.io/
+[iiif-presentation-api-v2]: http://iiif.io/api/presentation/2.1/)
+[iiif-image-api-v2]: http://iiif.io/api/image/2.1/)
+
+[dspace]: http://www.dspace.org/
+[dspace-install]: https://wiki.duraspace.org/display/DSDOC6x/Installing+DSpace#space-menu-link-content
+[dspace-rdf]: https://wiki.duraspace.org/display/DSDOC6x/Linked+%28Open%29+Data
+
+[fedora]: https://fedorarepository.org/
+[fedora-install]: https://wiki.duraspace.org/display/FEDORA4x/Quick+Start
