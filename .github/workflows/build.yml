@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: "Maven Cache"
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -20,14 +20,14 @@ jobs:
         with:
           java-version: 11
 
-      - name: "Maven Tests"
+      - name: "Maven Test"
         run: mvn clean test jacoco:report coveralls:report -DdryRun=true
 
       - name: "Coverage Report"
         uses: MikeEdgar/github-action@raw_coverage_file
         with:
           github-token: ${{ secrets.github_token }}
-          path-to-file: 'target/coveralls.json'
+          path-to-file: './target/coveralls.json'
           coverage-format: raw
 
       - name: "Deploy GH-Pages"

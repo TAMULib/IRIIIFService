@@ -46,8 +46,8 @@ This service provides IIIF manifest generation from DSpace RDF and/or Fedora PCD
 ### [IIIF](iiif) Image Server
 
 - Image resolution by identifier
-    - `http://[iiif image server]/iiif/2/[UUID redis key]/full/full/0/default.jpg`
-    - UUID resource location resolution via resources interface
+  - `http://[iiif image server]/iiif/2/[UUID redis key]/full/full/0/default.jpg`
+  - UUID resource location resolution via resources interface
 - [Presentation API v2](iiif-presentation-api-v2)
 - [Image API v2](iiif-image-api-v2)
 
@@ -56,49 +56,49 @@ This service provides IIIF manifest generation from DSpace RDF and/or Fedora PCD
 
 <br/>
 
-      require 'base64'
-      class CustomDelegate
-        ##
-        # Returns one of the following:
-        #
-        # 1. String URI
-        # 2. Hash with the following keys:
-        #     * `uri` [String] (required)
-        #     * `username` [String] For HTTP Basic authentication (optional).
-        #     * `secret` [String] For HTTP Basic authentication (optional).
-        #     * `headers` [Hash<String,String>] Hash of request headers (optional).
-        # 3. nil if not found.
-        #
-        # @param options [Hash] Empty hash.
-        # @return See above.
-        #
-        def httpsource_resource_info(options = {})
-          id = context['identifier']
-          puts id
-          if ( id =~ /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/ )
-            uri = '<%= @iiif_service_url %>resources/' + id + '/redirect'
-          elsif
-            irid = Base64.decode64(id)
-            puts irid
-            if irid.include? ":"
-              parts = irid.split(':')
-              ir = parts[0]
-              path = parts[1]
-              if ir == 'fedora'
-                uri = '<%= @fedora_url %>' + path
-              elsif ir == 'dspace'
-                uri = '<%= @dspace_url %>' + path
-              else
-                uri = irid
-              end
-            else
-              uri = id
-            end
+  require 'base64'
+  class CustomDelegate
+    ##
+    # Returns one of the following:
+    #
+    # 1. String URI
+    # 2. Hash with the following keys:
+    #     * `uri` [String] (required)
+    #     * `username` [String] For HTTP Basic authentication (optional).
+    #     * `secret` [String] For HTTP Basic authentication (optional).
+    #     * `headers` [Hash<String,String>] Hash of request headers (optional).
+    # 3. nil if not found.
+    #
+    # @param options [Hash] Empty hash.
+    # @return See above.
+    #
+    def httpsource_resource_info(options = {})
+      id = context['identifier']
+      puts id
+      if ( id =~ /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/ )
+        uri = '<%= @iiif_service_url %>resources/' + id + '/redirect'
+      elsif
+        irid = Base64.decode64(id)
+        puts irid
+        if irid.include? ":"
+          parts = irid.split(':')
+          ir = parts[0]
+          path = parts[1]
+          if ir == 'fedora'
+            uri = '<%= @fedora_url %>' + path
+          elsif ir == 'dspace'
+            uri = '<%= @dspace_url %>' + path
+          else
+            uri = irid
           end
-          puts uri
-          return uri
+        else
+          uri = id
         end
       end
+      puts uri
+      return uri
+    end
+  end
 
 </details>
 
@@ -106,14 +106,14 @@ This service provides IIIF manifest generation from DSpace RDF and/or Fedora PCD
 
 ### [DSpace](dspace)
 
--   [Installation](dspace-install)
--   [RDF](dspace-rdf)
+- [Installation](dspace-install)
+- [RDF](dspace-rdf)
 
 <div align="right">(<a href="#readme-top">back to top</a>)</div>
 
 #### [Fedora](refora)
 
-  - [Installation](fedora-install)
+- [Installation](fedora-install)
 
 <div align="right">(<a href="#readme-top">back to top</a>)</div>
 
