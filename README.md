@@ -1,18 +1,20 @@
 [![Build Status][build-badge]][build-status]
 [![Coverage Status][coverage-badge]][coverage-status]
 
-# Institutional Repository (IR) International Image Interoperability Framework (IIIF) Service
+# Institutional Repository International Image Interoperability Framework Service
 
 <a name="readme-top"></a>
 
-This service provides IIIF manifest generation from DSpace RDF and/or Fedora PCDM.
+A *Spring* backend for the *Institutional Repository International Image Interoperability Framework (IRIIIF) Service* developed and maintained by [Texas A&M University Libraries][tamu-library].
+
+This service provides **IIIF** manifest generation from **DSpace RDF** and/or **Fedora PCDM**.
 
 <details>
 <summary>Table of contents</summary>
 
   - [Requirements:](#requirements)
   - [External Requirements:](#external-requirements)
-    - [IIIF Image Server](#iiif-image-server)
+    - [IIIF Server](#iiif-server)
     - [DSpace](#dspace)
     - [Fedora](#fedora)
   - [Developer Documentation](#developer-documentation)
@@ -20,41 +22,42 @@ This service provides IIIF manifest generation from DSpace RDF and/or Fedora PCD
 
 </details>
 
+
 ## Requirements:
 
-- [Redis](redis)
+- [Redis][redis]
   - manifest cache
   - resource URL cache
 
 <div align="right">(<a href="#readme-top">back to top</a>)</div>
 
+
 ### External Requirements:
 
-- IIIF Image Server
+- IIIF Server
   - must support API v2
   - script delegate to resolve identifier
-  - tested with [Cantaloupe](cantaloupe)
+  - tested with [Cantaloupe][cantaloupe]
 - DSpace
   - RDF webapp deployed and indexed
   - Triplestore
-    - tested with [Fuseki](fuseki)
+    - tested with [Fuseki][fuseki]
 - Fedora
-  - structured with [PCDM](pcdm)
+  - structured with [PCDM][pcdm]
 
 <div align="right">(<a href="#readme-top">back to top</a>)</div>
 
-### [IIIF](iiif) Image Server
+
+#### [IIIF][iiif] Server
 
 - Image resolution by identifier
   - `http://[iiif image server]/iiif/2/[UUID redis key]/full/full/0/default.jpg`
   - UUID resource location resolution via resources interface
-- [Presentation API v2](iiif-presentation-api-v2)
-- [Image API v2](iiif-image-api-v2)
+- [Presentation API v2][iiif-presentation-api-v2]
+- [Image API v2][iiif-image-api-v2]
 
 <details>
 <summary>Example Cantaloupe custom delegate</summary>
-
-<br/>
 
   require 'base64'
   class CustomDelegate
@@ -104,26 +107,30 @@ This service provides IIIF manifest generation from DSpace RDF and/or Fedora PCD
 
 <div align="right">(<a href="#readme-top">back to top</a>)</div>
 
-### [DSpace](dspace)
 
-- [Installation](dspace-install)
-- [RDF](dspace-rdf)
+#### [DSpace][dspace]
+
+- [Installation][dspace-install]
+- [RDF][dspace-rdf]
+
+<div align="right">(<a href="#readme-top">back to top</a>)</div>
+
+
+#### [Fedora][fedora]
+
+- [Installation][fedora-install]
 
 <div align="right">(<a href="#readme-top">back to top</a>)</div>
 
-#### [Fedora](refora)
-
-- [Installation](fedora-install)
-
-<div align="right">(<a href="#readme-top">back to top</a>)</div>
 
 ## Developer Documentation
 
 - [Contributors Documentation][contribute-guide]
 - [Deployment Documentation][deployment-guide]
-- [API Documentation](api-guide)
+- [API Documentation][api-guide]
 
 <div align="right">(<a href="#readme-top">back to top</a>)</div>
+
 
 ## Additional Resources
 
@@ -131,9 +138,10 @@ Please feel free to file any issues concerning Ecosystem Identifier Service to t
 
 Any questions concerning Ecosystem Identifier Service can be directed to helpdesk@library.tamu.edu.
 
+Copyright © 2022 Texas A&M University Libraries under the [MIT License][license].
+
 <div align="right">(<a href="#readme-top">back to top</a>)</div>
 
-Copyright © 2022 Texas A&M University Libraries under the [The MIT License][license].
 
 <!-- LINKS -->
 [build-badge]: https://github.com/TAMULib/IRIIIFService/workflows/Build/badge.svg
