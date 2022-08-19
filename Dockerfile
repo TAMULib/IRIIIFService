@@ -13,8 +13,15 @@ ARG SOURCE_DIR
 RUN groupadd --non-unique -g $USER_ID $USER_NAME && \
     useradd --non-unique -d /$USER_NAME -m -u $USER_ID -g $USER_ID $USER_NAME
 
-# Update the system.
-RUN apt-get update && apt-get upgrade -y
+# Update the system and install dependencies.
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Make sure source directory exists.
+RUN mkdir -p $SOURCE_DIR && \
+    chown -R $USER_ID:$USER_ID $SOURCE_DIR
 
 # Set deployment directory.
 WORKDIR $SOURCE_DIR
