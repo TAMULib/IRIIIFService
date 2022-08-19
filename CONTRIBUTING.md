@@ -1,69 +1,65 @@
-# Contributing To IR IIIF Service
+<a name="readme-top"></a>
+# Contributing to Institutional Repository International Image Interoperability Framework Service
 
-Though IR IIIF Service is developed and maintained by Texas A&M University Libraries, we welcome community contributions. Involvement in IR IIIF Service can take many forms:
+Though *Institutional Repository International Image Interoperability Framework (IRIIIF) Service* is developed and maintained by Texas A&M University Libraries, we welcome community contributions.
+Involvement in *IRIIIF Service* can take many forms.
 
-#### Using IR IIIF Service
-
-Deploying IR IIIF Service and trying it out at your own institution is itself a way of contributing to the development process. For more information on deployment strategies please see the [relevant documentation](https://github.com/TAMULib/IRIIIFService/blob/master/README.md).
-
-#### Filing Issues
-
-Once you are using IR IIIF Service the creation of new issues through Github is a major method of contribution towards IR IIIF Service development. Issues can be motivated by the discovery of a bug in the software, or by the desire to see either new features added to cap or existing features behaving differently.
-
-These three categories of issue can be submitted using the following template:
-
-    [*] Bug Report
-    [] Feature Enhancement
-    [] Feature Request
-
-    Current Behavior:
-
-    [A description of the current behavior. This could include a list of steps to reproduce in the instance of a 
-    Bug Report, and can be 'N/A' for Feature Requests]
-
-    Desired Behavior:
-
-    [A description of the expected/desired behavior of the application]
+<div align="right">(<a href="#readme-top">back to top</a>)</div>
 
 
-    Relevant Information:
+## Using
 
-    [This section can include relevant error messages, or links to information that pertains to the issue]
+Deploying *IRIIIF Service* and trying it out at your own institution is itself a way of contributing to the development process.
+For more information on deployment strategies please see the [Deployment Guide][deployment-guide].
 
-Once an issue has been filed it will be curated by a IR IIIF Service developer and receive the appropriate labeling.
+<div align="right">(<a href="#readme-top">back to top</a>)</div>
 
-#### Creating Pull Requests
 
-Community code and documentation contributions are welcome, and should take the form of a Github Pull Request (PR). Each PR will need to be reviewed by a IR IIIF Service developer. A review will result in the PR being accepted and merged, a descriptive request for changes, or the PR being closed along with a detailed explanation.
+## Filing Issues
 
-It is our intention to maintain labeling on issues that are deemed to be low difficulty, in order to provide a good point of entry for those looking to begin contributing code or documentation.
+Once you are using *IRIIIF Service* the creation of new issues through GitHub is a major method of contribution towards *IRIIIF Service* development.
+Issues can be motivated by the discovery of a bug in the software, or by the desire to see either new features added or see changes to existing features.
 
-A PR description should include a list of the specific issues resolved, the predicted semantic versioning impact of the changes and a description which characterizes the nature of the changes made.
+There are two primary types of issues:
+1. Bug Report
+2. Feature Request
 
-For more information about semantic versioning please see [this reference](https://semver.org/). In general keep in mind:
+A **Bug Report** involves a problem with the existing software or a **Feature** is not working as designed or expected.
 
--   A Major Change is a breaking change that is not backwards compatible.
--   A Minor Change is a non breaking change that is backwards compatible to the last major change.
--   A Patch is a trivial change or bug fix that should not impact compatibility
+A **Feature** involves new functionality or behavior.
 
-Please confirm you PR description to the following template:
+<div align="right">(<a href="#readme-top">back to top</a>)</div>
 
-    Resolves:
 
-    - [List of # references to specific issues addressed by this PR]
+## Creating a Pull Request
 
-    Changes:
+Community code and documentation contributions are welcome and should take the form of a **GitHub Pull Request** (*PR*).
+Each *PR* will need to be reviewed by a *IRIIIF Service* developer.
+A review will result in the *PR* being accepted and merged, a descriptive request for changes, or the *PR* being closed along with a detailed explanation.
 
-    [*] Major
-    [] Minor
-    [] Patch
+It is our intention to maintain labeling on issues that are deemed to be low difficulty in order to provide a good point of entry for those looking to begin contributing code or documentation.
 
-    [A description of the approach taken to resolving those issues]
+A *PR* description should include a list of the specific issues resolved, the predicted *semantic versioning* impact of the changes, and a description which characterizes the nature of the changes made.
+When creating a *PR*, an issue template is automatically provided to simplify this process.
 
-In addition to a well formatted PR we would also appreciate granular commits with descriptive messages. For instance a good commit message may be `Moved /foo endpoint logic into a FooService`, whereas `Everything I did Friday` is less granular or descriptive.
+For more information about *semantic versioning* please see [Semantic Versioning Website][semantic-versioning].
+In general keep in mind:
 
-If your commits do not conform to these recommendations you might consider rebasing your PR. Instructions for how this might work can be found [here](https://help.github.com/articles/about-git-rebase/).
+- A **Major Change** is a breaking change that is not backwards compatible.
+- A **Minor Change** is a non-breaking change that is backwards compatible to the last **Major Change**.
+- A **Patch** is a trivial change or bug fix that should not impact compatibility.
 
-#### Good Luck!
+<div align="right">(<a href="#readme-top">back to top</a>)</div>
 
-We look forward to seeing your contributions. If you have any additional questions please contact the IR IIIF Service developers at [helpdesk@library.tamu.edu](<>).
+
+## Good Luck!
+
+We look forward to seeing your contributions.
+If you have any additional questions please contact the *IRIIIF Service* developers at helpdesk@library.tamu.edu.
+
+<div align="right">(<a href="#readme-top">back to top</a>)</div>
+
+
+<!-- LINKS -->
+[deployment-guide]: DEPLOYING.md
+[semantic-versioning]: https://semver.org/

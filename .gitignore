@@ -1,12 +1,70 @@
-.apt_generated/
-target/
-.DS_Store
+### Git ###
+!.gitkeep
+
+
+### STS ###
+.apt_generated
 .classpath
 .factorypath
 .project
 .settings
 .springBeans
-*.log*
-bin/
-logs/
+.sts4-cache
+
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+
+/.nb-gradle/
+
+
+### VS Code ###
+.vscode/
+
 dump.rdb
+
+
+### OS Specific ###
+.DS_Store
+.tmp/
+
+tmp/
+
+
+### Maven ###
+logs/
+target/
+
+.classpth
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+.project
+
+buildNumber.properties
+dependency-reduced-pom.xml
+pom.xml.next
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+
+
+### Weaver ###
+dist/
+
+
+### Project Specific ###
+.env*
+
+!**/src/main/**
+!**/src/test/**
