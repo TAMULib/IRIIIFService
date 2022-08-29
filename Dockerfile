@@ -45,6 +45,12 @@ ARG USER_ID
 ARG USER_NAME
 ARG SOURCE_DIR
 
+# Update the system and install dependencies.
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Create the user and group (use a high ID to attempt to avoid conflicts).
 RUN groupadd --non-unique -g $USER_ID $USER_NAME && \
     useradd --non-unique -d /$USER_NAME -m -u $USER_ID -g $USER_ID $USER_NAME
