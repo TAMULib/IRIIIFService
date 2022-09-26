@@ -10,10 +10,10 @@ import org.springframework.data.redis.core.index.Indexed;
 public class RedisResource {
 
     @Id
-    private final String id;
+    private String id;
 
     @Indexed
-    private final String url;
+    private String url;
 
     public RedisResource(String url) {
         this.id = UUID.nameUUIDFromBytes(url.getBytes()).toString();
@@ -24,8 +24,16 @@ public class RedisResource {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getUrl() {
         return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
 }
