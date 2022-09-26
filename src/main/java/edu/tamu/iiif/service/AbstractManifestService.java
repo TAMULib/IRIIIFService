@@ -167,6 +167,7 @@ public abstract class AbstractManifestService implements ManifestService {
     protected String getRdf(String url) throws NotFoundException {
         Optional<String> rdf = Optional.ofNullable(restTemplate.getForObject(url, String.class));
         if (rdf.isPresent()) {
+            logger.debug("RDF for {}: \n{}\n", url, rdf.get());
             return rdf.get();
         }
         throw new NotFoundException("RDF not found! " + url);
@@ -269,6 +270,7 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected String fetchImageInfo(String url) throws NotFoundException {
+        logger.debug("Fetching image info {}", url);
         Optional<String> imageInfo = Optional.ofNullable(restTemplate.getForObject(url, String.class));
         if (imageInfo.isPresent()) {
             return imageInfo.get();
