@@ -29,7 +29,7 @@ public class RedisManifest {
 
     private String json;
 
-    private final Long creation;
+    private Long creation;
 
     public RedisManifest() {
         this.creation = new Date().getTime();
@@ -113,6 +113,10 @@ public class RedisManifest {
 
     public Long getCreation() {
         return creation;
+    }
+
+    public void setCreation(Long creation) {
+        this.creation = creation;
     }
 
 }
