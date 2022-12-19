@@ -29,7 +29,7 @@ public class RedisManifest {
 
     private String json;
 
-    private final Long creation;
+    private Long creation;
 
     public RedisManifest() {
         this.creation = new Date().getTime();
@@ -67,20 +67,40 @@ public class RedisManifest {
         return path;
     }
 
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     public ManifestType getType() {
         return type;
+    }
+
+    public void setType(ManifestType type) {
+        this.type = type;
     }
 
     public String getRepository() {
         return repository;
     }
 
+    public void setRepository(String repository) {
+        this.repository = repository;
+    }
+
     public String getAllowed() {
         return allowed;
     }
 
+    public void setAllowed(String allowed) {
+        this.allowed = allowed;
+    }
+
     public String getDisallowed() {
         return disallowed;
+    }
+
+    public void setDisallowed(String disallowed) {
+        this.disallowed = disallowed;
     }
 
     public String getJson() {
@@ -93,6 +113,10 @@ public class RedisManifest {
 
     public Long getCreation() {
         return creation;
+    }
+
+    public void setCreation(Long creation) {
+        this.creation = creation;
     }
 
 }
