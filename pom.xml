@@ -23,7 +23,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>11</java.version>
-    <jena-libs.version>4.4.0</jena-libs.version>
+    <jena-libs.version>4.8.0</jena-libs.version>
     <iiif-presentation.version>3.2.6</iiif-presentation.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -266,7 +266,7 @@
         <groupId>org.eluder.coveralls</groupId>
         <artifactId>coveralls-maven-plugin</artifactId>
         <configuration>
-          <repoToken></repoToken>
+          <repoToken/>
         </configuration>
         <dependencies>
           <dependency>
@@ -326,7 +326,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore/>
                   </action>
                 </pluginExecution>
               </pluginExecutions>
