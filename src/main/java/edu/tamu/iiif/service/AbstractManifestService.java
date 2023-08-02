@@ -165,10 +165,22 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected String getRdf(String url) throws NotFoundException {
-        Optional<String> rdf = Optional.ofNullable(restTemplate.getForObject(url, String.class));
-        if (rdf.isPresent()) {
-            logger.debug("RDF for {}: \n{}\n", url, rdf.get());
-            return rdf.get();
+        try {
+            if (logger.isDebugEnabled()) {
+                logger.info("Requesting RDF for {}", url);
+            }
+            Optional<String> rdf = Optional.ofNullable(restTemplate.getForObject(url, String.class));
+            if (rdf.isPresent()) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("RDF for {}: \n{}\n", url, rdf.get());
+                }
+                return rdf.get();
+            }
+        } catch (RestClientException e) {
+            logger.error("Failed to get RDF for {}", url, e);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Error while requesting RDF for {}: {}", url, e.getMessage(), e);
+            }
         }
         throw new NotFoundException("RDF not found! " + url);
     }
