@@ -59,6 +59,7 @@ This service provides **IIIF** manifest generation from **DSpace RDF** and/or **
 <details>
 <summary>Example Cantaloupe custom delegate</summary>
 
+```
   require 'base64'
   class CustomDelegate
     ##
@@ -102,6 +103,7 @@ This service provides **IIIF** manifest generation from **DSpace RDF** and/or **
       return uri
     end
   end
+```
 
 </details>
 
