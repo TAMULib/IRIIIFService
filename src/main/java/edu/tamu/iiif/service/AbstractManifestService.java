@@ -177,7 +177,7 @@ public abstract class AbstractManifestService implements ManifestService {
                 return rdf.get();
             }
         } catch (RestClientException e) {
-            logger.error("Failed to get RDF for {}", url, e);
+            logger.error("Failed to get RDF for {}: {}", url, e.getMessage());
             if (logger.isDebugEnabled()) {
                 logger.debug("Error while requesting RDF for {}: {}", url, e.getMessage(), e);
             }
