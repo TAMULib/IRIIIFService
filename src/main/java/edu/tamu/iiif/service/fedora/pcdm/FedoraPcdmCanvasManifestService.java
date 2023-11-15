@@ -7,8 +7,8 @@ import java.net.URISyntaxException;
 
 import org.springframework.stereotype.Service;
 
-import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import edu.tamu.iiif.controller.ManifestRequest;
+import edu.tamu.iiif.model.CanvasWithInfo;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.rdf.RdfResource;
 
@@ -18,8 +18,8 @@ public class FedoraPcdmCanvasManifestService extends AbstractFedoraPcdmManifestS
     public String generateManifest(ManifestRequest request) throws IOException, URISyntaxException {
         String context = request.getContext();
         RdfResource rdfResource = getRdfResourceByContextPath(context);
-        Canvas canvas = generateCanvas(request, rdfResource, 0);
-        return mapper.writeValueAsString(canvas);
+        CanvasWithInfo canvasWithInfo = generateCanvas(request, rdfResource, 0);
+        return mapper.writeValueAsString(canvasWithInfo.getCanvas());
     }
 
     @Override
