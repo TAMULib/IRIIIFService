@@ -22,7 +22,6 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
@@ -30,17 +29,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
-import de.digitalcollections.iiif.presentation.model.api.v2.Image;
 import de.digitalcollections.iiif.presentation.model.api.v2.ImageResource;
-import de.digitalcollections.iiif.presentation.model.api.v2.PropertyValue;
 import de.digitalcollections.iiif.presentation.model.api.v2.Sequence;
-import de.digitalcollections.iiif.presentation.model.api.v2.Service;
 import de.digitalcollections.iiif.presentation.model.impl.v2.CanvasImpl;
-import de.digitalcollections.iiif.presentation.model.impl.v2.ImageImpl;
-import de.digitalcollections.iiif.presentation.model.impl.v2.ImageResourceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimpleImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
-import de.digitalcollections.iiif.presentation.model.impl.v2.ServiceImpl;
 import edu.tamu.iiif.config.model.AbstractIiifConfig;
 import edu.tamu.iiif.config.model.DSpaceRdfIiifConfig;
 import edu.tamu.iiif.controller.ManifestRequest;
@@ -205,32 +198,6 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
             }
         }
         return canvases;
-    }
-
-    private Canvas getCanvasPage(Canvas canvas, int page) {
-        String id = canvas.getId().toString() + "?page=" + page;
-        PropertyValue label = new PropertyValueSimpleImpl(canvas.getLabel().getFirstValue() + "?page=" + page);
-        Canvas canvasPage = new CanvasImpl(id, label, canvas.getHeight(), canvas.getWidth());
-        canvasPage.setImages(canvas.getImages().stream().map(i -> {
-            Image image = new ImageImpl(i.getId().toString().replace("/info.json", ";" + page + "/info.json"));
-            ImageResource ir = i.getResource();
-            ImageResource imageResource = new ImageResourceImpl(ir.getId().toString().replace("/full/full/0/default.jpg", ";" + page + "/full/full/0/default.jpg"));
-            imageResource.setFormat(ir.getFormat());
-            imageResource.setHeight(ir.getHeight());
-            imageResource.setWidth(ir.getWidth());
-            List<Service> services = ir.getServices().stream().map(s -> {
-                Service service = new ServiceImpl(s.getId().toString() + ";" + page);
-                service.setLabel(s.getLabel());
-                service.setContext(s.getContext());
-                service.setProfile(s.getProfile());
-                return service;
-            }).collect(Collectors.toList());
-            imageResource.setServices(services);
-            image.setResource(imageResource);
-            image.setOn(i.getOn());
-            return image;
-        }).collect(Collectors.toList()));
-        return canvasPage;
     }
 
     private RdfCanvas getDSpaceRdfCanvas(ManifestRequest request, RdfResource rdfResource, int page) throws URISyntaxException, URISyntaxException {
