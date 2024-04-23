@@ -11,6 +11,8 @@ import static edu.tamu.iiif.utility.StringUtility.joinPath;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -169,6 +171,7 @@ public abstract class AbstractManifestService implements ManifestService {
 
     private String getRdf(String url) throws NotFoundException {
         try {
+            url = URLDecoder.decode(url, StandardCharsets.UTF_8);
             if (logger.isDebugEnabled()) {
                 logger.info("Requesting RDF for {}", url);
             }
