@@ -20,7 +20,7 @@ import edu.tamu.iiif.config.model.ResolverConfig;
 import edu.tamu.iiif.exception.NotFoundException;
 
 @Service
-@ConditionalOnProperty(value = "iiif.resolver", havingValue = "remote", matchIfMissing = false)
+@ConditionalOnProperty(value = "iiif.resolver.type", havingValue = "remote", matchIfMissing = false)
 public class RemoteResourceResolver implements ResourceResolver {
 
     @Autowired
