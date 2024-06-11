@@ -13,7 +13,7 @@ import edu.tamu.iiif.model.RedisResource;
 import edu.tamu.iiif.model.repo.RedisResourceRepo;
 
 @Service
-@ConditionalOnProperty(value = "iiif.resolver", havingValue = "redis", matchIfMissing = true)
+@ConditionalOnProperty(value = "iiif.resolver.type", havingValue = "redis", matchIfMissing = true)
 public class RedisResourceResolver implements ResourceResolver {
 
     public final static UrlValidator URL_VALIDATOR = new UrlValidator(new String[] { "http", "https" }, UrlValidator.ALLOW_LOCAL_URLS);
