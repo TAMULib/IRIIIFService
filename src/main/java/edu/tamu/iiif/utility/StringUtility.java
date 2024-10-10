@@ -17,7 +17,7 @@ public class StringUtility {
     }
 
     public static String encodeSpaces(String value) {
-        return value.replace(" ", "%20");
+        return value;
     }
 
 }

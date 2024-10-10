@@ -188,6 +188,7 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected URI buildId(String path) throws URISyntaxException {
+        System.out.print("\n\n\nDEBUG: buildId(" + path + "), str = " + encodeSpaces(getIiifServiceUrl() + FORWARD_SLASH + getManifestType().getName() + FORWARD_SLASH + path) + ", URI is " + (new URI(encodeSpaces(getIiifServiceUrl() + FORWARD_SLASH + getManifestType().getName() + FORWARD_SLASH + path))) + "\n\n\n");
         return new URI(encodeSpaces(getIiifServiceUrl() + FORWARD_SLASH + getManifestType().getName() + FORWARD_SLASH + path));
     }
 
@@ -368,8 +369,11 @@ public abstract class AbstractManifestService implements ManifestService {
         String id;
         try {
             id = resourceResolver.lookup(url);
+            System.out.print("\n\n\nDEBUG: getResourceId for " + url + ", from lookup is " + id + "\n\n\n");
         } catch (NotFoundException e) {
             id = resourceResolver.create(url);
+            logger.info("NotFoundException for url " + url + " is ...", e);
+            System.out.print("\n\n\nDEBUG: getResourceId for " + url + ", from failed lookup now creating is " + id + "\n\n\n");
         }
         return id;
     }
