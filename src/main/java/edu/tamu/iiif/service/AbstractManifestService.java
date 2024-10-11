@@ -171,15 +171,20 @@ public abstract class AbstractManifestService implements ManifestService {
 
     private String getRdf(String url) throws NotFoundException {
         try {
-            url = URLDecoder.decode(url, StandardCharsets.UTF_8);
-            if (logger.isDebugEnabled()) {
-                logger.info("Requesting RDF for {}", url);
+            String doDecode = System.getenv("DEBUG_DISABLE_URL_DECODE");
+            System.out.print("\n\n\nDEBUG: getRdf(), url = " + url + ", url decoded = " + URLDecoder.decode(url, StandardCharsets.UTF_8) + ", (decoding is " + (doDecode == "true" ? "enabled" : "disabled") + ")\n\n\n");
+            if (doDecode == "true") {
+                url = URLDecoder.decode(url, StandardCharsets.UTF_8);
             }
-            Optional<String> rdf = Optional.ofNullable(restTemplate.getForObject(url, String.class));
-            if (rdf.isPresent()) {
-                logger.debug("RDF for {}: \n{}\n", url, rdf.get());
-                return rdf.get();
+
+            logger.debug("Requesting RDF for {}", url);
+            String rdf = restTemplate.getForObject(url, String.class);
+            if (rdf != null) {
+                logger.debug("RDF for {}: \n{}\n", url, rdf);
+                return rdf;
             }
+
+            logger.debug("RDF for {}: is not present\n", url);
         } catch (RestClientException e) {
             logger.error("Failed to get RDF for {}: {}", url, e.getMessage());
             logger.debug("Error while requesting RDF for {}: {}", url, e.getMessage(), e);
