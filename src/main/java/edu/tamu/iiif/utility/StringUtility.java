@@ -17,14 +17,14 @@ public class StringUtility {
     }
 
     public static String encodeSpaces(String value) {
-        String doEncode = System.getenv("DEBUG_DISABLE_SPACE_ENCODE");
-        if (doEncode == "true") {
-            System.out.print("\n\n\nDEBUG: replacing spaces, from '" + value + "' to '" + value.replace(" ", "%20") + "'\n\n\n");
-            return value.replace(" ", "%20");
+        String disableEncode = System.getenv("DEBUG_DISABLE_SPACE_ENCODE");
+        if (disableEncode == "true") {
+            System.out.print("\n\n\nDEBUG: not replacing spaces, from '" + value + "'\n\n\n");
+            return value;
         }
 
-        System.out.print("\n\n\nDEBUG: not replacing spaces, from '" + value + "'\n\n\n");
-        return value;
+        System.out.print("\n\n\nDEBUG: replacing spaces, from '" + value + "' to '" + value.replace(" ", "%20") + "'\n\n\n");
+        return value.replace(" ", "%20");
     }
 
 }

@@ -37,7 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-
+import com.fasterxml.jackson.databind.JsonNode;
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import de.digitalcollections.iiif.presentation.model.api.v2.ImageResource;
 import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
@@ -199,13 +199,18 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
             NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(PCDM_HAS_MEMBER_PREDICATE);
             while (nodes.hasNext()) {
                 RDFNode node = nodes.next();
+                System.out.print("\n\n\nDEBUG: getCanvases() using from PCDM_HAS_MEMBER_PREDICATE node: " + node.toString() + "\n\n\n");
 
                 Model fileModel = getFedoraRdfModel(node.toString());
+                System.out.print("\n\n\nDEBUG: getCanvases() resulting file model is: " + fileModel.toString() + "\n\n\n");
 
                 RdfResource fileRdfResource = new RdfResource(fileModel, node.toString());
+                System.out.print("\n\n\nDEBUG: getCanvases() resulting fileRdfResource is: " + fileRdfResource.toString() + "\n\n\n");
 
                 if (fileRdfResource.getResourceById(PCDM_HAS_FILE_PREDICATE) != null) {
                     CanvasWithInfo canvas = generateCanvas(request, fileRdfResource, 0);
+                    String debugData = canvas.getCanvasInfo().isPresent() ? canvas.getCanvasInfo().get().toPrettyString() : "";
+                    System.out.print("\n\n\nDEBUG: getCanvases() file has canvas: '" + debugData + "'\n\n\n");
                     if (canvas.getCanvas().getImages().size() > 0) {
                         canvases.add(canvas.getCanvas());
                     }
@@ -275,10 +280,13 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
             NodeIterator nodeItr = parentRdfResource.getNodesOfPropertyWithId(LDP_CONTAINS_PREDICATE);
             while (nodeItr.hasNext()) {
                 RDFNode node = nodeItr.next();
+                System.out.print("\n\n\nDEBUG: getFedoraRdfCanvas() using from LDP_HAS_MEMBER_RELATION_PREDICATE, PCDM_HAS_FILE_PREDICATE node: " + node.toString() + "\n\n\n");
 
                 Model fileModel = getFedoraRdfModel(node.toString());
+                System.out.print("\n\n\nDEBUG: getFedoraRdfCanvas() fileModel: " + fileModel.toString() + "\n\n\n");
 
                 RdfResource fileRdfResource = new RdfResource(fileModel, node.toString());
+                System.out.print("\n\n\nDEBUG: getFedoraRdfCanvas() fileRdfResource: " + fileRdfResource.toString() + "\n\n\n");
 
                 if (fileRdfResource.containsStatement(RDF_TYPE_PREDICATE, PCDM_FILE)) {
                     OptionalImageWithInfo imageWithInfo = generateImage(request, fileRdfResource, parameterizedCanvasId, page);
@@ -288,6 +296,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
                         Optional<ImageResource> imageResource = Optional.ofNullable(imageWithInfo.get().getImage().getResource());
 
                         if (imageResource.isPresent()) {
+                            System.out.print("\n\n\nDEBUG: getFedoraRdfCanvas() imageResource = " + imageResource.get().getWidth() + "x" + imageResource.get().getHeight() + ", " + imageResource.get().getType() + ", " + imageResource.get().getId() + ", canvas = " + rdfCanvas.getWidth() + "x" + rdfCanvas.getHeight() + "\n\n\n");
                             int height = imageResource.get().getHeight();
                             if (height > rdfCanvas.getHeight()) {
                                 rdfCanvas.setHeight(height);

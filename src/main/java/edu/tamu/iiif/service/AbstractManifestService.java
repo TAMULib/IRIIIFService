@@ -170,26 +170,23 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     private String getRdf(String url) throws NotFoundException {
+        String disableDecode = System.getenv("DEBUG_DISABLE_URL_DECODE");
+        System.out.println("\n\n\nDEBUG: DEBUG_DISABLE_URL_DECODE: " + disableDecode + "\n\n\n");
+        System.out.print("\n\n\nDEBUG: getRdf(), url = " + url + ", url decoded = " + URLDecoder.decode(url, StandardCharsets.UTF_8) + ", (decoding is " + (disableDecode != "true" ? "enabled" : "disabled") + ")\n\n\n");
+        String decodedUrl = (disableDecode == "true") ? url : URLDecoder.decode(url, StandardCharsets.UTF_8);
+
+        logger.debug("Requesting RDF for {}", decodedUrl);
+
         try {
-            String doDecode = System.getenv("DEBUG_DISABLE_URL_DECODE");
-            System.out.print("\n\n\nDEBUG: getRdf(), url = " + url + ", url decoded = " + URLDecoder.decode(url, StandardCharsets.UTF_8) + ", (decoding is " + (doDecode == "true" ? "enabled" : "disabled") + ")\n\n\n");
-            if (doDecode == "true") {
-                url = URLDecoder.decode(url, StandardCharsets.UTF_8);
-            }
+            String rdf = restTemplate.getForObject(decodedUrl, String.class);
+            logger.debug("RDF for {}: \n{}\n", decodedUrl, rdf);
 
-            logger.debug("Requesting RDF for {}", url);
-            String rdf = restTemplate.getForObject(url, String.class);
-            if (rdf != null) {
-                logger.debug("RDF for {}: \n{}\n", url, rdf);
-                return rdf;
-            }
-
-            logger.debug("RDF for {}: is not present\n", url);
+            return rdf;
         } catch (RestClientException e) {
-            logger.error("Failed to get RDF for {}: {}", url, e.getMessage());
-            logger.debug("Error while requesting RDF for {}: {}", url, e.getMessage(), e);
+            logger.error("Failed to get RDF for {}: {}", decodedUrl, e.getMessage(), e);
+
+            throw new NotFoundException("RDF not found for " + decodedUrl, e);
         }
-        throw new NotFoundException("RDF not found! " + url);
     }
 
     protected URI buildId(String path) throws URISyntaxException {
