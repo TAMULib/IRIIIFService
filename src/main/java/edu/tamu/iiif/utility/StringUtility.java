@@ -18,6 +18,7 @@ public class StringUtility {
 
     public static String encodeSpaces(String value) {
         String disableEncode = System.getenv("DEBUG_DISABLE_SPACE_ENCODE");
+        System.out.println("\n\n\nDEBUG: DEBUG_DISABLE_SPACE_ENCODE: " + disableEncode + "\n\n\n");
         if (disableEncode == "true") {
             System.out.print("\n\n\nDEBUG: not replacing spaces, from '" + value + "'\n\n\n");
             return value;
