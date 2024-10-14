@@ -170,10 +170,10 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     private String getRdf(String url) throws NotFoundException {
-        String disableDecode = System.getenv("DEBUG_DISABLE_URL_DECODE");
+        boolean disableDecode = "true".equalsIgnoreCase(System.getenv("DEBUG_DISABLE_URL_DECODE"));
         System.out.println("\n\n\nDEBUG: DEBUG_DISABLE_URL_DECODE: " + disableDecode + "\n\n\n");
-        System.out.print("\n\n\nDEBUG: getRdf(), url = " + url + ", url decoded = " + URLDecoder.decode(url, StandardCharsets.UTF_8) + ", (decoding is " + (disableDecode != "true" ? "enabled" : "disabled") + ")\n\n\n");
-        String decodedUrl = (disableDecode == "true") ? url : URLDecoder.decode(url, StandardCharsets.UTF_8);
+        System.out.print("\n\n\nDEBUG: getRdf(), url = " + url + ", url decoded = " + URLDecoder.decode(url, StandardCharsets.UTF_8) + ", (decoding is " + (disableDecode ? "disabled" : "enabled") + ")\n\n\n");
+        String decodedUrl = disableDecode ? url : URLDecoder.decode(url, StandardCharsets.UTF_8);
 
         logger.debug("Requesting RDF for {}", decodedUrl);
 
