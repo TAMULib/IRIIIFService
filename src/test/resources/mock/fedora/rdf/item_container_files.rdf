@@ -38,7 +38,7 @@
 @prefix xs:  <http://www.w3.org/2001/XMLSchema> .
 @prefix dc:  <http://purl.org/dc/elements/1.1/> .
 
-<http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/Pages/ExCat0084/files>
+<http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/Pages/ExCat 0084/files>
         rdf:type                fedora:Container ;
         rdf:type                fedora:Resource ;
         rdf:type                ldp:DirectContainer ;
@@ -47,10 +47,10 @@
         fedora:createdBy        "bypassAdmin"^^<http://www.w3.org/2001/XMLSchema#string> ;
         fedora:created          "2018-05-24T21:19:28.957Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
         fedora:lastModified     "2018-05-24T21:19:29.121Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
-        ldp:membershipResource  <http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/Pages/ExCat0084> ;
+        ldp:membershipResource  <http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/Pages/ExCat 0084> ;
         ldp:hasMemberRelation   ns004:hasFile ;
         rdf:type                ldp:RDFSource ;
         rdf:type                ldp:Container ;
         fedora:writable         "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-        fedora:hasParent        <http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/Pages/ExCat0084> ;
-        ldp:contains            <http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/Pages/ExCat0084/files/ExCat0084.jpg> .
+        fedora:hasParent        <http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/Pages/ExCat 0084> ;
+        ldp:contains            <http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/Pages/ExCat 0084/files/ExCat0084.jpg> .

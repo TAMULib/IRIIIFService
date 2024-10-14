@@ -38,7 +38,7 @@
 @prefix xs:  <http://www.w3.org/2001/XMLSchema> .
 @prefix dc:  <http://purl.org/dc/elements/1.1/> .
 
-<http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/Pages/ExCat 0084/files/ExCat0084.jpg>
+<http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/Pages/ExCat%200084/files/ExCat0084.jpg>
         rdf:type                 ns004:File ;
         rdf:type                 fedora:Binary ;
         rdf:type                 fedora:Resource ;
@@ -53,6 +53,6 @@
         dc:identifier            "ExCat0084.jpg"^^<http://www.w3.org/2001/XMLSchema#string> ;
         rdf:type                 ldp:NonRDFSource ;
         fedora:writable          "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-        iana:describedby         <http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/Pages/ExCat 0084/files/ExCat0084.jpg/fcr:metadata> ;
-        fedora:hasParent         <http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/Pages/ExCat 0084/files> ;
-        fedora:hasFixityService  <http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/Pages/ExCat 0084/files/ExCat0084.jpg/fcr:fixity> .
+        iana:describedby         <http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/Pages/ExCat%200084/files/ExCat0084.jpg/fcr:metadata> ;
+        fedora:hasParent         <http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/Pages/ExCat%200084/files> ;
+        fedora:hasFixityService  <http://localhost:9000/fcrepo/rest/mwbObjects/TGWCatalog/Pages/ExCat%200084/files/ExCat0084.jpg/fcr:fixity> .

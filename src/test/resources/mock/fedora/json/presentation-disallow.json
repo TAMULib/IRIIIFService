@@ -1,6 +1,6 @@
 {
   "@context": "http://iiif.io/api/presentation/2/context.json",
-  "@id": "http://localhost:9000/fedora-pcdm/presentation/mwbObjects/TGWCatalog/Pages/ExCat0084?disallow=image/bmp;image/jpeg",
+  "@id": "http://localhost:9000/fedora-pcdm/presentation/mwbObjects/TGWCatalog/Pages/ExCat 0084?disallow=image/bmp;image/jpeg",
   "@type": "sc:Manifest",
   "attribution": "Bob Boring",
   "description": [
@@ -37,16 +37,16 @@
     },
     {
       "label": "context",
-      "value": "mwbObjects/TGWCatalog/Pages/ExCat0084"
+      "value": "mwbObjects/TGWCatalog/Pages/ExCat 0084"
     }
   ],
   "sequences": [
     {
-      "@id": "http://localhost:9000/fedora-pcdm/sequence/mwbObjects/TGWCatalog/Pages/ExCat0084?disallow=image/bmp;image/jpeg",
+      "@id": "http://localhost:9000/fedora-pcdm/sequence/mwbObjects/TGWCatalog/Pages/ExCat 0084?disallow=image/bmp;image/jpeg",
       "@type": "sc:Sequence",
       "canvases": [
         {
-          "@id": "http://localhost:9000/fedora-pcdm/canvas/mwbObjects/TGWCatalog/Pages/ExCat0084?disallow=image/bmp;image/jpeg",
+          "@id": "http://localhost:9000/fedora-pcdm/canvas/mwbObjects/TGWCatalog/Pages/ExCat 0084?disallow=image/bmp;image/jpeg",
           "@type": "sc:Canvas",
           "height": 3000,
           "images": [
@@ -54,7 +54,7 @@
               "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn/info.json",
               "@type": "oa:Annotation",
               "motivation": "sc:painting",
-              "on": "http://localhost:9000/fedora-pcdm/canvas/mwbObjects/TGWCatalog/Pages/ExCat0084?disallow=image/bmp;image/jpeg",
+              "on": "http://localhost:9000/fedora-pcdm/canvas/mwbObjects/TGWCatalog/Pages/ExCat 0084?disallow=image/bmp;image/jpeg",
               "resource": {
                 "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn/full/full/0/default.jpg",
                 "@type": "dctypes:Image",
@@ -98,7 +98,7 @@
             },
             {
               "label": "context",
-              "value": "mwbObjects/TGWCatalog/Pages/ExCat0084"
+              "value": "mwbObjects/TGWCatalog/Pages/ExCat 0084"
             }
           ],
           "width": 2400

@@ -1,19 +1,19 @@
 {
-  "@id": "http://localhost:9000/fedora-pcdm/sequence/mwbObjects/TGWCatalog/Pages/ExCat 0084",
+  "@id": "http://localhost:9000/fedora-pcdm/sequence/mwbObjects/TGWCatalog/Pages/ExCat%200084",
   "@type": "sc:Sequence",
   "canvases": [
     {
-      "@id": "http://localhost:9000/fedora-pcdm/canvas/mwbObjects/TGWCatalog/Pages/ExCat 0084",
+      "@id": "http://localhost:9000/fedora-pcdm/canvas/mwbObjects/TGWCatalog/Pages/ExCat%200084",
       "@type": "sc:Canvas",
       "height": 3000,
       "images": [
         {
-          "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn/info.json",
+          "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0JTIwMDA4NC9maWxlcy9FeENhdDAwODQuanBn/info.json",
           "@type": "oa:Annotation",
           "motivation": "sc:painting",
-          "on": "http://localhost:9000/fedora-pcdm/canvas/mwbObjects/TGWCatalog/Pages/ExCat 0084",
+          "on": "http://localhost:9000/fedora-pcdm/canvas/mwbObjects/TGWCatalog/Pages/ExCat%200084",
           "resource": {
-            "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn/full/full/0/default.jpg",
+            "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0JTIwMDA4NC9maWxlcy9FeENhdDAwODQuanBn/full/full/0/default.jpg",
             "@type": "dctypes:Image",
             "format": "image/png; charset=utf-8",
             "height": 3000,
@@ -21,7 +21,7 @@
               "label": "Fedora IIIF Image Resource Service",
               "profile": "http://iiif.io/api/image/2/level0.json",
               "@context": "http://iiif.io/api/image/2/context.json",
-              "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn"
+              "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0JTIwMDA4NC9maWxlcy9FeENhdDAwODQuanBn"
             },
             "width": 2400
           }
@@ -55,7 +55,7 @@
         },
         {
           "label": "context",
-          "value": "mwbObjects/TGWCatalog/Pages/ExCat 0084"
+          "value": "mwbObjects/TGWCatalog/Pages/ExCat%200084"
         }
       ],
       "width": 2400
