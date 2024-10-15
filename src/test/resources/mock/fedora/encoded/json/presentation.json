@@ -1,0 +1,119 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "http://localhost:9000/fedora-pcdm/presentation/mwbObjects/TGWCatalog/Pages/ExCat%200084",
+  "@type": "sc:Manifest",
+  "attribution": "Bob Boring",
+  "description": [
+    "There is a smudge",
+    "Back Cover"
+  ],
+  "label": "ExCat0084",
+  "license": "Test license",
+  "logo": "https://library.tamu.edu/assets/images/tamu-logos/TAM-PrimaryMarkB.png",
+  "metadata": [
+    {
+      "label": "date",
+      "value": "1/5/2018"
+    },
+    {
+      "label": "identifier",
+      "value": "ExCat0084"
+    },
+    {
+      "label": "format",
+      "value": "jpeg"
+    },
+    {
+      "label": "isPartOf",
+      "value": " The Great War Catalog, page  Back Cover"
+    },
+    {
+      "label": "license",
+      "value": "Test license"
+    },
+    {
+      "label": "contributor",
+      "value": "Bob Boring"
+    },
+    {
+      "label": "context",
+      "value": "mwbObjects/TGWCatalog/Pages/ExCat%200084"
+    }
+  ],
+  "sequences": [
+    {
+      "@id": "http://localhost:9000/fedora-pcdm/sequence/mwbObjects/TGWCatalog/Pages/ExCat%200084",
+      "@type": "sc:Sequence",
+      "canvases": [
+        {
+          "@id": "http://localhost:9000/fedora-pcdm/canvas/mwbObjects/TGWCatalog/Pages/ExCat%200084",
+          "@type": "sc:Canvas",
+          "height": 3000,
+          "images": [
+            {
+              "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0JTIwMDA4NC9maWxlcy9FeENhdDAwODQuanBn/info.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "http://localhost:9000/fedora-pcdm/canvas/mwbObjects/TGWCatalog/Pages/ExCat%200084",
+              "resource": {
+                "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0JTIwMDA4NC9maWxlcy9FeENhdDAwODQuanBn/full/full/0/default.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/png; charset=utf-8",
+                "height": 3000,
+                "service": {
+                  "label": "Fedora IIIF Image Resource Service",
+                  "profile": "http://iiif.io/api/image/2/level0.json",
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0JTIwMDA4NC9maWxlcy9FeENhdDAwODQuanBn"
+                },
+                "width": 2400
+              }
+            }
+          ],
+          "label": "ExCat0084",
+          "metadata": [
+            {
+              "label": "date",
+              "value": "1/5/2018"
+            },
+            {
+              "label": "identifier",
+              "value": "ExCat0084"
+            },
+            {
+              "label": "format",
+              "value": "jpeg"
+            },
+            {
+              "label": "isPartOf",
+              "value": " The Great War Catalog, page  Back Cover"
+            },
+            {
+              "label": "license",
+              "value": "Test license"
+            },
+            {
+              "label": "contributor",
+              "value": "Bob Boring"
+            },
+            {
+              "label": "context",
+              "value": "mwbObjects/TGWCatalog/Pages/ExCat%200084"
+            }
+          ],
+          "width": 2400
+        }
+      ],
+      "label": "ExCat0084"
+    }
+  ],
+  "thumbnail": {
+    "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0JTIwMDA4NC9maWxlcy9FeENhdDAwODQuanBn/full/!100,100/0/default.jpg",
+    "service": {
+      "label": "Fedora IIIF Image Resource Service",
+      "profile": "http://iiif.io/api/image/2/level0.json",
+      "@context": "http://iiif.io/api/image/2/context.json",
+      "@id": "http://localhost:8182/iiif/2/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0JTIwMDA4NC9maWxlcy9FeENhdDAwODQuanBn"
+    }
+  }
+}

@@ -5,43 +5,12 @@ import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_LEVEL_ZERO_PROFIL
 import static edu.tamu.iiif.utility.RdfModelUtility.createRdfModel;
 import static edu.tamu.iiif.utility.RdfModelUtility.getObjects;
 import static edu.tamu.iiif.utility.StringUtility.encode;
-import static edu.tamu.iiif.utility.StringUtility.encodeSpaces;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
-
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.Statement;
-import org.apache.jena.rdf.model.StmtIterator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import de.digitalcollections.iiif.presentation.model.api.v2.Image;
 import de.digitalcollections.iiif.presentation.model.api.v2.ImageResource;
@@ -66,6 +35,30 @@ import edu.tamu.iiif.model.OptionalImageWithInfo;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 public abstract class AbstractManifestService implements ManifestService {
 
@@ -134,7 +127,6 @@ public abstract class AbstractManifestService implements ManifestService {
             redisManifestRepo.save(new RedisManifest(encode(path), getManifestType(), getRepository(), request.getAllowed(), request.getDisallowed(), manifest));
             update = false;
         }
-
         if (update) {
             RedisManifest redisManifest = optionalRedisManifest.get();
             manifest = generateManifest(request);
@@ -144,7 +136,6 @@ public abstract class AbstractManifestService implements ManifestService {
         } else {
             logger.info("Manifest requested: " + path);
         }
-
         return manifest;
     }
 
@@ -170,25 +161,20 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     private String getRdf(String url) throws NotFoundException {
+        logger.debug("Requesting RDF for {}", url);
+
         try {
-            url = URLDecoder.decode(url, StandardCharsets.UTF_8);
-            if (logger.isDebugEnabled()) {
-                logger.info("Requesting RDF for {}", url);
-            }
-            Optional<String> rdf = Optional.ofNullable(restTemplate.getForObject(url, String.class));
-            if (rdf.isPresent()) {
-                logger.debug("RDF for {}: \n{}\n", url, rdf.get());
-                return rdf.get();
-            }
+            String rdf = restTemplate.getForObject(url, String.class);
+            logger.debug("RDF for {}: \n{}\n", url, rdf);
+
+            return rdf;
         } catch (RestClientException e) {
-            logger.error("Failed to get RDF for {}: {}", url, e.getMessage());
-            logger.debug("Error while requesting RDF for {}: {}", url, e.getMessage(), e);
+            throw new NotFoundException("RDF not found for " + url, e);
         }
-        throw new NotFoundException("RDF not found! " + url);
     }
 
     protected URI buildId(String path) throws URISyntaxException {
-        return new URI(encodeSpaces(getIiifServiceUrl() + FORWARD_SLASH + getManifestType().getName() + FORWARD_SLASH + path));
+        return new URI(getIiifServiceUrl() + FORWARD_SLASH + getManifestType().getName() + FORWARD_SLASH + path);
     }
 
     protected String getLogo(RdfResource rdfResource) {
@@ -285,11 +271,12 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected String fetchImageInfo(String url) throws NotFoundException {
         logger.debug("Fetching image info {}", url);
-        Optional<String> imageInfo = Optional.ofNullable(restTemplate.getForObject(url, String.class));
-        if (imageInfo.isPresent()) {
-            return imageInfo.get();
+
+        try {
+            return restTemplate.getForObject(url, String.class);
+        } catch (RestClientException e) {
+            throw new NotFoundException("Image not found for " + url, e);
         }
-        throw new NotFoundException("Image information not found!");
     }
 
     protected URI getImageUri(String url) throws URISyntaxException {

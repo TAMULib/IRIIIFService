@@ -69,6 +69,11 @@ public abstract class AbstractDSpaceRdfManifestServiceTest extends AbstractManif
     }
 
     @Override
+    protected String getMockDirectoryPath() {
+        return super.getMockDirectoryPath() + "dspace/";
+    }
+
+    @Override
     protected String getRepoRdfIdentifier() {
         return DSPACE_RDF_IDENTIFIER;
     }
