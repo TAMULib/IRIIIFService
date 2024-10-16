@@ -35,6 +35,7 @@ import edu.tamu.iiif.model.OptionalImageWithInfo;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
+import edu.tamu.iiif.utility.StringUtility;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -174,7 +175,7 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected URI buildId(String path) throws URISyntaxException {
-        return new URI(getIiifServiceUrl() + FORWARD_SLASH + getManifestType().getName() + FORWARD_SLASH + path);
+        return new URI(StringUtility.encodeSpaces(getIiifServiceUrl() + FORWARD_SLASH + getManifestType().getName() + FORWARD_SLASH + path));
     }
 
     protected String getLogo(RdfResource rdfResource) {
