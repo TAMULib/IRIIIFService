@@ -14,7 +14,7 @@ public abstract class AbstractCollection extends AbstractFedoraPcdm {
     protected Resource collection;
 
     @PostConstruct
-    private void constructResoruces() {
+    private void constructResources() {
         collectionRdf = new ClassPathResource(getMockFilePath(RDF_DIR, "collection_container.rdf"));
         itemRdf = new ClassPathResource(getMockFilePath(RDF_DIR, "item_container.rdf"));
 

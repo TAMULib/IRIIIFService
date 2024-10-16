@@ -23,6 +23,9 @@ public class FedoraPcdmCanvasManifestServiceUncodedTest extends AbstractCanvasVa
     protected String getManifestPagePath() {
         return "mwbObjects/TGWCatalog/Pages/ExCat0084";
     }
+    protected String getManifestHandlePath() {
+        return "rdf/handle/123456789/158308";
+    }
 
     protected FedoraPcdmCanvasManifestService getManifestService() {
         return fedoraPcdmCanvasManifestService;

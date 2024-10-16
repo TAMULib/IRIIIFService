@@ -18,7 +18,7 @@ public abstract class AbstractPresentation extends AbstractFedoraPcdm {
     protected Resource presentationDisallow;
 
     @PostConstruct
-    private void constructResoruces() {
+    private void constructResources() {
         itemRdf = new ClassPathResource(getMockFilePath(RDF_DIR, "item_container.rdf"));
         itemFilesRdf = new ClassPathResource(getMockFilePath(RDF_DIR, "item_container_files.rdf"));
         itemFilesEntryRdf = new ClassPathResource(getMockFilePath(RDF_DIR, "item_container_files_entry.rdf"));

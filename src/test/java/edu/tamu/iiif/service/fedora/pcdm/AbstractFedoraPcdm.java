@@ -4,7 +4,6 @@ import static org.mockito.Mockito.lenient;
 
 import edu.tamu.iiif.config.model.FedoraPcdmIiifConfig;
 import edu.tamu.iiif.service.AbstractManifestServiceTest;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,8 +16,6 @@ public abstract class AbstractFedoraPcdm extends AbstractManifestServiceTest {
     protected static final String FEDORA_URL = "http://localhost:9000/fcrepo/rest";
 
     protected static final String FEDORA_PCDM_IDENTIFIER = "fedora-pcdm";
-
-    protected static final String SIMULATE_FAILURE = "Simulate Failure";
 
     protected void setup(AbstractFedoraPcdmManifestService fedoraPcdmManifestService) {
         super.setup(fedoraPcdmManifestService);
@@ -81,24 +78,6 @@ public abstract class AbstractFedoraPcdm extends AbstractManifestServiceTest {
     protected String getRepoBaseUrl() {
         return FEDORA_URL + "/";
     }
-
-    /**
-     * Get the path to the mock file.
-     *
-     * @param dir The sub-directory the file is stored within (must add trailing forward slash).
-     * @param file The name of the file.
-     *
-     * @return The path to the file.
-     */
-    abstract protected String getMockFilePath(String type, String file);
-
-    /**
-     * Setup the mocks.
-     *
-     * @throws IOException
-     */
-    abstract protected void setupMocks() throws IOException;
-
 
     /**
      * Get the manifest path for a collection.

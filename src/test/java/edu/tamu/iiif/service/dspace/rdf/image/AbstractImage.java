@@ -1,12 +1,12 @@
-package edu.tamu.iiif.service.fedora.pcdm.image;
+package edu.tamu.iiif.service.dspace.rdf.image;
 
-import edu.tamu.iiif.service.fedora.pcdm.AbstractFedoraPcdm;
-import edu.tamu.iiif.service.fedora.pcdm.FedoraPcdmImageManifestService;
+import edu.tamu.iiif.service.dspace.rdf.AbstractDspaceRdf;
+import edu.tamu.iiif.service.dspace.rdf.DSpaceRdfImageManifestService;
 import javax.annotation.PostConstruct;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-public abstract class AbstractImage extends AbstractFedoraPcdm {
+public abstract class AbstractImage extends AbstractDspaceRdf {
 
     protected Resource image;
 
@@ -20,6 +20,6 @@ public abstract class AbstractImage extends AbstractFedoraPcdm {
      *
      * @return The manifest service.
      */
-    abstract protected FedoraPcdmImageManifestService getManifestService();
+    abstract protected DSpaceRdfImageManifestService getManifestService();
 
 }

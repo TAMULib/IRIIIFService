@@ -1,0 +1,34 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "http://localhost:9000/dspace-rdf/collection/123456789/158299",
+  "@type": "sc:Collection",
+  "attribution": "Chevy",
+  "label": "Cool Cars",
+  "logo": "https://library.tamu.edu/assets/images/tamu-logos/TAM-PrimaryMarkB.png",
+  "manifests": [
+    {
+      "@id": "http://localhost:9000/dspace-rdf/presentation/123456789/1%2058308",
+      "@type": "sc:Manifest",
+      "label": "Corvette"
+    }
+  ],
+  "metadata": [
+    {
+      "label": "creator",
+      "value": "Chevy"
+    },
+    {
+      "label": "license",
+      "value": "Test license"
+    },
+    {
+      "label": "title",
+      "value": "Cool Cars"
+    },
+    {
+      "label": "context",
+      "value": "rdf/handle/123456789/158299"
+    }
+  ],
+  "viewingHint": "multi-part"
+}

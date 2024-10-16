@@ -5,11 +5,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.tamu.iiif.exception.NotFoundException;
+import edu.tamu.iiif.model.ManifestType;
+import edu.tamu.iiif.model.repo.RedisManifestRepo;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Base64;
 import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -21,15 +24,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import edu.tamu.iiif.exception.NotFoundException;
-import edu.tamu.iiif.model.ManifestType;
-import edu.tamu.iiif.model.repo.RedisManifestRepo;
-
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
-public abstract class AbstractManifestServiceTest implements ManifestServiceTest {
+public abstract class AbstractManifestServiceTest {
 
     protected static final String RDF_DIR = "rdf/";
 
@@ -42,6 +39,8 @@ public abstract class AbstractManifestServiceTest implements ManifestServiceTest
     protected static final String IMAGE_SERVICE_URL = "http://localhost:8182/iiif/2";
 
     protected static final String LOGO_URL = "https://library.tamu.edu/assets/images/tamu-logos/TAM-PrimaryMarkB.png";
+
+    protected static final String SIMULATE_FAILURE = "Simulate Failure";
 
     @Spy
     protected ObjectMapper objectMapper;
@@ -104,5 +103,22 @@ public abstract class AbstractManifestServiceTest implements ManifestServiceTest
     protected abstract String getRepoRdfIdentifier();
 
     protected abstract String getRepoBaseUrl();
+
+    /**
+     * Get the path to the mock file.
+     *
+     * @param dir The sub-directory the file is stored within (must add trailing forward slash).
+     * @param file The name of the file.
+     *
+     * @return The path to the file.
+     */
+    abstract protected String getMockFilePath(String type, String file);
+
+    /**
+     * Setup the mocks.
+     *
+     * @throws IOException
+     */
+    abstract protected void setupMocks() throws IOException;
 
 }
