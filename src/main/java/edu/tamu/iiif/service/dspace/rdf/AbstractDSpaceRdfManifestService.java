@@ -11,22 +11,7 @@ import static edu.tamu.iiif.constants.Constants.DSPACE_RDF_CONDITION;
 import static edu.tamu.iiif.constants.Constants.PRESENTATION_IDENTIFIER;
 import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
 import static edu.tamu.iiif.utility.RdfModelUtility.hasObject;
-import static edu.tamu.iiif.utility.StringUtility.encodeSpaces;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.NodeIterator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import de.digitalcollections.iiif.presentation.model.api.v2.ImageResource;
@@ -43,6 +28,18 @@ import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
 import edu.tamu.iiif.utility.RdfModelUtility;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.NodeIterator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 
 @ConditionalOnExpression(DSPACE_RDF_CONDITION)
 public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestService {
@@ -90,19 +87,19 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
     }
 
     protected URI getDSpaceIiifCollectionUri(String handle) throws URISyntaxException {
-        return getDSpaceIiifUri(encodeSpaces(handle), COLLECTION_IDENTIFIER);
+        return getDSpaceIiifUri(handle, COLLECTION_IDENTIFIER);
     }
 
     protected URI getDSpaceIiifPresentationUri(String handle) throws URISyntaxException {
-        return getDSpaceIiifUri(encodeSpaces(handle), PRESENTATION_IDENTIFIER);
+        return getDSpaceIiifUri(handle, PRESENTATION_IDENTIFIER);
     }
 
     protected URI getDSpaceIiifSequenceUri(String handle) throws URISyntaxException {
-        return getDSpaceIiifUri(encodeSpaces(handle), SEQUENCE_IDENTIFIER);
+        return getDSpaceIiifUri(handle, SEQUENCE_IDENTIFIER);
     }
 
     protected URI getDSpaceIiifCanvasUri(String handle) throws URISyntaxException {
-        return getDSpaceIiifUri(encodeSpaces(handle), CANVAS_IDENTIFIER);
+        return getDSpaceIiifUri(handle, CANVAS_IDENTIFIER);
     }
 
     protected String getHandle(String uri) {
@@ -181,7 +178,7 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
     private List<Canvas> getCanvases(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         List<Canvas> canvases = new ArrayList<Canvas>();
         // NOTE: canvas per bitstream and bitstreams uri must contain the context handle path of the desired resource
-        String contextHandlePath = encodeSpaces(getHandlePath(rdfResource.getId()));
+        String contextHandlePath = getHandlePath(rdfResource.getId());
         NodeIterator bitstreamIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_BITSTREAM_PREDICATE);
         while (bitstreamIterator.hasNext()) {
             String uri = bitstreamIterator.next().toString();
