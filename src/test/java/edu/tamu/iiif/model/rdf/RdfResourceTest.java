@@ -3,9 +3,14 @@ package edu.tamu.iiif.model.rdf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import edu.tamu.iiif.constants.Constants;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResIterator;
@@ -16,9 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import edu.tamu.iiif.constants.Constants;
-import edu.tamu.iiif.utility.RdfModelUtility;
-
 @ExtendWith(SpringExtension.class)
 public class RdfResourceTest {
 
@@ -26,7 +28,7 @@ public class RdfResourceTest {
 
     @Test
     public void testCreateDefault() throws IOException {
-        Model model = RdfModelUtility.createRdfModel(rdf);
+        Model model = createRdfModel(rdf);
         RdfResource rdfResource = new RdfResource(model);
         assertNotNull(rdfResource);
         assertEquals(model, rdfResource.getModel());
@@ -34,7 +36,7 @@ public class RdfResourceTest {
 
     @Test
     public void testCreateWithResource() throws IOException {
-        Model model = RdfModelUtility.createRdfModel(rdf);
+        Model model = createRdfModel(rdf);
         Resource resource = model.getResource(Constants.DSPACE_IS_PART_OF_COLLECTION_PREDICATE);
         RdfResource rdfResource = new RdfResource(model, resource);
         assertNotNull(rdfResource);
@@ -44,7 +46,7 @@ public class RdfResourceTest {
 
     @Test
     public void testCreateFromRdfResourceWithResourceId() throws IOException {
-        Model testModel = RdfModelUtility.createRdfModel(rdf);
+        Model testModel = createRdfModel(rdf);
         Resource testResource = testModel.getResource(Constants.DSPACE_IS_PART_OF_COLLECTION_PREDICATE);
         RdfResource testRdfResource = new RdfResource(testModel, testResource);
         Resource resource = testModel.getResource(Constants.DSPACE_HAS_BITSTREAM_PREDICATE);
@@ -55,7 +57,7 @@ public class RdfResourceTest {
 
     @Test
     public void testCreateFromRdfResourceWithResourceResource() throws IOException {
-        Model testModel = RdfModelUtility.createRdfModel(rdf);
+        Model testModel = createRdfModel(rdf);
         Resource testResource = testModel.getResource(Constants.DSPACE_IS_PART_OF_COLLECTION_PREDICATE);
         RdfResource testRdfResource = new RdfResource(testModel, testResource);
         Resource resource = testModel.getResource(Constants.DSPACE_HAS_BITSTREAM_PREDICATE);
@@ -66,7 +68,7 @@ public class RdfResourceTest {
 
     @Test
     public void testMethods() throws IOException {
-        Model model = RdfModelUtility.createRdfModel(rdf);
+        Model model = createRdfModel(rdf);
         Resource resource = model.getResource(Constants.DSPACE_IS_PART_OF_COLLECTION_PREDICATE);
         RdfResource rdfResource = new RdfResource(model, resource);
 
@@ -100,6 +102,24 @@ public class RdfResourceTest {
         assertNotNull(resIterator);
 
         assertEquals(1, resIterator.toList().size());
+    }
+
+    /**
+     * Provide the behavior from the original RdfModelUtility createRdfModel().
+     *
+     * The original createRdfModel() from RdfModelUtility is removed.
+     * This is added so that the test continue to operate with minimal changes.
+     * It is likely a good idea to change this behavior in the future.
+     *
+     * @param rdf
+     * @return
+     * @throws IOException
+     */
+    private static Model createRdfModel(String rdf) {
+        InputStream stream = new ByteArrayInputStream(rdf.getBytes(StandardCharsets.UTF_8));
+        Model model = ModelFactory.createDefaultModel();
+        model.read(stream, null, "TTL");
+        return model;
     }
 
 }

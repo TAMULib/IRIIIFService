@@ -2,7 +2,6 @@ package edu.tamu.iiif.service;
 
 import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_CONTEXT;
 import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_LEVEL_ZERO_PROFILE;
-import static edu.tamu.iiif.utility.RdfModelUtility.createRdfModel;
 import static edu.tamu.iiif.utility.RdfModelUtility.getObjects;
 import static edu.tamu.iiif.utility.StringUtility.encode;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
@@ -35,19 +34,9 @@ import edu.tamu.iiif.model.OptionalImageWithInfo;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
-
-// import org.springframework.http.HttpMethod;
-// import org.springframework.http.client.ClientHttpResponse;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-// import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -169,58 +158,7 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected Model getRdfModel(String url) throws IOException {
-        try {
-            return createRdfModel(getRdf(url));
-        } catch (Exception e) {
-            System.out.print("\n\n\nDEBUG: failed due to exception " + e.getMessage() + ", now attempting to use RDFDataMgr.loadModel()\n\n\n");
-            e.printStackTrace();
-        }
         return RDFDataMgr.loadModel(url);
-    }
-
-    private String getRdf(String url) throws NotFoundException {
-    logger.debug("Requesting RDF for {}", url);
-
-    HttpURLConnection con = null;
-    try {
-        URL urlObject = new URL(url); // Directly use the provided URL
-        con = (HttpURLConnection) urlObject.openConnection();
-        con.setRequestMethod("GET");
-
-        int status = con.getResponseCode();
-        StringBuilder response = new StringBuilder();
-        System.out.print("\n\n\nDEBUG: response code is " + status + "\n\n\n");
-
-        if (status == HttpURLConnection.HTTP_OK) {
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
-                String inputLine;
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-            }
-            logger.info("RDF for {}: \n{}\n", url, response.toString());
-            return response.toString();
-        }
-
-        throw new NotFoundException("RDF not found for " + url + ", status = " + status + ", con.getContent returns: " + con.getContent());
-    } catch (MalformedURLException e) {
-        throw new NotFoundException("Malformed URL for " + url + ", " + e.getMessage(), e);
-    } catch (IOException e) {
-        throw new NotFoundException("IOException URL for " + url + ", " + e.getMessage(), e);
-    } finally {
-        if (con != null) {
-            con.disconnect();
-        }
-    }
-        
-        /*try {
-            String rdf = restTemplate.getForObject(url, String.class);
-            logger.debug("RDF for {}: \n{}\n", url, rdf);
-
-            return rdf;
-        } catch (RestClientException e) {
-            throw new NotFoundException("RDF not found for " + url, e);
-        }*/
     }
 
     protected URI buildId(String path) throws URISyntaxException {

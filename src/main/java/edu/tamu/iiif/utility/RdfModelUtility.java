@@ -2,46 +2,15 @@ package edu.tamu.iiif.utility;
 
 import edu.tamu.iiif.controller.ManifestRequest;
 import edu.tamu.iiif.model.rdf.RdfResource;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.NodeIterator;
-import org.apache.jena.riot.RDFDataMgr;
-import org.apache.jena.riot.RDFLanguages;
-import org.apache.jena.riot.RDFParser;
-import org.apache.jena.riot.system.ErrorHandlerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class RdfModelUtility {
-
-    private final static Logger logger = LoggerFactory.getLogger(RdfModelUtility.class);
-
-    public static Model createRdfModel(String rdf) throws IOException {
-        // THIS IS VERY BAD PRACTICE BUT THIS MAY HELP PROVIDE US SOME TEST DATA.
-        //String decodedRDFDataBecauseJenaIsSilly = rdf.replaceAll("%20", " ");
-
-        InputStream stream = new ByteArrayInputStream(rdf.getBytes(StandardCharsets.UTF_8));
-        System.out.print("\n\n\nDEBUG: stream returned (updated) is " + rdf + "\n\n\n");
-        /*RDFParser parser = RDFParser.create()
-            .source(rdf)
-            .lang(RDFLanguages.TURTLE)
-            .errorHandler(ErrorHandlerFactory.errorHandlerStd(logger))
-            .build()
-            ;*/
-
-        Model model = ModelFactory.createDefaultModel();
-        model.read(stream, null, "TTL");
-        return model;
-    }
 
     public static boolean hasObject(Model model, String uri) {
         NodeIterator firstNodeItr = model.listObjectsOfProperty(model.getProperty(uri));

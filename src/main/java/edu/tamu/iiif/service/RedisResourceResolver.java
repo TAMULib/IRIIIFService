@@ -1,16 +1,14 @@
 package edu.tamu.iiif.service;
 
+import edu.tamu.iiif.exception.NotFoundException;
+import edu.tamu.iiif.model.RedisResource;
+import edu.tamu.iiif.model.repo.RedisResourceRepo;
 import java.net.URISyntaxException;
 import java.util.Optional;
-
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
-
-import edu.tamu.iiif.exception.NotFoundException;
-import edu.tamu.iiif.model.RedisResource;
-import edu.tamu.iiif.model.repo.RedisResourceRepo;
 
 @Service
 @ConditionalOnProperty(value = "iiif.resolver.type", havingValue = "redis", matchIfMissing = true)
@@ -22,7 +20,6 @@ public class RedisResourceResolver implements ResourceResolver {
     private RedisResourceRepo redisResourceRepo;
 
     public String lookup(String url) throws URISyntaxException, NotFoundException {
-        System.out.print("\n\n\nDEBUG: REDIS lookup for url " + url + "\n\n\n");
         if (!URL_VALIDATOR.isValid(url)) {
             throw new URISyntaxException(url, "Not a valid URL");
         }
@@ -34,7 +31,6 @@ public class RedisResourceResolver implements ResourceResolver {
     }
 
     public String create(String url) throws URISyntaxException {
-        System.out.print("\n\n\nDEBUG: REDIS create for url " + url + "\n\n\n");
         if (!URL_VALIDATOR.isValid(url)) {
             throw new URISyntaxException(url, "Not a valid URL");
         }
@@ -42,7 +38,6 @@ public class RedisResourceResolver implements ResourceResolver {
     }
 
     public String resolve(String id) throws NotFoundException {
-        System.out.print("\n\n\nDEBUG: REDIS resolve for id " + id + "\n\n\n");
         if (redisResourceRepo.existsById(id)) {
             return redisResourceRepo.findById(id).get().getUrl();
         }
@@ -50,7 +45,6 @@ public class RedisResourceResolver implements ResourceResolver {
     }
 
     public void remove(String id) throws NotFoundException {
-        System.out.print("\n\n\nDEBUG: REDIS id for id " + id + "\n\n\n");
         if (redisResourceRepo.existsById(id)) {
             redisResourceRepo.deleteById(id);
         } else {
