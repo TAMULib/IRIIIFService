@@ -35,8 +35,14 @@ import edu.tamu.iiif.model.OptionalImageWithInfo;
 import edu.tamu.iiif.model.RedisManifest;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
-import edu.tamu.iiif.utility.StringUtility;
+
+// import org.springframework.http.HttpMethod;
+// import org.springframework.http.client.ClientHttpResponse;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+// import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -56,6 +62,7 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.riot.RDFDataMgr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,15 +71,6 @@ import org.springframework.http.HttpHeaders;
 // import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
-// import org.springframework.http.HttpMethod;
-// import org.springframework.http.client.ClientHttpResponse;
-
-import java.io.BufferedReader;
-// import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 
 public abstract class AbstractManifestService implements ManifestService {
 
@@ -171,7 +169,13 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected Model getRdfModel(String url) throws IOException {
-        return createRdfModel(getRdf(url));
+        try {
+            return createRdfModel(getRdf(url));
+        } catch (NotFoundException e) {
+            System.out.print("\n\n\nDEBUG: failed due to exception " + e.getMessage() + ", now attempting to use RDFDataMgr.loadModel()\n\n\n");
+            e.printStackTrace();
+        }
+        return RDFDataMgr.loadModel(url);
     }
 
     private String getRdf(String url) throws NotFoundException {
@@ -220,7 +224,7 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected URI buildId(String path) throws URISyntaxException {
-        return new URI(StringUtility.encodeSpaces(getIiifServiceUrl() + FORWARD_SLASH + getManifestType().getName() + FORWARD_SLASH + path));
+        return new URI(getIiifServiceUrl() + FORWARD_SLASH + getManifestType().getName() + FORWARD_SLASH + path);
     }
 
     protected String getLogo(RdfResource rdfResource) {

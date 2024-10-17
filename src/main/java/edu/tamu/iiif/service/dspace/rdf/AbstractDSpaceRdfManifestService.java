@@ -28,7 +28,6 @@ import edu.tamu.iiif.model.rdf.RdfCanvas;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
 import edu.tamu.iiif.utility.RdfModelUtility;
-import edu.tamu.iiif.utility.StringUtility;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -88,19 +87,19 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
     }
 
     protected URI getDSpaceIiifCollectionUri(String handle) throws URISyntaxException {
-        return getDSpaceIiifUri(StringUtility.encodeSpaces(handle), COLLECTION_IDENTIFIER);
+        return getDSpaceIiifUri(handle, COLLECTION_IDENTIFIER);
     }
 
     protected URI getDSpaceIiifPresentationUri(String handle) throws URISyntaxException {
-        return getDSpaceIiifUri(StringUtility.encodeSpaces(handle), PRESENTATION_IDENTIFIER);
+        return getDSpaceIiifUri(handle, PRESENTATION_IDENTIFIER);
     }
 
     protected URI getDSpaceIiifSequenceUri(String handle) throws URISyntaxException {
-        return getDSpaceIiifUri(StringUtility.encodeSpaces(handle), SEQUENCE_IDENTIFIER);
+        return getDSpaceIiifUri(handle, SEQUENCE_IDENTIFIER);
     }
 
     protected URI getDSpaceIiifCanvasUri(String handle) throws URISyntaxException {
-        return getDSpaceIiifUri(StringUtility.encodeSpaces(handle), CANVAS_IDENTIFIER);
+        return getDSpaceIiifUri(handle, CANVAS_IDENTIFIER);
     }
 
     protected String getHandle(String uri) {
@@ -179,7 +178,7 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
     private List<Canvas> getCanvases(ManifestRequest request, RdfResource rdfResource) throws IOException, URISyntaxException {
         List<Canvas> canvases = new ArrayList<Canvas>();
         // NOTE: canvas per bitstream and bitstreams uri must contain the context handle path of the desired resource
-        String contextHandlePath = getHandlePath(StringUtility.encodeSpaces(rdfResource.getId()));
+        String contextHandlePath = getHandlePath(rdfResource.getId());
         NodeIterator bitstreamIterator = rdfResource.getAllNodesOfPropertyWithId(DSPACE_HAS_BITSTREAM_PREDICATE);
         while (bitstreamIterator.hasNext()) {
             String uri = bitstreamIterator.next().toString();
