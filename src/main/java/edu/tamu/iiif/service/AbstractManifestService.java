@@ -37,8 +37,10 @@ import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.model.repo.RedisManifestRepo;
 import edu.tamu.iiif.utility.StringUtility;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -161,17 +163,22 @@ public abstract class AbstractManifestService implements ManifestService {
         return createRdfModel(getRdf(url));
     }
 
-    private String getRdf(String url) throws NotFoundException {
+    private String getRdf(String url) throws IOException {
         logger.debug("Requesting RDF for {}", url);
+        
+        URL urlObject = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) urlObject.openConnection();
+        con.setRequestMethod("GET");
+        return "Stub";
 
-        try {
+        /*try {
             String rdf = restTemplate.getForObject(url, String.class);
             logger.debug("RDF for {}: \n{}\n", url, rdf);
 
             return rdf;
         } catch (RestClientException e) {
             throw new NotFoundException("RDF not found for " + url, e);
-        }
+        }*/
     }
 
     protected URI buildId(String path) throws URISyntaxException {
