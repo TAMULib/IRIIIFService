@@ -60,8 +60,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+// import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+// import org.springframework.http.HttpMethod;
+// import org.springframework.http.client.ClientHttpResponse;
+
+import java.io.BufferedReader;
+// import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 public abstract class AbstractManifestService implements ManifestService {
 
@@ -163,16 +173,40 @@ public abstract class AbstractManifestService implements ManifestService {
         return createRdfModel(getRdf(url));
     }
 
-    private String getRdf(String url) throws IOException {
+    private String getRdf(String url) throws NotFoundException {
         logger.debug("Requesting RDF for {}", url);
-        
-        URL urlObject = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) urlObject.openConnection();
-        con.setRequestMethod("GET");
-        int status = con.getResponseCode();
-        con.disconnect();
-        return "Stub, response is: " + status;
 
+        boolean disableDecode = "true".equalsIgnoreCase(System.getenv("DEBUG_DISABLE_URL_DECODE"));
+        String decodedUrl = disableDecode ? url : URLDecoder.decode(url, StandardCharsets.UTF_8);
+
+        try {
+            URL urlObject = new URL(decodedUrl); // Use decodedUrl here
+            HttpURLConnection con = (HttpURLConnection) urlObject.openConnection();
+            con.setRequestMethod("GET");
+    
+            // Get the response code
+            int status = con.getResponseCode();
+            StringBuilder response = new StringBuilder();
+    
+            // Check the response status and read the input stream if the status is OK
+            if (status == HttpURLConnection.HTTP_OK) {
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                }
+                logger.info("RDF for {}: \n{}\n", decodedUrl, response.toString());
+                return response.toString(); // Return the actual response
+            } else {
+                logger.error("Received non-success status code {} for URL: {}", status, decodedUrl);
+                throw new NotFoundException("RDF not found for " + decodedUrl);
+            }
+        } catch (IOException e) {
+            logger.error("IO exception while processing response for {}: {}", decodedUrl, e.getMessage(), e);
+            throw new NotFoundException("RDF not found for " + decodedUrl, e);
+        }
+        
         /*try {
             String rdf = restTemplate.getForObject(url, String.class);
             logger.debug("RDF for {}: \n{}\n", url, rdf);
