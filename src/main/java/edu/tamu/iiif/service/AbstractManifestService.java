@@ -120,21 +120,25 @@ public abstract class AbstractManifestService implements ManifestService {
         Optional<RedisManifest> optionalRedisManifest = getRedisManifest(request);
 
         if (optionalRedisManifest.isPresent()) {
+            System.out.print("\n\n\nDEBUG: getManifest optionalRedisManifest called\n\n\n");
             // logger.info("Manifest already in redis: " + optionalRedisManifest.get().getId() + " (" + optionalRedisManifest.get().getCreation() + ")");
             manifest = optionalRedisManifest.get().getJson();
         } else {
+            System.out.print("\n\n\nDEBUG: getManifest optionalRedisManifest else called\n\n\n");
             // logger.info("Generating new manifest.");
             manifest = generateManifest(request);
             redisManifestRepo.save(new RedisManifest(encode(path), getManifestType(), getRepository(), request.getAllowed(), request.getDisallowed(), manifest));
             update = false;
         }
         if (update) {
+            System.out.print("\n\n\nDEBUG: getManifest update called\n\n\n");
             RedisManifest redisManifest = optionalRedisManifest.get();
             manifest = generateManifest(request);
             redisManifest.setJson(manifest);
             redisManifestRepo.save(redisManifest);
             // logger.info("Manifest update requested: " + path);
         } else {
+            System.out.print("\n\n\nDEBUG: getManifest no update called\n\n\n");
             // logger.info("Manifest requested: " + path);
         }
         return manifest;
@@ -158,7 +162,14 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected Model getRdfModel(String url) throws IOException {
-        return RDFDataMgr.loadModel(url);
+        System.out.print("\n\n\nDEBUG: getRdfModel for url = " + url + "\n\n\n");
+        try {
+            return RDFDataMgr.loadModel(url);
+        } catch (Exception e) {
+            System.out.print("\n\n\nDEBUG: something went wrong, " + e.getMessage() + "\n\n\n");
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     protected URI buildId(String path) throws URISyntaxException {

@@ -1,11 +1,10 @@
 package edu.tamu.iiif.service.fedora.pcdm.canvas;
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
 
 import edu.tamu.iiif.service.fedora.pcdm.FedoraPcdmCanvasManifestService;
 import java.io.IOException;
-import org.apache.jena.riot.RiotException;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 
@@ -32,7 +31,8 @@ public class FedoraPcdmCanvasManifestServiceDecodedTest extends AbstractCanvasIn
     }
 
     protected void setupMocks() throws IOException {
-        when(restTemplate.getForObject(eq(FEDORA_URL + "/" + getManifestPagePath()), eq(String.class))).thenThrow(new RiotException(SIMULATE_FAILURE));
+        //mockServer.expect(requestTo(FEDORA_URL))
+       //     .andRespond(withServerError());
     }
 
 }

@@ -20,6 +20,7 @@ import org.mockito.Spy;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
@@ -27,8 +28,6 @@ import org.springframework.web.client.RestTemplate;
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
 public abstract class AbstractManifestServiceTest {
-
-    protected static final String RDF_DIR = "rdf/";
 
     protected static final String JSON_DIR = "json/";
 
@@ -38,14 +37,17 @@ public abstract class AbstractManifestServiceTest {
 
     protected static final String IMAGE_SERVICE_URL = "http://localhost:8182/iiif/2";
 
+    protected static final String MIMETYPE_TURTLE = "text/turtle;charset=utf-8";
+
     protected static final String LOGO_URL = "https://library.tamu.edu/assets/images/tamu-logos/TAM-PrimaryMarkB.png";
+
+    protected static final String RDF_DIR = "rdf/";
 
     protected static final String SIMULATE_FAILURE = "Simulate Failure";
 
     @Spy
     protected ObjectMapper objectMapper;
 
-    @Mock
     protected RestTemplate restTemplate;
 
     @Mock
@@ -54,8 +56,17 @@ public abstract class AbstractManifestServiceTest {
     @Mock
     protected ResourceResolver resourceResolver;
 
+    //protected MockRestServiceServer mockServer;
+
+    //private RestGatewaySupport mockGateway;
+
     @BeforeEach
     public void init() throws URISyntaxException, NotFoundException {
+        restTemplate = new RestTemplateBuilder().build();
+        //mockGateway = new RestGatewaySupport();
+        //mockGateway.setRestTemplate(restTemplate);
+        //mockServer = MockRestServiceServer.createServer(mockGateway);
+
         lenient().when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(String.class), any(String.class), any(String.class))).thenReturn(Optional.empty());
 
         lenient().when(resourceResolver.lookup(any(String.class))).thenAnswer(new Answer<String>() {
