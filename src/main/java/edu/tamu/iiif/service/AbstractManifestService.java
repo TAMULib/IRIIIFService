@@ -146,7 +146,9 @@ public abstract class AbstractManifestService implements ManifestService {
             redisManifest.setJson(manifest);
             redisManifestRepo.save(redisManifest);
             // logger.info("Manifest update requested: " + path);
-        } 
+        } else {
+            // logger.info("Manifest requested: " + path);
+        }
         return manifest;
     }
 
@@ -178,15 +180,15 @@ public abstract class AbstractManifestService implements ManifestService {
         String decodedUrl = disableDecode ? url : URLDecoder.decode(url, StandardCharsets.UTF_8);
 
         try {
-            URL urlObject = new URL(decodedUrl); // Use decodedUrl here
+            URL urlObject = new URL(decodedUrl); 
             HttpURLConnection con = (HttpURLConnection) urlObject.openConnection();
             con.setRequestMethod("GET");
     
-            // Get the response code
+            
             int status = con.getResponseCode();
             StringBuilder response = new StringBuilder();
     
-            // Check the response status and read the input stream if the status is OK
+           
             if (status == HttpURLConnection.HTTP_OK) {
                 try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
                     String inputLine;
@@ -194,14 +196,14 @@ public abstract class AbstractManifestService implements ManifestService {
                         response.append(inputLine);
                     }
                 }
-                logger.info("RDF for {}: \n{}\n", decodedUrl, response.toString());
-                return response.toString(); // Return the actual response
+                // logger.info("RDF for {}: \n{}\n", decodedUrl, response.toString());
+                return response.toString();
             } else {
-                logger.error("Received non-success status code {} for URL: {}", status, decodedUrl);
+                // logger.error("Received non-success status code {} for URL: {}", status, decodedUrl);
                 throw new NotFoundException("RDF not found for " + decodedUrl);
             }
         } catch (IOException e) {
-            logger.error("IO exception while processing response for {}: {}", decodedUrl, e.getMessage(), e);
+            // logger.error("IO exception while processing response for {}: {}", decodedUrl, e.getMessage(), e);
             throw new NotFoundException("RDF not found for " + decodedUrl, e);
         }
         
