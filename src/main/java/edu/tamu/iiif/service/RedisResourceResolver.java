@@ -22,6 +22,7 @@ public class RedisResourceResolver implements ResourceResolver {
     private RedisResourceRepo redisResourceRepo;
 
     public String lookup(String url) throws URISyntaxException, NotFoundException {
+        System.out.print("\n\n\nDEBUG: REDIS lookup for url " + url + "\n\n\n");
         if (!URL_VALIDATOR.isValid(url)) {
             throw new URISyntaxException(url, "Not a valid URL");
         }
@@ -33,6 +34,7 @@ public class RedisResourceResolver implements ResourceResolver {
     }
 
     public String create(String url) throws URISyntaxException {
+        System.out.print("\n\n\nDEBUG: REDIS create for url " + url + "\n\n\n");
         if (!URL_VALIDATOR.isValid(url)) {
             throw new URISyntaxException(url, "Not a valid URL");
         }
@@ -40,6 +42,7 @@ public class RedisResourceResolver implements ResourceResolver {
     }
 
     public String resolve(String id) throws NotFoundException {
+        System.out.print("\n\n\nDEBUG: REDIS resolve for id " + id + "\n\n\n");
         if (redisResourceRepo.existsById(id)) {
             return redisResourceRepo.findById(id).get().getUrl();
         }
@@ -47,6 +50,7 @@ public class RedisResourceResolver implements ResourceResolver {
     }
 
     public void remove(String id) throws NotFoundException {
+        System.out.print("\n\n\nDEBUG: REDIS id for id " + id + "\n\n\n");
         if (redisResourceRepo.existsById(id)) {
             redisResourceRepo.deleteById(id);
         } else {
