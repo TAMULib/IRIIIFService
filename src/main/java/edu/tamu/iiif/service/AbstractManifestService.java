@@ -169,7 +169,8 @@ public abstract class AbstractManifestService implements ManifestService {
         URL urlObject = new URL(url);
         HttpURLConnection con = (HttpURLConnection) urlObject.openConnection();
         con.setRequestMethod("GET");
-        return "Stub";
+        int status = con.getResponseCode();
+        return "Stub, response is: " + status;
 
         /*try {
             String rdf = restTemplate.getForObject(url, String.class);
