@@ -132,10 +132,10 @@ public abstract class AbstractManifestService implements ManifestService {
         Optional<RedisManifest> optionalRedisManifest = getRedisManifest(request);
 
         if (optionalRedisManifest.isPresent()) {
-            logger.info("Manifest already in redis: " + optionalRedisManifest.get().getId() + " (" + optionalRedisManifest.get().getCreation() + ")");
+            // logger.info("Manifest already in redis: " + optionalRedisManifest.get().getId() + " (" + optionalRedisManifest.get().getCreation() + ")");
             manifest = optionalRedisManifest.get().getJson();
         } else {
-            logger.info("Generating new manifest.");
+            // logger.info("Generating new manifest.");
             manifest = generateManifest(request);
             redisManifestRepo.save(new RedisManifest(encode(path), getManifestType(), getRepository(), request.getAllowed(), request.getDisallowed(), manifest));
             update = false;
@@ -145,10 +145,8 @@ public abstract class AbstractManifestService implements ManifestService {
             manifest = generateManifest(request);
             redisManifest.setJson(manifest);
             redisManifestRepo.save(redisManifest);
-            logger.info("Manifest update requested: " + path);
-        } else {
-            logger.info("Manifest requested: " + path);
-        }
+            // logger.info("Manifest update requested: " + path);
+        } 
         return manifest;
     }
 
