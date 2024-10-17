@@ -27,10 +27,10 @@ public class RdfModelUtility {
 
     public static Model createRdfModel(String rdf) throws IOException {
         // THIS IS VERY BAD PRACTICE BUT THIS MAY HELP PROVIDE US SOME TEST DATA.
-        String decodedRDFDataBecauseJenaIsSilly = rdf.replaceAll("%20", " ");
+        //String decodedRDFDataBecauseJenaIsSilly = rdf.replaceAll("%20", " ");
 
-        InputStream stream = new ByteArrayInputStream(decodedRDFDataBecauseJenaIsSilly.getBytes(StandardCharsets.UTF_8));
-        System.out.print("\n\n\nDEBUG: stream returned is " + rdf + "\n\n\n");
+        InputStream stream = new ByteArrayInputStream(rdf.getBytes(StandardCharsets.UTF_8));
+        System.out.print("\n\n\nDEBUG: stream returned (updated) is " + rdf + "\n\n\n");
         /*RDFParser parser = RDFParser.create()
             .source(rdf)
             .lang(RDFLanguages.TURTLE)

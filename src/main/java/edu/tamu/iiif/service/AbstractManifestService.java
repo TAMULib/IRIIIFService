@@ -171,7 +171,7 @@ public abstract class AbstractManifestService implements ManifestService {
     protected Model getRdfModel(String url) throws IOException {
         try {
             return createRdfModel(getRdf(url));
-        } catch (NotFoundException e) {
+        } catch (Exception e) {
             System.out.print("\n\n\nDEBUG: failed due to exception " + e.getMessage() + ", now attempting to use RDFDataMgr.loadModel()\n\n\n");
             e.printStackTrace();
         }
