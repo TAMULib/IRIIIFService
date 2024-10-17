@@ -1,6 +1,7 @@
 package edu.tamu.iiif.utility;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -18,8 +19,9 @@ import edu.tamu.iiif.model.rdf.RdfResource;
 
 public class RdfModelUtility {
 
-    public static Model createRdfModel(String rdf) {
+    public static Model createRdfModel(String rdf) throws IOException {
         InputStream stream = new ByteArrayInputStream(rdf.getBytes(StandardCharsets.UTF_8));
+        System.out.print("\n\n\nDEBUG: stream returned is " + rdf + "\n\n\n");
         Model model = ModelFactory.createDefaultModel();
         model.read(stream, null, "TTL");
         return model;

@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
-
+import java.io.IOException;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.Property;
@@ -25,7 +25,7 @@ public class RdfResourceTest {
     private final static String rdf = Files.contentOf(new File("src/test/resources/mock/dspace/rdf/item.rdf"), "UTF-8");
 
     @Test
-    public void testCreateDefault() {
+    public void testCreateDefault() throws IOException {
         Model model = RdfModelUtility.createRdfModel(rdf);
         RdfResource rdfResource = new RdfResource(model);
         assertNotNull(rdfResource);
@@ -33,7 +33,7 @@ public class RdfResourceTest {
     }
 
     @Test
-    public void testCreateWithResource() {
+    public void testCreateWithResource() throws IOException {
         Model model = RdfModelUtility.createRdfModel(rdf);
         Resource resource = model.getResource(Constants.DSPACE_IS_PART_OF_COLLECTION_PREDICATE);
         RdfResource rdfResource = new RdfResource(model, resource);
@@ -43,7 +43,7 @@ public class RdfResourceTest {
     }
 
     @Test
-    public void testCreateFromRdfResourceWithResourceId() {
+    public void testCreateFromRdfResourceWithResourceId() throws IOException {
         Model testModel = RdfModelUtility.createRdfModel(rdf);
         Resource testResource = testModel.getResource(Constants.DSPACE_IS_PART_OF_COLLECTION_PREDICATE);
         RdfResource testRdfResource = new RdfResource(testModel, testResource);
@@ -54,7 +54,7 @@ public class RdfResourceTest {
     }
 
     @Test
-    public void testCreateFromRdfResourceWithResourceResource() {
+    public void testCreateFromRdfResourceWithResourceResource() throws IOException {
         Model testModel = RdfModelUtility.createRdfModel(rdf);
         Resource testResource = testModel.getResource(Constants.DSPACE_IS_PART_OF_COLLECTION_PREDICATE);
         RdfResource testRdfResource = new RdfResource(testModel, testResource);
@@ -65,7 +65,7 @@ public class RdfResourceTest {
     }
 
     @Test
-    public void testMethods() {
+    public void testMethods() throws IOException {
         Model model = RdfModelUtility.createRdfModel(rdf);
         Resource resource = model.getResource(Constants.DSPACE_IS_PART_OF_COLLECTION_PREDICATE);
         RdfResource rdfResource = new RdfResource(model, resource);

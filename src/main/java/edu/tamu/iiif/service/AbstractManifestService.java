@@ -183,11 +183,10 @@ public abstract class AbstractManifestService implements ManifestService {
         con = (HttpURLConnection) urlObject.openConnection();
         con.setRequestMethod("GET");
 
-        
         int status = con.getResponseCode();
         StringBuilder response = new StringBuilder();
+        System.out.print("\n\n\nDEBUG: response code is " + status + "\n\n\n");
 
-        
         if (status == HttpURLConnection.HTTP_OK) {
             try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
                 String inputLine;
@@ -196,17 +195,14 @@ public abstract class AbstractManifestService implements ManifestService {
                 }
             }
             logger.info("RDF for {}: \n{}\n", url, response.toString());
-            return response.toString(); 
-        } else {
-            logger.error("Received non-success status code {} for URL: {}", status, url);
-            throw new NotFoundException("RDF not found for " + url);
+            return response.toString();
         }
+
+        throw new NotFoundException("RDF not found for " + url + ", status = " + status + ", con.getContent returns: " + con.getContent());
     } catch (MalformedURLException e) {
-        logger.error("Malformed URL: {}. Error: {}", url, e.getMessage(), e);
-        throw new NotFoundException("RDF not found for " + url, e);
+        throw new NotFoundException("Malformed URL for " + url + ", " + e.getMessage(), e);
     } catch (IOException e) {
-        logger.error("IO exception while processing response for {}: {}", url, e.getMessage(), e);
-        throw new NotFoundException("RDF not found for " + url, e);
+        throw new NotFoundException("IOException URL for " + url + ", " + e.getMessage(), e);
     } finally {
         if (con != null) {
             con.disconnect();

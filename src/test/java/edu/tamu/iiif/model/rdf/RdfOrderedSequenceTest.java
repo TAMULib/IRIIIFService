@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 import org.apache.jena.rdf.model.Model;
@@ -23,7 +24,7 @@ import edu.tamu.iiif.utility.RdfModelUtility;
 public class RdfOrderedSequenceTest {
 
     @Test
-    public void testRdfOrderedSequence() {
+    public void testRdfOrderedSequence() throws IOException {
         String rdf = Files.contentOf(new File("src/test/resources/mock/fedora/rdf/collection_container.rdf"), "UTF-8");
         Model model = RdfModelUtility.createRdfModel(rdf);
         System.out.println(model);

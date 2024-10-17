@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,14 +31,14 @@ public class RdfModelUtilityTest {
     }
 
     @Test
-    public void testCreateRdfModel() {
+    public void testCreateRdfModel() throws IOException {
         String rdf = Files.contentOf(new File("src/test/resources/mock/dspace/rdf/item.rdf"), "UTF-8");
         Model model = RdfModelUtility.createRdfModel(rdf);
         assertNotNull(model);
     }
 
     @Test
-    public void testFindIdByPredicate() {
+    public void testFindIdByPredicate() throws IOException {
         String rdf = Files.contentOf(new File("src/test/resources/mock/fedora/rdf/collection_container.rdf"), "UTF-8");
         Model model = RdfModelUtility.createRdfModel(rdf);
         assertNotNull(model);
@@ -47,7 +48,7 @@ public class RdfModelUtilityTest {
     }
 
     @Test
-    public void testFindObject() {
+    public void testFindObject() throws IOException {
         String rdf = Files.contentOf(new File("src/test/resources/mock/dspace/rdf/item.rdf"), "UTF-8");
         Model model = RdfModelUtility.createRdfModel(rdf);
         Resource resource = model.getResource("http://localhost:8080/rdf/resource/123456789/158308");
@@ -59,7 +60,7 @@ public class RdfModelUtilityTest {
     }
 
     @Test
-    public void getObjects() {
+    public void getObjects() throws IOException {
         String rdf = Files.contentOf(new File("src/test/resources/mock/dspace/rdf/item.rdf"), "UTF-8");
         Model model = RdfModelUtility.createRdfModel(rdf);
         Resource resource = model.getResource("http://localhost:8080/rdf/resource/123456789/158308");
@@ -71,7 +72,7 @@ public class RdfModelUtilityTest {
     }
 
     @Test
-    public void getObjectsFromListOfProperties() {
+    public void getObjectsFromListOfProperties() throws IOException {
         String rdf = Files.contentOf(new File("src/test/resources/mock/dspace/rdf/item.rdf"), "UTF-8");
         Model model = RdfModelUtility.createRdfModel(rdf);
         Resource resource = model.getResource("http://localhost:8080/rdf/resource/123456789/158308");
