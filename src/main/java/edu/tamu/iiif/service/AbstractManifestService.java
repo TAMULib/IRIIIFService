@@ -170,6 +170,7 @@ public abstract class AbstractManifestService implements ManifestService {
         HttpURLConnection con = (HttpURLConnection) urlObject.openConnection();
         con.setRequestMethod("GET");
         int status = con.getResponseCode();
+        con.disconnect();
         return "Stub, response is: " + status;
 
         /*try {
