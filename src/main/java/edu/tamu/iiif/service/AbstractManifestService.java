@@ -38,6 +38,7 @@ import edu.tamu.iiif.model.repo.RedisManifestRepo;
 import edu.tamu.iiif.utility.StringUtility;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -174,38 +175,43 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     private String getRdf(String url) throws NotFoundException {
-        logger.debug("Requesting RDF for {}", url);
+    logger.debug("Requesting RDF for {}", url);
 
-        boolean disableDecode = "true".equalsIgnoreCase(System.getenv("DEBUG_DISABLE_URL_DECODE"));
-        String decodedUrl = disableDecode ? url : URLDecoder.decode(url, StandardCharsets.UTF_8);
+    HttpURLConnection con = null;
+    try {
+        URL urlObject = new URL(url); // Directly use the provided URL
+        con = (HttpURLConnection) urlObject.openConnection();
+        con.setRequestMethod("GET");
 
-        try {
-            URL urlObject = new URL(decodedUrl); 
-            HttpURLConnection con = (HttpURLConnection) urlObject.openConnection();
-            con.setRequestMethod("GET");
-    
-            
-            int status = con.getResponseCode();
-            StringBuilder response = new StringBuilder();
-    
-           
-            if (status == HttpURLConnection.HTTP_OK) {
-                try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
-                    String inputLine;
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
-                    }
+        
+        int status = con.getResponseCode();
+        StringBuilder response = new StringBuilder();
+
+        
+        if (status == HttpURLConnection.HTTP_OK) {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
                 }
-                // logger.info("RDF for {}: \n{}\n", decodedUrl, response.toString());
-                return response.toString();
-            } else {
-                // logger.error("Received non-success status code {} for URL: {}", status, decodedUrl);
-                throw new NotFoundException("RDF not found for " + decodedUrl);
             }
-        } catch (IOException e) {
-            // logger.error("IO exception while processing response for {}: {}", decodedUrl, e.getMessage(), e);
-            throw new NotFoundException("RDF not found for " + decodedUrl, e);
+            logger.info("RDF for {}: \n{}\n", url, response.toString());
+            return response.toString(); 
+        } else {
+            logger.error("Received non-success status code {} for URL: {}", status, url);
+            throw new NotFoundException("RDF not found for " + url);
         }
+    } catch (MalformedURLException e) {
+        logger.error("Malformed URL: {}. Error: {}", url, e.getMessage(), e);
+        throw new NotFoundException("RDF not found for " + url, e);
+    } catch (IOException e) {
+        logger.error("IO exception while processing response for {}: {}", url, e.getMessage(), e);
+        throw new NotFoundException("RDF not found for " + url, e);
+    } finally {
+        if (con != null) {
+            con.disconnect();
+        }
+    }
         
         /*try {
             String rdf = restTemplate.getForObject(url, String.class);
