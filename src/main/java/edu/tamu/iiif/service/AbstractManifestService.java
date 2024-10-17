@@ -142,13 +142,13 @@ public abstract class AbstractManifestService implements ManifestService {
         return manifest;
     }
 
-    protected RdfResource getRdfResourceByContextPath(String contextPath) throws NotFoundException {
+    protected RdfResource getRdfResourceByContextPath(String contextPath) throws IOException {
         String rdfUrl = getRdfUrl(contextPath);
         Model model = getRdfModel(rdfUrl);
         return getRdfResource(model, rdfUrl);
     }
 
-    protected RdfResource getRdfResourceByUrl(String rdfUrl) throws NotFoundException {
+    protected RdfResource getRdfResourceByUrl(String rdfUrl) throws IOException {
         Model model = getRdfModel(rdfUrl);
         return getRdfResource(model, rdfUrl);
     }
@@ -159,7 +159,7 @@ public abstract class AbstractManifestService implements ManifestService {
         return new RdfResource(model, model.getResource(rdfUrl));
     }
 
-    protected Model getRdfModel(String url) throws NotFoundException {
+    protected Model getRdfModel(String url) throws IOException {
         return createRdfModel(getRdf(url));
     }
 

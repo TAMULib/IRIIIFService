@@ -105,7 +105,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
         return getFedoraIiifCanvasUri(canvasId);
     }
 
-    protected Model getFedoraRdfModel(String url) throws NotFoundException {
+    protected Model getFedoraRdfModel(String url) throws IOException {
         return getRdfModel(url + FEDORA_FCR_METADATA);
     }
 
