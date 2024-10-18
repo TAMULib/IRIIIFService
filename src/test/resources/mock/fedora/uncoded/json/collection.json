@@ -1,0 +1,57 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "http://localhost:9000/fedora-pcdm/collection/mwbObjects/TGWCatalog",
+  "@type": "sc:Collection",
+  "attribution": "Bob Boring",
+  "description": [
+    "A page level collection of The Great War exhibit catalog.",
+    "The assets are JPEGs created from TIFFs created when the catalog was digitized."
+  ],
+  "label": [
+    "The Great War Exhibit Catalog",
+    "TGW_Catalog"
+  ],
+  "logo": "https://library.tamu.edu/assets/images/tamu-logos/TAM-PrimaryMarkB.png",
+  "manifests": [
+    {
+      "@id": "http://localhost:9000/fedora-pcdm/presentation/mwbObjects/TGWCatalog/Pages/ExCat0084",
+      "@type": "sc:Manifest",
+      "label": "ExCat0084"
+    }
+  ],
+  "metadata": [
+    {
+      "label": "identifier",
+      "value": "TGW_Catalog"
+    },
+    {
+      "label": "references",
+      "value": "The Great War Exhibit Catalog"
+    },
+    {
+      "label": "abstract",
+      "value": "Web presentation images for The Great War catalog.  These images will be part of a IIIF Manifest version of the document."
+    },
+    {
+      "label": "isPartOf",
+      "value": "The Great War Exhibit"
+    },
+    {
+      "label": "title",
+      "value": "The Great War Exhibit Catalog"
+    },
+    {
+      "label": "license",
+      "value": "Test license"
+    },
+    {
+      "label": "contributor",
+      "value": "Bob Boring"
+    },
+    {
+      "label": "context",
+      "value": "mwbObjects/TGWCatalog"
+    }
+  ],
+  "viewingHint": "multi-part"
+}

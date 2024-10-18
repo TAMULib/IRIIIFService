@@ -10,4 +10,8 @@ public class NotFoundException extends IOException {
         super(message);
     }
 
+    public NotFoundException(String message, Exception e) {
+        super(message, e);
+    }
+
 }
