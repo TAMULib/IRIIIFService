@@ -1,11 +1,7 @@
 package edu.tamu.iiif.service.fedora.pcdm.image;
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-
 import edu.tamu.iiif.service.fedora.pcdm.FedoraPcdmImageManifestService;
 import java.io.IOException;
-import org.apache.jena.riot.RiotException;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 
@@ -32,10 +28,7 @@ public class FedoraPcdmImageManifestServiceDecodedTest extends AbstractImageInva
     }
 
     protected void setupMocks() throws IOException {
-        when(restTemplate.getForObject(
-            eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0IDAwODQvZmlsZXMvRXhDYXQwMDg0LmpwZw=="),
-            eq(String.class)
-        )).thenThrow(new RiotException(SIMULATE_FAILURE));
+        restGetRdfBadRequest(IMAGE_SERVICE_URL_PATH + "/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0IDAwODQvZmlsZXMvRXhDYXQwMDg0LmpwZw==");
     }
 
 }

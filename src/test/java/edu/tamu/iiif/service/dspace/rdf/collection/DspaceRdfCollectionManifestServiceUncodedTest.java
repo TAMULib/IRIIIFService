@@ -1,9 +1,5 @@
 package edu.tamu.iiif.service.dspace.rdf.collection;
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
-
 import edu.tamu.iiif.service.dspace.rdf.DSpaceRdfCollectionManifestService;
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,12 +57,11 @@ public class DspaceRdfCollectionManifestServiceUncodedTest extends AbstractColle
 
     @Override
     protected void setupMocks() throws IOException {
-        lenient().when(restTemplate.getForObject(eq(DSPACE_URL + "/" + getManifestHandlePath()), eq(String.class))).thenReturn(loadResource(itemRdf));
-
-        lenient().when(restTemplate.getForObject(eq(DSPACE_URL + "/" + PATH_HANDLE + "/" + getManifestCommunity1Path()), eq(String.class))).thenReturn(loadResource(communityRdf));
-        lenient().when(restTemplate.getForObject(eq(DSPACE_URL + "/" + PATH_HANDLE + "/" + getManifestCommunity2Path()), eq(String.class))).thenReturn(loadResource(communityRdf));
-        when(restTemplate.getForObject(eq(DSPACE_URL + "/" + PATH_HANDLE + "/" + getManifestCollectionPath()), eq(String.class))).thenReturn(loadResource(collectionRdf));
-        lenient().when(restTemplate.getForObject(eq(DSPACE_URL + "/" + PATH_HANDLE + "/" + getManifestSubcommunityPath()), eq(String.class))).thenReturn(loadResource(subcommunityRdf));
+        restGetRdfSuccess(DSPACE_URL_PATH + "/" + getManifestHandlePath(), itemRdf);
+        restGetRdfSuccess(DSPACE_URL_PATH + "/" + PATH_HANDLE + "/" + getManifestCommunity1Path(), communityRdf);
+        restGetRdfSuccess(DSPACE_URL_PATH + "/" + PATH_HANDLE + "/" + getManifestCommunity2Path(), communityRdf);
+        restGetRdfSuccess(DSPACE_URL_PATH + "/" + PATH_HANDLE + "/" + getManifestCollectionPath(), collectionRdf);
+        restGetRdfSuccess(DSPACE_URL_PATH + "/" + PATH_HANDLE + "/" + getManifestSubcommunityPath(), subcommunityRdf);
     }
 
 }

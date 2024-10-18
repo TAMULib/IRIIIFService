@@ -1,11 +1,7 @@
 package edu.tamu.iiif.service.dspace.rdf.sequence;
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-
 import edu.tamu.iiif.service.dspace.rdf.DSpaceRdfSequenceManifestService;
 import java.io.IOException;
-import org.apache.jena.riot.RiotException;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 
@@ -45,7 +41,7 @@ public class DspaceRdfSequenceManifestServiceDecodedTest extends AbstractSequenc
 
     @Override
     protected void setupMocks() throws IOException {
-        when(restTemplate.getForObject(eq(DSPACE_URL + "/" + getManifestHandlePath()), eq(String.class))).thenThrow(new RiotException(SIMULATE_FAILURE));
+        restGetRdfBadRequest(DSPACE_URL_PATH + "/" + getManifestHandlePath());
     }
 
 }

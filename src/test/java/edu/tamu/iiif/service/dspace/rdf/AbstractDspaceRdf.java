@@ -16,7 +16,10 @@ public abstract class AbstractDspaceRdf extends AbstractManifestServiceTest {
     @MockBean
     private DSpaceRdfIiifConfig config;
 
-    protected static final String DSPACE_URL = "http://localhost:8080";
+    // Added for consistency reasons where the mock server uses the URL path strings.
+    protected static final String DSPACE_URL_PATH = "";
+
+    protected static final String DSPACE_URL = "http://localhost:8080" + DSPACE_URL_PATH;
 
     protected static final String DSPACE_RDF_IDENTIFIER = "dspace-rdf";
 

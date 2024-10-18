@@ -1,13 +1,9 @@
 package edu.tamu.iiif.service.dspace.rdf.sequence;
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-
 import edu.tamu.iiif.service.dspace.rdf.DSpaceRdfSequenceManifestService;
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
-import org.springframework.http.HttpHeaders;
 
 public class DspaceRdfSequenceManifestServiceEncodedTest extends AbstractSequenceValid {
 
@@ -45,12 +41,9 @@ public class DspaceRdfSequenceManifestServiceEncodedTest extends AbstractSequenc
 
     @Override
     protected void setupMocks() throws IOException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "image/png; charset=utf-8");
-        when(restTemplate.headForHeaders(eq(DSPACE_URL + "/" + getManifestBitstreamPath()))).thenReturn(headers);
-
-        when(restTemplate.getForObject(eq(DSPACE_URL + "/" + getManifestHandlePath()), eq(String.class))).thenReturn(loadResource(itemRdf));
-        when(restTemplate.getForObject(eq(IMAGE_SERVICE_URL + "/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzElMjA1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json"), eq(String.class))).thenReturn(loadResource(image));
+        restGetImageSuccess(DSPACE_URL_PATH + "/" + getManifestBitstreamPath(), "image/png");
+        restGetRdfSuccess(DSPACE_URL_PATH + "/" + getManifestHandlePath(), itemRdf);
+        restGetRdfSuccess(IMAGE_SERVICE_URL_PATH + "/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzElMjA1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json", image);
     }
 
 }

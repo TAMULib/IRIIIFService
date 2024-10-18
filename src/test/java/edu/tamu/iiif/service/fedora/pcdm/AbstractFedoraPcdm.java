@@ -13,7 +13,9 @@ public abstract class AbstractFedoraPcdm extends AbstractManifestServiceTest {
     @MockBean
     private FedoraPcdmIiifConfig config;
 
-    protected static final String FEDORA_URL = "http://localhost:9000/fcrepo/rest";
+    protected static final String FEDORA_URL_PATH = "/fcrepo/rest";
+
+    protected static final String FEDORA_URL = "http://localhost:9000" + FEDORA_URL_PATH;
 
     protected static final String FEDORA_PCDM_IDENTIFIER = "fedora-pcdm";
 

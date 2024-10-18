@@ -1,14 +1,9 @@
 package edu.tamu.iiif.service.fedora.pcdm.sequence;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-
 import edu.tamu.iiif.service.fedora.pcdm.FedoraPcdmSequenceManifestService;
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
-import org.springframework.http.HttpHeaders;
 
 public class FedoraPcdmSequenceManifestServiceUncodedTest extends AbstractSequenceValid {
 
@@ -33,14 +28,10 @@ public class FedoraPcdmSequenceManifestServiceUncodedTest extends AbstractSequen
     }
 
     protected void setupMocks() throws IOException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "image/png; charset=utf-8");
-        when(restTemplate.headForHeaders(any(String.class))).thenReturn(headers);
-
-        when(restTemplate.getForObject(eq(FEDORA_URL + "/" + getManifestPagePath()), eq(String.class))).thenReturn(loadResource(itemRdf));
-        when(restTemplate.getForObject(eq(FEDORA_URL + "/" + getManifestPagePath() + "/files/fcr:metadata"), eq(String.class))).thenReturn(loadResource(itemFilesRdf));
-        when(restTemplate.getForObject(eq(FEDORA_URL + "/" + getManifestPagePath() + "/files/ExCat0084.jpg/fcr:metadata"), eq(String.class))).thenReturn(loadResource(itemFilesEntryRdf));
-        when(restTemplate.getForObject(eq(IMAGE_SERVICE_URL + "/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn/info.json"), eq(String.class))).thenReturn(loadResource(image));
+        restGetRdfSuccess(FEDORA_URL_PATH + "/" + getManifestPagePath(), itemRdf);
+        restGetRdfSuccess(FEDORA_URL_PATH + "/" + getManifestPagePath() + "/files/fcr:metadata", itemFilesRdf);
+        restGetRdfSuccess(FEDORA_URL_PATH + "/" + getManifestPagePath() + "/files/ExCat0084.jpg/fcr:metadata", itemFilesEntryRdf);
+        restGetRdfSuccess(IMAGE_SERVICE_URL_PATH + "/ZmVkb3JhLXBjZG06bXdiT2JqZWN0cy9UR1dDYXRhbG9nL1BhZ2VzL0V4Q2F0MDA4NC9maWxlcy9FeENhdDAwODQuanBn/info.json", image);
     }
 
 }
