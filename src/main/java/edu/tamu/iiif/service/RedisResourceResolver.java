@@ -1,16 +1,14 @@
 package edu.tamu.iiif.service;
 
+import edu.tamu.iiif.exception.NotFoundException;
+import edu.tamu.iiif.model.RedisResource;
+import edu.tamu.iiif.model.repo.RedisResourceRepo;
 import java.net.URISyntaxException;
 import java.util.Optional;
-
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
-
-import edu.tamu.iiif.exception.NotFoundException;
-import edu.tamu.iiif.model.RedisResource;
-import edu.tamu.iiif.model.repo.RedisResourceRepo;
 
 @Service
 @ConditionalOnProperty(value = "iiif.resolver.type", havingValue = "redis", matchIfMissing = true)

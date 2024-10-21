@@ -20,24 +20,7 @@ import static edu.tamu.iiif.constants.Constants.SEQUENCE_IDENTIFIER;
 import static edu.tamu.iiif.utility.RdfModelUtility.findObject;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.NodeIterator;
-import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.Statement;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
-
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import de.digitalcollections.iiif.presentation.model.api.v2.ImageResource;
 import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
@@ -56,6 +39,20 @@ import edu.tamu.iiif.model.rdf.RdfOrderedResource;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.service.AbstractManifestService;
 import edu.tamu.iiif.utility.RdfModelUtility;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 
 @ConditionalOnExpression(FEDORA_PCDM_CONDITION)
 public abstract class AbstractFedoraPcdmManifestService extends AbstractManifestService {
@@ -108,7 +105,7 @@ public abstract class AbstractFedoraPcdmManifestService extends AbstractManifest
         return getFedoraIiifCanvasUri(canvasId);
     }
 
-    protected Model getFedoraRdfModel(String url) throws NotFoundException {
+    protected Model getFedoraRdfModel(String url) throws IOException {
         return getRdfModel(url + FEDORA_FCR_METADATA);
     }
 

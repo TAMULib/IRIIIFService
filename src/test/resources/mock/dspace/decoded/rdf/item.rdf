@@ -1,0 +1,24 @@
+@prefix void:  <http://rdfs.org/ns/void#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dc:  <http://purl.org/dc/elements/1.1/> .
+@prefix bibo:  <http://purl.org/ontology/bibo/> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix dc:    <http://purl.org/dc/elements/1.1/> .
+@prefix dspace: <http://digital-repositories.org/ontologies/dspace/0.1.0#> .
+
+<http://localhost:8080/rdf/resource/123456789/1 58308>
+        dspace:hasBitstream        <http://localhost:8080/xmlui/bitstream/123456789/1 58308/1/sports-car-146873_960_720.png> ;
+        dspace:isPartOfCollection  <http://localhost:8080/rdf/resource/123456789/158299> ;
+        dc:date                    "2018-04-24T13:29:59Z"^^xsd:dateTime ;
+        dcterms:available          "2018-04-24T13:29:59Z"^^xsd:dateTime ;
+        dcterms:hasPart            <http://localhost:8080/xmlui/bitstream/123456789/1 58308/1/sports-car-146873_960_720.png> ;
+        dcterms:isPartOf           <http://localhost:8080/rdf/resource/123456789/158299> ;
+        dcterms:title              "Corvette" ;
+        dcterms:description        "A fast car" ;
+        dcterms:license            "Test license";
+        dc:creator                 "Chevy";
+        bibo:uri                   <http://localhost:8080/xmlui/handle/123456789/1 58308> ;
+        void:sparqlEndpoint        <http://localhost:8983/dspace/sparql> ;
+        foaf:homepage              <http://localhost:8080/xmlui> .
