@@ -1,7 +1,11 @@
 package edu.tamu.iiif.service.dspace.rdf.canvas;
 
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
 import edu.tamu.iiif.service.dspace.rdf.DSpaceRdfCanvasManifestService;
 import java.io.IOException;
+import org.apache.jena.riot.RiotException;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 
@@ -41,7 +45,7 @@ public class DspaceRdfCanvasManifestServiceDecodedTest extends AbstractCanvasInv
 
     @Override
     protected void setupMocks() throws IOException {
-        restGetRdfBadRequest(DSPACE_URL_PATH + "/" + getManifestHandlePath());
+        when(restTemplate.getForObject(eq(DSPACE_URL + "/" + getManifestHandlePath()), eq(String.class))).thenThrow(new RiotException(SIMULATE_FAILURE));
     }
 
 }

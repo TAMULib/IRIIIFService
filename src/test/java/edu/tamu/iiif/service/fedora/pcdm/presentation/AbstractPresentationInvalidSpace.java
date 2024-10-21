@@ -1,6 +1,7 @@
 package edu.tamu.iiif.service.fedora.pcdm.presentation;
 
 import static edu.tamu.iiif.model.ManifestType.PRESENTATION;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -13,7 +14,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Optional;
-import org.apache.jena.irix.IRIException;
+import org.apache.jena.riot.RiotException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -77,9 +78,11 @@ public abstract class AbstractPresentationInvalidSpace extends AbstractPresentat
      * @param manifestRequest The built manifest request.
      */
     private void performAssertionCheck(ManifestRequest manifestRequest) {
-        assertThrows(IRIException.class, () -> {
+        RiotException exception = assertThrows(RiotException.class, () -> {
             getManifestService().getManifest(manifestRequest);
         });
+
+        assertEquals(SIMULATE_FAILURE, exception.getMessage());
     }
 
 }

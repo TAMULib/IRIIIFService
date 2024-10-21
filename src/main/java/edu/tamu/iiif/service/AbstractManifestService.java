@@ -2,6 +2,7 @@ package edu.tamu.iiif.service;
 
 import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_CONTEXT;
 import static edu.tamu.iiif.constants.Constants.IIIF_IMAGE_API_LEVEL_ZERO_PROFILE;
+import static edu.tamu.iiif.utility.RdfModelUtility.createRdfModel;
 import static edu.tamu.iiif.utility.RdfModelUtility.getObjects;
 import static edu.tamu.iiif.utility.StringUtility.encode;
 import static edu.tamu.iiif.utility.StringUtility.joinPath;
@@ -51,7 +52,6 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
-import org.apache.jena.riot.RDFDataMgr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,13 +139,13 @@ public abstract class AbstractManifestService implements ManifestService {
         return manifest;
     }
 
-    protected RdfResource getRdfResourceByContextPath(String contextPath) throws IOException {
+    protected RdfResource getRdfResourceByContextPath(String contextPath) throws NotFoundException {
         String rdfUrl = getRdfUrl(contextPath);
         Model model = getRdfModel(rdfUrl);
         return getRdfResource(model, rdfUrl);
     }
 
-    protected RdfResource getRdfResourceByUrl(String rdfUrl) throws IOException {
+    protected RdfResource getRdfResourceByUrl(String rdfUrl) throws NotFoundException {
         Model model = getRdfModel(rdfUrl);
         return getRdfResource(model, rdfUrl);
     }
@@ -156,8 +156,21 @@ public abstract class AbstractManifestService implements ManifestService {
         return new RdfResource(model, model.getResource(rdfUrl));
     }
 
-    protected Model getRdfModel(String url) throws IOException {
-        return RDFDataMgr.loadModel(url);
+    protected Model getRdfModel(String url) throws NotFoundException {
+        return createRdfModel(getRdf(url));
+    }
+
+    private String getRdf(String url) throws NotFoundException {
+        logger.debug("Requesting RDF for {}", url);
+
+        try {
+            String rdf = restTemplate.getForObject(url, String.class);
+            logger.debug("RDF for {}: \n{}\n", url, rdf);
+
+            return rdf;
+        } catch (RestClientException e) {
+            throw new NotFoundException("RDF not found for " + url, e);
+        }
     }
 
     protected URI buildId(String path) throws URISyntaxException {
@@ -477,13 +490,12 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected Optional<String> getMimeType(String url) {
-        HttpHeaders headers = restTemplate.headForHeaders(url);
-
-        if (headers == null) {
+        try {
+            HttpHeaders headers = restTemplate.headForHeaders(url);
+            return Optional.ofNullable(headers.getFirst(HttpHeaders.CONTENT_TYPE));
+        } catch (RestClientException e) {
             return Optional.empty();
         }
-
-        return Optional.ofNullable(headers.getFirst(HttpHeaders.CONTENT_TYPE));
     }
 
     private Metadata buildMetadata(String label, String value) {
