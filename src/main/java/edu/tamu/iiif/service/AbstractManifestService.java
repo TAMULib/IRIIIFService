@@ -477,12 +477,13 @@ public abstract class AbstractManifestService implements ManifestService {
     }
 
     protected Optional<String> getMimeType(String url) {
-        try {
-            HttpHeaders headers = restTemplate.headForHeaders(url);
-            return Optional.ofNullable(headers.getFirst(HttpHeaders.CONTENT_TYPE));
-        } catch (RestClientException e) {
+        HttpHeaders headers = restTemplate.headForHeaders(url);
+
+        if (headers == null) {
             return Optional.empty();
         }
+
+        return Optional.ofNullable(headers.getFirst(HttpHeaders.CONTENT_TYPE));
     }
 
     private Metadata buildMetadata(String label, String value) {
