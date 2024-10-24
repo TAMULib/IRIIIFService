@@ -1,7 +1,11 @@
 package edu.tamu.iiif.service.dspace.rdf.image;
 
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
 import edu.tamu.iiif.service.dspace.rdf.DSpaceRdfImageManifestService;
 import java.io.IOException;
+import org.apache.jena.riot.RiotException;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 
@@ -41,7 +45,10 @@ public class DspaceRdfImageManifestServiceDecodedTest extends AbstractImageInval
 
     @Override
     protected void setupMocks() throws IOException {
-        restGetRdfBadRequest(IMAGE_SERVICE_URL + "/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzEgNTgzMDgvMS9zcG9ydHMtY2FyLTE0Njg3M185NjBfNzIwLnBuZw==");
+        when(restTemplate.getForObject(
+            eq(IMAGE_SERVICE_URL + "/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzEgNTgzMDgvMS9zcG9ydHMtY2FyLTE0Njg3M185NjBfNzIwLnBuZw=="),
+            eq(String.class)
+        )).thenThrow(new RiotException(SIMULATE_FAILURE));
     }
 
 }

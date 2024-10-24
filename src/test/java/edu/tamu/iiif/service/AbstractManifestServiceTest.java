@@ -3,9 +3,6 @@ package edu.tamu.iiif.service;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
-import static org.mockserver.model.Header.header;
-import static org.mockserver.model.HttpRequest.request;
-import static org.mockserver.model.HttpResponse.response;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,19 +20,15 @@ import org.mockito.Spy;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-import org.mockserver.integration.ClientAndServer;
-import org.mockserver.junit.jupiter.MockServerExtension;
-import org.mockserver.junit.jupiter.MockServerSettings;
-import org.mockserver.mock.Expectation;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
-@MockServerSettings(ports = { 8182, 9000 })
-@ExtendWith(MockitoExtension.class)
-@ExtendWith(MockServerExtension.class)
 @ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 public abstract class AbstractManifestServiceTest {
+
+    protected static final String RDF_DIR = "rdf/";
 
     protected static final String JSON_DIR = "json/";
 
@@ -43,19 +36,11 @@ public abstract class AbstractManifestServiceTest {
 
     protected static final String IIIF_SERVICE_URL = "http://localhost:9000";
 
-    protected static final String IMAGE_SERVICE_URL_PATH = "/iiif/2";
-
-    protected static final String IMAGE_SERVICE_URL = "http://localhost:8182" + IMAGE_SERVICE_URL_PATH;
-
-    protected static final String MIMETYPE_TURTLE = "text/turtle;charset=utf-8";
+    protected static final String IMAGE_SERVICE_URL = "http://localhost:8182/iiif/2";
 
     protected static final String LOGO_URL = "https://library.tamu.edu/assets/images/tamu-logos/TAM-PrimaryMarkB.png";
 
-    protected static final String RDF_DIR = "rdf/";
-
     protected static final String SIMULATE_FAILURE = "Simulate Failure";
-
-    protected ClientAndServer client;
 
     @Spy
     protected ObjectMapper objectMapper;
@@ -70,9 +55,7 @@ public abstract class AbstractManifestServiceTest {
     protected ResourceResolver resourceResolver;
 
     @BeforeEach
-    public void init(ClientAndServer client) throws URISyntaxException, NotFoundException {
-        this.client = client;
-
+    public void init() throws URISyntaxException, NotFoundException {
         lenient().when(redisManifestRepo.findByPathAndTypeAndRepositoryAndAllowedAndDisallowed(any(String.class), any(ManifestType.class), any(String.class), any(String.class), any(String.class))).thenReturn(Optional.empty());
 
         lenient().when(resourceResolver.lookup(any(String.class))).thenAnswer(new Answer<String>() {
@@ -88,62 +71,6 @@ public abstract class AbstractManifestServiceTest {
     }
 
     /**
-     * Helper for mocking a successfull REST response for a standard RDF.
-     *
-     * @param path The path to process.
-     * @param resource The resource file representing the RDF to return.
-     *
-     * @return The standard response from the mock server respond function.
-     *
-     * @throws IOException An I/O exception.
-     */
-    protected Expectation[] restGetRdfSuccess(String path, Resource resource) throws IOException {
-        return client.when(request().withMethod("GET")
-            .withPath(path)
-        )
-        .respond(response().withStatusCode(200)
-            .withHeaders(header("Content-Type", MIMETYPE_TURTLE))
-            .withBody(loadResource(resource))
-        );
-    }
-
-    /**
-     * Helper for mocking a successfull REST response for a standard image response.
-     *
-     * @param path The path to process.
-     * @param resource The resource file representing the RDF to return.
-     *
-     * @return The standard response from the mock server respond function.
-     *
-     * @throws IOException An I/O exception.
-     */
-    protected Expectation[] restGetImageSuccess(String path, String mime) throws IOException {
-        return client.when(request().withMethod("GET")
-            .withPath(path)
-        )
-        .respond(response().withStatusCode(200)
-            .withHeaders(header("Content-Type", mime))
-            .withBody("fake image data")
-        );
-    }
-
-    /**
-     * Helper for mocking a Bad Request REST response for a standard RDF.
-     *
-     * @param path The path to process.
-     *
-     * @return The standard response from the mock server respond function.
-     *
-     * @throws IOException An I/O exception.
-     */
-    protected Expectation[] restGetRdfBadRequest(String path) throws IOException {
-        return client.when(request().withMethod("GET")
-            .withPath(path)
-        )
-        .respond(response().withStatusCode(400));
-    }
-
-    /**
      * Get the mock files such that the implementer can specify custom directory paths.
      *
      * This is intended to be called relative to the classpath such as via the `@Value` Spring annotation.
@@ -154,11 +81,6 @@ public abstract class AbstractManifestServiceTest {
         return "mock/";
     }
 
-    /**
-     * Setup the manifest URLs and other settings.
-     *
-     * @param manifestService The manifest service.
-     */
     protected void setup(AbstractManifestService manifestService) {
         setField(manifestService, "iiifServiceUrl", IIIF_SERVICE_URL);
         setField(manifestService, "imageServerUrl", IMAGE_SERVICE_URL);

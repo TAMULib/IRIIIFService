@@ -1,16 +1,29 @@
 package edu.tamu.iiif.utility;
 
-import edu.tamu.iiif.controller.ManifestRequest;
-import edu.tamu.iiif.model.rdf.RdfResource;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.NodeIterator;
 
+import edu.tamu.iiif.controller.ManifestRequest;
+import edu.tamu.iiif.model.rdf.RdfResource;
+
 public class RdfModelUtility {
+
+    public static Model createRdfModel(String rdf) {
+        InputStream stream = new ByteArrayInputStream(rdf.getBytes(StandardCharsets.UTF_8));
+        Model model = ModelFactory.createDefaultModel();
+        model.read(stream, null, "TTL");
+        return model;
+    }
 
     public static boolean hasObject(Model model, String uri) {
         NodeIterator firstNodeItr = model.listObjectsOfProperty(model.getProperty(uri));

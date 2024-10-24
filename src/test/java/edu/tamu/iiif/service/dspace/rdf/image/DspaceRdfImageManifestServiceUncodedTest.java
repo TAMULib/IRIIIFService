@@ -1,5 +1,8 @@
 package edu.tamu.iiif.service.dspace.rdf.image;
 
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
 import edu.tamu.iiif.service.dspace.rdf.DSpaceRdfImageManifestService;
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +44,7 @@ public class DspaceRdfImageManifestServiceUncodedTest extends AbstractImageValid
 
     @Override
     protected void setupMocks() throws IOException {
-        restGetRdfSuccess(IMAGE_SERVICE_URL_PATH + "/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n/info.json", image);
+        when(restTemplate.getForObject(eq(IMAGE_SERVICE_URL + "/ZHNwYWNlLXJkZjp4bWx1aS9iaXRzdHJlYW0vMTIzNDU2Nzg5LzE1ODMwOC8xL3Nwb3J0cy1jYXItMTQ2ODczXzk2MF83MjAucG5n"), eq(String.class))).thenReturn(loadResource(image));
     }
 
 }

@@ -1,5 +1,8 @@
 package edu.tamu.iiif.service.fedora.pcdm.collection;
 
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
 import edu.tamu.iiif.service.fedora.pcdm.FedoraPcdmCollectionManifestService;
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,9 +31,9 @@ public class FedoraPcdmCollectionManifestServiceUncodedTest extends AbstractColl
     }
 
     protected void setupMocks() throws IOException {
-        restGetRdfSuccess(FEDORA_URL_PATH + "/" + getManifestCollectionPath(), collectionRdf);
-        restGetRdfSuccess(FEDORA_URL_PATH + "/" + getManifestPagePath(), itemRdf);
-        restGetRdfSuccess(FEDORA_URL_PATH + "/" + getManifestPagePath() + "/fcr:metadata", itemRdf);
+        when(restTemplate.getForObject(eq(FEDORA_URL + "/" + getManifestCollectionPath()), eq(String.class))).thenReturn(loadResource(collectionRdf));
+        when(restTemplate.getForObject(eq(FEDORA_URL + "/" + getManifestPagePath()), eq(String.class))).thenReturn(loadResource(itemRdf));
+        when(restTemplate.getForObject(eq(FEDORA_URL + "/" + getManifestPagePath() + "/fcr:metadata"), eq(String.class))).thenReturn(loadResource(itemRdf));
     }
 
 }

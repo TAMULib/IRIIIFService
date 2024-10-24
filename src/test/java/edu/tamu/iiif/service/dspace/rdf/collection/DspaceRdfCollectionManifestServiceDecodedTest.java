@@ -1,7 +1,11 @@
 package edu.tamu.iiif.service.dspace.rdf.collection;
 
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
 import edu.tamu.iiif.service.dspace.rdf.DSpaceRdfCollectionManifestService;
 import java.io.IOException;
+import org.apache.jena.riot.RiotException;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 
@@ -57,6 +61,7 @@ public class DspaceRdfCollectionManifestServiceDecodedTest extends AbstractColle
 
     @Override
     protected void setupMocks() throws IOException {
-        restGetRdfBadRequest(DSPACE_URL_PATH + "/" + PATH_HANDLE + "/" + getManifestCollectionPath());
+        when(restTemplate.getForObject(eq(DSPACE_URL + "/" + PATH_HANDLE + "/" + getManifestCollectionPath()), eq(String.class))).thenThrow(new RiotException(SIMULATE_FAILURE));
     }
+
 }

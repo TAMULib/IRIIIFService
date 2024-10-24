@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.util.Optional;
+
 import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.http.Header;
 import org.apache.http.HttpRequest;
