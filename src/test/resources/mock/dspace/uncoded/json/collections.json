@@ -1,0 +1,31 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "http://localhost:9000/dspace-rdf/collection/123456789/158298",
+  "@type": "sc:Collection",
+  "collections": [
+    {
+      "@id": "http://localhost:9000/dspace-rdf/collection/123456789/158301",
+      "@type": "sc:Collection",
+      "label": "Fast Cars"
+    },
+    {
+      "@id": "http://localhost:9000/dspace-rdf/collection/123456789/158299",
+      "@type": "sc:Collection",
+      "label": "Cool Cars"
+    }
+  ],
+  "label": "Cars",
+  "logo": "https://library.tamu.edu/assets/images/tamu-logos/TAM-PrimaryMarkB.png",
+  "manifests": [],
+  "metadata": [
+    {
+      "label": "title",
+      "value": "Cars"
+    },
+    {
+      "label": "context",
+      "value": "rdf/handle/123456789/158298"
+    }
+  ],
+  "viewingHint": "multi-part"
+}

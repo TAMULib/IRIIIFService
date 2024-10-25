@@ -9,9 +9,9 @@ import edu.tamu.iiif.model.ManifestType;
 public interface ManifestService {
 
     public String getManifest(ManifestRequest request) throws IOException, URISyntaxException;
-    
+
     public String getRepository();
-    
+
     public ManifestType getManifestType();
 
 }

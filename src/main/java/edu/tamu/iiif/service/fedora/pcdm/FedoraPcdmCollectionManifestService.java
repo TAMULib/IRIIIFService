@@ -9,20 +9,6 @@ import static edu.tamu.iiif.constants.Constants.PCDM_HAS_MEMBER_PREDICATE;
 import static edu.tamu.iiif.model.ManifestType.COLLECTION;
 import static edu.tamu.iiif.utility.RdfModelUtility.findObject;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.NodeIterator;
-import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.ResIterator;
-import org.apache.jena.rdf.model.Resource;
-import org.springframework.stereotype.Service;
-
 import de.digitalcollections.iiif.presentation.model.api.v2.Collection;
 import de.digitalcollections.iiif.presentation.model.api.v2.Metadata;
 import de.digitalcollections.iiif.presentation.model.api.v2.references.CollectionReference;
@@ -32,11 +18,22 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.PropertyValueSimple
 import de.digitalcollections.iiif.presentation.model.impl.v2.references.CollectionReferenceImpl;
 import de.digitalcollections.iiif.presentation.model.impl.v2.references.ManifestReferenceImpl;
 import edu.tamu.iiif.controller.ManifestRequest;
-import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.ManifestType;
 import edu.tamu.iiif.model.rdf.RdfOrderedResource;
 import edu.tamu.iiif.model.rdf.RdfResource;
 import edu.tamu.iiif.utility.RdfModelUtility;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.ResIterator;
+import org.apache.jena.rdf.model.Resource;
+import org.springframework.stereotype.Service;
 
 @Service
 public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManifestService {
@@ -170,7 +167,7 @@ public class FedoraPcdmCollectionManifestService extends AbstractFedoraPcdmManif
 
     }
 
-    private List<CollectionReference> getSubcollections(RdfResource rdfResource) throws URISyntaxException, NotFoundException {
+    private List<CollectionReference> getSubcollections(RdfResource rdfResource) throws URISyntaxException, IOException {
         List<CollectionReference> subcollections = new ArrayList<CollectionReference>();
         // TODO: follow order proxy if iana available
         NodeIterator nodes = rdfResource.getNodesOfPropertyWithId(PCDM_HAS_MEMBER_PREDICATE);
