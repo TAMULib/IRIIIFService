@@ -40,7 +40,7 @@ USER $USER_NAME
 RUN mvn package -Pjar -DskipTests=true
 
 # Switch to Normal JRE Stage.
-FROM openjdk:11-jre-slim
+FROM eclipse-temurin:11-jdk-jammy
 ARG USER_ID
 ARG USER_NAME
 ARG SOURCE_DIR
