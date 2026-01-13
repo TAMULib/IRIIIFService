@@ -479,6 +479,19 @@ public abstract class AbstractManifestService implements ManifestService {
     protected Optional<String> getMimeType(String url) {
         try {
             HttpHeaders headers = restTemplate.headForHeaders(url);
+            logger.debug("Headers for URL: "+url);
+            headers.forEach((header,value) -> {
+                logger.debug(header+": "+value);
+            });
+
+            if (headers.containsKey(HttpHeaders.LOCATION)) {
+                headers = restTemplate.headForHeaders(headers.getFirst(HttpHeaders.LOCATION));
+                logger.debug("Headers for LOCATION redirect url: "+HttpHeaders.LOCATION);
+                headers.forEach((header,value) -> {
+                    logger.debug(header+": "+value);
+                });
+            }
+
             return Optional.ofNullable(headers.getFirst(HttpHeaders.CONTENT_TYPE));
         } catch (RestClientException e) {
             return Optional.empty();
