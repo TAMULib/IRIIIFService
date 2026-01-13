@@ -57,6 +57,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -478,7 +479,8 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected Optional<String> getMimeType(String url) {
         try {
-            HttpHeaders headers = restTemplate.headForHeaders(url);
+            //HttpHeaders headers = restTemplate.headForHeaders(url);
+            HttpHeaders headers = restTemplate.execute(url, HttpMethod.GET, null, null);
             logger.debug("Headers for URL: "+url);
             headers.forEach((header,value) -> {
                 logger.debug(header+": "+value);
