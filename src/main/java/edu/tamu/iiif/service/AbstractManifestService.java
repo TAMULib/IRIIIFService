@@ -479,11 +479,11 @@ public abstract class AbstractManifestService implements ManifestService {
 
     protected Optional<String> getMimeType(String url) {
         try {
-            HttpHeaders headers = restTemplate.headForHeaders(url);
+//            HttpHeaders headers = restTemplate.headForHeaders(url);
             ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
             logger.debug("Status Code for "+url+": " + response.getStatusCode());
             logger.debug("Headers for URL: "+url);
-            logger.debug("Response body for "+url+": "+response.getBody());
+            HttpHeaders headers = response.getHeaders();
             headers.forEach((header,value) -> {
                 logger.debug(header+": "+value);
             });
