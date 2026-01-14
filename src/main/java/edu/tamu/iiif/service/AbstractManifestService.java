@@ -483,6 +483,7 @@ public abstract class AbstractManifestService implements ManifestService {
             ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
             logger.debug("Status Code for "+url+": " + response.getStatusCode());
             logger.debug("Headers for URL: "+url);
+            logger.debug("Response body for "+url+": "+response.getBody());
             headers.forEach((header,value) -> {
                 logger.debug(header+": "+value);
             });
