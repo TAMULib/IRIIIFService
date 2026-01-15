@@ -266,6 +266,7 @@ public abstract class AbstractManifestService implements ManifestService {
         try {
             return restTemplate.getForObject(url, String.class);
         } catch (RestClientException e) {
+            logger.debug(e.getStackTrace().toString());
             throw new NotFoundException("Image not found for " + url, e);
         }
     }
