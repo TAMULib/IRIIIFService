@@ -38,11 +38,15 @@ import java.util.List;
 import java.util.Optional;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 
 @ConditionalOnExpression(DSPACE_RDF_CONDITION)
 public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestService {
+
+    private final static Logger logger = LoggerFactory.getLogger(AbstractDSpaceRdfManifestService.class);
 
     @Autowired
     protected DSpaceRdfIiifConfig config;
@@ -209,6 +213,7 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         RdfCanvas rdfCanvas = new RdfCanvas();
 
         if (image.isPresent()) {
+            logger.debug("*** Image present for: "+uri);
             rdfCanvas.addImage(image.get());
 
             Optional<ImageResource> imageResource = Optional.ofNullable(image.get().getImage().getResource());
@@ -224,6 +229,8 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
                     rdfCanvas.setWidth(width);
                 }
             }
+        } else {
+            logger.debug("*** No image present for: "+uri);
         }
 
         return rdfCanvas;

@@ -173,10 +173,13 @@ public abstract class AbstractManifestService implements ManifestService {
         String url = rdfResource.getResource().getURI();
         OptionalImageResourceWithInfo imageResource = generateImageResource(request, rdfResource, page);
         if (imageResource.isPresent()) {
+            logger.debug("*** Adding image to canvas: "+rdfResource.getResource().getURI());
             Image image = new ImageImpl(getImageInfoUri(url));
             image.setResource(imageResource.get());
             image.setOn(getCanvasUri(canvasId));
             return OptionalImageWithInfo.of(Optional.of(image), imageResource.getImageResourceInfo());
+        } else {
+            logger.debug("*** Skipping adding image to canvas: "+rdfResource.getResource().getURI());
         }
         return OptionalImageWithInfo.of(Optional.empty());
     }
