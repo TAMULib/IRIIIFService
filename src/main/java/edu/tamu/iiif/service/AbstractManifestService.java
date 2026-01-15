@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import ch.qos.logback.classic.Level;
 import de.digitalcollections.iiif.presentation.model.api.v2.Canvas;
 import de.digitalcollections.iiif.presentation.model.api.v2.Image;
 import de.digitalcollections.iiif.presentation.model.api.v2.ImageResource;
@@ -268,7 +267,6 @@ public abstract class AbstractManifestService implements ManifestService {
         try {
             return restTemplate.getForObject(url, String.class);
         } catch (RestClientException e) {
-            logger.error("Image not found exception for "+url, e);
             throw new NotFoundException("Image not found for " + url, e);
         }
     }

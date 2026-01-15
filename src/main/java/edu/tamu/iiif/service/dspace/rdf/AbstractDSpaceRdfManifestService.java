@@ -22,6 +22,7 @@ import de.digitalcollections.iiif.presentation.model.impl.v2.SequenceImpl;
 import edu.tamu.iiif.config.model.AbstractIiifConfig;
 import edu.tamu.iiif.config.model.DSpaceRdfIiifConfig;
 import edu.tamu.iiif.controller.ManifestRequest;
+import edu.tamu.iiif.exception.NotFoundException;
 import edu.tamu.iiif.model.CanvasWithInfo;
 import edu.tamu.iiif.model.OptionalImageWithInfo;
 import edu.tamu.iiif.model.rdf.RdfCanvas;
@@ -42,6 +43,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
 
 @ConditionalOnExpression(DSPACE_RDF_CONDITION)
 public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestService {
@@ -234,6 +238,24 @@ public abstract class AbstractDSpaceRdfManifestService extends AbstractManifestS
         }
 
         return rdfCanvas;
+    }
+
+    protected String fetchImageInfo(String url) throws NotFoundException {
+        logger.debug("Fetching image info {}", url);
+
+        try {
+//            return restTemplate.getForObject(url, String.class);
+            ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+            logger.debug("Status Code for imageinfo "+url+": " + response.getStatusCode());
+            logger.debug("Headers for imageinfo: "+url);
+            HttpHeaders headers = response.getHeaders();
+            headers.forEach((header,value) -> {
+                logger.debug(header+": "+value);
+            });
+            return response.getBody();
+        } catch (RestClientException e) {
+            throw new NotFoundException("Image not found for " + url, e);
+        }
     }
 
 }
